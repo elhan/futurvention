@@ -1,0 +1,73 @@
+/* Fullscreen slider navigation button */
+.nav-btn-wrap {
+  position: fixed;
+  width: 100%;
+  bottom: 40px;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+}
+
+.nav-btn {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  font-size: 50px;
+  color: white;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  transform: rotate(-90deg);
+  text-rendering: optimizeLegibility;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, .1);
+  cursor: pointer;
+}
+
+.nav-btn.up {
+  transform: rotate(90deg);
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, .2);
+}
+
+.nav-btn p:before {
+  content:"\2039";
+  position: absolute;
+  bottom: 16px;
+  width: 50px;
+  height: 50px;
+}
+
+.box-button-wrap {
+  padding: 70px 0 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.box-button-wrap > .btn {
+  padding: 20px 40px;
+  white-space: normal;
+}
+
+/* NAVBAR LOGIN & REGISTRATION BUTTONS */
+.reg-btn-wrap {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.reg-btn-wrap > .btn {
+  color: white;
+  font-size: 20px;
+}
+
+.reg-btn-wrap > .btn:hover {
+  text-decoration: none;
+  color: white;
+}
+
+.reg-btn-wrap > .btn:focus {
+  color: white;
+  outline: none;
+  text-decoration: none;
+}
