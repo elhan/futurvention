@@ -3,7 +3,7 @@
 
     /**
      * @ngdoc overview
-     * @name fvAlphaApp
+     * @name fvApp
      * @description
      * # fvApp
      *
@@ -16,29 +16,19 @@
             'ngResource',
             'ngRoute',
             'ngSanitize',
-            'ngTouch'
+            'ngTouch',
+            'mgcrea.ngStrap',
+            'mgcrea.ngStrap.modal'
         ]);
 
     app.config(function ($routeProvider) {
         $routeProvider
         .when('/', {
             templateUrl: 'views/main.html'
+        })
+        .when('/apply', {
+            templateUrl: 'views/apply.html'
         });
-//        .when('/import', {
-//            templateUrl: 'views/import.html'
-//        })
-//        .when('/manage', {
-//            templateUrl: 'views/manage.html'
-//        })
-//        .when('/categories', {
-//            templateUrl: 'views/categories.html'
-//        })
-//        .when('/download', {
-//            templateUrl: 'views/download.html'
-//        })
-//        .when('/team', {
-//            templateUrl: 'views/team.html'
-//        })
 //        .otherwise({
 //            redirectTo: '/'
 //        });

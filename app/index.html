@@ -10,13 +10,11 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/angular-motion/dist/angular-motion.min.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css"/>
-    <link rel="stylesheet" href="styles/animations.css"/>
-    <link rel="stylesheet" href="styles/components/buttons.css"/>
-    <link rel="stylesheet" type="text/css" href="styles/assets.css" />
+    <link rel="stylesheet" type="text/css" href="styles/main.css"/>
     <!-- endbuild -->
   </head>
   <body ng-app="fvApp">
@@ -60,13 +58,17 @@
     <script src="bower_components/firebase/firebase.js"></script>
     <script src="bower_components/firebase-simple-login/firebase-simple-login.js"></script>
     <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
+    <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
+    <script src="scripts/common/constants.js"></script>
     <script src="scripts/common/controllers.js"></script>
     <script src="scripts/common/directives.js"></script>
+    <script src="scripts/common/services.js"></script>
     <!-- endbuild -->
   </body>
 </html>

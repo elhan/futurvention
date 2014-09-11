@@ -33,7 +33,7 @@ module.exports = function (grunt) {
           paths: ['assets/css']
         },
         files: {
-          'app/styles/assets.css': 'app/styles/less/assets.less'
+          'app/styles/main.css': 'app/styles/less/main.less'
         }
       },
       production: {
@@ -46,7 +46,7 @@ module.exports = function (grunt) {
 //          }
         },
         files: {
-          'app/styles/assets.css': 'app/styles/less/assets.less'
+          'app/styles/main.css': 'app/styles/less/main.less'
         }
       }
     },
@@ -71,10 +71,12 @@ module.exports = function (grunt) {
       styles: {
         files: [
           '<%= yeoman.app %>/styles/{,*/}*.css',
-          //CUSTOM CODE: include .less
           '<%= yeoman.app %>/styles/less/{,*/}*.less'
         ],
-        tasks: ['newer:copy:styles', 'autoprefixer', 'less']
+        tasks: ['less', 'newer:copy:styles', 'autoprefixer'],
+        options: {
+          livereload: true
+        }
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -86,7 +88,6 @@ module.exports = function (grunt) {
         files: [
           '<%= yeoman.app %>/{,*/}*.html',
           '.tmp/styles/{,*/}*.css',
-          // CUSTOM CODE
           '.tmp/styles/{,*/}*.less',
           '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
         ]
