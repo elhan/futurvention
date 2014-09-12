@@ -30,8 +30,6 @@
             $location.path(path);
         };
 
-//        var authModal = $modal({scope: $scope, title: 'Login Modal', contentTemplate: 'views/modals/authModal.html', show: false});
-//        window.setTimeout(authModal.show, 3000);
     }]);
 
     /**
@@ -57,5 +55,19 @@
             });
         };
 
+    }]);
+
+    /**
+     * @ngdoc function
+     * @name fvApp.controller:HeaderCtrl
+     * @description
+     * # HeaderCtrl
+     * Controller of header navigation bar
+     */
+    app.controller('HeaderCtrl', ['$scope', '$location', function ($scope, $location) {
+        // The header needs to be aware of the current location
+        $scope.locationAt = function (route) {
+            return route === $location.path();
+        };
     }]);
 }());

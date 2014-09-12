@@ -12,9 +12,9 @@
   display: flex;
   width: 50px;
   height: 50px;
-  font-size: 50px;
-  color: white;
-  font-weight: 300;
+  .text-50;
+  .text-white;
+  .text-w-300;
   -webkit-font-smoothing: antialiased;
   transform: rotate(-90deg);
   text-rendering: optimizeLegibility;
@@ -50,24 +50,41 @@
   white-space: normal;
 }
 
-/* NAVBAR LOGIN & REGISTRATION BUTTONS */
+// Navbar Login & Registration links
+
 .reg-btn-wrap {
   display: flex;
   justify-content: flex-end;
 }
 
 .reg-btn-wrap > .btn {
-  color: white;
+  .text-white;
   font-size: 20px;
 }
 
 .reg-btn-wrap > .btn:hover {
   text-decoration: none;
-  color: white;
+  .text-white;
 }
 
 .reg-btn-wrap > .btn:focus {
-  color: white;
+  .text-white;
   outline: none;
   text-decoration: none;
+}
+
+// Color
+
+.button.bg-darkblue {
+  border-color: #303fd0;
+}
+
+.button.bg-darkblue:hover {
+  background-color: #5962c9;
+}
+
+// Social Buttons
+
+.btn-fb {
+  background-color: @fbBlue;
 }
