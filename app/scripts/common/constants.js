@@ -30,6 +30,6 @@
         all: '*',
         admin: 'admin',
 //        editor: 'editor',
-//        guest: 'guest'
+        guest: 'guest'
     });
 }());

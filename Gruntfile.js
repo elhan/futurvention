@@ -400,6 +400,40 @@ module.exports = function (grunt) {
         configFile: 'test/karma.conf.js',
         singleRun: true
       }
+    },
+
+    ngconstant: {
+      options: {
+        name: 'config',
+        wrap: '(function () {\'use strict\';\n\n{%= __ngModule %}}());',
+        space: '  '
+      },
+      development: {
+        options: {
+          dest: '<%= yeoman.app %>/scripts/config.js',
+        },
+        constants: {
+          ENV: {
+            name: 'development',
+            apiEndpoint: 'http://localhost:9000',
+            fbApiKey: '676011345823665',
+            liApiKey: '77d2smbm870t22',
+          }
+        }
+      },
+      production: {
+        options: {
+          dest: '<%= yeoman.dist %>/scripts/config.js',
+        },
+        constants: {
+          ENV: {
+            name: 'production',
+            apiEndpoint: 'http://futurvention.herokuapp.com',
+            fbApiKey: '675990215825778',
+            liApiKey: '77xj8xhasosg9k',
+          }
+        }
+      }
     }
   });
 
@@ -411,6 +445,7 @@ module.exports = function (grunt) {
 
     grunt.task.run([
       'clean:server',
+      'ngconstant:development',
       'wiredep',
       'less',
       'concurrent:server',
@@ -435,6 +470,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
+    'ngconstant:production',
     'wiredep',
     'less',
     'useminPrepare',

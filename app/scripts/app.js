@@ -18,7 +18,11 @@
             'ngSanitize',
             'ngTouch',
             'mgcrea.ngStrap',
-            'mgcrea.ngStrap.modal'
+            'mgcrea.ngStrap.modal',
+            'facebook',
+            'ngLinkedIn',
+            'config',
+            'firebase'
         ]);
 
     app.config(function ($routeProvider) {
@@ -33,4 +37,11 @@
 //            redirectTo: '/'
 //        });
     });
+
+    // Initialize authentication providers. The api keys differ by enviropment (development, production)
+    app.config(function(FacebookProvider, $linkedInProvider, ENV) {
+        FacebookProvider.init(ENV.fbApiKey);
+        $linkedInProvider.set('appKey', ENV.liApiKey);
+    });
+
 }());

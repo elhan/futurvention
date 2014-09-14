@@ -39,15 +39,18 @@
      * # LoginCtrl
      * Controller of the login form
      */
-    app.controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthSvc', function ($scope, $rootScope, AUTH_EVENTS, AuthSvc) {
+    app.controller('LoginCtrl', ['$scope', '$rootScope', 'AUTH_EVENTS', 'AuthSvc', function ($scope, $rootScope,  AUTH_EVENTS, AuthSvc) {
 
-        $scope.credentials = {
-            username: '',
+        $scope.newUser = {
+            firstName: '',
+            lastName: '',
+            email: '',
             password: ''
         };
 
-        $scope.login = function (credentials) {
-            AuthSvc.login(credentials).then(function (user) {
+        $scope.login = function (newUser) {
+            AuthSvc.login(newUser).then(function (user) {
+              console.log(user);
                 $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
                 $scope.setCurrentUser(user);
             }, function () {
@@ -55,6 +58,19 @@
             });
         };
 
+        $scope.loginFb = function () {
+            AuthSvc.loginFb().then(function () {
+                // TODO: handle responses and broadcast $rootscope events
+                console.log('logged in with facebook');
+            });
+        };
+
+        $scope.loginLi = function() {
+            // TODO: handle responses and broadcast $rootscope events
+            AuthSvc.loginLi().then(function() {
+                console.log('logged in with linkedin');
+            });
+        };
     }]);
 
     /**

@@ -4,6 +4,7 @@
   "dependencies": {
     "express": "^4.8.5",
     "grunt-contrib-less": "^0.11.4",
+    "grunt-ng-constant": "^1.0.0",
     "gzippo": "^0.2.0"
   },
   "devDependencies": {

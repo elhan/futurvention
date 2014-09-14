@@ -3,7 +3,18 @@
 
     var app = angular.module('fvApp');
 
-    app.directive('fvslider', ['$document', '$timeout', function ($document, $timeout) {
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvslider
+     * @restrict A
+     *
+     * @description
+     * Creates a custom slider element
+     *
+     * @example
+     * <fvslider slidename="bg" count="4" fullscreen="true" keyboard="true" mousewheel="true" indicator="true" navbtn="true"></fvslider>
+     */
+    app.directive('fvSlider', ['$document', '$timeout', function ($document, $timeout) {
         //key codes for the arrow up/down events
         var arrowDown = 40,
             arrowUp = 38;
@@ -15,6 +26,9 @@
                 var MAX_ANIMATION_DURATION = 600, // default animation duration between slides, in ms
                     MIN_ANIMATION_DURATION = 200, // used to speed animation when transitioning between multiple slides.
                     throttle = false;
+
+                // prevent scrolling if fullscreen
+                attrs.fullscreen && angular.element('body').css('overflow', 'hidden');
 
                 function goToNextSlide(i) {
                     $timeout(function () {
@@ -82,7 +96,7 @@
                 };
 
                 // on key event navigation to next/previous slides
-                angular.element($document).bind('keydown', onKeyDown);
+                angular.element($document).on('keydown', onKeyDown);
 
                 if (document.addEventListener) {
                     document.addEventListener('mousewheel', onScroll(), false);
@@ -90,8 +104,41 @@
 //                } else { //IE
 //                    sq.attachEvent('onmousewheel', onScroll());
                 }
+
+                // unbind listeners and enable scrolling if fullscreen
+                scope.$on('$destroy', function () {
+                    attrs.fullscreen && angular.element('body').css('overflow', 'auto');
+                    angular.element($document).off('keydown');
+                    angular.element($document).off('mousewheel');
+                    angular.element($document).off('DOMMouseScroll');
+                });
             }
         };
     }]);
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fv-form-nobubble
+     * @element any
+     *
+     * @description
+     * Suppress the default HTML5 validation bubble
+     *
+     * @example
+     * <form name="loginForm" class="reg-form" role="form" fv-nobubble> ... </form>
+     */
+    app.directive('fvFormNoBubble', function () {
+        return {
+            restinct: 'E',
+            link: function () {
+                var forms = document.getElementsByTagName('form');
+                for (var i = 0; i < forms.length; i++) {
+                    forms[i].addEventListener('invalid', function (e) {
+                        e.preventDefault();
+                    });
+                }
+            }
+        };
+    });
 
 }());
