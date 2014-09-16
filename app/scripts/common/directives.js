@@ -116,29 +116,4 @@
         };
     }]);
 
-    /**
-     * @ngdoc directive
-     * @name fvApp.directive:fv-form-nobubble
-     * @element any
-     *
-     * @description
-     * Suppress the default HTML5 validation bubble
-     *
-     * @example
-     * <form name="loginForm" class="reg-form" role="form" fv-nobubble> ... </form>
-     */
-    app.directive('fvFormNoBubble', function () {
-        return {
-            restinct: 'E',
-            link: function () {
-                var forms = document.getElementsByTagName('form');
-                for (var i = 0; i < forms.length; i++) {
-                    forms[i].addEventListener('invalid', function (e) {
-                        e.preventDefault();
-                    });
-                }
-            }
-        };
-    });
-
 }());

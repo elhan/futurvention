@@ -30,6 +30,12 @@
         .when('/', {
             templateUrl: 'views/main.html'
         })
+        .when('/register', {
+            templateUrl: 'views/register.html'
+        })
+        .when('/login', {
+            templateUrl: 'views/login.html'
+        })
         .when('/apply', {
             templateUrl: 'views/apply.html'
         });
@@ -40,7 +46,7 @@
 
     // Initialize authentication providers. The api keys differ by enviropment (development, production)
     app.config(function(FacebookProvider, $linkedInProvider, ENV) {
-        FacebookProvider.init(ENV.fbApiKey);
+        FacebookProvider.init(ENV.fbApiKey, {status: true});
         $linkedInProvider.set('appKey', ENV.liApiKey);
     });
 

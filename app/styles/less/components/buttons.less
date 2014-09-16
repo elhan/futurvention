@@ -1,4 +1,74 @@
-/* Fullscreen slider navigation button */
+.box-button-wrap {
+  padding: 70px 0 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.box-button-wrap > .btn {
+  padding: 20px 40px;
+  white-space: normal;
+}
+
+// Navbar Login & Registration links
+// -------------------------
+
+.nav-link-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav-link {
+  .text-white;
+  font-size: 20px;
+  &:hover {
+    text-decoration: none;
+    .text-white;
+    .text-w-700;
+  }
+  &:focus {
+    .text-white;
+    outline: none;
+    text-decoration: none;
+  }
+  &:hover:focus {
+    outline: none;
+  }
+}
+
+// Color
+// -------------------------
+
+.bg-darkblue {
+  border-color: @darkBlue;
+  background-color: @darkBlue;
+}
+
+.bg-darkblue:hover {
+  background-color: #5962c9;
+}
+
+// Custom button classes
+// -------------------------
+
+.btn-fb {
+  background-color: @fbBlue;
+}
+
+.link-box-darkblue {
+  .text-darkBlue;
+  margin-left: 5px;
+  padding: 4px 8px 6px;
+  border: 1px solid @darkBlue;
+  border-radius: 6px;
+  &:hover {
+    .text-white;
+    cursor: pointer;
+    background-color: @darkSlateBlue;
+    border-color: @darkSlateBlue;
+  }
+}
+
+// Navigation button
 .nav-btn-wrap {
   position: fixed;
   width: 100%;
@@ -37,55 +107,4 @@
   bottom: 16px;
   width: 50px;
   height: 50px;
-}
-
-.box-button-wrap {
-  padding: 70px 0 30px;
-  display: flex;
-  justify-content: center;
-}
-
-.box-button-wrap > .btn {
-  padding: 20px 40px;
-  white-space: normal;
-}
-
-// Navbar Login & Registration links
-
-.reg-btn-wrap {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.reg-btn-wrap > .btn {
-  .text-white;
-  font-size: 20px;
-}
-
-.reg-btn-wrap > .btn:hover {
-  text-decoration: none;
-  .text-white;
-}
-
-.reg-btn-wrap > .btn:focus {
-  .text-white;
-  outline: none;
-  text-decoration: none;
-}
-
-// Color
-
-.bg-darkblue {
-  border-color: @darkBlue;
-  background-color: @darkBlue;
-}
-
-.bg-darkblue:hover {
-  background-color: #5962c9;
-}
-
-// Social Buttons
-
-.btn-fb {
-  background-color: @fbBlue;
 }

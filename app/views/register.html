@@ -5,7 +5,7 @@
   </div>
   <div class="content-wrap">
     <div class="social-btn-wrap">
-      <div class="text-silver text-16">Already have an account? <span class="link-box-darkblue">Log in here.</span></div>
+      <div class="text-silver text-16">Already have an account? <span class="link-box-darkblue" ng-click="go('/login')">Log in here.</span></div>
       <div class="text-silver text-w-700 text-16">Sign up with an existing LinkedIn or Facebook Account</div>
       <button type="button" class="btn btn-primary btn-lg" ng-click="loginLi()">
         <i class="fa fa-lg fa-linkedin"></i>
@@ -20,7 +20,7 @@
     <!--inline divider-->
     <div class="divider"><span>OR</span></div>
     <!--The actual login form-->
-    <form name="loginForm" class="reg-form" role="form" ng-submit="register(newUser)">
+    <form name="loginForm" class="reg-form" role="form" ng-submit="register(credentials)">
       <label class="label-title">Sign up with an email account</label>
       <!-- first name input-->
       <div class="form-group">
@@ -47,10 +47,10 @@
       <div class="form-group" ng-class="{'has-error': loginForm.inputPassword.$error.minlength}">
         <input type="password" name="inputPassword" class="form-control" ng-model="newUser.password" ng-minlength="6" placeholder="Password" ng-required="true">
         <label ng-show="loginForm.inputPassword.$error.minlength" class="control-label label-s" for="inputPassword">
-          This field needs to be at least 6 characters long.
+          The specified password is incorrect.
         </label>
       </div>
-      <button type="submit" class="text-16 btn btn btn-primary btn-lg bg-darkblue">Submit</button>
+      <button type="submit" class="text-16 btn btn btn-primary btn-lg bg-darkblue" ng-disabled="{{loginForm.$invalid}}">Submit</button>
     </form>
   </div>
 </div>
