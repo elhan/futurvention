@@ -49,14 +49,16 @@
             firebaseEvents = EVENTS.firebase,
             firebaseUrl = ENV.firebaseUrl,
             usersRef = new Firebase(firebaseUrl + '/users'),
-            sync = $firebase(usersRef).$asObject();
+            sync = $firebase(usersRef);
 
         // broadcast an event when firebase has done connecting
-        sync.$loaded().then(function () {
+        sync.$asObject().$loaded().then(function () {
             $rootScope.$broadcast(firebaseEvents.firebaseConnected);
         });
 
         this.setUser = function (user) {
+            console.log('adding new user: ' + user);
+            console.log(sync);
             sync.$push(user).then(function (newChildRef) {
                 // TODO: add proper logging
                 console.log('added new user with key: ', newChildRef.name());
