@@ -2,10 +2,10 @@
   <div ng-switch-when="0" class="box text-white col-md-8 col-md-offset-2">
     <div class="text-header-l">FREELANCING REVOLUTIONIZED</div>
     <div class="box-description">
-      XXX is where freelancing meets ecommerce. It's like your very own creative storefront, stocked with the services you want to sell. Open your store to see the new face of online work.
+      ServiceBucket is where freelancing meets ecommerce. It's like your very own creative storefront, stocked with the services you want to sell. Open your store to see the new face of online work.
     </div>
     <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/apply')">Apply to Join in less than a minute</button>
+      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="isAuthenticated() ? go('/apply') : go('/register')">Apply to Join in less than a minute</button>
     </div>
   </div>
   <div ng-switch-when="1" class="box text-white col-md-8 col-md-offset-2">
@@ -42,7 +42,7 @@
       </div>
     </div>
     <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/apply')">Apply to Join in less than a minute</button>
+      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/register')">Apply to Join in less than a minute</button>
     </div>
   </div>
   <div ng-switch-when="2" class="box text-white col-md-12">
@@ -85,7 +85,7 @@
       </div>
     </div>
     <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/apply')">Apply to Join in less than a minute</button>
+      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/register')">Apply to Join in less than a minute</button>
     </div>
   </div>
   <div ng-switch-when="3" class="box text-white col-md-12">
@@ -123,7 +123,7 @@
       </div>
     </div>
     <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/apply')">Apply to Join in less than a minute</button>
+      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/register')">Apply to Join in less than a minute</button>
     </div>
   </div>
 </div>

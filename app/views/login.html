@@ -22,7 +22,7 @@
       <label class="label-title">Sign in with an email account</label>
       <!-- email input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.invalidEmail || authError.emailTaken}">
-        <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true">
+          <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true" autocomplete="on">
         <label ng-show="loginForm.inputEmail.$error.email" class="control-label label-s" for="inputEmail">
           Please include a '@' in the email address.
         </label>
@@ -35,7 +35,7 @@
       </div>
       <!-- password input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputPassword.$error.minlength || authError.invalidPassword}">
-        <input type="password" name="inputPassword" class="form-control" ng-model="newUser.password" ng-minlength="6" placeholder="Password" ng-required="true">
+          <input type="password" name="inputPassword" class="form-control" ng-model="newUser.password" ng-minlength="6" placeholder="Password" ng-required="true" autocomplete="on">
         <label ng-show="loginForm.inputPassword.$error.minlength" class="control-label label-s" for="inputPassword">
           This field needs to be at least 6 characters long.
         </label>

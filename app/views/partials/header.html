@@ -3,7 +3,7 @@
      ng-class="locationAt('/') ? 'navbar-transparent' : 'navbar-dark'">
   <div class="container-fluid">
     <div class="row-fluid">
-      <div ng-if="!locationAt('/apply')" class="nav-link-wrap col-m-2 col-m-offset-9">
+      <div class="nav-link-wrap col-m-2 col-m-offset-9">
         <button class="btn btn-link nav-link btn-left" ng-click="go('/')">SERVICE BUCKET</button>
         <div>
           <button ng-if="!isAuthenticated() && !locationAt('/register')" class="btn btn-link nav-link" ng-click="go('/register')">Sign up</button>

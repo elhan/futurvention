@@ -45,9 +45,15 @@
     });
 
     // Initialize authentication providers. The api keys differ by enviropment (development, production)
-    app.config(function(FacebookProvider, $linkedInProvider, ENV) {
-        FacebookProvider.init(ENV.fbApiKey, {status: true});
-        $linkedInProvider.set('appKey', ENV.liApiKey);
+    app.config(function(FacebookProvider, $linkedInProvider, ENV, AUTH_PROVIDER_OPTIONS) {
+        var authOptions = AUTH_PROVIDER_OPTIONS;
+        FacebookProvider.init(ENV.fbApiKey, authOptions.facebook);
+        $linkedInProvider.options({
+            appKey: ENV.liApiKey,
+            scope: authOptions.linkedIn.scope,
+            authorize: authOptions.linkedIn.authorize,
+            credentials_cookie: authOptions.linkedIn.credentials_cookie
+        });
     });
 
 }());

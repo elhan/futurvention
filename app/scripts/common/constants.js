@@ -23,6 +23,20 @@
 
     /**
      * @ngdoc object
+     * @name fvApp.controller:USER_EVENTS
+     * @description
+     * # USER_EVENTS
+     * All the suported user - related vents. Broadcasted through $rootScope
+     */
+    app.constant('USER_EVENTS', {
+        createSuccess: 'user-creation-success',
+        createFailed: 'user-creation-failed',
+        updateSuccess: 'user-update-success',
+        updateFailed: 'user-update-failed'
+    });
+
+    /**
+     * @ngdoc object
      * @name fvApp.constants:USER_ROLES
      * @description
      * # USER_ROLES
@@ -37,14 +51,14 @@
 
     /**
      * @ngdoc String
-     * @name fvApp.constants:FIREBASE_URL
+     * @name fvApp.constants:FIREBASE_SETTINGS
      * @description
-     * # FIREBASE_URL
-     * Firebase url registered for fvApp
+     * # FIREBASE_settings
+     * Firebase settings registered for fvApp
      */
-    app.constant('FIREBASE', {
-        URL: 'https://fvappdev.firebaseio.com/',
-        ERROR: {
+    app.constant('FIREBASE_SETTINGS', {
+        url: 'https://fvappdev.firebaseio.com/',
+        error: {
             AUTHENTICATION_DISABLED: 'The specified authentication type is not enabled for this Firebase.',
             EMAIL_TAKEN: 'The specified email address is already in use.',
             INVALID_EMAIL: 'The specified email address is incorrect.',
@@ -66,8 +80,14 @@
      */
     app.constant('AUTH_PROVIDER_OPTIONS', {
         facebook: {
-            rememberMe: true,
+//            rememberMe: true,
             scope: 'public_profile, email'
+        },
+        linkedIn: {
+            scope: 'r_emailaddress r_fullprofile',
+            fields: ['id', 'first-name', 'last-name', 'email-address'],
+            authorize: true,
+            credentials_cookie: true // only supported for https!
         }
     });
 }());

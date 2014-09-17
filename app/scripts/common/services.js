@@ -10,7 +10,7 @@
      * A singleton object following the service style to cash the user's session info.
      */
     app.service('SessionSvc', function () {
-        this.create = function (sessionId, userId, userRole) {
+        this.create = function (sessionId, userId, provider, userRole) {
             this.id = sessionId;
             this.userId = userId;
             this.userRole = userRole;
@@ -39,63 +39,85 @@
 
     /**
      * @ngdoc service
+     * @name fvApp.service:UserSvc
+     * @description
+     * # UserSvc
+     * Interacts with the server to set, get, and delete User objects.
+     */
+    app.service('UserSvc', ['$firebase', '$rootScope', 'FIREBASE_SETTINGS', function ($firebase,  $rootScope, FIREBASE_SETTINGS) {
+        var users,
+            firebaseSettings = FIREBASE_SETTINGS,
+            usersRef = new Firebase(firebaseSettings.url + '/users'),
+            sync = $firebase(usersRef);
+
+        this.setUser = function (user) {
+            sync.$push(user).then(function (newChildRef) {
+                // TODO: add proper logging
+                console.log('added new user with key: ', newChildRef.name());
+            });
+        };
+
+        this.getUsers = function () {
+            return users;
+        };
+
+        this.getUser = function (id) {
+            return _.find(users, function (user) {
+                return user.id === id;
+            });
+        };
+
+        // Synchronise the user collection
+        usersRef.on('value', function (snapshot) {
+            users = snapshot.val();
+        }, function (errorObject) {
+            console.log('The firebase read failed: ' + errorObject.code);
+        });
+
+        return this;
+    }]);
+
+    /**
+     * @ngdoc service
      * @name fvApp.service:AuthSvc
      * @description
      * # AuthSvc
      * A service to handle email authentication and authorization.
      */
-    app.factory('AuthSvc', ['$http', '$linkedIn', '$firebaseSimpleLogin', 'SessionSvc', 'FIREBASE', function ($http, $linkedIn, $firebaseSimpleLogin, SessionSvc, FIREBASE) {
-        var authSvc = {};
+    app.service('AuthSvc', ['$http', '$firebaseSimpleLogin', '$linkedIn', '$cookies', 'SessionSvc', 'FIREBASE_SETTINGS', 'AUTH_PROVIDER_OPTIONS', 'ENV',
+                            function ($http, $firebaseSimpleLogin, $linkedIn, $cookies, SessionSvc, FIREBASE_SETTINGS, AUTH_PROVIDER_OPTIONS, ENV) {
+        var authOptions = AUTH_PROVIDER_OPTIONS,
+            firebaseSettings = FIREBASE_SETTINGS,
+            environment = ENV;
 
-        authSvc.isAuthenticated = function () {
+        this.isAuthenticated = function () {
             return !!SessionSvc.userId;
         };
 
-        authSvc.isAuthorized = function (authorizedRoles) {
+        this.isAuthorized = function (authorizedRoles) {
             if (!angular.isArray(authorizedRoles)) {
                 authorizedRoles = [authorizedRoles];
             }
-            return (authSvc.isAuthenticated() &&
+            return (this.isAuthenticated() &&
                     authorizedRoles.indexOf(SessionSvc.userRole) !== -1);
         };
 
-        authSvc.firebaseAuth =  function () {
-            return $firebaseSimpleLogin(new Firebase(FIREBASE.URL));
+        this.firebaseAuth =  function () {
+            return $firebaseSimpleLogin(new Firebase(firebaseSettings.url));
         };
 
-//        authSvc.login = function (user) {
-//            return $http
-//            .post('/login', user)
-//            .then(function (res) {
-//              console.log(res);
-//                SessionSvc.create(res.data.id, res.data.user.id, res.data.user.role);
-//                return res.data.user;
-//            });
-//        };
-//
-//        // login with Facebook
-//        authSvc.loginFb = function () {
-//            return Facebook.login(function(res) {
-//                // TODO: contact the server, retrieve user info, create a Session object...
-//                console.log(res);
-//            });
-//        };
-//
-//        // check if the user is logged in with Facebook
-//        authSvc.getFbLoginStatus = function() {
-//            Facebook.getLoginStatus(function(res) {
-//                // TODO: contact the server, retrieve user info, create a Session object...
-//                console.log(res);
-//            });
-//        };
-//
-//        authSvc.loginLi = function() {
-//            return $linkedIn.authorize().then(function () {
-//                // TODO: contact the server, retrieve user info, create a Session object...
-//                console.log('linkedin auth success');
-//            });
-//        };
-//
-        return authSvc;
+        this.loginLi = function () {
+           return $linkedIn.authorize();
+        };
+
+        this.getLiProfile = function () {
+            return $linkedIn.profile('me', authOptions.linkedIn.fields);
+        };
+
+        this.getLiCookie = function () {
+            return $cookies[['linkedin_oauth_', environment.liApiKey, '_crc'].join('')];
+        };
+
+        return this;
     }]);
 }());
