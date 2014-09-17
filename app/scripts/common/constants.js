@@ -47,28 +47,6 @@
     });
 
     /**
-     * @ngdoc String
-     * @name fvApp.constant:FIREBASE_PARAMS
-     * @description
-     * # FIREBASE_settings
-     * Firebase settings registered for fvApp
-     */
-    app.constant('FIREBASE_PARAMS', {
-        url: 'https://fvappdev.firebaseio.com/',
-        error: {
-            AUTHENTICATION_DISABLED: 'The specified authentication type is not enabled for this Firebase.',
-            EMAIL_TAKEN: 'The specified email address is already in use.',
-            INVALID_EMAIL: 'The specified email address is incorrect.',
-            INVALID_FIREBASE: 'Invalid Firebase specified.',
-            INVALID_ORIGIN: 'Domain not added to the firebase whitelist.',
-            INVALID_PASSWORD: 'The specified password is incorrect.',
-            INVALID_USER: 'The specified user does not exist.',
-            UNKNOWN_ERROR: 'An unknown error occurred. Please contact support@firebase.com.',
-            USER_DENIED: 'Authentication request cancelled by the user'
-        }
-    });
-
-    /**
      * @ngdoc Object
      * @name fvApp.constant:AUTH_PROVIDER_OPTIONS
      * @description

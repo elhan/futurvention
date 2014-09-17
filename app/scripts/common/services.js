@@ -44,11 +44,11 @@
      * # UserSvc
      * Interacts with the server to set, get, and delete User objects.
      */
-    app.service('UserSvc', ['$firebase', '$rootScope', 'FIREBASE_PARAMS', 'EVENTS', function ($firebase, $rootScope, FIREBASE_PARAMS, EVENTS) {
+    app.service('UserSvc', ['$firebase', '$rootScope', 'ENV', 'EVENTS', function ($firebase, $rootScope, ENV, EVENTS) {
         var users,
             firebaseEvents = EVENTS.firebase,
-            firebaseParams = FIREBASE_PARAMS,
-            usersRef = new Firebase(firebaseParams.url + '/users'),
+            firebaseUrl = ENV.firebaseUrl,
+            usersRef = new Firebase(firebaseUrl + '/users'),
             sync = $firebase(usersRef).$asObject();
 
         // broadcast an event when firebase has done connecting
@@ -90,11 +90,10 @@
      * # AuthSvc
      * A service to handle email authentication and authorization.
      */
-    app.service('AuthSvc', ['$http', '$firebaseSimpleLogin', '$linkedIn', '$cookies', 'SessionSvc', 'FIREBASE_PARAMS', 'AUTH_PROVIDER_OPTIONS', 'ENV',
-                            function ($http, $firebaseSimpleLogin, $linkedIn, $cookies, SessionSvc, FIREBASE_PARAMS, AUTH_PROVIDER_OPTIONS, ENV) {
+    app.service('AuthSvc', ['$firebaseSimpleLogin', '$linkedIn', '$cookies', 'SessionSvc', 'AUTH_PROVIDER_OPTIONS', 'ENV',
+                            function ($firebaseSimpleLogin, $linkedIn, $cookies, SessionSvc, AUTH_PROVIDER_OPTIONS, ENV) {
         var authOptions = AUTH_PROVIDER_OPTIONS,
-            firebaseParams = FIREBASE_PARAMS,
-            environment = ENV;
+            firebaseUrl = ENV.firebaseUrl;
 
         this.isAuthenticated = function () {
             return !!SessionSvc.userId;
@@ -109,11 +108,11 @@
         };
 
         this.firebaseAuth =  function () {
-            return $firebaseSimpleLogin(new Firebase(firebaseParams.url));
+            return $firebaseSimpleLogin(new Firebase(firebaseUrl));
         };
 
         this.loginLi = function () {
-           return $linkedIn.authorize();
+            return $linkedIn.authorize();
         };
 
         this.getLiProfile = function () {
