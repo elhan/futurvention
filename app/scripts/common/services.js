@@ -93,7 +93,7 @@
     app.service('AuthSvc', ['$firebaseSimpleLogin', '$linkedIn', '$cookies', 'SessionSvc', 'AUTH_PROVIDER_OPTIONS', 'ENV',
                             function ($firebaseSimpleLogin, $linkedIn, $cookies, SessionSvc, AUTH_PROVIDER_OPTIONS, ENV) {
         var authOptions = AUTH_PROVIDER_OPTIONS,
-            firebaseUrl = ENV.firebaseUrl;
+            environment = ENV;
 
         this.isAuthenticated = function () {
             return !!SessionSvc.userId;
@@ -108,7 +108,7 @@
         };
 
         this.firebaseAuth =  function () {
-            return $firebaseSimpleLogin(new Firebase(firebaseUrl));
+            return $firebaseSimpleLogin(new Firebase(environment.firebaseUrl));
         };
 
         this.loginLi = function () {
