@@ -21,16 +21,16 @@
     <form name="loginForm" class="reg-form" role="form" ng-submit="login(newUser)">
       <label class="label-title">Sign in with an email account</label>
       <!-- email input -->
-      <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.invalidEmail || authError.emailTaken}">
-          <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true" autocomplete="on">
+      <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.invalidEmail || authError.invalidUser}">
+        <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true" autocomplete="on">
         <label ng-show="loginForm.inputEmail.$error.email" class="control-label label-s" for="inputEmail">
           Please include a '@' in the email address.
         </label>
-        <label ng-show="authError.emailTaken && authError.emailTaken === newUser.email" class="control-label label-s" for="inputEmail">
-          The specified email address is already in use.
-        </label>
         <label ng-show="authError.invalidEmail && authError.invalidEmail === newUser.email" class="control-label label-s" for="inputEmail">
           The specified email address is incorrect.
+        </label>
+        <label ng-show="authError.invalidUser && authError.invalidUser === newUser.email" class="control-label label-s" for="inputEmail">
+          The specified user does not exist.
         </label>
       </div>
       <!-- password input -->

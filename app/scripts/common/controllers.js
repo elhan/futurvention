@@ -60,7 +60,9 @@
         });
 
         // initialization
-        initSession();
+        $scope.$on('firebase-connected', function () {
+            initSession();
+        });
     }]);
 
     /**
@@ -70,10 +72,10 @@
      * # LoginCtrl
      * Controller of the login form
      */
-    app.controller('LoginCtrl', ['$scope', '$rootScope', '$linkedIn', 'AUTH_EVENTS', 'AUTH_PROVIDER_OPTIONS', 'AuthSvc', 'UserSvc', function ($scope, $rootScope, $linkedIn, AUTH_EVENTS, AUTH_PROVIDER_OPTIONS, AuthSvc, UserSvc) {
+    app.controller('LoginCtrl', ['$scope', '$rootScope', '$linkedIn', 'EVENTS', 'AUTH_PROVIDER_OPTIONS', 'AuthSvc', 'UserSvc', function ($scope, $rootScope, $linkedIn, EVENTS, AUTH_PROVIDER_OPTIONS, AuthSvc, UserSvc) {
 
         var authOptions = AUTH_PROVIDER_OPTIONS,
-            authEvents = AUTH_EVENTS,
+            authEvents = EVENTS.auth,
             firebase = AuthSvc.firebaseAuth();
 
         // the models for the registration form
@@ -104,7 +106,7 @@
 
         $scope.loginFb = function () {
             firebase.$login('facebook', authOptions.facebook).then(function (res) {
-                var user = UserSvc.getUser(res.values[0].id); // try fetch the user from the server
+                var user = UserSvc.getUser(res.id); // try fetch the user from the server
                 !user && UserSvc.setUser({ // if the user is not registered, store a new User object
                         id: res.id,
                         firstName: res.thirdPartyUserData.first_name,
@@ -165,7 +167,7 @@
         $scope.$on('auth-login-failed', function (event, error) {
             switch (error.code) {
                 case 'INVALID_USER':
-                    $scope.authError.invalidUser = true;
+                    $scope.authError.invalidUser = $scope.newUser.email;
                     break;
                 case 'INVALID_EMAIL':
                     $scope.authError.invalidEmail = $scope.newUser.email;

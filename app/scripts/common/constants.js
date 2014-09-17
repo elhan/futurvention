@@ -5,39 +5,36 @@
 
     /**
      * @ngdoc object
-     * @name fvApp.controller:AUTH_EVENTS
+     * @name fvApp.constant:EVENTS
      * @description
-     * # AUTH_EVENTS
-     * All the suported authentication events. Broadcasted through $rootScope
+     * # EVENTS
+     * All the supported $rootScope events.
      */
-    app.constant('AUTH_EVENTS', {
-        registrationSuccess: 'auth-registration-success',
-        registrationFailed: 'auth-registration-failed',
-        loginSuccess: 'auth-login-success',
-        loginFailed: 'auth-login-failed',
-        logoutSuccess: 'auth-logout-success',
-        sessionTimeout: 'auth-session-timeout',
-        notAuthenticated: 'auth-not-authenticated',
-        notAuthorized: 'auth-not-authorized'
+    app.constant('EVENTS', {
+        user: {
+            createSuccess: 'user-creation-success',
+            createFailed: 'user-creation-failed',
+            updateSuccess: 'user-update-success',
+            updateFailed: 'user-update-failed'
+        },
+        auth: {
+            registrationSuccess: 'auth-registration-success',
+            registrationFailed: 'auth-registration-failed',
+            loginSuccess: 'auth-login-success',
+            loginFailed: 'auth-login-failed',
+            logoutSuccess: 'auth-logout-success',
+            sessionTimeout: 'auth-session-timeout',
+            notAuthenticated: 'auth-not-authenticated',
+            notAuthorized: 'auth-not-authorized'
+        },
+        firebase: {
+            firebaseConnected: 'firebase-connected'
+        }
     });
 
     /**
      * @ngdoc object
-     * @name fvApp.controller:USER_EVENTS
-     * @description
-     * # USER_EVENTS
-     * All the suported user - related vents. Broadcasted through $rootScope
-     */
-    app.constant('USER_EVENTS', {
-        createSuccess: 'user-creation-success',
-        createFailed: 'user-creation-failed',
-        updateSuccess: 'user-update-success',
-        updateFailed: 'user-update-failed'
-    });
-
-    /**
-     * @ngdoc object
-     * @name fvApp.constants:USER_ROLES
+     * @name fvApp.constant:USER_ROLES
      * @description
      * # USER_ROLES
      * All the suported user roles
@@ -51,12 +48,12 @@
 
     /**
      * @ngdoc String
-     * @name fvApp.constants:FIREBASE_SETTINGS
+     * @name fvApp.constant:FIREBASE_PARAMS
      * @description
      * # FIREBASE_settings
      * Firebase settings registered for fvApp
      */
-    app.constant('FIREBASE_SETTINGS', {
+    app.constant('FIREBASE_PARAMS', {
         url: 'https://fvappdev.firebaseio.com/',
         error: {
             AUTHENTICATION_DISABLED: 'The specified authentication type is not enabled for this Firebase.',
@@ -73,7 +70,7 @@
 
     /**
      * @ngdoc Object
-     * @name fvApp.constants:AUTH_PROVIDER_OPTIONS
+     * @name fvApp.constant:AUTH_PROVIDER_OPTIONS
      * @description
      * # AUTH_PROVIDER_OPTIONS
      * Authentication provider options

@@ -31,7 +31,7 @@
         <input type="text" name="inputLastName" class="form-control" ng-model="newUser.lastName" placeholder="Last name" ng-required="true">
       </div>
       <!-- email input -->
-      <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.emailTaken}">
+      <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.emailTaken || authError.invalidEmail}">
         <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true">
         <label ng-show="loginForm.inputEmail.$error.email" class="control-label label-s" for="inputEmail">
           Please include a '@' in the email address.
@@ -47,7 +47,7 @@
       <div class="form-group" ng-class="{'has-error': loginForm.inputPassword.$error.minlength}">
         <input type="password" name="inputPassword" class="form-control" ng-model="newUser.password" ng-minlength="6" placeholder="Password" ng-required="true">
         <label ng-show="loginForm.inputPassword.$error.minlength" class="control-label label-s" for="inputPassword">
-          The specified password is incorrect.
+            This field needs to be at least 6 characters long.
         </label>
       </div>
       <button type="submit" class="text-16 btn btn btn-primary btn-lg bg-darkblue" ng-disabled="{{loginForm.$invalid}}">Submit</button>

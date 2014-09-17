@@ -44,11 +44,17 @@
      * # UserSvc
      * Interacts with the server to set, get, and delete User objects.
      */
-    app.service('UserSvc', ['$firebase', '$rootScope', 'FIREBASE_SETTINGS', function ($firebase,  $rootScope, FIREBASE_SETTINGS) {
+    app.service('UserSvc', ['$firebase', '$rootScope', 'FIREBASE_PARAMS', 'EVENTS', function ($firebase, $rootScope, FIREBASE_PARAMS, EVENTS) {
         var users,
-            firebaseSettings = FIREBASE_SETTINGS,
-            usersRef = new Firebase(firebaseSettings.url + '/users'),
-            sync = $firebase(usersRef);
+            firebaseEvents = EVENTS.firebase,
+            firebaseParams = FIREBASE_PARAMS,
+            usersRef = new Firebase(firebaseParams.url + '/users'),
+            sync = $firebase(usersRef).$asObject();
+
+        // broadcast an event when firebase has done connecting
+        sync.$loaded().then(function () {
+            $rootScope.$broadcast(firebaseEvents.firebaseConnected);
+        });
 
         this.setUser = function (user) {
             sync.$push(user).then(function (newChildRef) {
@@ -84,10 +90,10 @@
      * # AuthSvc
      * A service to handle email authentication and authorization.
      */
-    app.service('AuthSvc', ['$http', '$firebaseSimpleLogin', '$linkedIn', '$cookies', 'SessionSvc', 'FIREBASE_SETTINGS', 'AUTH_PROVIDER_OPTIONS', 'ENV',
-                            function ($http, $firebaseSimpleLogin, $linkedIn, $cookies, SessionSvc, FIREBASE_SETTINGS, AUTH_PROVIDER_OPTIONS, ENV) {
+    app.service('AuthSvc', ['$http', '$firebaseSimpleLogin', '$linkedIn', '$cookies', 'SessionSvc', 'FIREBASE_PARAMS', 'AUTH_PROVIDER_OPTIONS', 'ENV',
+                            function ($http, $firebaseSimpleLogin, $linkedIn, $cookies, SessionSvc, FIREBASE_PARAMS, AUTH_PROVIDER_OPTIONS, ENV) {
         var authOptions = AUTH_PROVIDER_OPTIONS,
-            firebaseSettings = FIREBASE_SETTINGS,
+            firebaseParams = FIREBASE_PARAMS,
             environment = ENV;
 
         this.isAuthenticated = function () {
@@ -103,7 +109,7 @@
         };
 
         this.firebaseAuth =  function () {
-            return $firebaseSimpleLogin(new Firebase(firebaseSettings.url));
+            return $firebaseSimpleLogin(new Firebase(firebaseParams.url));
         };
 
         this.loginLi = function () {
