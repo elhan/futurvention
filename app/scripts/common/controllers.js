@@ -19,13 +19,19 @@
 
         // Initialize the Session object when the app first loads if there is a session available in the local storage
         function initSession () {
-            var firebaseSession = LocalStorageSvc.getSession();
-            if (!firebaseSession) {
-                return;
+            var firebaseSession = LocalStorageSvc.getSession(),
+                user = UserSvc.getUser();
+            if (!user && !firebaseSession) {
+                return; // user is not logged in
             }
             // TODO: implement user roles
-            $scope.setCurrentUser(UserSvc.getUser(firebaseSession.user.id));
-            SessionSvc.create(firebaseSession.sessionKey, firebaseSession.user.id, firebaseSession.user.provider, $scope.userRoles.user);
+            $scope.setCurrentUser(UserSvc.getUser());
+            if (firebaseSession) {
+                SessionSvc.create(firebaseSession.sessionKey, firebaseSession.user.id, firebaseSession.user.provider, $scope.userRoles.user);
+            } else {
+                // TODO: proper linkedIn session
+                SessionSvc.create(Math.random(), user.id, 'linkedIn', $scope.userRoles.user);
+            }
         }
 
         /*
@@ -60,9 +66,7 @@
         });
 
         // initialization
-        $scope.$on('firebase-connected', function () {
-            initSession();
-        });
+        initSession();
     }]);
 
     /**
@@ -96,9 +100,7 @@
         $scope.register = function (newUser) {
             firebase.$createUser(newUser.email, newUser.password).then(function (session) {
                 $rootScope.$broadcast(authEvents.registrationSuccess, session);
-                newUser.id = session.id; // this is the firebase userId, not the session's id
-                UserSvc.setUser(newUser); // create a new User object in the database
-                $scope.login({email: newUser.email, password: newUser.password}); // auto login user after registration
+                $scope.login(newUser); // auto login user after registration
             }, function (error) {
                 $rootScope.$broadcast(authEvents.registrationFailed, error);
             });
@@ -106,13 +108,12 @@
 
         $scope.loginFb = function () {
             firebase.$login('facebook', authOptions.facebook).then(function (res) {
-                var user = UserSvc.getUser(res.id); // try fetch the user from the server
-                !user && UserSvc.setUser({ // if the user is not registered, store a new User object
-                        id: res.id,
-                        firstName: res.thirdPartyUserData.first_name,
-                        lastName: res.thirdPartyUserData.last_name,
-                        email: res.thirdPartyUserData.email
-                    });
+                UserSvc.setUser({ // if the user is not registered, store a new User object
+                    id: res.id,
+                    firstName: res.thirdPartyUserData.first_name,
+                    lastName: res.thirdPartyUserData.last_name,
+                    email: res.thirdPartyUserData.email
+                });
                 $rootScope.$broadcast(authEvents.loginSuccess, res.id, 'facebook');
             }, function (error) {
                 $rootScope.$broadcast(authEvents.loginFailed, error);
@@ -122,21 +123,22 @@
         $scope.loginLi = function () {
             AuthSvc.loginLi().then(function () {
                 AuthSvc.getLiProfile().then(function (res) {
-                    var user = UserSvc.getUser(res.values[0].id); // try fetch the user from the server
-                    user&& UserSvc.setUser({ // if the user is not registered, store a new User object
-                            id: res.values[0].id,
-                            firstName: res.values[0].firstName,
-                            lastName: res.values[0].lastName,
-                            email: res.values[0].emailAddress
-                        });
+                    UserSvc.setUser({ // if the user is not registered, store a new User object
+                        id: res.values[0].id,
+                        firstName: res.values[0].firstName,
+                        lastName: res.values[0].lastName,
+                        email: res.values[0].emailAddress
+                    });
                     $rootScope.$broadcast(authEvents.loginSuccess, res.values[0].id, 'linkedIn');
                 });
             });
         };
 
         $scope.login = function (newUser) {
-            firebase.$login('password', { email: newUser.email, password: newUser.password }).then(function (res) {
-                $rootScope.$broadcast(authEvents.loginSuccess, res.id, 'password');
+            firebase.$login('password', { email: newUser.email, password: newUser.password }).then(function (session) {
+                newUser.id = session.id; // this is the firebase userId, not the session's id
+                UserSvc.setUser(newUser); // create a new User object in the database
+                $rootScope.$broadcast(authEvents.loginSuccess, session.id, 'password');
             }, function (error) {
                 $rootScope.$broadcast(authEvents.loginFailed, error);
             });
@@ -144,6 +146,7 @@
 
         $scope.logout = function () {
             firebase.$logout();
+            UserSvc.removeUser();
             $rootScope.$broadcast(authEvents.logoutSuccess, event);
         };
 

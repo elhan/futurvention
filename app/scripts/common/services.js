@@ -44,46 +44,25 @@
      * # UserSvc
      * Interacts with the server to set, get, and delete User objects.
      */
-    app.service('UserSvc', ['$firebase', '$rootScope', 'ENV', 'EVENTS', function ($firebase, $rootScope, ENV, EVENTS) {
-        var users,
-            firebaseEvents = EVENTS.firebase,
-            firebaseUrl = ENV.firebaseUrl,
-            usersRef = new Firebase(firebaseUrl + '/users'),
-            sync = $firebase(usersRef);
-
-        // broadcast an event when firebase has done connecting
-        sync.$asObject().$loaded().then(function () {
-            $rootScope.$broadcast(firebaseEvents.firebaseConnected);
-        });
+    app.service('UserSvc', function () {
 
         this.setUser = function (user) {
-            console.log('adding new user: ' + user);
-            console.log(sync);
-            sync.$push(user).then(function (newChildRef) {
-                // TODO: add proper logging
-                console.log('added new user with key: ', newChildRef.name());
-            });
+            // TODO: post to server
+            localStorage.setItem('user', JSON.stringify(user));
         };
 
-        this.getUsers = function () {
-            return users;
+        this.getUser = function () {
+            // TODO: get from server
+            return JSON.parse(localStorage.getItem('user'));
         };
 
-        this.getUser = function (id) {
-            return _.find(users, function (user) {
-                return user.id === id;
-            });
+        this.removeUser = function () {
+            // TODO: remove from server
+            localStorage.removeItem('user');
         };
-
-        // Synchronise the user collection
-        usersRef.on('value', function (snapshot) {
-            users = snapshot.val();
-        }, function (errorObject) {
-            console.log('The firebase read failed: ' + errorObject.code);
-        });
 
         return this;
-    }]);
+    });
 
     /**
      * @ngdoc service
