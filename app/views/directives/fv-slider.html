@@ -1,7 +1,7 @@
 <div ng-repeat="slide in slides" ng-show="index === $index" class="{{options.slidename}} {{slides[$index]}} cover speed{{speed}}"
      ng-class="{'slideup': direction === 'up', 'slidedown': direction === 'down'}"
      ng-swipe-up="goToSlide(index + 1)" ng-swipe-down="goToSlide(index - 1)">
-  <div ng-if="index === $index" ng-include="'views/partials/landingPageContent.html'" class="centered fade"></div>
+  <div ng-if="index === $index" ng-include="'views/partials/landingPageContent.html'" class="fade" ng-class="{'fullscreen': options.fullscreen}"></div>
 </div>
 <div ng-if="options.indicator" class="indicator">
   <span ng-repeat="slide in slides" ng-click="goToSlide($index)" ng-class="{active: index === $index}"></span>

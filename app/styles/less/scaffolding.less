@@ -1,0 +1,148 @@
+.fullscreen-y {
+  height: 100%;
+  min-height: 100%;
+}
+
+.fullscreen-x {
+  width: 100%;
+  margin: 0;
+}
+
+.fullscreen {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body, html {
+  .fullscreen;
+}
+
+// CUSTOM FLEX CLASSES
+
+.flex {
+  display: flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-centered {
+  display: flex;
+  align-self: center;
+}
+
+.flex-content-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-content-spread {
+  display: flex;
+  justify-content: space-between;
+}
+
+// CONTAINERS
+.container-x {
+  display: flex;
+  flex-direction: row;
+}
+
+.container-y {
+  display: flex;
+  flex-direction: column;
+}
+
+.container-page {
+  .container-y;
+  align-content: space-between;
+  width: 66.66666667%; // .col-md-8
+  margin-left: 16.66666667%; // .col-sm-offset-2
+  padding-top: 50px; // header bar height
+}
+
+.container-page-inner {
+  width: 80%;
+  margin: 0 auto;
+}
+
+// BOX CLASSES
+.box-s {
+  max-width: 245px;
+}
+
+.box-s-title {
+  .text-20;
+  .text-w-700;
+  .text-centered;
+}
+
+.box-s-description {
+  .text-18;
+  .text-w-300;
+  .text-centered;
+  line-height: 1.5em;
+  align-self: center;
+  max-width: 256px;
+}
+
+// WRAPPER CLASSES
+.wrapper-row {
+  display: flex;
+  justify-content: space-around;
+  padding: 60px 40px 20px;
+}
+
+.wrapper-column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: flex-start;
+}
+
+.wrapper-round {
+  padding: 0px;
+  border-radius: 50%;
+}
+
+.wrapper-s {
+  height: 80px;
+  width: 80px;
+}
+
+.wrapper-m {
+  height: 135px;
+  width: 135px;
+  margin-bottom: 30px;
+  position: relative;
+  display: flex;
+  align-self: center;
+}
+
+.wrapper-lightgrey {
+  border: 1px solid @lightGrey;
+  -webkit-box-shadow: 0 0 2px @lightGrey;
+  -mox-box-shadow: 0 0 2px @lightGrey;
+  box-shadow: 0 0 2px @lightGrey;
+  > div, i, span {
+    color: @lightGrey;
+  }
+  .selected & {
+    background-color: @lightGrey;
+    > div, i, span {
+      color: white;
+    }
+  }
+}
+
+.wrapper-black {
+  -webkit-box-shadow: 0 0 2px white;
+  -mox-box-shadow: 0 0 2px white;
+  box-shadow: 0 0 2px white;
+  > div, i, span {
+    color: black;
+  }
+}

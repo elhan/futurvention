@@ -1,129 +1,149 @@
-<div ng-switch on="$index">
-  <div ng-switch-when="0" class="box text-white col-md-8 col-md-offset-2">
-    <div class="text-header-l">FREELANCING REVOLUTIONIZED</div>
-    <div class="box-description">
-      ServiceBucket is where freelancing meets ecommerce. It's like your very own creative storefront, stocked with the services you want to sell. Open your store to see the new face of online work.
+<div ng-switch on="$index" class="landing container-page flex-content-centered fullscreen-y">
+  <!--  Page 0-->
+  <div ng-switch-when="0" class="container-y box text-white">
+    <div class="container-y">
+      <div class="flex-centered text-header-l">FREELANCING REVOLUTIONIZED</div>
+      <div class="flex-centered container-y description">
+        <div>ServiceBucket is where freelancing meets ecommerce. It's like your very own creative storefront,</div>
+        <div>stocked with the services you want to sell. Open your store to see the new face of online work.</div>
+      </div>
     </div>
-    <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="isAuthenticated() ? go('/apply') : go('/register')">Apply to Join in less than a minute</button>
+    <div class="container-x flex-content-centered">
+      <button type="button" class="btn btn-lg btn-primary btn-apply" ng-click="isAuthenticated() ? go('/apply') : go('/register')">Apply to Join in less than a minute</button>
     </div>
   </div>
-  <div ng-switch-when="1" class="box text-white col-md-8 col-md-offset-2">
-    <div class="text-header-l">ALL YOUR PROFILES UNDER ONE ROOF</div>
-    <div class="box-description">
-      Work on multiple freelance sites? We will compile all your feedback, reviews and even entire portfolios from all your accounts. Simply enter the URLs and we'll do the rest. More work history means more jobs for you.
-    </div>
-    <div class="container-fluid">
-      <div class="row-fluid wrapper-row">
-        <div class="col-xs-1 wrapper-round wrapper-s bg-white">
-          <div class="cover icon-centered">
-            <i class="fa-centered fa fa-behance fa-3x"></i>
+  <!-- Page 1-->
+  <div ng-switch-when="1" class="text-white container-y">
+    <div class="flex-centered text-header-l">ALL YOUR PROFILES UNDER ONE ROOF</div>
+      <div class="container-page-inner">
+      <div class="flex-centered container-y description">
+        <div>Work on multiple freelance sites? We will compile all your feedback, reviews and even entire portfolios from all your accounts.</div>
+        <div>Simply enter the URLs and we'll do the rest. More work history means more jobs for you.</div>
+      </div>
+      <!--    Profile import third party icons-->
+      <div class="icons-import">
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="icon-thirdparty">
+            <i class="fa-centered fa fa-linkedin fa-2x"></i>
           </div>
         </div>
-        <div class="col-xs-1 wrapper-round wrapper-s bg-white">
-          <div class="cover icon-centered">
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="icon-odesk icon-thirdparty"></div>
+        </div>
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="icon-elance">E</div>
+        </div>
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="icon-freelancer icon-thirdparty"></div>
+        </div>
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="col-xs-1 wrapper-round icon-pph wrapper-s bg-white">
+            <div class="quarter-tl">
+              <span class="circle-s"></span>
+            </div>
+            <div class="quarter-tr">
+              <span class="circle-s"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="icon-thirdparty">
+            <i class="fa-centered fa fa-behance fa-2x"></i>
+          </div>
+        </div>
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="icon-thirdparty">
             <i class="fa-centered fa fa-dribbble fa-3x"></i>
           </div>
         </div>
-        <div class="col-xs-1 wrapper-round wrapper-s bg-white">
-          <div class="cover icon-centered">
+        <div class="col-xs-1 import-link wrapper-black">
+          <div class="icon-thirdparty">
             <i class="fa-centered fa fa-github fa-3x"></i>
           </div>
         </div>
-        <div class="col-xs-1 wrapper-round wrapper-s bg-white">
-          <div class="icon-odesk cover icon-centered"></div>
-        </div>
-        <div class="col-xs-1 wrapper-round wrapper-s bg-white">
-          <div class="icon-elance">E</div>
-        </div>
-        <div class="col-xs-1 wrapper-round wrapper-s bg-white">
-          <div class="icon-freelancer cover icon-centered"></div>
-        </div>
       </div>
     </div>
-    <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/register')">Apply to Join in less than a minute</button>
+    <div class="container-x flex-content-centered">
+      <button type="button" class="btn btn-lg btn-primary btn-apply" ng-click="isAuthenticated() ? go('/apply') : go('/register')">Apply to Join in less than a minute</button>
     </div>
   </div>
-  <div ng-switch-when="2" class="box text-white col-md-12">
-    <div class="text-header-l">FREELANCE FLEXIBILITY, ECOMMERCE CONVENIENCE</div>
-    <div class="container-fluid">
-      <div class="row-fluid wrapper-row">
-        <div class="col-s-1 wrapper-column">
-          <div class="wrapper-round wrapper-m bg-white">
-            <div class="cover icon-centered">
-              <i class="fa-centered fa fa-list fa-3x"></i>
-            </div>
-          </div>
-          <div class="box-s-title">SUPERFAST SETUP</div>
-          <div class="box-s-description">
-            Select services and set your price. A comprehensive catalogue with ready-made, professional service descriptions makes it super easy.
-          </div>
+  <!-- Page 2-->
+  <div ng-switch-when="2" class="text-white container-y">
+    <div class="flex-centered text-header-l">FREELANCE FLEXIBILITY, ECOMMERCE CONVENIENCE</div>
+    <div class="content-center">
+      <div class="container-y">
+        <div class="wrapper-round wrapper-m bg-white wrapper-black flex-content-centered">
+          <i class="fa-centered fa fa-list fa-3x"></i>
         </div>
-        <div class="col-s-1 wrapper-column">
-          <div class="wrapper-round wrapper-m bg-white">
-            <div class="cover icon-centered">
-              <i class="fa-centered fa fa-usd fa-3x"></i>
-            </div>
-          </div>
-          <div class="box-s-title">OPEN 24/7</div>
-          <div class="box-s-description">
-            Say goodbye to bids and cover letters. Clients will now come to you, not the other way round.
-          </div>
+        <div class="box-s-title">SUPERFAST SETUP</div>
+        <div class="box-s-description">
+          Select services and set your price. A comprehensive catalogue with ready-made, professional service descriptions makes it super easy.
         </div>
-        <div class="col-s-1 wrapper-column">
-          <div class="wrapper-round wrapper-m bg-white">
-            <div class="cover icon-centered">
-              <i class="fa-centered fa fa-briefcase fa-3x"></i>
-            </div>
-          </div>
-          <div class="box-s-title"><span class="degree">360</span> SUPPORT</div>
-          <div class="box-s-description">
-            You keep selling your services, we handle the rest. From communications to invoicing to reviews, you're in good hands.
-          </div>
+      </div>
+      <div class="container-y">
+        <div class="wrapper-round wrapper-m bg-white wrapper-black flex-content-centered">
+          <i class="fa-centered fa fa-usd fa-3x"></i>
+        </div>
+        <div class="box-s-title">OPEN 24/7</div>
+        <div class="box-s-description">
+          Say goodbye to bids and cover letters. Clients will now come to you, not the other way round.
+        </div>
+      </div>
+      <div class="container-y">
+        <div class="wrapper-round wrapper-m bg-white wrapper-black flex-content-centered">
+          <i class="fa-centered fa fa-briefcase fa-3x"></i>
+        </div>
+        <div class="box-s-title"><span class="degree">360</span> SUPPORT</div>
+        <div class="box-s-description">
+          You keep selling your services, we handle the rest. From communications to invoicing to reviews, you're in good hands.
         </div>
       </div>
     </div>
-    <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/register')">Apply to Join in less than a minute</button>
+    <div class="container-x flex-content-centered">
+      <button type="button" class="btn btn-lg btn-primary btn-apply" ng-click="isAuthenticated() ? go('/apply') : go('/register')">Apply to Join in less than a minute</button>
     </div>
   </div>
-  <div ng-switch-when="3" class="box text-white col-md-12">
-    <div class="text-header-l">OUR SELLERS ARE THE CREAM OF THE CROP</div>
-    <div class="container-fluid">
-      <div class="row-fluid wrapper-row">
-        <div class="col-s-1 wrapper-column">
-          <div class="wrapper-m">
-            <img class="img-responsive img-circle" src="../../images/seller0.png"></img>
-          </div>
-          <div class="box-s-title">TOM</div>
-          <div class="box-s-description">web designer</div>
-        </div>
-        <div class="col-s-1 wrapper-column">
-          <div class="wrapper-m">
-            <img class="img-responsive img-circle" src="../../images/seller1.png"></img>
-          </div>
-          <div class="box-s-title">HELEN</div>
-          <div class="box-s-description">photographer</div>
-        </div>
-        <div class="col-s-1 wrapper-column">
-          <div class="wrapper-m">
-            <img class="img-responsive img-circle" src="../../images/seller2.png"></img>
-          </div>
-          <div class="box-s-title">DAMON</div>
-          <div class="box-s-description">copywriter</div>
-        </div>
-        <div class="col-s-1 wrapper-column">
-          <div class="wrapper-m">
-            <img class="img-responsive img-circle" src="../../images/seller3.png"></img>
-          </div>
-          <div class="box-s-title">LUISA</div>
-          <div class="box-s-description">web developer</div>
-        </div>
+  <!-- Page 3-->
+  <div ng-switch-when="3" class="text-white container-y">
+    <div class="flex-centered text-header-l">OUR SELLERS ARE THE CREAM OF THE CROP</div>
+    <div class="container-page-inner">
+      <div class="flex-centered container-y description">
+        <div>We only let the best in. Higher-quality freelancers attract clients who are willing to pay for excellence.</div>
+        <div>That's more bussiness for you.</div>
       </div>
     </div>
-    <div class="box-button-wrap">
-      <button type="button" class="btn btn-lg btn-primary bg-darkblue" ng-click="go('/register')">Apply to Join in less than a minute</button>
+    <div class="content-center">
+      <div class="container-y flex-1">
+        <div class="wrapper-m">
+          <img class="img-responsive img-circle" src="../../images/seller0.png"></img>
+        </div>
+        <div class="box-s-title">TOM</div>
+        <div class="box-s-description">web designer</div>
+      </div>
+      <div class="container-y flex-1">
+        <div class="wrapper-m">
+          <img class="img-responsive img-circle" src="../../images/seller1.png"></img>
+        </div>
+        <div class="box-s-title">HELEN</div>
+        <div class="box-s-description">photographer</div>
+      </div>
+      <div class="container-y flex-1">
+        <div class="wrapper-m">
+          <img class="img-responsive img-circle" src="../../images/seller2.png"></img>
+        </div>
+        <div class="box-s-title">DAMON</div>
+        <div class="box-s-description">copywriter</div>
+      </div>
+      <div class="container-y flex-1">
+        <div class="wrapper-m">
+          <img class="img-responsive img-circle" src="../../images/seller3.png"></img>
+        </div>
+        <div class="box-s-title">LUISA</div>
+        <div class="box-s-description">web developer</div>
+      </div>
     </div>
+  <div class="container-x flex-content-centered">
+    <button type="button" class="btn btn-lg btn-primary btn-apply" ng-click="isAuthenticated() ? go('/apply') : go('/register')">Apply to Join in less than a minute</button>
+  </div>
   </div>
 </div>

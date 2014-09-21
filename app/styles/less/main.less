@@ -4,13 +4,21 @@
 // Font & text related styles
 @import 'fonts.less';
 
-// Components
+// Scaffolding: grid, containers etc
+@import 'scaffolding.less';
+
+// Components: buttons, dropdowns etc
+@import 'components/components.less';
 @import 'components/buttons.less';
+
+// Directives: styles for custom element directives
+@import 'directives/fv-timeline-h.less';
 
 // Views & partials
 @import 'header.less';
 @import 'landing.less';
 @import 'register.less';
+@import 'apply.less';
 
 // Animations
 @import 'animations.less';
@@ -19,5 +27,5 @@
 @import 'assets.less';
 
 @import '../../bower_components/lato/less/lato.less';
-//@lato-font-path: '../../bower_components/lato/font';
-@lato-font-path: '../fonts';
+@lato-font-path: '../../bower_components/lato/font';
+//@lato-font-path: '../fonts';

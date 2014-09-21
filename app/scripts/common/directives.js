@@ -6,7 +6,7 @@
     /**
      * @ngdoc directive
      * @name fvApp.directive:fvslider
-     * @restrict A
+     * @restrict E
      *
      * @description
      * Creates a custom slider element
@@ -115,5 +115,25 @@
             }
         };
     }]);
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvTimelineH
+     * @restrict E
+     *
+     * @description
+     * Creates a custom horizontal timeline element
+     *
+     * @example
+     * <fv-timeline-h></fv-timeline-h>
+     */
+    app.directive('fvTimelineH', function () {
+        return {
+            restrict: 'E',
+            templateUrl: 'views/directives/fv-timeline-h.html',
+            link: function () {
+            }
+        };
+    });
 
 }());

@@ -1,12 +1,10 @@
-.box-button-wrap {
-  padding: 70px 0 30px;
-  display: flex;
-  justify-content: center;
-}
+// Bootstrap override
+// -------------------------
 
-.box-button-wrap > .btn {
-  padding: 20px 40px;
-  white-space: normal;
+.btn {
+  &:focus {
+    outline: none !important;
+  }
 }
 
 // Navbar Login & Registration links
@@ -54,6 +52,12 @@
   background-color: @fbBlue;
 }
 
+.btn-apply {
+  .bg-darkblue;
+  padding: 20px 40px;
+  white-space: normal;
+}
+
 .link-box-darkblue {
   .text-darkBlue;
   margin-left: 5px;
@@ -72,7 +76,8 @@
 .nav-btn-wrap {
   position: fixed;
   width: 100%;
-  bottom: 40px;
+  bottom: 0;
+  padding-bottom: 40px;
   display: flex;
   justify-content: center;
   z-index: 2;

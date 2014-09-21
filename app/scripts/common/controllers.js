@@ -4,7 +4,7 @@
     var app = angular.module('fvApp');
 
     /**
-     * @ngdoc function
+     * @ngdoc Controller
      * @name fvApp.controller:MainCtrl
      * @description
      * # MainCtrl
@@ -46,6 +46,10 @@
             $location.path(path);
         };
 
+        $scope.locationAt = function (route) {
+            return route === $location.path();
+        };
+
         // update Session object and currentUser model on logout
         $scope.$on('auth-logout-success', function (event) {
             SessionSvc.destroy();
@@ -60,7 +64,8 @@
             provider === 'linkedIn' && SessionSvc.create(Math.random(), userId, provider, $scope.userRoles.user);
             initSession();
             $scope.setCurrentUser(UserSvc.getUser(SessionSvc.userId));
-            $scope.go('/');
+            // if the user just registered, redirect him to seller application flow
+            $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
             // TODO: add proper logging
             console.log(event);
         });
@@ -70,7 +75,7 @@
     }]);
 
     /**
-     * @ngdoc function
+     * @ngdoc Controller
      * @name fvApp.controller:LoginCtrl
      * @description
      * # LoginCtrl
@@ -187,16 +192,68 @@
     }]);
 
     /**
-     * @ngdoc function
-     * @name fvApp.controller:HeaderCtrl
+     * @ngdoc Controller
+     * @name fvApp.controller:ApplyCtrl
      * @description
-     * # HeaderCtrl
-     * Controller of header navigation bar
+     * # ApplyCtrl
+     * Controls the apply page & seller profile completion
      */
-    app.controller('HeaderCtrl', ['$scope', '$location', function ($scope, $location) {
-        // The header needs to be aware of the current location
-        $scope.locationAt = function (route) {
-            return route === $location.path();
+    app.controller('ApplyCtrl', ['$scope', function ($scope) {
+        // init the new User profile
+        $scope.profile = {};
+
+        // profile completion steps
+        $scope.steps = ['import', 'complete', 'open'];
+        $scope.activeStep = $scope.steps[0];
+
+        // avoid shadow properties
+        $scope.updateProfile = function (profileData) {
+            angular.extend($scope.profile, profileData);
         };
     }]);
+
+    /**
+     * @ngdoc Controller
+     * @name fvApp.controller:ApplyImportCtrl
+     * @description
+     * # ApplyImportCtrl
+     * Controls the apply 'import' step
+     */
+    app.controller('ApplyImportCtrl', ['$scope', function ($scope) {
+        // A collection of third party profiles and their selection state
+        $scope.providers = [
+            { name: 'linkedIn', selected: false },
+            { name: 'oDesk', selected: false },
+            { name: 'elance', selected: false},
+            { name: 'peoplePerHour', selected: false },
+            { name: 'freelancer', selected: false },
+            { name: 'behance', selected: false },
+            { name: 'dribbble', selected: false },
+            { name: 'github', selected: false }
+        ];
+
+        // toggles the given provider's selection state
+        $scope.toggleSelection = function (providerName) {
+            var provider = _.find($scope.providers, function (provider) {
+                return provider.name === providerName;
+            });
+            provider.selected = !provider.selected;
+        };
+
+        // returns the giver provider's selection state
+        $scope.isSelected = function (providerName) {
+            return _.find($scope.providers, function (provider) {
+                return provider.name === providerName && provider.selected;
+            });
+        };
+
+        // returns an array containing all the selected providers
+        $scope.getSelectedProviders = function () {
+            return _.filter($scope.providers, function (provider) {
+                return provider.selected;
+            });
+        };
+
+    }]);
+
 }());

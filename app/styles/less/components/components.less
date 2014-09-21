@@ -1,0 +1,89 @@
+// Dividers
+// -------------------------
+.divider-fancy {
+  overflow:hidden;
+  height:20px;
+  &:after {
+    content: '';
+    display: block;
+    margin:-25px auto 0;
+    width: 100%;
+    height: 25px;
+    border-radius: 100%;
+    box-shadow: 0 0 8px rgba(0, 0, 0, .5);
+  }
+}
+
+// Profile import links
+// -------------------------
+.import-link-wrap {
+  .container-y;
+  .flex-content-centered;
+  .icon-minus {
+    display: none;
+  }
+  > div, i {
+    transition: .2s;
+  }
+  &:hover {
+    .import-link {
+      background-color: @darkBlue;
+      border: 1px solid @darkBlue;
+      cursor: pointer;
+      .icon-thirdparty {
+        display: none;
+      }
+      .icon-plus {
+        display: flex;
+      }
+    }
+    .label-import-link {
+      color: black;
+    }
+    &.selected {
+      .import-link {
+        background-color: @lightGrey;
+        border: 1px solid @lightGrey;
+        .icon-plus {
+          display: none;
+        }
+        .icon-minus {
+          display: flex;
+        }
+      }
+      .label-import-link {
+        color: @lightGrey;
+      }
+    }
+  }
+}
+
+.import-link {
+  .wrapper-round;
+  .wrapper-s;
+  .bg-white;
+  .flex-content-centered;
+
+  .icon-thirdparty {
+    .cover;
+    .icon-centered;
+  }
+
+  .icon-plus, icon-minus {
+    display: flex;
+    .icon-centered;
+    display: none;
+    > i {
+      color: white;
+    }
+  }
+}
+
+.label-import-link {
+  .text-centered;
+  padding: 12px 0;
+  letter-spacing: .5px;
+  &:hover {
+    cursor: pointer;
+  }
+}
