@@ -146,10 +146,194 @@
   </div>
   <div>
   </div>
-
   <div ng-show="getSelectedProviders().length" >
     <div class="container-y col-md-8 col-sm-offset-2">
       <div class="divider-fancy"></div>
+      <!--Import profiles form-->
+      <form class="form-horizontal" name="providersForm" role="form" ng-submit="saveProviders()">
+        <!--linkedIn input-->
+        <div class="container-y" ng-show="isSelected('linkedIn')">
+          <div class="form-group" ng-class="{'has-error': providersForm.inputLinkedIn.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <i class="fa-centered fa fa-linkedin fa-2x"></i>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputLinkedIn" ng-model="providers.linkedIn.url" placeholder="enter your linkedIn profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.linkedIn.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="providersForm">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+        <!--oDesk input-->
+        <div class="container-y" ng-show="isSelected('oDesk')">
+          <div class="form-group" ng-class="{'has-error': providersForm.inputOdesk.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <div class="col-xs-1 import-link wrapper-black">
+                  <div class="icon-odesk icon-thirdparty"></div>
+                </div>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputOdesk" ng-model="providers.oDesk.url" placeholder="enter your oDesk profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.oDesk.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="inputOdesk">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+        <!--Elance input-->
+        <div class="container-y" ng-show="isSelected('elance')">
+          <div class="form-group" ng-class="{'has-error': providersForm.inputElance.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <div class="col-xs-1 import-link wrapper-black">
+                  <div class="icon-odesk icon-thirdparty"></div>
+                </div>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputElance" ng-model="providers.elance.url" placeholder="enter your Elance profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.elance.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="inputElance">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+        <!--PeoplePerHour input-->
+        <div class="container-y" ng-show="isSelected('peoplePerHour')">
+          <div class="form-group" ng-class="{'has-error': providersForm.peoplePerHour.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <div class="col-xs-1 import-link wrapper-black">
+                  <div class="icon-odesk icon-thirdparty"></div>
+                </div>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputPph" ng-model="providers.peoplePerHour.url" placeholder="enter your PeoplePerHour profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.peoplePerHour.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="inputPph">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+        <!--Freelancer input-->
+        <div class="container-y" ng-show="isSelected('freelancer')">
+          <div class="form-group" ng-class="{'has-error': providersForm.freelancer.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <div class="col-xs-1 import-link wrapper-black">
+                  <div class="icon-odesk icon-thirdparty"></div>
+                </div>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputFreelancer" ng-model="providers.freelancer.url" placeholder="enter your Freelancer profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.freelancer.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="inputFreelancer">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+        <!--Behance input-->
+        <div class="container-y" ng-show="isSelected('behance')">
+          <div class="form-group" ng-class="{'has-error': providersForm.behance.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <div class="col-xs-1 import-link wrapper-black">
+                  <div class="icon-odesk icon-thirdparty"></div>
+                </div>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputBehance" ng-model="providers.behance.url" placeholder="enter your Behance profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.behance.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="inputBehance">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+        <!--Dribbble input-->
+        <div class="container-y" ng-show="isSelected('dribbble')">
+          <div class="form-group" ng-class="{'has-error': providersForm.behance.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <div class="col-xs-1 import-link wrapper-black">
+                  <div class="icon-odesk icon-thirdparty"></div>
+                </div>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputDribbble" ng-model="providers.dribbble.url" placeholder="enter your Dribbble profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.dribbble.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="inputDribbble">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+        <!--Github input-->
+        <div class="container-y" ng-show="isSelected('github')">
+          <div class="form-group" ng-class="{'has-error': providersForm.github.$error.url}">
+            <div class="container-x flex-content-centered">
+<!--
+              <div class="input-badge">
+                <div class="col-xs-1 import-link wrapper-black">
+                  <div class="icon-odesk icon-thirdparty"></div>
+                </div>
+              </div>
+-->
+              <div class="col-md-6">
+                <input type="url" class="form-control" name="inputGithub" ng-model="providers.github.url" placeholder="enter your Github profile url">
+              </div>
+              <button class="btn btn-flat text-white bg-darkgrey" ng-disabled="providersForm.$invalid || !providers.github.url">save</button>
+            </div>
+            <div class="container-x flex-content-centered">
+              <label ng-show="providersForm.$invalid" class="control-label label-s col-md-6" for="inputGithub">
+                Please provide a valid url: 'http://...'
+              </label>
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
   </div>
   <!--Apply page footer - skip-->

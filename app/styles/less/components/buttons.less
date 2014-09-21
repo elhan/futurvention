@@ -7,6 +7,12 @@
   }
 }
 
+.btn-flat {
+  &:active {
+    box-shadow: none !important;
+  }
+}
+
 // Navbar Login & Registration links
 // -------------------------
 
@@ -39,10 +45,31 @@
 .bg-darkblue {
   border-color: @darkBlue;
   background-color: @darkBlue;
+  &:hover {
+    background-color: #5962c9;
+  }
 }
 
-.bg-darkblue:hover {
-  background-color: #5962c9;
+.bg-lightgrey {
+  border-color: @lightGrey;
+  background-color: @lightGrey;
+  &:hover {
+    border-color: @lightGrey;
+    background-color: @lightGrey;
+  }
+}
+
+.bg-darkgrey {
+  border-color: @darkGrey;
+  background-color: @darkGrey;
+  &:hover {
+    border-color: @darkGrey;
+    background-color: @darkGrey;
+  }
+}
+
+.bg-darkgrey[disabled] {
+  .bg-lightgrey;
 }
 
 // Custom button classes
