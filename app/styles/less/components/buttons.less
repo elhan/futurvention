@@ -5,6 +5,9 @@
   &:focus {
     outline: none !important;
   }
+  &:hover:focus {
+    outline: none !important;
+  }
 }
 
 .btn-flat {
@@ -23,7 +26,7 @@
 
 .nav-link {
   .text-white;
-  font-size: 20px;
+  .text-p;
   &:hover {
     text-decoration: none;
     .text-white;
@@ -31,22 +34,42 @@
   }
   &:focus {
     .text-white;
-    outline: none;
     text-decoration: none;
   }
-  &:hover:focus {
-    outline: none;
-  }
+}
+
+// Size
+// -------------------------
+
+.btn-big {
+  .text-p;
+  height: 58px;
+  border-radius: 4px;
+  padding: 20px 30px;
+}
+
+.btn-normal {
+  height: 48px;
+  border-radius: 4px;
+  padding: 15px 40px;
+  font-size: calc(14 / 48em);
 }
 
 // Color
 // -------------------------
 
-.bg-darkblue {
-  border-color: @darkBlue;
-  background-color: @darkBlue;
+.btn-blue {
+  .text-white;
+  border-color: @defaultBlue;
+  background-color: @defaultBlue;
   &:hover {
-    background-color: #5962c9;
+    .text-white;
+    background-color: @darkBlue;
+    border-color: @darkBlue;
+    drop-shadow: 3px;
+  }
+  i {
+    color: white;
   }
 }
 
@@ -75,68 +98,71 @@
 // Custom button classes
 // -------------------------
 
+.social-btn-wrap {
+  button {
+    margin: 2px;
+    span {
+      margin-left: 8px;
+    }
+  }
+  div {
+    margin: 10px 0;
+  }
+}
+
 .btn-fb {
   background-color: @fbBlue;
 }
 
 .btn-apply {
-  .bg-darkblue;
+  .btn-blue;
   padding: 20px 40px;
   white-space: normal;
-}
-
-.link-box-darkblue {
-  .text-darkBlue;
-  margin-left: 5px;
-  padding: 4px 8px 6px;
-  border: 1px solid @darkBlue;
-  border-radius: 6px;
-  &:hover {
-    .text-white;
-    cursor: pointer;
-    background-color: @darkSlateBlue;
-    border-color: @darkSlateBlue;
-  }
 }
 
 // Navigation button
 .nav-btn-wrap {
   position: fixed;
   width: 100%;
-  bottom: 0;
-  padding-bottom: 40px;
   display: flex;
+  align-items: center;
+  align-content: center;
   justify-content: center;
   z-index: 2;
+  bottom: 50px;
+  @media screen and (max-height: 768px) {
+    bottom: 25px;
+  }
 }
 
 .nav-btn {
-  display: flex;
-  width: 50px;
-  height: 50px;
-  .text-50;
   .text-white;
   .text-w-300;
+  .container-x;
+  .flex-content-centered;
+  .text-centered;
+  width: 50px;
+  height: 50px;
   -webkit-font-smoothing: antialiased;
   transform: rotate(-90deg);
   text-rendering: optimizeLegibility;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, .1);
   cursor: pointer;
-}
 
-.nav-btn.up {
-  transform: rotate(90deg);
-}
+  &.up {
+    transform: rotate(90deg);
+  }
 
-.nav-btn:hover {
-  background-color: rgba(255, 255, 255, .2);
-}
+  &:hover {
+    background-color: rgba(255, 255, 255, .2);
+  }
 
-.nav-btn p:before {
-  content:"\2039";
-  position: absolute;
-  bottom: 16px;
-  width: 50px;
-  height: 50px;
+  p {
+    .text-h2;
+    margin: 0;
+    &:before {
+      content:"\2039";
+    }
+  }
 }

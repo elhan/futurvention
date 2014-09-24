@@ -19,10 +19,6 @@ display: none;
   background-color: white;
 }
 
-.bg-darkblue {
-  background-color: #303fd0;
-}
-
 .cover {
   position: absolute;
   left: 0;
@@ -33,7 +29,7 @@ display: none;
 
 .indicator {
   position: fixed;
-  right: 40px;
+  right: 34px;
   top: 50%;
   display: flex;
   flex-direction: column;
@@ -53,11 +49,24 @@ display: none;
   content: "\00b0";
 }
 
+.content-center {
+  .container-x;
+  .flex-content-spread;
+  @media screen and (max-height: 768px) {
+    padding: 25px 0;
+  }
+  @media screen and (min-height: 768px) {
+    padding: 60px 0;
+  }
+}
+
 .landing {
   // offset positioning due to pag navigation button of fv-slider
   &.container-page {
     position: absolute;
     bottom: 90px;
+    width: 80%;
+    margin: 0 10%;
     .box {
       .flex-content-spread;
       min-height: 260px;
@@ -66,21 +75,60 @@ display: none;
 
   .icons-import {
     .container-x;
-    .flex-content-spread;
-    padding: 90px 0;
+    .flex-centered;
+    padding: 60px 0 70px 0;
   }
-}
 
-.description {
-  .text-centered;
-  .text-w-400;
-  .text-18;
-  line-height: 1.5em;
-  padding: 5px 0 20px;
-}
+  .text-h3 {
+    max-width: 1135px;
+  }
 
-.content-center {
-  .container-x;
-  .flex-content-spread;
-  padding: 60px 0;
+  .page-0 {
+    .flex-content-centered;
+    .subtitle {
+      max-width: 825px;
+      @media screen and (max-width: 1366px) {
+        max-width: 652px;
+      }
+    }
+    .box {
+      height: calc(100% / 3px);
+    }
+  }
+
+  .page-1 {
+    .flex-content-centered;
+    .subtitle {
+      max-width: 1000px;
+      @media screen and (max-width: 1366px) {
+        max-width: 790px;
+      }
+    }
+    .box {
+      height: calc(100% / 3px);
+    }
+  }
+
+  .page-2 {
+    .content-center {
+      width: calc((100% / 3) * 2);
+      margin: 0 auto;
+    }
+    .wrapper-icon-m {
+      cursor: pointer;
+      transition: .2s;
+      i {
+        transition: none;
+      }
+      &:hover {
+        background-color: @defaultBlue;
+        color: white;
+        border-color: @defaultBlue;
+        box-shadow: none;
+        i {
+          color: white;
+        }
+      }
+    }
+  }
 }

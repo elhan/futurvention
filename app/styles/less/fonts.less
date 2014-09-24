@@ -1,13 +1,76 @@
 body, html {
-  font-family: 'Lato';
+  font-family: GothamMedium;
+  @media screen and (max-height: 768px) {
+    body {
+      font-size: 38px;
+    }
+  }
+  @media screen and (min-height: 768px) {
+    body {
+      font-size: 48px;
+    }
+  }
 }
 
 .text-centered {
   text-align: center;
 }
 
-// Color
+// FontFace
+// -------------------------
+@font-face {
+  font-family: 'GothamMedium';
+  src: local('GothamMedium'),
+    url('../../fonts/gotham-medium-webfont.svg') format(svg),
+    url('../../fonts/gotham-medium-webfont.ttf') format(TrueType);
+}
 
+@font-face {
+  font-family: 'OpenSansRegular';
+  src: local('OpenSansRegular'),
+    url('../../fonts/OpenSans-Regular-webfont.svg') format(svg),
+    url('../../fonts/OpenSans-Regular-webfont.ttf') format(TrueType);
+}
+
+// Size
+// -------------------------
+.text-h1 {
+  font-size : 1em;
+  line-height: calc(60 / 48em);
+  margin-bottom: 4px;
+}
+
+.text-h2 {
+  font-size: calc(24 / 48em);
+  line-height: calc(26 / 24em);
+}
+
+.text-h3 {
+  font-size: calc(18 / 48em);
+  line-height: calc(26 / 18em);
+  font-family: OpenSansRegular;
+}
+
+.text-p {
+  font-size: calc(14 / 48em);
+  line-size: calc(20 / 14em);
+  font-family: OpenSansRegular;
+}
+
+.text-t {
+  font-size: calc(13 / 48em);
+  line-height: calc(18 / 13em);
+  font-family: OpenSansRegular;
+}
+
+.text-i {
+  font-size: calc(13 / 48em);
+  line-height: calc(18 / 13em);
+  font-family: OpenSansRegular;
+}
+
+// Color
+// -------------------------
 .text-black {
   color: black;
 }
@@ -26,6 +89,14 @@ body, html {
 
 .text-lightGrey {
   color: @lightGrey;
+}
+
+.text-grey {
+  color: @grey;
+}
+
+.text-darkGrey {
+  color: @darkGrey;
 }
 
 // Weight
@@ -47,44 +118,4 @@ body, html {
 
 .text-w-300 {
   font-weight: 300;
-}
-
-// Size
-
-.text-header-l {
-  .text-w-900;
-  font-size: 46px;
-  letter-spacing: 1px;
-  word-spacing: 10px;
-}
-
-.text-header-m {
-  .text-w-800;
-  font-size: 32px;
-}
-
-.text-header-s {
-  .text-w-700;
-  font-size: 26px;
-  letter-spacing: 1px;
-}
-
-.text-50 {
-  font-size: 50px;
-}
-
-.text-20 {
-  font-size: 20px;
-}
-
-.text-18 {
-  font-size: 18px;
-}
-
-.text-16 {
-  font-size: 16px;
-}
-
-.text-12 {
-  font-size: 12px;
 }

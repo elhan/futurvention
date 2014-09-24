@@ -7,6 +7,10 @@
   <span ng-repeat="slide in slides" ng-click="goToSlide($index)" ng-class="{active: index === $index}"></span>
 </div>
 <div ng-if="options.navbtn" class="nav-btn-wrap">
-  <div ng-if="index < slides.length - 1" class="nav-btn col-xs-1" ng-click="goToSlide(index + 1)"><p></p></div>
-  <div ng-if="index === slides.length - 1" class="nav-btn col-xs-1 up" ng-click="goToSlide(0)"><p></p></div>
+  <div ng-if="index < slides.length - 1" class="nav-btn" ng-click="goToSlide(index + 1)">
+    <p class="container-x flex-content-centered"></p>
+  </div>
+  <div ng-if="index === slides.length - 1" class="nav-btn up" ng-click="goToSlide(0)">
+    <p class="container-x flex-content-centered"></p>
+  </div>
 </div>
