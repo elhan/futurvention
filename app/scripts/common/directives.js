@@ -118,6 +118,54 @@
 
     /**
      * @ngdoc directive
+     * @name fvApp.directive:fvScrollBottom
+     * @restrict A
+     *
+     * @description
+     * Listens for broadcasted events and scrolls to the bottom of the page. The event to listen for is passed
+     * through the scrolltrigger attribute.
+     *
+     * @example
+     * <form fv-scroll-bottom scrollTrigger="ui-provider-selected" ... " ng-submit="saveProviders()">
+     */
+    app.directive('fvScrollBottom', ['$window', '$document', '$timeout', function ($window, $document, $timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                scope.$on(attrs.scrolltrigger, function () {
+                    $timeout(function () {
+                        $window.scrollTo(0, angular.element($document)[0].body.scrollHeight);
+                    });
+                });
+            }
+        };
+    }]);
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvAutoFocus
+     * @restrict A
+     * @element window, input, select, textarea, a
+     *
+     * @description
+     * Autofocus elements when they are first inserted into the DOM
+     *
+     * @example
+     * <input autofocus>
+     */
+    app.directive('fvAutoFocus', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                element && element.focus && $timeout(function () {
+                    element.focus();
+                });
+            }
+        };
+    });
+
+    /**
+     * @ngdoc directive
      * @name fvApp.directive:fvTimelineH
      * @restrict E
      *

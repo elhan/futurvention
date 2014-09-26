@@ -1,8 +1,25 @@
-// Bootstrap override
+// Form
 // -------------------------
 
 .form-group {
   margin-bottom: 10px;
+}
+
+input {
+  height: 38px !important;
+}
+
+input .input-l {
+  height: 48px !important;
+}
+
+.form-control::-webkit-input-placeholder {
+  font-size: 13px;
+  line-height: 24px;
+  .text-lightGrey;
+  &.input-l {
+    font-size: 14px;
+  }
 }
 
 // Navbar
@@ -50,11 +67,18 @@
 .import-link-wrap {
   .container-y;
   .flex-content-centered;
-  .icon-minus {
-    display: none;
-  }
+  .text-white;
   > div, i {
     transition: .2s;
+  }
+  &.selected {
+    .import-link {
+      background-color: @darkGrey;
+      border: 1px solid @darkGrey;
+    }
+    .label-import-link {
+      .text-darkGrey;
+    }
   }
   &:hover {
     .import-link {
@@ -69,21 +93,18 @@
       }
     }
     .label-import-link {
-      color: black;
+      color: @darkGrey;
     }
     &.selected {
       .import-link {
-        background-color: @lightGrey;
-        border: 1px solid @lightGrey;
+        background-color: @darkGrey;
+        border: 1px solid @darkGrey;
         .icon-plus {
           display: none;
         }
-        .icon-minus {
+        .icon-thirdparty {
           display: flex;
         }
-      }
-      .label-import-link {
-        color: @lightGrey;
       }
     }
   }
@@ -107,14 +128,19 @@
     .icon-centered;
   }
 
-  .icon-plus, icon-minus {
-    display: flex;
+  .icon-plus {
     .icon-centered;
     display: none;
+    padding-top: 4px;
     > i {
       color: white;
     }
   }
+}
+
+.import-link-s {
+  width: 38px;
+  height: 38px;
 }
 
 
@@ -151,8 +177,8 @@
 }
 
 .wrapper-icon-s {
-  height: 80px;
-  width: 80px;
+  height: 76px;
+  width: 76px;
 }
 
 // Labels
@@ -160,14 +186,15 @@
 
 .label-import-link {
   .text-centered;
+  .text-t;
   padding: 12px 0;
-  letter-spacing: .5px;
   &:hover {
     cursor: pointer;
   }
 }
 
 .label-s {
+  .text-i;
   margin: 5px 0 -6px;
   display: flex;
   font-style: italic;

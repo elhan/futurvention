@@ -219,40 +219,77 @@
      * # ApplyImportCtrl
      * Controls the apply 'import' step
      */
-    app.controller('ApplyImportCtrl', ['$scope', 'Utils', function ($scope, Utils) {
-        var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'];
+    app.controller('ApplyImportCtrl', ['$scope', '$timeout', 'Utils', 'EVENTS', 'ProfileSvc', function ($scope, $timeout, Utils, events, ProfileSvc) {
 
-        function initProviders() {
-            _.forEach(providerNames, function (name) {
-                $scope.providers[name] = { selected: false, url: '', saved: false };
-            });
-        }
-
-        $scope.providers = {};
+        $scope.providers = ProfileSvc.providers;
+        $scope.selectedProviders = [];
 
         $scope.pseudoUrlPattern = Utils.PSEUDO_URL_PATTERN;
 
         // toggles the given provider's selection state
         $scope.toggleSelection = function (providerName) {
-            $scope.providers[providerName].selected = !$scope.providers[providerName].selected;
+            var provider = $scope.providers[providerName];
+            provider.selected = !provider.selected;
+            if (provider.selected) {
+                $scope.$broadcast(events.ui.providerSelected, providerName); // required to auto scroll down
+                $scope.selectedProviders.push(provider);
+            } else {
+                _.remove($scope.selectedProviders, function (selectedProvider) {
+                    return selectedProvider.name === provider.name;
+                });
+            }
+        };
+
+        $scope.focus = function (event) {
+            console.log(event);
+//            scope.$broadcast(events.ui.inputCleared, providerName);
+
         };
 
         // returns the giver provider's selection state
         $scope.isSelected = function (providerName) {
-            return  $scope.providers[providerName].selected;
+            return $scope.providers[providerName].selected;
         };
 
-        // returns a collection of all the selected providers
-        $scope.getSelectedProviders = function () {
-            var selectedProviders = [];
-            _.forIn($scope.providers, function (provider) {
-                provider.selected && selectedProviders.push(provider);
-            });
-            return selectedProviders;
+        // save a provider link on the backend
+        $scope.saveProfile = function (providerName) {
+            var provider = $scope.providers[providerName];
+            provider.inProgress = true;
+
+            // TODO: remove, mock functionality
+            $timeout(function () { provider.saved = true; provider.inProgress = false;}, 3000);
+
+//            ProfileSvc.save(provider.url).success(function () {
+//                provider.saved = true;
+//                provider.inProgress = false;
+//            }).error(function (error) {
+//                //TODO: error handling
+//                provider.inProgress = false;
+//                console.log(error);
+//            });
         };
 
-        initProviders();
+        // save a provider link on the backend
+        $scope.removeProfile = function (providerName) {
+            var provider = $scope.providers[providerName];
+            provider.inProgress = true;
 
+            // TODO: remove, mock functionality
+            $timeout(function () {
+              provider.saved = false;
+              provider.inProgress = false;
+              provider.url = ''; // reset input model
+            }, 3000);
+
+//            ProfileSvc.save(provider.url).success(function () {
+//                provider.saved = true;
+//                provider.inProgress = false;
+//            }).error(function (error) {
+//                //TODO: error handling
+//                provider.inProgress = false;
+//                console.log(error);
+//            });
+        };
     }]);
 
 }());

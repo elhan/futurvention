@@ -1,0 +1,5 @@
+{
+    "jscodehints.detectedExclusions": [
+        "/home/kosmas/projects/futurvention/bower_components/angular-strap/src/typeahead/typeahead.js"
+    ]
+}

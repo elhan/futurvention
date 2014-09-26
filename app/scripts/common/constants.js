@@ -29,6 +29,9 @@
         },
         firebase: {
             firebaseConnected: 'firebase-connected'
+        },
+        ui: {
+            providerSelected: 'ui-provider-selected'
         }
     });
 

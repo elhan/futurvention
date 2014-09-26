@@ -1,16 +1,41 @@
 .apply {
   .apply-content {
-    margin-top: 50px;
+    margin-top: 35px;
   }
 
   .apply-footer {
     .container-x;
     .flex-content-centered;
-    margin-top: 50px;
   }
 
   // Bootstrap override
   .form-horizontal .control-label {
     padding-top: 0px;
+  }
+
+  .content-center {
+    padding: 55px 0 65px;
+  }
+
+  .providers-form-wrapper {
+    padding-top: 20px;
+  }
+
+  .status-icon {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .form-group {
+    .btn, .status-icon {
+      min-height: 38px !important;
+      width: 65px !important;
+    }
+  }
+
+  .btn-continue {
+    .btn-blue;
+    .btn-big;
   }
 }

@@ -26,6 +26,15 @@ module.exports = function(config) {
       'bower_components/angular-route/angular-route.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-touch/angular-touch.js',
+      'bower_components/lodash/dist/lodash.compat.js',
+      'bower_components/firebase/firebase.js',
+      'bower_components/firebase-simple-login/firebase-simple-login.js',
+      'bower_components/mockfirebase/dist/mockfirebase.js',
+      'bower_components/angularfire/dist/angularfire.min.js',
+      'bower_components/angular-strap/dist/angular-strap.min.js',
+      'bower_components/angular-strap/dist/angular-strap.tpl.min.js',
+      'bower_components/angular-facebook/lib/angular-facebook.js',
+      'bower_components/ngLinkedIn/ngLinkedIn.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js'
@@ -66,10 +75,10 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
 
     // Uncomment the following lines if you are using grunt's server to run the tests
-    // proxies: {
-    //   '/': 'http://localhost:9000/'
-    // },
-    // URL root prevent conflicts with the site root
-    // urlRoot: '_karma_'
+     proxies: {
+       '/': 'http://localhost:9000/'
+     },
+     // URL root prevent conflicts with the site root
+     urlRoot: '_karma_'
   });
 };

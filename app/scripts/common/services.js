@@ -106,4 +106,31 @@
 
         return this;
     }]);
+
+    /**
+     * @ngdoc service
+     * @name fvApp.service:ProfileSvc
+     * @description
+     * # ProfileSvc
+     * CRUD operations for Seller profiles
+     */
+    app.service('ProfileSvc', ['$http', function ($http) {
+        var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
+            profileSvcUrl = '/profile';
+
+        function initProviders () {
+            var providers = {};
+            _.forEach(providerNames, function (name) {
+                providers[name] = { name: name, selected: false, url: '', saved: false, inProgress: false };
+            });
+            return providers;
+        }
+
+        this.providers = initProviders();
+
+        this.save = function (link) {
+            return $http.post(profileSvcUrl, { profileLink: link });
+        };
+    }]);
+
 }());
