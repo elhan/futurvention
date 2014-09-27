@@ -16,6 +16,11 @@
   }
 }
 
+.btn-link {
+  color: @defaultBlue !important;
+  text-decoration: none !important;
+}
+
 // Navbar Login & Registration links
 // -------------------------
 
@@ -133,6 +138,27 @@
   @media screen and (max-height: 768px) {
     bottom: 25px;
   }
+}
+
+// Save button: apply page 1
+.btn-save {
+  .btn-flat;
+  .text-white;
+  .bg-darkgrey;
+  margin-left: 14px;
+}
+
+.btn-save[disabled] {
+  .bg-lightgrey;
+}
+
+// Continue button: apply page 1
+.btn-continue {
+  .btn-blue;
+  .btn-big;
+  .flex-1;
+  .flex-content-centered;
+  .text-m;
 }
 
 .nav-btn {

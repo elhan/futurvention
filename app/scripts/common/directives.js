@@ -179,7 +179,7 @@
         return {
             restrict: 'E',
             templateUrl: 'views/directives/fv-timeline-h.html',
-            link: function () {
+            link: function (scope, element) {
             }
         };
     });

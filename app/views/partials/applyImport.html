@@ -1,5 +1,5 @@
 <div class="container-y apply-content" ng-controller="ApplyImportCtrl">
-  <div class="text-h1 text-centered">Import your profile info, portfolio, and reviews from other sites</div>
+  <div class="apply-header">Import your profile info, portfolio, and reviews from other sites</div>
   <div class="text-centered text-h3 text-silver">
     Compile profile information from multiple sites and showcase your expertise with pushbutton ease
   </div>
@@ -131,14 +131,18 @@
 
                 <div class="form-group" ng-class="{'has-error': providersForm['\{\{provider.name\}\}'].$error.url}">
                   <div class="container-x flex-content-centered">
-                    <div class="import-link-s wrapper-darkGrey wrapper-round bg-darkgrey"></div>
-                    <div class="col-md-6">
-                      <input fv-auto-focus type="url" class="form-control" name="'\{\{provider.name\}\}'"
+                    <div class="flex-1 flex-content-right">
+                      <div class="import-link-s wrapper-darkGrey wrapper-round bg-darkgrey"></div>
+                    </div>
+                    <div class="flex-2">
+                      <input fv-auto-focus type="url" class="form-control input-l" name="'\{\{provider.name\}\}'"
                              ng-model="provider.url" placeholder="enter your {{provider.name}} profile url">
                     </div>
-                    <button ng-show="!provider.inProgress && !provider.saved" class="btn btn-flat text-white bg-darkgrey"
-                            ng-disabled="providersForm.$invalid || !provider.url" ng-click="saveProfile(provider.name)">save</button>
-                    <div ng-show="provider.inProgress" class="status-icon text-darkGrey text-m">
+                    <div class="flex-1">
+                      <button ng-show="!provider.inProgress && !provider.saved" class="btn btn-save"
+                              ng-disabled="providersForm.$invalid || !provider.url" ng-click="saveProfile(provider.name)">save</button>
+                    </div>
+                    <div ng-show="provider.inProgress" class="status-icon text-darkGrey text-m flex-1">
                       <i class="fa fa-spinner fa-spin fa-1"></i>
                     </div>
                     <div ng-show="!provider.inProgress && provider.saved" class="status-icon text-darkGrey text-h3" ng-click="removeProfile(provider.name)">
@@ -154,7 +158,11 @@
 
             </div>
             <div class="container-x flex-content-centered">
-              <button type="submit" class="btn-continue col-md-6 btn btn-lg" ng-disabled="providersForm.$invalid">Submit</button>
+              <div class="flex-1"></div>
+              <div class="wrapper-continue-1">
+                <button type="submit" class="btn btn-continue" ng-disabled="providersForm.$invalid" ng-click="goToStep(1)">Continue</button>
+              </div>
+              <div class="flex-1"></div>
             </div>
           </div>
         </form>
@@ -163,7 +171,7 @@
   </div>
   <!--Apply page footer - skip-->
   <div ng-show="selectedProviders.length === 0" class="apply-footer">
-    <button class="btn btn-link link-apply-skip">
+    <button class="btn btn-link link-apply-skip text-p" ng-click="goToStep(1)">
       <span>Nothing to import? Skip>></span>
     </button>
   </div>

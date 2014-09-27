@@ -22,7 +22,8 @@
             'facebook',
             'ngLinkedIn',
             'config',
-            'firebase'
+            'firebase',
+            'angularFileUpload'
         ]);
 
     app.config(function ($routeProvider) {

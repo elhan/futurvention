@@ -199,17 +199,22 @@
      * Controls the apply page & seller profile completion
      */
     app.controller('ApplyCtrl', ['$scope', function ($scope) {
+        // profile completion steps
+        var steps = ['import', 'complete', 'open'];
+
         // init the new User profile
         $scope.profile = {};
 
-        // profile completion steps
-        $scope.steps = ['import', 'complete', 'open'];
-        $scope.activeStep = $scope.steps[0];
+        $scope.activeStep = steps[0];
 
         // avoid shadow properties
         $scope.updateProfile = function (profileData) {
             angular.extend($scope.profile, profileData);
         };
+
+        $scope.goToStep = function (step) {
+            $scope.activeStep = steps[step];
+        }
     }]);
 
     /**
@@ -219,12 +224,9 @@
      * # ApplyImportCtrl
      * Controls the apply 'import' step
      */
-    app.controller('ApplyImportCtrl', ['$scope', '$timeout', 'Utils', 'EVENTS', 'ProfileSvc', function ($scope, $timeout, Utils, events, ProfileSvc) {
-
+    app.controller('ApplyImportCtrl', ['$scope', '$timeout', 'EVENTS', 'ProfileSvc', function ($scope, $timeout, events, ProfileSvc) {
         $scope.providers = ProfileSvc.providers;
         $scope.selectedProviders = [];
-
-        $scope.pseudoUrlPattern = Utils.PSEUDO_URL_PATTERN;
 
         // toggles the given provider's selection state
         $scope.toggleSelection = function (providerName) {
@@ -240,12 +242,6 @@
             }
         };
 
-        $scope.focus = function (event) {
-            console.log(event);
-//            scope.$broadcast(events.ui.inputCleared, providerName);
-
-        };
-
         // returns the giver provider's selection state
         $scope.isSelected = function (providerName) {
             return $scope.providers[providerName].selected;
@@ -257,11 +253,12 @@
             provider.inProgress = true;
 
             // TODO: remove, mock functionality
-            $timeout(function () { provider.saved = true; provider.inProgress = false;}, 3000);
+            $timeout(function () { provider.saved = true; provider.inProgress = false; }, 3000);
 
-//            ProfileSvc.save(provider.url).success(function () {
+//            ProfileSvc.save(provider.url).success(function (profileObj) {
 //                provider.saved = true;
 //                provider.inProgress = false;
+//                $scope.updateProfile(profileObj);
 //            }).error(function (error) {
 //                //TODO: error handling
 //                provider.inProgress = false;
@@ -284,12 +281,44 @@
 //            ProfileSvc.save(provider.url).success(function () {
 //                provider.saved = true;
 //                provider.inProgress = false;
+//                TODO: remove from profile obj
 //            }).error(function (error) {
 //                //TODO: error handling
 //                provider.inProgress = false;
 //                console.log(error);
 //            });
         };
+    }]);
+
+    /**
+     * @ngdoc Controller
+     * @name fvApp.controller:ApplyImportCtrl
+     * @description
+     * # ApplyImportCtrl
+     * Controls the apply 'import' step
+     */
+    app.controller('ApplyInfoCtrl', ['$scope', '$timeout', '$upload', 'EVENTS', 'ProfileSvc', function ($scope, $timeout, events, ProfileSvc) {
+        $scope.onFileSelect =  function ($files) {
+            // TODO: remove mock functionality
+            console.log($files);
+            var reader = new FileReader();
+
+            reader.onload = function ($files) {
+                return function(e) {
+                    // Render thumbnail.
+                    var span = document.createElement('span');
+                    span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                                      '" title="', escape($files.name), '"/>'].join('');
+
+                    document.getElementByClass('profile-picture-m ')[0].insertBefore(span, null);
+                    //localStorage.setItem('img', e.target.result);
+                };
+            };
+            reader.onload($files);
+
+            // Read in the image file as a data URL.
+            //reader.readAsDataURL($files);
+        }
     }]);
 
 }());

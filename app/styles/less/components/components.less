@@ -6,11 +6,12 @@
 }
 
 input {
-  height: 38px !important;
-}
-
-input .input-l {
-  height: 48px !important;
+  &.input-l {
+    height: 48px !important;
+  }
+  &.input-s {
+    height: 38px !important;
+  }
 }
 
 .form-control::-webkit-input-placeholder {
@@ -20,6 +21,12 @@ input .input-l {
   &.input-l {
     font-size: 14px;
   }
+}
+
+textarea {
+  .text-p;
+  border-radius: 4px;
+  border-color: @lightGrey;
 }
 
 // Navbar
@@ -141,6 +148,7 @@ input .input-l {
 .import-link-s {
   width: 38px;
   height: 38px;
+  margin-right: 14px;
 }
 
 
@@ -170,7 +178,6 @@ input .input-l {
     height: 150px;
     width: 150px;
   }
-  margin-bottom: 30px;
   position: relative;
   display: flex;
   align-self: center;
@@ -214,5 +221,31 @@ input .input-l {
   }
   .text-darkBlue {
     cursor: pointer;
+  }
+}
+
+.profile-picture-m {
+  .wrapper-round;
+  width: 110px;
+  height: 110px;
+  cursor: pointer;
+
+  &.default {
+    background-color: @grey95;
+    border: 1px solid @grey95;
+    box-shadow: 0 0 2px @grey95;
+    > i {
+      color: @grey80;
+    }
+  }
+
+  > input {
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    position: absolute;
+    padding: 0px;
+    margin: 0px;
+    overflow: hidden;
   }
 }

@@ -1,20 +1,20 @@
 <div class="timeline-container">
   <!--  The actual timeline and nodes-->
   <div class="timeline-horizontal">
-    <span class="circle-timeline active"></span>
+    <span class="circle-timeline" ng-class="{'active': activeStep === 'import'}"></span>
     <div class="divider-h">
       <div class="line"></div>
     </div>
-    <span class="circle-timeline"></span>
+    <span class="circle-timeline" ng-class="{'active': activeStep === 'complete'}"></span>
     <div class="divider-h">
       <div class="line"></div>
     </div>
-    <span class="circle-timeline"></span>
+    <span class="circle-timeline" ng-class="{'active': activeStep === 'open'}"></span>
   </div>
   <!--  Node labels-->
   <div class="timeline-label-container">
-    <span class="timeline-label active text-t">Import Profiles</span>
-    <span class="timeline-label text-t">Create Profile</span>
-    <span class="timeline-label text-t">Open Storefront</span>
+    <span class="timeline-label text-t" ng-class="{'active': activeStep === 'import'}">Import Profiles</span>
+    <span class="timeline-label text-t" ng-class="{'active': activeStep === 'complete'}">Complete Profile</span>
+    <span class="timeline-label text-t" ng-class="{'active': activeStep === 'open'}">Open Storefront</span>
   </div>
 </div>

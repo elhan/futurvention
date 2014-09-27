@@ -1,4 +1,13 @@
 .apply {
+
+  .apply-header {
+    .text-centered;
+    .text-h1;
+    @media screen and (max-width: 1600px) {
+      .text-h2;
+    }
+  }
+
   .apply-content {
     margin-top: 35px;
   }
@@ -28,14 +37,64 @@
   }
 
   .form-group {
-    .btn, .status-icon {
-      min-height: 38px !important;
+    .btn-save, .status-icon {
+      min-height: 48px !important;
       width: 65px !important;
+    }
+    .btn {
+      min-height: 48px !important;
     }
   }
 
-  .btn-continue {
-    .btn-blue;
-    .btn-big;
+  .wrapper-continue-1 {
+    .flex-2;
+    margin: 0 -15px;
+    padding-top: 29px;
+  }
+
+  .wrapper-continue-2 {
+    .flex-2;
+    margin-right: -14px;
+    padding-top: 29px;
+  }
+
+  .wrapper-profile {
+    margin: 30px 0 15px;
+  }
+
+  .label-l {
+    .flex-1;
+    .text-h3;
+    .flex-content-end;
+    align-items: center;
+    margin-right: 15px;
+  }
+
+  .label-picture {
+    margin-left: -10px;
+  }
+
+  .label-r {
+    .text-p;
+    .flex-content-start;
+    align-items: center;
+    margin-left: 15px;
+  }
+
+  .label-location {
+    margin-left: -11px;
+  }
+
+  .input-info-rate {
+    width: 80px;
+  }
+
+  .textarea-wrapper {
+    margin-left: 14px;
+  }
+
+  .textarea-info {
+    min-width: 100%;
+    min-height: 144px;
   }
 }
