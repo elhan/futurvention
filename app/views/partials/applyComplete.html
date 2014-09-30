@@ -10,8 +10,7 @@
     <div class="container-x wrapper-profile">
       <div class="label-l label-picture">Add your photo</div>
       <div class="flex-2">
-        <div class="profile-picture-m default wrapper-round" ng-file-select="onFileSelect($files)" ng-file-drop="onFileSelect($files)" ng-click="this.value = null">
-          <input ng-file-select="onFileSelect($files)" type="file" __wrapper_for_parent_="true" accept="image/*">
+        <div class="modal-lg profile-picture-m default wrapper-round" ng-click="showImageCrop()">
           <i class="fa-centered fa fa-camera"></i>
         </div>
       </div>
@@ -37,6 +36,7 @@
         <div class="flex-1"></div>
       </div>
       <!-- Rate -->
+<!--
       <div class="form-group container-x">
         <div class="label-l">Rate</div>
         <div class="flex-1">
@@ -45,6 +45,7 @@
         </div>
         <div class="flex-2"></div>
       </div>
+-->
       <!-- Textarea-->
       <div class="form-group container-x">
         <div class="flex-1"></div>
@@ -89,7 +90,7 @@
     <div class="container-x flex-content-centered">
       <div class="flex-1"></div>
       <div class="wrapper-continue-2">
-        <button type="submit" class="btn btn-continue" ng-disabled="providersForm.$invalid" ng-click="goToStep(2)">Continue</button>
+        <button type="submit" class="btn btn-continue" ng-disabled="profileInfoForm.$invalid" ng-click="goToStep(2)">Continue</button>
       </div>
       <div class="flex-1"></div>
     </div>

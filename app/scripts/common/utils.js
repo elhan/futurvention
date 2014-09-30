@@ -11,6 +11,8 @@
         // www. sans http:// or https://
         Utils.PSEUDO_URL_PATTERN = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
+        Utils.ELANCE_URL_PATTERN = /^http[s]?:\/\/([^\/]*elance.com)/i;
+
         return Utils;
     });
 }());

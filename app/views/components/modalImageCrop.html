@@ -1,0 +1,34 @@
+<div class="modal" tabindex="-1" role="dialog">
+  <div class="modal-content modal-big container-y modal-image-crop">
+    <div class="header">
+      <button type="button" class="close" ng-click="$hide()">&times;</button>
+    </div>
+    <!-- Centered container -->
+    <div class="flex-1 flex-content-centered container-y" ng-file-drop="onFileSelect($files)" accept="image/*">
+      <!-- Image crop area -->
+      <div ng-show="profile.image || originalImage" class="wrapper-modal-inner">
+        <img-crop image="originalImage" result-image="croppedImage" on-load-begin="onLoadBegin()" on-load-done="onLoadDone()" on-load-error="onLoadError()">
+        </img-crop>
+      </div>
+      <!-- Empty modal -->
+      <div ng-show="!profile.image" class="container-x flex-content-centered">
+        <div class="container-y text-silver">
+          <div class="flex-1">
+            <i class="fa-centered fa fa-picture-o"></i>
+          </div>
+          <div class="flex-1 wrapper-text text-h2">Drag a photo here</div>
+          <div class="flex-1">
+            <div class="divider text-p"><span>OR</span></div>
+          </div>
+          <div class="flex-1 wrapper-text text-p" ng-file-select="onFileSelect($files)" accept="image/*">
+            <div class="link-box">Select a photo from your computer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer container-x bg-white">
+      <button class="btn btn-blue btn-small" ng-click="saveProfileImage()" ng-disabled="!croppedImage">Set as profile photo</button>
+      <button class="btn btn-small btn-lightgrey" ng-click="$hide()">Cancel</button>
+    </div>
+  </div>
+</div>

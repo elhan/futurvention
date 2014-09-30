@@ -203,7 +203,9 @@
         var steps = ['import', 'complete', 'open'];
 
         // init the new User profile
-        $scope.profile = {};
+        $scope.profile = {
+            providers: {}
+        };
 
         $scope.activeStep = steps[0];
 
@@ -212,9 +214,14 @@
             angular.extend($scope.profile, profileData);
         };
 
+        // avoid shadow properties
+        $scope.updateProviders = function (name, url) {
+            $scope.profile.providers[name] = url;
+        };
+
         $scope.goToStep = function (step) {
             $scope.activeStep = steps[step];
-        }
+        };
     }]);
 
     /**
@@ -248,77 +255,94 @@
         };
 
         // save a provider link on the backend
-        $scope.saveProfile = function (providerName) {
-            var provider = $scope.providers[providerName];
-            provider.inProgress = true;
-
-            // TODO: remove, mock functionality
-            $timeout(function () { provider.saved = true; provider.inProgress = false; }, 3000);
-
-//            ProfileSvc.save(provider.url).success(function (profileObj) {
-//                provider.saved = true;
-//                provider.inProgress = false;
-//                $scope.updateProfile(profileObj);
-//            }).error(function (error) {
-//                //TODO: error handling
-//                provider.inProgress = false;
-//                console.log(error);
-//            });
-        };
-
-        // save a provider link on the backend
-        $scope.removeProfile = function (providerName) {
+        $scope.saveProvider = function (providerName) {
             var provider = $scope.providers[providerName];
             provider.inProgress = true;
 
             // TODO: remove, mock functionality
             $timeout(function () {
-              provider.saved = false;
-              provider.inProgress = false;
-              provider.url = ''; // reset input model
+                provider.saved = true;
+                provider.inProgress = false;
+                $scope.updateProviders(provider.name, provider.url);
             }, 3000);
 
-//            ProfileSvc.save(provider.url).success(function () {
-//                provider.saved = true;
-//                provider.inProgress = false;
-//                TODO: remove from profile obj
-//            }).error(function (error) {
-//                //TODO: error handling
-//                provider.inProgress = false;
-//                console.log(error);
-//            });
+            //            ProfileSvc.saveProvider(provider.url).success(function (profileObj) {
+            //                provider.saved = true;
+            //                provider.inProgress = false;
+            //                $scope.updateProfile(profileObj);
+            //            }).error(function (error) {
+            //                //TODO: error handling
+            //                provider.inProgress = false;
+            //                console.log(error);
+            //            });
+        };
+
+        $scope.removeProvider = function (providerName) {
+            var provider = $scope.providers[providerName];
+            provider.inProgress = true;
+
+            // TODO: remove, mock functionality
+            $timeout(function () {
+                provider.saved = false;
+                provider.inProgress = false;
+                provider.url = ''; // reset input model
+            }, 3000);
+
+            //            ProfileSvc.removeProvider(provider.url).success(function () {
+            //                provider.saved = falses;
+            //                provider.inProgress = false;
+            //                TODO: remove from profile obj
+            //            }).error(function (error) {
+            //                //TODO: error handling
+            //                provider.inProgress = false;
+            //                console.log(error);
+            //            });
         };
     }]);
 
     /**
      * @ngdoc Controller
-     * @name fvApp.controller:ApplyImportCtrl
+     * @name fvApp.controller:ApplyInfoCtrl
      * @description
-     * # ApplyImportCtrl
-     * Controls the apply 'import' step
+     * # ApplyInfoCtrl
+     * Controls the apply 'info' step
      */
-    app.controller('ApplyInfoCtrl', ['$scope', '$timeout', '$upload', 'EVENTS', 'ProfileSvc', function ($scope, $timeout, events, ProfileSvc) {
+    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', function ($scope, $modal, $timeout, ProfileSvc) {
+        $scope.originalImage = ''; // image selected by the user
+        $scope.croppedImage = ''; // final image, after cropping
+
+        var modalImageCrop = $modal({
+            scope: $scope,
+            template: 'views/components/modalImageCrop.html',
+            show: false,
+            animation: 'am-slide-top'
+        });
+
+        $scope.showImageCrop = function () {
+            modalImageCrop.$promise.then(modalImageCrop.show);
+            $scope.croppedImage = ''; // reset the croppedImage object
+        };
+
         $scope.onFileSelect =  function ($files) {
-            // TODO: remove mock functionality
-            console.log($files);
             var reader = new FileReader();
-
-            reader.onload = function ($files) {
-                return function(e) {
-                    // Render thumbnail.
-                    var span = document.createElement('span');
-                    span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                                      '" title="', escape($files.name), '"/>'].join('');
-
-                    document.getElementByClass('profile-picture-m ')[0].insertBefore(span, null);
-                    //localStorage.setItem('img', e.target.result);
-                };
+            reader.onload = function (e) {
+                $timeout(function () { $scope.originalImage = e.target.result; });
             };
-            reader.onload($files);
+            reader.readAsDataURL($files[0]); // Read in the image file as a data URL.
+        };
 
-            // Read in the image file as a data URL.
-            //reader.readAsDataURL($files);
-        }
+        $scope.saveProfileImage = function () {
+            $timeout(function () {
+                $scope.updateProfile( {image: $scope.croppedImage} );
+            });
+//            ProfileSvc.saveProfileImage($scope.croppedImage).success(function () {
+//                $scope.updateProfile( {image: $scope.croppedImage} );
+//            }).progress(function () {
+//                // TODO
+//            }).error(function () {
+//                // TODO
+//            });
+        };
     }]);
 
 }());

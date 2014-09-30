@@ -126,7 +126,7 @@
      * through the scrolltrigger attribute.
      *
      * @example
-     * <form fv-scroll-bottom scrollTrigger="ui-provider-selected" ... " ng-submit="saveProviders()">
+     * <form fv-scroll-bottom scrollTrigger="ui-provider-selected" ... ">
      */
     app.directive('fvScrollBottom', ['$window', '$document', '$timeout', function ($window, $document, $timeout) {
         return {
@@ -156,7 +156,7 @@
     app.directive('fvAutoFocus', function ($timeout) {
         return {
             restrict: 'A',
-            link: function (scope, element, attrs) {
+            link: function (scope, element) {
                 element && element.focus && $timeout(function () {
                     element.focus();
                 });
@@ -179,7 +179,7 @@
         return {
             restrict: 'E',
             templateUrl: 'views/directives/fv-timeline-h.html',
-            link: function (scope, element) {
+            link: function () {
             }
         };
     });

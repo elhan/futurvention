@@ -1,3 +1,63 @@
+// Modal
+// -------------------------
+
+.modal-big {
+  width: 90%;
+  height: 90%;
+  margin: 1% 5%;
+  position: absolute;
+}
+
+.modal-image-crop {
+  .bg-grey95;
+
+  .divider {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+    span {
+      .bg-grey95;
+    }
+  }
+
+  .wrapper-text {
+    .flex-content-centered;
+    margin: 30px 0;
+  }
+
+  .link-box {
+    .text-darkGrey;
+    .bg-white;
+    border: 1px solid silver;
+    height: auto;
+    padding: 15px;
+    margin: 0;
+    cursor: pointer;
+  }
+
+  .header {
+    .container-x;
+    .flex-content-end;
+    padding: 10px;
+  }
+
+  .footer {
+    padding: 15px;
+    .btn-blue {
+      margin-right: 15px;
+    }
+  }
+}
+
+.wrapper-modal-inner {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  left: 10%;
+  top: 10%;
+}
+
+
 // Form
 // -------------------------
 
@@ -55,6 +115,7 @@ textarea {
 
 // Dividers
 // -------------------------
+
 .divider-fancy {
   overflow:hidden;
   height:20px;
@@ -69,8 +130,22 @@ textarea {
   }
 }
 
+.divider {
+  text-align: center;
+  border-bottom: 1px solid lightgrey;
+  line-height: 0.1em;
+  margin: 35px 10px 0 10px;
+}
+
+.divider span {
+  .text-silver;
+  background-color: white;
+  padding: 0 10px;
+}
+
 // Profile import links
 // -------------------------
+
 .import-link-wrap {
   .container-y;
   .flex-content-centered;
@@ -146,14 +221,14 @@ textarea {
 }
 
 .import-link-s {
-  width: 38px;
-  height: 38px;
+  width: 47px;
+  height: 47px;
   margin-right: 14px;
 }
 
-
 // Icon wrappers
 // -------------------------
+
 .wrapper-icon-m {
   @media screen and (max-height: 768px) {
     height: 100px;
@@ -231,7 +306,7 @@ textarea {
   cursor: pointer;
 
   &.default {
-    background-color: @grey95;
+    .bg-grey95;
     border: 1px solid @grey95;
     box-shadow: 0 0 2px @grey95;
     > i {

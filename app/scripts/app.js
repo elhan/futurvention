@@ -23,7 +23,8 @@
             'ngLinkedIn',
             'config',
             'firebase',
-            'angularFileUpload'
+            'angularFileUpload',
+            'ngImgCrop'
         ]);
 
     app.config(function ($routeProvider) {

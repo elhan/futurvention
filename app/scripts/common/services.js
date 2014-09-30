@@ -114,7 +114,7 @@
      * # ProfileSvc
      * CRUD operations for Seller profiles
      */
-    app.service('ProfileSvc', ['$http', function ($http) {
+    app.service('ProfileSvc', ['$http', '$upload', function ($http, $upload) {
         var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
             profileSvcUrl = '/profile';
 
@@ -128,8 +128,15 @@
 
         this.providers = initProviders();
 
-        this.save = function (link) {
+        this.saveProvider = function (link) {
             return $http.post(profileSvcUrl, { profileLink: link });
+        };
+
+        this.saveProfileImage = function (img) {
+            return $upload.upload({
+                url: profileSvcUrl,
+                file: img
+            });
         };
     }]);
 
