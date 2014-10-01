@@ -16,19 +16,25 @@
             <div><i class="fa-centered fa fa-camera"></i></div>
           </div>
         </div>
+        <i ng-if="getProfile()['image']" class="icon-check fa fa-check"></i>
       </div>
       <div class="flex-1"></div>
     </div>
     <!-- Profile Form -->
     <form class="form-horizontal" name="profileInfoForm" role="form" ng-submit="saveProfileInfo()">
       <!-- Personal url -->
-      <div class="form-group container-x">
+      <div class="form-group container-x" ng-class="{'has-error': urlExists}">
         <div class="label-l">Your Personal Url</div>
         <div class="flex-2">
-          <input type="text" class="form-control input-info-url input-l" name="infoUrl" ng-model="url">
+          <input type="text" class="form-control input-info-url input-l" name="infoUrl" ng-model="personalUrl" ng-blur="savePersonalUrl()" ng-focus="personalUrlExists = false">
           <div class="label-r">.servicebucket.com</div>
         </div>
-        <div class="flex-1"></div>
+        <div class="flex-1">
+          <i ng-if="getProfile()['personalUrl']" class="icon-check fa fa-check"></i>
+        </div>
+        <label ng-show="urlExists" class="control-label label-s col-md-6">
+          This url is already taken. Please provide a new url.
+        </label>
       </div>
       <!-- Title -->
       <div class="form-group container-x">
@@ -36,64 +42,44 @@
         <div class="flex-2">
           <input type="text" class="form-control input-l" name="infoTitle" ng-model="title" placeholder="eg. UX Designer">
         </div>
-        <div class="flex-1"></div>
-      </div>
-      <!-- Rate -->
-<!--
-      <div class="form-group container-x">
-        <div class="label-l">Rate</div>
         <div class="flex-1">
-          <input type="number" class="form-control input-l input-info-rate" name="infoRate" ng-model="rate">
-          <div class="label-r">$ / h</div>
+          <i ng-if="title" class="icon-check fa fa-check"></i>
         </div>
-        <div class="flex-2"></div>
       </div>
--->
       <!-- Textarea-->
       <div class="form-group container-x">
-        <div class="flex-1"></div>
+        <div class="label-l label-bio">Bio</div>
         <div class="flex-2 textarea-wrapper">
-          <textarea class="textarea-info"></textarea>
+          <textarea class="textarea-info" name="infoBio" placeholder="Try to be as detailed and personal as possible" ng-model="bio"></textarea>
         </div>
-        <div class="flex-1"></div>
+        <div class="flex-1">
+          <i ng-if="bio" class="icon-check check-info-bio fa fa-check"></i>
+        </div>
       </div>
     </form>
     <!-- Location -->
     <div class="form-group container-x">
       <div class="label-l label-location">Location</div>
-      <div class="flex-2">
-        <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-            Action <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
+      <div class="flex-2 location-wrapper flex-content-spread">
+        <div class="form-group container-x">
+          <input type="text" class="form-control input-l" name="infoCity" ng-model="city" placeholder="City">
         </div>
-        <div class="btn-group">
-          <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <div class="btn-group wrapper-drop-country">
+          <button type="button" class="btn btn-default" ng-model="country" data-html="1" ng-options="country for country in countries"
+                  data-placeholder="Country" bs-select>
             Action <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-          </ul>
         </div>
       </div>
-      <div class="flex-1"></div>
+      <div class="flex-1">
+        <i ng-if="city && country" class="icon-check check-info-location fa fa-check"></i>
+      </div>
     </div>
     <!-- Continue button -->
     <div class="container-x flex-content-centered">
       <div class="flex-1"></div>
       <div class="wrapper-continue-2">
-        <button type="submit" class="btn btn-continue" ng-disabled="profileInfoForm.$invalid" ng-click="goToStep(2)">Continue</button>
+        <button type="submit" class="btn btn-continue" ng-disabled="!(city && country && bio && personalUrl && profileImage)" ng-click="continue()">Continue</button>
       </div>
       <div class="flex-1"></div>
     </div>

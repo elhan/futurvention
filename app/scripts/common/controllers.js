@@ -292,7 +292,16 @@
             keyboard: true
         });
 
-        $scope.profileImage = ProfileSvc.getProfile().image;
+
+        $scope.personalUrlExists = false; // true if the user has set a url that already exists. Used to display error label
+        $scope.profileImage = ProfileSvc.getProfile().image; // default, in case the user already has a profile image
+        $scope.countries = ProfileSvc.getCountries(); // all available countries - used to populate the dropdown
+
+        $scope.personalUrl = '';
+        $scope.title = '';
+        $scope.title = '';
+        $scope.city = '';
+        $scope.country = '';
 
         $scope.closeModal = function () {
             $scope.init(false);
@@ -332,20 +341,50 @@
 
         $scope.setProgress = function (state) { $scope.inProgress = state; };
 
+        // expose this on scope as some form inputs need to be aware of the profile completion state
+        $scope.getProfile = function () {
+            return ProfileSvc.getProfile();
+        };
+
         $scope.saveProfileImage = function () {
-            // TODO: remove mock functionality
-            $timeout(function () {
+            ProfileSvc.saveProfileImage($scope.croppedImage).then(function (res) {
+                console.log(res);
                 ProfileSvc.updateProfile({ image: $scope.croppedImage });
                 $scope.profileImage = angular.copy($scope.croppedImage);
                 $scope.closeModal();
+            }, function (err) {
+                // TODO: error handling
+                console.log(err);
             });
-            //            ProfileSvc.saveProfileImage($scope.croppedImage).success(function () {
-            //                $scope.updateProfile( {image: $scope.croppedImage} );
-            //            }).progress(function () {
-            //                // TODO
-            //            }).error(function () {
-            //                // TODO
-            //            });
+        };
+
+        $scope.savePersonalUrl = function () {
+            ProfileSvc.savePersonalUrl($scope.personalUrl).then(function (res) {
+                console.log(res);
+                ProfileSvc.updateProfile({ personalUrl: $scope.personalUrl });
+            }, function (err) {
+                console.log(err);
+                // TODO: check for specific 'url exists' error
+                $scope.personalUrlExists = true;
+            });
+        };
+
+        // on continue, save the rest of the user's info
+        $scope.continue = function () {
+            var info = {
+                title: $scope.title,
+                bio: $scope.bio,
+                city: $scope.city,
+                country: $scope.country
+            };
+            ProfileSvc.saveProfile(info).then(function (res) {
+                console.log(res);
+                ProfileSvc.updateProfile(info); // update the cached Profile object once the server has persisted it
+                console.log(ProfileSvc.getProfile());
+            }, function (err) {
+                // TODO: handle error
+                console.log(err);
+            });
         };
 
         $scope.init();

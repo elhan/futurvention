@@ -117,16 +117,21 @@
     app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', function ($http, $q, $upload, $timeout) {
         var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
             steps = ['import', 'info', 'open'], // profile completion steps
-            profileSvcUrl = '/profile',
+//            profileSvcUrl = '/profile',
+            countriesUrl = '/countries', //TODO: fix this
+            countries = [],
             profile = {};
 
-        this.getProfile = function () {
-            return profile;
-        };
-
-        this.updateProfile = function (obj) {
-            angular.extend(profile, obj);
-        };
+        // Initialize the available countries when the service is first instantiated
+        (function initCountries () {
+            $http.get(countriesUrl).success(function (res) {
+                countries = res;
+            }).error(function (error) {
+                //TODO: handle errors & defaults
+                countries = ['Uk', 'USA', 'Greece'];
+                console.log(error);
+            });
+        }());
 
         // Provider object constructor
         this.Provider = function (name, url) {
@@ -143,13 +148,32 @@
             return providers;
         };
 
+        ////////////////////////////////////////////////////////////
+        /// Get methods interact with the service's private objects
+        ////////////////////////////////////////////////////////////
+
+        this.getProfile = function () {
+            return profile;
+        };
+
         this.getSteps = function () {
             return steps;
         };
 
+        this.getCountries = function () {
+            return countries;
+        };
+
+        this.updateProfile = function (obj) {
+            angular.extend(profile, obj);
+        };
+
+        ////////////////////////////////////////////
+        /// Save methods persist data on the server
+        ////////////////////////////////////////////
+
         this.saveProvider = function (provider) {
             //return $http.post(profileSvcUrl, { profileLink: provider.url });
-
             // TODO: remove mock functionality
             var deferred = $q.defer();
             $timeout(function () {
@@ -157,6 +181,43 @@
             }, 2000);
             return deferred.promise;
         };
+
+        this.saveProfileImage = function (img) {
+            !img&& console.log('no img');
+            // return $upload.upload({ url: profileSvcUrl, file: img });
+            // TODO: remove mock functionality
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve('profile image saved');
+            });
+            return deferred.promise;
+        };
+
+        this.savePersonalUrl = function (url) {
+            !url && console.log('no url');
+            // return $http.post(profileSvcUrl, { personalUrl: url });
+            // TODO: remove mock functionality
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve('personal url saved');
+            });
+            return deferred.promise;
+        };
+
+        this.saveProfile = function (info) {
+            !info && console.log('no info');
+            // return $http.post(profileSvcUrl, info);
+            // TODO: remove mock functionality
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve('profile info saved');
+            });
+            return deferred.promise;
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Remove methods perform delete operations on the server
+        ///////////////////////////////////////////////////////////
 
         this.removeProvider = function (provider) {
             //return $http.post(profileSvcUrl, { profileLink: '' });
@@ -169,12 +230,6 @@
             return deferred.promise;
         };
 
-        this.saveProfileImage = function (img) {
-            return $upload.upload({
-                url: profileSvcUrl,
-                file: img
-            });
-        };
     }]);
 
 }());
