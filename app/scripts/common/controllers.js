@@ -198,29 +198,11 @@
      * # ApplyCtrl
      * Controls the apply page & seller profile completion
      */
-    app.controller('ApplyCtrl', ['$scope', function ($scope) {
-        // profile completion steps
-        var steps = ['import', 'complete', 'open'];
-
-        // init the new User profile
-        $scope.profile = {
-            providers: {}
-        };
-
-        $scope.activeStep = steps[0];
-
-        // avoid shadow properties
-        $scope.updateProfile = function (profileData) {
-            angular.extend($scope.profile, profileData);
-        };
-
-        // avoid shadow properties
-        $scope.updateProviders = function (name, url) {
-            $scope.profile.providers[name] = url;
-        };
-
+    app.controller('ApplyCtrl', ['$scope', 'ProfileSvc', function ($scope, ProfileSvc) {
+        $scope.steps = ProfileSvc.getSteps();
+        $scope.activeStep = $scope.steps[0];
         $scope.goToStep = function (step) {
-            $scope.activeStep = steps[step];
+            $scope.activeStep = $scope.steps[step];
         };
     }]);
 
@@ -232,7 +214,7 @@
      * Controls the apply 'import' step
      */
     app.controller('ApplyImportCtrl', ['$scope', '$timeout', 'EVENTS', 'ProfileSvc', function ($scope, $timeout, events, ProfileSvc) {
-        $scope.providers = ProfileSvc.providers;
+        $scope.providers = ProfileSvc.initProviders();
         $scope.selectedProviders = [];
 
         // toggles the given provider's selection state
@@ -259,44 +241,38 @@
             var provider = $scope.providers[providerName];
             provider.inProgress = true;
 
-            // TODO: remove, mock functionality
-            $timeout(function () {
+            ProfileSvc.saveProvider(provider).then(function (res) {
+                console.log(res);
                 provider.saved = true;
                 provider.inProgress = false;
-                $scope.updateProviders(provider.name, provider.url);
-            }, 3000);
-
-            //            ProfileSvc.saveProvider(provider.url).success(function (profileObj) {
-            //                provider.saved = true;
-            //                provider.inProgress = false;
-            //                $scope.updateProfile(profileObj);
-            //            }).error(function (error) {
-            //                //TODO: error handling
-            //                provider.inProgress = false;
-            //                console.log(error);
-            //            });
+                ProfileSvc.updateProfile({
+                    providers: new ProfileSvc.Provider(provider.name, provider.url)
+                });
+                console.log(ProfileSvc.getProfile());
+            }, function (error) {
+                //TODO: error handling
+                provider.inProgress = false;
+                console.log(error);
+            });
         };
 
+        // remove a provider link & corresponding data
         $scope.removeProvider = function (providerName) {
             var provider = $scope.providers[providerName];
             provider.inProgress = true;
 
-            // TODO: remove, mock functionality
-            $timeout(function () {
+            ProfileSvc.removeProvider(provider).then(function () {
                 provider.saved = false;
                 provider.inProgress = false;
-                provider.url = ''; // reset input model
-            }, 3000);
-
-            //            ProfileSvc.removeProvider(provider.url).success(function () {
-            //                provider.saved = falses;
-            //                provider.inProgress = false;
-            //                TODO: remove from profile obj
-            //            }).error(function (error) {
-            //                //TODO: error handling
-            //                provider.inProgress = false;
-            //                console.log(error);
-            //            });
+                ProfileSvc.updateProfile({
+                    providers: new ProfileSvc.Provider(provider.name, '')
+                });
+                console.log(ProfileSvc.getProfile());
+            }, function (error) {
+                //TODO: error handling
+                provider.inProgress = false;
+                console.log(error);
+            });
         };
     }]);
 
@@ -307,42 +283,71 @@
      * # ApplyInfoCtrl
      * Controls the apply 'info' step
      */
-    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', function ($scope, $modal, $timeout, ProfileSvc) {
-        $scope.originalImage = ''; // image selected by the user
-        $scope.croppedImage = ''; // final image, after cropping
-
+    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'ProfileSvc', function ($scope, $modal, $timeout, ProfileSvc) {
         var modalImageCrop = $modal({
             scope: $scope,
             template: 'views/components/modalImageCrop.html',
             show: false,
-            animation: 'am-slide-top'
+            animation: 'am-slide-top',
+            keyboard: true
         });
 
-        $scope.showImageCrop = function () {
-            modalImageCrop.$promise.then(modalImageCrop.show);
-            $scope.croppedImage = ''; // reset the croppedImage object
+        $scope.profileImage = ProfileSvc.getProfile().image;
+
+        $scope.closeModal = function () {
+            $scope.init(false);
+            modalImageCrop.hide();
+        };
+
+        /*
+            Expose the init function on the scope, as the fv-on-drop directive needs to call it.
+            progressState is passed as an argument to enable setting the initial progress state to true
+            in case of a drop event.
+        **/
+        $scope.init = function (progressState) {
+            $scope.uncroppedImage = ''; // image selected by the user for cropping
+            $scope.croppedImage = ''; // final image, after cropping
+            $scope.tempImage = ''; // neccessarry to avoid shadow scopping
+            $scope.setProgress(progressState);
+        };
+
+        $scope.updateCroppedImage = function (img) {
+            $scope.croppedImage = img;
+        };
+
+        $scope.showImageCropModal = function () {
+            modalImageCrop.$promise.then(function () {
+                $scope.croppedImage = ''; // reset the croppedImage object
+                modalImageCrop.show();
+            });
         };
 
         $scope.onFileSelect =  function ($files) {
             var reader = new FileReader();
             reader.onload = function (e) {
-                $timeout(function () { $scope.originalImage = e.target.result; });
+                $timeout(function () { $scope.uncroppedImage = e.target.result; });
             };
             reader.readAsDataURL($files[0]); // Read in the image file as a data URL.
         };
 
-        $scope.saveProfileImage = function () {
-            $timeout(function () {
-                $scope.updateProfile( {image: $scope.croppedImage} );
-            });
-//            ProfileSvc.saveProfileImage($scope.croppedImage).success(function () {
-//                $scope.updateProfile( {image: $scope.croppedImage} );
-//            }).progress(function () {
-//                // TODO
-//            }).error(function () {
-//                // TODO
-//            });
-        };
-    }]);
+        $scope.setProgress = function (state) { $scope.inProgress = state; };
 
+        $scope.saveProfileImage = function () {
+            // TODO: remove mock functionality
+            $timeout(function () {
+                ProfileSvc.updateProfile({ image: $scope.croppedImage });
+                $scope.profileImage = angular.copy($scope.croppedImage);
+                $scope.closeModal();
+            });
+            //            ProfileSvc.saveProfileImage($scope.croppedImage).success(function () {
+            //                $scope.updateProfile( {image: $scope.croppedImage} );
+            //            }).progress(function () {
+            //                // TODO
+            //            }).error(function () {
+            //                // TODO
+            //            });
+        };
+
+        $scope.init();
+    }]);
 }());

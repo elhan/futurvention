@@ -114,22 +114,59 @@
      * # ProfileSvc
      * CRUD operations for Seller profiles
      */
-    app.service('ProfileSvc', ['$http', '$upload', function ($http, $upload) {
+    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', function ($http, $q, $upload, $timeout) {
         var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
-            profileSvcUrl = '/profile';
+            steps = ['import', 'info', 'open'], // profile completion steps
+            profileSvcUrl = '/profile',
+            profile = {};
 
-        function initProviders () {
-            var providers = {};
+        this.getProfile = function () {
+            return profile;
+        };
+
+        this.updateProfile = function (obj) {
+            angular.extend(profile, obj);
+        };
+
+        // Provider object constructor
+        this.Provider = function (name, url) {
+            this.name = name;
+            this.url = url;
+        };
+
+        // returns a new collection of Provider objects that includes all providerNames with blank urls
+        this.initProviders = function () {
+            var self = this, providers = {};
             _.forEach(providerNames, function (name) {
-                providers[name] = { name: name, selected: false, url: '', saved: false, inProgress: false };
+                providers[name] = new self.Provider(name, '');
             });
             return providers;
-        }
+        };
 
-        this.providers = initProviders();
+        this.getSteps = function () {
+            return steps;
+        };
 
-        this.saveProvider = function (link) {
-            return $http.post(profileSvcUrl, { profileLink: link });
+        this.saveProvider = function (provider) {
+            //return $http.post(profileSvcUrl, { profileLink: provider.url });
+
+            // TODO: remove mock functionality
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve('provider saved: ' + provider.toString());
+            }, 2000);
+            return deferred.promise;
+        };
+
+        this.removeProvider = function (provider) {
+            //return $http.post(profileSvcUrl, { profileLink: '' });
+
+            // TODO: remove mock functionality
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve('provider removed: ' + provider.toString());
+            }, 2000);
+            return deferred.promise;
         };
 
         this.saveProfileImage = function (img) {

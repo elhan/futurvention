@@ -101,8 +101,8 @@
                 if (document.addEventListener) {
                     document.addEventListener('mousewheel', onScroll(), false);
                     document.addEventListener('DOMMouseScroll', onScroll(), false);
-//                } else { //IE
-//                    sq.attachEvent('onmousewheel', onScroll());
+                    //                } else { //IE
+                    //                    sq.attachEvent('onmousewheel', onScroll());
                 }
 
                 // unbind listeners and enable scrolling if fullscreen
@@ -151,15 +151,65 @@
      * Autofocus elements when they are first inserted into the DOM
      *
      * @example
-     * <input autofocus>
+     * <input fv-auto-focus>
      */
-    app.directive('fvAutoFocus', function ($timeout) {
+    app.directive('fvAutoFocus', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             link: function (scope, element) {
                 element && element.focus && $timeout(function () {
                     element.focus();
                 });
+            }
+        };
+    }]);
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvBgImage
+     * @restrict A
+     * @element div
+     *
+     * @description
+     * Dynamic background image functionality
+     *
+     * @example
+     * <div fv-bg-image="someBackgroundImage"> ... </div>
+     */
+    app.directive('fvBgImage', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                attrs.$observe('fvBgImage', function (newImg, oldImg) {
+                    if (!newImg || newImg === oldImg) {
+                        return;
+                    }
+                    element.css({
+                        'background-image': ['url(', newImg, ')'].join(''),
+                        'background-size' : 'cover'
+                    });
+                }, true);
+            }
+        };
+    });
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvOnDrop
+     * @restrict A
+     * @element div
+     *
+     * @description
+     * Execute a controller function on drop
+     *
+     * @example
+     * <div fv-on-drop="setProgress(true)"> ... </div>
+     */
+    app.directive('fvOnDrop', function () {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                element.on('drop', function () { scope.$apply(attrs.fvOnDrop); });
             }
         };
     });

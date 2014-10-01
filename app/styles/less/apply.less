@@ -98,4 +98,34 @@
     min-width: 100%;
     min-height: 144px;
   }
+
+  .image-profile {
+    .flex-content-centered;
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    display: flex;
+
+    &:hover {
+      > div {
+        display: block;
+      }
+    }
+
+    div {
+      .text-white;
+      .text-h3;
+      display: none;
+      align-self: center;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, .7);
+      cursor: pointer;
+      width: calc(100% / 3);
+      height: calc(100% / 3);
+    }
+  }
+
+  .progress-bar {
+    width: calc(200% / 3);
+  }
 }

@@ -10,8 +10,11 @@
     <div class="container-x wrapper-profile">
       <div class="label-l label-picture">Add your photo</div>
       <div class="flex-2">
-        <div class="modal-lg profile-picture-m default wrapper-round" ng-click="showImageCrop()">
-          <i class="fa-centered fa fa-camera"></i>
+        <div class="modal-lg profile-picture-m default wrapper-round" ng-click="showImageCropModal()">
+          <i ng-if="!profileImage" class="fa-centered fa fa-camera"></i>
+          <div ng-if="profileImage" fv-bg-image="{{profileImage}}" class="image-profile">
+            <div><i class="fa-centered fa fa-camera"></i></div>
+          </div>
         </div>
       </div>
       <div class="flex-1"></div>
