@@ -236,6 +236,12 @@
             return $scope.providers[providerName].selected;
         };
 
+        $scope.hasUnsavedProviders = function () {
+            return _.find($scope.selectedProviders, function (provider) {
+                return !provider.saved; // return the first unsaved provider in selectedProviders
+            });
+        };
+
         // save a provider link on the backend
         $scope.saveProvider = function (providerName) {
             var provider = $scope.providers[providerName];
@@ -257,13 +263,14 @@
         };
 
         // remove a provider link & corresponding data
-        $scope.removeProvider = function (providerName) {
-            var provider = $scope.providers[providerName];
+        $scope.removeProvider = function (provider) {
             provider.inProgress = true;
-
             ProfileSvc.removeProvider(provider).then(function () {
+                provider.selected = false;
                 provider.saved = false;
                 provider.inProgress = false;
+                provider.url = '';
+                _.remove($scope.selectedProviders, provider);
                 ProfileSvc.updateProfile({
                     providers: new ProfileSvc.Provider(provider.name, '')
                 });
@@ -273,6 +280,10 @@
                 provider.inProgress = false;
                 console.log(error);
             });
+        };
+
+        $scope.editProvider = function (provider) {
+            provider.saved = false;
         };
     }]);
 

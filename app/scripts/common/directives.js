@@ -166,6 +166,33 @@
 
     /**
      * @ngdoc directive
+     * @name fvApp.directive:fvFocusInput
+     * @restrict A
+     * @element input
+     *
+     * @description
+     * Focus an input by name, on one or more events. The name of input to focus
+     * and the event(s) that trigger the focus action are provided as attributes.
+     *
+     * @example
+     * <div fv-focus-input focusOn="click" focusInput="elance"></div>
+     */
+    app.directive('fvFocusInput', ['$timeout', function ($timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                $timeout(function () {
+                    var input = document.getElementsByName(attrs.focusInput)[0];
+                    input && element.on(attrs.focusOn, function () {
+                        $timeout(function () { input.focus(); });
+                    });
+                });
+            }
+        };
+    }]);
+
+    /**
+     * @ngdoc directive
      * @name fvApp.directive:fvBgImage
      * @restrict A
      * @element div

@@ -4,8 +4,13 @@
   .apply-header {
     .text-centered;
     .text-h1;
+    max-width: 989px;
+    margin: 0 auto;
     @media screen and (max-width: 1600px) {
       .text-h2;
+    }
+    @media screen and (min-width: 1600px) {
+      font-size: 34px;
     }
   }
 
@@ -31,19 +36,54 @@
     padding-top: 20px;
   }
 
-  .status-icon {
-    display: flex;
+  .action-icon {
+    .wrapper-round;
+    .flex-content-centered;
     align-items: center;
     cursor: pointer;
+    width: 37px;
+    height: 37px;
+    &.remove {
+      border: 1px solid @redError;
+      color: @redError;
+      &:hover {
+        background-color: @redError;
+        color: white;
+      }
+    }
+    &.edit {
+      border: 1px solid @defaultBlue;
+      color: @defaultBlue;
+      &:hover {
+        background-color: @defaultBlue;
+        color: white;
+      }
+    }
+  }
+
+  .action-icon-wrapper {
+    padding-left: 15px;
+  }
+
+  .spinner-icon {
+    color: @defaultBlue;
+    margin-left: 15px;
   }
 
   .form-group {
-    .btn-save, .status-icon {
-      min-height: 48px !important;
+    .btn-save {
+      min-height: 38px !important;
       width: 65px !important;
     }
     .btn {
-      min-height: 48px !important;
+      min-height: 38px !important;
+    }
+  }
+
+  .input-provider {
+    &:disabled {
+      .bg-white;
+      border: 1px solid @green;
     }
   }
 
