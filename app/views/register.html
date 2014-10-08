@@ -1,18 +1,18 @@
 <div ng-controller="LoginCtrl" class="register box col-md-6 col-md-offset-3">
   <div class="header-wrap">
-    <div class="text-h2">APPLY TO JOIN OUR EXCLUSIVE COMMUNITY</div>
-    <div class="text-h2">OF HIGH-END FREELANCERS</div>
+    <div class="text-h1">APPLY TO JOIN OUR EXCLUSIVE COMMUNITY</div>
+    <div class="text-h1">OF HIGH-END FREELANCERS</div>
   </div>
   <div class="content-wrap">
     <div class="social-btn-wrap">
       <div class="text-grey text-p">Sign in with an existing LinkedIn or Facebook Account</div>
-      <button type="button" class="btn btn-blue btn-lg btn-big" ng-click="loginLi()">
+      <button type="button" class="btn btn-blue btn-lg btn-big btn-li" ng-click="loginLi()">
         <i class="fa fa-lg fa-linkedin"></i>
-        <span>Sign in with LinkedIn</span>
+        <span>Sign up with LinkedIn</span>
       </button>
       <button type="button" class="btn btn-blue btn-lg btn-big btn-fb" ng-click="loginFb()">
         <i class="fa fa-lg fa-facebook"></i>
-        <span>Sign in with Facebook</span>
+        <span>Sign up with Facebook</span>
       </button>
       <div class="text-grey text-i">Don't worry, we'll never post anything on your profile</div>
     </div>
@@ -32,7 +32,7 @@
       <!-- email input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.emailTaken || authError.invalidEmail}">
         <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true">
-        <label ng-show="loginForm.inputEmail.$error.email" class="control-label label-s text-i" for="inputEmail">
+        <label ng-show="loginForm.inputEmail.$error.email" class="label-warn" for="inputEmail">
           Please include a '@' in the email address.
         </label>
         <label ng-show="authError.emailTaken && authError.emailTaken === newUser.email" class="control-label label-s" for="inputEmail">
@@ -45,17 +45,17 @@
       <!-- password input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputPassword.$error.minlength}">
         <input type="password" name="inputPassword" class="form-control" ng-model="newUser.password" ng-minlength="6" placeholder="Password" ng-required="true">
-        <label ng-show="loginForm.inputPassword.$error.minlength" class="control-label label-s text-i" for="inputPassword">
+        <label ng-show="loginForm.inputPassword.$error.minlength" class="label-warn" for="inputPassword">
             This field needs to be at least 6 characters long.
         </label>
       </div>
       <button type="submit" class="btn btn-blue btn-lg btn-big" ng-disabled="loginForm.$invalid">Submit</button>
       <div class="link-tc text-grey text-i">By clicking SignUp you agree to our
-        <span class="text-darkGrey">T&C's</span>
+        <span class="text-grey-dark">T&C's</span>
       </div>
     </form>
-    <div class="link-box text-grey text-p">Don't have an account?
-      <span class="text-darkBlue" ng-click="go('/login')">Create one here.</span>
+    <div class="link-box text-grey text-p">Already have an account?
+      <span class="text-darkBlue" ng-click="go('/login')">Sign in here.</span>
     </div>
   </div>
 </div>

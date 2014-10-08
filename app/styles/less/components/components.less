@@ -5,16 +5,37 @@
   margin-bottom: 10px;
 }
 
-input {
-  &.input-l {
-    height: 48px !important;
-  }
-  &.input-s {
-    height: 38px !important;
+.form-control, .textarea-info {
+  &:focus {
+    border-color: @blueDefault;
+    outline: 0;
+    box-shadow: none;
   }
 }
 
-.form-control::-webkit-input-placeholder {
+.has-error .form-control {
+  border-color: @redError;
+  &:focus {
+    border-color: @redError;
+    outline: 0;
+    box-shadow: none;
+  }
+}
+
+input {
+  &.input-l {
+    height: 48px;
+    .text-p;
+    .text-grey-dark;
+  }
+  &.input-s {
+    height: 38px;
+    .text-p;
+    .text-grey-dark;
+  }
+}
+
+.form-control::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
   font-size: 13px;
   line-height: 24px;
   .text-lightGrey;
@@ -24,21 +45,42 @@ input {
 }
 
 textarea {
-  .text-p;
   border-radius: 4px;
   border-color: @lightGrey;
   padding: 6px 12px;
-  font-family: GothamMedium;
+  .text-p;
+  .text-grey-dark;
   &:focus {
     border-color: #66afe9;
     outline: 0;
     box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
   }
-  &::-webkit-input-placeholder {
+}
+
+.search-box {
+  .inner-addon {
+    position: relative;
+  }
+
+  .inner-addon .fa {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
     font-size: 14px;
-    line-height: 24px;
-    font-family: GothamMedium;
-    .text-lightGrey;
+    color: @lightGrey;
+  }
+
+  .left-addon .glyphicon  {
+    left:  0px;
+  }
+
+  .left-addon input  {
+    padding-left:  30px;
+    border-radius: 30px;
+  }
+
+  .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover {
+    background-color: @blueDefault;
   }
 }
 
@@ -96,6 +138,14 @@ textarea {
   padding: 0 10px;
 }
 
+.divider-thumb-overlay {
+  font-size: 6px;
+  width: .1em;
+  background-color: white;
+  opacity: 0.3;
+  height: calc(100% / 3);
+}
+
 // Profile import links
 // -------------------------
 
@@ -108,17 +158,17 @@ textarea {
   }
   &.selected {
     .import-link {
-      background-color: @darkGrey;
-      border: 1px solid @darkGrey;
+      background-color: @greyDark;
+      border: 1px solid @greyDark;
     }
     .label-import-link {
-      .text-darkGrey;
+      .text-grey-dark;
     }
   }
   &:hover {
     .import-link {
-      background-color: @darkBlue;
-      border: 1px solid @darkBlue;
+      background-color: @blueActive;
+      border: 1px solid @blueActive;
       cursor: pointer;
       .icon-thirdparty {
         display: none;
@@ -128,12 +178,12 @@ textarea {
       }
     }
     .label-import-link {
-      color: @darkGrey;
+      color: @greyDark;
     }
     &.selected {
       .import-link {
-        background-color: @darkGrey;
-        border: 1px solid @darkGrey;
+        background-color: @greyDark;
+        border: 1px solid @greyDark;
         .icon-plus {
           display: none;
         }
@@ -165,11 +215,12 @@ textarea {
 
   .icon-plus {
     .icon-centered;
+    .text-white;
+    .flex-content-centered;
+    font-family: OpenSansLight;
+    font-size: 1.2em;
     display: none;
-    padding-top: 4px;
-    > i {
-      color: white;
-    }
+    padding-top: 6px;
   }
 }
 
@@ -240,12 +291,62 @@ textarea {
   .label-s;
   .text-green;
   .flex-content-start;
+  padding-left: 0px;
   background-color: white !important; //bootstrap override
   i {
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;
     font-size: 1em;
+    padding-left: 0;
+    padding-right: 5px;
+  }
+}
+
+.label-warn {
+  .label-s;
+  .text-grey;
+  .text-i;
+}
+
+.has-error .control-label {
+  color: @redError;
+}
+
+// Dropdown
+// -------------------------
+
+// copy bootstrap .dropdown-menu > li > a
+.dropdown-menu > li > a {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: normal;
+  line-height: 1.42857143;
+  color: #333;
+  white-space: nowrap;
+  cursor: pointer;
+
+  &:hover {
+    cursor: pointer;
+    color: #262626;
+    background-color: #f5f5f5;
+  }
+}
+
+.wrapper-drop-country {
+  display: flex;
+  flex: 1;
+  height: 48px;
+  padding-left: 20px;
+
+  > button {
+    width: 100%;
+    text-align: left;
+    span {
+      float: right;
+      margin-top: 8px;
+    }
   }
 }
 
@@ -292,39 +393,50 @@ textarea {
   }
 }
 
-// Dropdown
-// -------------------------
-
-// copy bootstrap .dropdown-menu > li > a
-.dropdown-menu > li > a {
-  display: block;
-  padding: 3px 20px;
-  clear: both;
-  font-weight: normal;
-  line-height: 1.42857143;
-  color: #333;
-  white-space: nowrap;
-  cursor: pointer;
-
-  &:hover {
-    cursor: pointer;
-    color: #262626;
-    background-color: #f5f5f5;
-  }
+a {
+  color: @blueDefault;
 }
 
-.wrapper-drop-country {
-  display: flex;
-  flex: 1;
-  height: 48px;
-  padding-left: 20px;
+.thumbnail-grid {
+  margin: 20px -15px 0px;
+}
 
-  > button {
-    width: 100%;
-    text-align: left;
-    span {
-      float: right;
-      margin-top: 8px;
+.thumbnail {
+  cursor: pointer;
+  padding: 0px;
+  max-width: 232px;
+
+  .wrapper-img {
+    overflow: hidden;
+    border-top-right-radius: 4px;
+  }
+
+  .thumb-overlay {
+    .flex-content-centered;
+    position: absolute;
+    top: 1px;
+    right: 15px; // thumbnails have padding 15px
+    bottom: 90px; //90px = 20px thumbnail margin + 70px caption height
+    left: 15px;
+    background-color: @blueDefault;
+    color: white;
+    font-family: OpenSansLight;
+    opacity: .9;
+    border-top-right-radius: 3px;
+    visibility: hidden;
+    transition: visibility .1s ease-in-out .1s;
+  }
+
+  .caption {
+    height: 70px;
+    overflow: overlay;
+  }
+
+  &:hover {
+    border: 1px solid @blueDefault;
+    box-shadow: 0px 0px 10px lightgrey;
+    .thumb-overlay {
+      visibility: visible;
     }
   }
 }

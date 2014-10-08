@@ -3,9 +3,9 @@
 
   .apply-header {
     .text-centered;
-    .text-h1;
     max-width: 989px;
     margin: 0 auto;
+    .text-h1;
     @media screen and (max-width: 1600px) {
       .text-h2;
     }
@@ -41,24 +41,7 @@
     .flex-content-centered;
     align-items: center;
     cursor: pointer;
-    width: 37px;
-    height: 37px;
-    &.remove {
-      border: 1px solid @redError;
-      color: @redError;
-      &:hover {
-        background-color: @redError;
-        color: white;
-      }
-    }
-    &.edit {
-      border: 1px solid @defaultBlue;
-      color: @defaultBlue;
-      &:hover {
-        background-color: @defaultBlue;
-        color: white;
-      }
-    }
+    padding-left: 15px;
   }
 
   .action-icon-wrapper {
@@ -66,24 +49,23 @@
   }
 
   .spinner-icon {
-    color: @defaultBlue;
+    color: @blueDefault;
     margin-left: 15px;
   }
 
   .form-group {
     .btn-save {
-      min-height: 38px !important;
-      width: 65px !important;
+      height: 38px;
+      width: 65px;
     }
     .btn {
-      min-height: 38px !important;
+      height: 38px;
     }
   }
 
   .input-provider {
     &:disabled {
       .bg-white;
-      border: 1px solid @green;
     }
   }
 
@@ -107,12 +89,13 @@
     .flex-1;
     .text-h3;
     .flex-content-end;
+    font-family: OpenSansRegular;
     align-items: center;
     margin-right: 15px;
     &.label-bio {
       align-items: flex-start;
       margin-right: 0px;
-      padding-top: 12px;
+      padding-top: 5px;
     }
   }
 
@@ -129,6 +112,7 @@
 
   .label-location {
     margin-left: -11px;
+    padding-bottom: 10px;
   }
 
   .input-info-url {
@@ -178,5 +162,62 @@
 
   .progress-bar {
     width: calc(200% / 3);
+  }
+
+
+  // Page 3 - storefront
+  // -------------------------
+  .wrapper-search {
+    align-items: center;
+    margin-top: 45px;
+    margin-bottom: 8px;
+    .text-h3 {
+      margin-right: 10px;
+      font-family: OpenSansBold;
+    }
+  }
+
+  // bootstrap override
+  .nav-tabs {
+    border: 0;
+  }
+
+  .nav-tabs > li > a {
+    height: 25px;
+    display: flex;
+    align-items: center;
+    &:hover {
+      color: @blueDefault;
+      border-color: transparent;
+      background-color: white;
+    }
+  }
+
+  .nav-tabs > li.active > a {
+    color: white;
+    background-color: @blueDefault;
+    border-color: transparent;
+    border-radius: 15px;
+  }
+
+  .wrapper-showmore {
+    .container-x;
+    .flex-content-centered;
+    margin-bottom: 40px;
+  }
+
+  .thumbnail-grid {
+    &.selected-services {
+      justify-content: flex-start;
+      margin-top: 0;
+    }
+  }
+
+  .thumb-overlay-inner {
+    .flex-1;
+    .text-h2;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
   }
 }

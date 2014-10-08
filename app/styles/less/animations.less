@@ -73,6 +73,10 @@
   -webkit-transition: 1s ease-in opacity;
   transition: 1s ease-in opacity;
   opacity: 1;
+  &.fast {
+    -webkit-transition: .1s ease-in opacity;
+    transition: .1s ease-in opacity;
+  }
 }
 
 .fade.ng-enter {
@@ -96,7 +100,7 @@
   border-radius: 50%;
   width: 6px;
   height: 6px;
-  background-color: @defaultBlue;
+  background-color: @blueDefault;
   cursor: pointer;
   transition: width .5s, height .5s, background-color .5s, margin-left .5s;
 }

@@ -1,11 +1,11 @@
 <div ng-controller="LoginCtrl" class="register box col-md-6 col-md-offset-3">
   <div class="header-wrap">
-    <div class="text-h2">LOGIN TO YOUR SERVICE BUCKET ACCOUNT</div>
+    <div class="text-h1">LOGIN TO YOUR SERVICE BUCKET ACCOUNT</div>
   </div>
   <div class="content-wrap">
     <div class="social-btn-wrap">
       <div class="text-grey text-p">Sign in with an existing LinkedIn or Facebook Account</div>
-      <button type="button" class="btn btn-blue btn-lg btn-big" ng-click="loginLi()">
+      <button type="button" class="btn btn-blue btn-lg btn-big btn-li" ng-click="loginLi()">
         <i class="fa fa-lg fa-linkedin"></i>
         <span>Sign in with LinkedIn</span>
       </button>
@@ -23,7 +23,7 @@
       <!-- email input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.invalidEmail || authError.invalidUser}">
         <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true" autocomplete="on">
-        <label ng-show="loginForm.inputEmail.$error.email" class="control-label label-s text-i" for="inputEmail">
+        <label ng-show="loginForm.inputEmail.$error.email" class="label-warn" for="inputEmail">
           Please include a '@' in the email address.
         </label>
         <label ng-show="authError.invalidEmail && authError.invalidEmail === newUser.email" class="control-label label-s text-i" for="inputEmail">
@@ -36,7 +36,7 @@
       <!-- password input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputPassword.$error.minlength || authError.invalidPassword}">
           <input type="password" name="inputPassword" class="form-control" ng-model="newUser.password" ng-minlength="6" placeholder="Password" ng-required="true" autocomplete="on">
-        <label ng-show="loginForm.inputPassword.$error.minlength" class="control-label label-s text-i" for="inputPassword">
+        <label ng-show="loginForm.inputPassword.$error.minlength" class="label-warn" for="inputPassword">
           This field needs to be at least 6 characters long.
         </label>
         <label ng-show="authError.invalidPassword && authError.invalidPassword === newUser.password" class="control-label label-s text-i" for="inputPassword">

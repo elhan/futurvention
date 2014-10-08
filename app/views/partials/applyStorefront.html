@@ -1,0 +1,75 @@
+<div class="container-y apply-content apply" ng-controller="ApplyStorefrontCtrl">
+  <div class="apply-header">Build your storefront in a snap</div>
+  <div class="text-centered text-h3 text-silver">
+    Use our comprehensive catalogue to select services you want to offer, then set your price for each
+  </div>
+  <!-- Thumbnail Grid: Selected Services -->
+  <div class="container-x wrapper-search" ng-show="selectedServices.length > 0">
+    <span class="text-h3">Services Offered</span>
+  </div>
+  <div class="thumbnail-grid flex-wrap selected-services">
+    <div ng-repeat="selectedService in selectedServices" class="col-sm-6 col-md-3 wrapper-thumb">
+      <div class="thumbnail">
+        <div class="wrapper-img">
+          <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
+        </div>
+        <div class="thumb-overlay">
+          <div class="thumb-overlay-inner" ng-click="editSelected(selectedService)">
+            <i class="fa fa-pencil"></i>
+          </div>
+          <div class="divider-thumb-overlay"></div>
+          <div class="thumb-overlay-inner" ng-click="removeSelected(selectedService)">
+            <i class="fa fa-times"></i>
+          </div>
+        </div>
+        <div class="caption">
+          <div class="text-p-bold">{{ selectedService }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Search box -->
+  <div class="container-x wrapper-search">
+    <span class="text-h3">Service Catalogue</span>
+    <div class="search-box">
+      <div class="inner-addon left-addon">
+        <i class="fa fa-search"></i>
+        <input type="text" class="form-control" ng-model="selectedService" ng-options="service for service in services" placeholder="Service name" bs-typeahead />
+      </div>
+    </div>
+  </div>
+  <!-- Service categories -->
+  <div class="container-x">
+    <div class="text-p">
+      <div ng-model="categories.activeCategoryIndex" bs-tabs>
+        <div ng-repeat="category in categories" title="{{ category }}" bs-pane></div>
+      </div>
+    </div>
+  </div>
+  <!-- Thumbnail Grid: Services By Category -->
+  <div class="thumbnail-grid flex-wrap">
+    <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb">
+      <div class="thumbnail" ng-click="selectService(service)">
+        <div class="wrapper-img">
+          <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
+        </div>
+        <div class="thumb-overlay">+</div>
+        <div class="caption">
+          <div class="text-p-bold">{{ service }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Show more button -->
+  <div class="wrapper-showmore" ng-show="services.length >= paginationIndex">
+    <button class="btn btn-link text-p" ng-click="showMore()">
+      <span>Show more services</span>
+    </button>
+  </div>
+  <!-- Continue button -->
+  <div class="container-x flex-content-centered">
+    <div class="container-x col-sm-6 col-md-3">
+      <button type="submit" class="btn btn-continue flex-1" ng-disabled="true" ng-click="goToStep(1)">Continue</button>
+    </div>
+  </div>
+</div>

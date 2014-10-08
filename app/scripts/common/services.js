@@ -116,7 +116,7 @@
      */
     app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', function ($http, $q, $upload, $timeout) {
         var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
-            steps = ['import', 'info', 'open'], // profile completion steps
+            steps = ['import', 'info', 'storefront'], // profile completion steps
 //            profileSvcUrl = '/profile',
             countriesUrl = '/countries', //TODO: fix this
             countries = [],
@@ -230,6 +230,30 @@
             return deferred.promise;
         };
 
+    }]);
+
+    /**
+     * @ngdoc service
+     * @name fvApp.service: CatalogueSvc
+     * @description
+     * # CatalogueSvc
+     * CRUD operations for Catalogue items (services, categories etc)
+     */
+    app.service('CatalogueSvc', ['SERVICE_CATALOGUE', function (catalogue) {
+        this.services = _.uniq(_.pluck(catalogue, 'Title'));
+
+        this.categories = _.uniq(_.pluck(catalogue, 'Category'));
+
+        /*
+            Filters the available services by category and returns an array of service titles.
+            The pagination array defines the number of services returned in one batch.
+            If category == All, return all (unique) services.
+        **/
+        this.getServicesInCategory = function (category, paginationIndex) {
+            // if category is 'All' do not fitler
+            var filteredCatalogue = category === 'All' ? catalogue : _.where(catalogue, { 'Category': category });
+            return _.chain(filteredCatalogue).pluck('Title').uniq().slice(0, paginationIndex).valueOf();
+        };
     }]);
 
 }());

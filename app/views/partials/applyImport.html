@@ -12,9 +12,7 @@
         <div class="icon-thirdparty">
           <i class="fa-centered fa fa-linkedin icon-linkedIn"></i>
         </div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">LinkedIn</div>
     </div>
@@ -24,9 +22,7 @@
          ng-click="toggleSelection('oDesk')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
         <div class="icon-odesk icon-thirdparty"></div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">oDesk</div>
     </div>
@@ -38,9 +34,7 @@
         <div class="icon-thirdparty container-y">
           <div class="icon-elance">E</div>
         </div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">Elance</div>
     </div>
@@ -59,9 +53,7 @@
             </div>
           </div>
         </div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">PeoplePerHour</div>
     </div>
@@ -71,9 +63,7 @@
          ng-click="toggleSelection('freelancer')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
         <div class="icon-freelancer icon-thirdparty"></div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">Freelancer</div>
     </div>
@@ -85,9 +75,7 @@
         <div class="icon-thirdparty">
           <i class="fa-centered fa fa-behance icon-behance"></i>
         </div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">Behance</div>
     </div>
@@ -99,9 +87,7 @@
         <div class="icon-thirdparty">
           <i class="fa-centered fa fa-dribbble icon-dribbble"></i>
         </div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">Dribbble</div>
     </div>
@@ -113,9 +99,7 @@
         <div class="icon-thirdparty">
           <i class="fa-centered fa fa-github"></i>
         </div>
-        <div class="icon-plus">
-          <i class="fa-centered fa fa-plus"></i>
-        </div>
+        <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">Github</div>
     </div>
@@ -128,7 +112,6 @@
         <form fv-scroll-bottom scrollTrigger="ui-provider-selected" class="form-horizontal" name="providersForm" role="form">
           <div class="container-y">
             <div ng-repeat="provider in selectedProviders">
-
               <div ng-form class="form-group" name="innerForm" ng-class="{'has-error': innerForm.$error.url}">
                 <div class="container-x flex-content-centered">
                   <div class="flex-1 flex-content-end">
@@ -144,36 +127,31 @@
                     <button ng-show="!provider.inProgress && !provider.saved" class="btn btn-save"
                             ng-disabled="innerForm.$invalid || !provider.url" ng-click="saveProvider(provider.name)">save</button>
                     <!-- Spinner: upload in progress -->
-                    <div ng-show="provider.inProgress" class="spinner-icon text-darkGrey text-h3">
+                    <div ng-show="provider.inProgress" class="spinner-icon text-grey-dark text-h3">
                       <i class="fa fa-circle-o-notch fa-spin fa-1"></i>
                     </div>
                     <!-- Icon: edit-->
-                    <div class="action-icon-wrapper">
-                      <div ng-show="provider.saved && !provider.inProgress" class="action-icon edit text-h3" ng-click="editProvider(provider)"
-                           focus-on="click" focus-input="{{provider.name}}" fv-focus-input
-                           data-title="Edit your {{provider.name}} profile link" bs-tooltip>
-                        <i class="fa fa-pencil-square-o"></i>
-                      </div>
+                    <div ng-show="provider.saved && !provider.inProgress" class="action-icon edit text-h3" ng-click="editProvider(provider)"
+                         focus-on="click" focus-input="{{provider.name}}" fv-focus-input
+                         data-title="Edit your {{provider.name}} profile link" bs-tooltip>
+                      <i class="fa fa-pencil"></i>
                     </div>
                     <!-- Icon: remove-->
-                    <div class="action-icon-wrapper">
-                      <div ng-show="provider.saved && !provider.inProgress" class="action-icon remove text-h3" ng-click="removeProvider(provider)"
-                           data-title="Remove your {{provider.name}} profile link" bs-tooltip>
-                        <i class="fa fa-times"></i>
-                      </div>
+                    <div ng-show="provider.saved && !provider.inProgress" class="action-icon remove text-h3" ng-click="removeProvider(provider)"
+                         data-title="Remove your {{provider.name}} profile link" bs-tooltip>
+                      <i class="fa fa-times"></i>
                     </div>
-
                   </div>
                 </div>
                 <div class="container-x flex-content-centered">
                   <!-- Error label: invalid url-->
-                  <label ng-show="innerForm.$error.url" class="control-label label-s col-md-6" for="{{provider.name}}">
+                  <label ng-show="innerForm.$error.url" class="label-warn label-s col-md-6" for="{{provider.name}}">
                     Please provide a valid url: 'http://...'
                   </label>
                   <!-- Success label: provider saved-->
                   <label ng-show="!provider.inProgress && provider.saved" class="label-success col-md-6">
-                    <span>{{provider.name}} profile saved!</span>
                     <i class="icon-check fa-check"></i>
+                    <span>{{provider.name}} profile saved!</span>
                   </label>
                 </div>
               </div>

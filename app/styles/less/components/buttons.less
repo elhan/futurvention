@@ -17,7 +17,7 @@
 }
 
 .btn-link {
-  color: @defaultBlue !important;
+  color: @blueDefault !important;
   text-decoration: none !important;
 }
 
@@ -72,12 +72,12 @@
 .btn-blue {
   font-family: GothamBold;
   .text-white;
-  border-color: @defaultBlue;
-  background-color: @defaultBlue;
+  border-color: @blueDefault;
+  background-color: @blueDefault;
   &:hover {
     .text-white;
-    background-color: @darkBlue;
-    border-color: @darkBlue;
+    background-color: @blueActive;
+    border-color: @blueActive;
     drop-shadow: 3px;
   }
   i {
@@ -95,11 +95,11 @@
 }
 
 .bg-darkgrey {
-  border-color: @darkGrey;
-  background-color: @darkGrey;
+  border-color: @greyDark;
+  background-color: @greyDark;
   &:hover {
-    border-color: @darkGrey;
-    background-color: @darkGrey;
+    border-color: @greyDark;
+    background-color: @greyDark;
   }
 }
 
@@ -123,7 +123,21 @@
 }
 
 .btn-fb {
-  background-color: @fbBlue;
+  background-color: @blueFb;
+  border: 1px solid @blueFb;
+  &:hover {
+    background-color: @blueFbHover;
+    border: 1px solid @blueFbHover;
+  }
+}
+
+.btn-li {
+  background-color: @blueLi;
+  border: 1px solid @blueLi;
+  &:hover {
+    background-color: @blueLiHover;
+    border: 1px solid @blueLiHover;
+  }
 }
 
 .btn-apply {

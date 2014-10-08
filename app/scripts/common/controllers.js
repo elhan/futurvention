@@ -303,7 +303,6 @@
             keyboard: true
         });
 
-
         $scope.personalUrlExists = false; // true if the user has set a url that already exists. Used to display error label
         $scope.profileImage = ProfileSvc.getProfile().image; // default, in case the user already has a profile image
         $scope.countries = ProfileSvc.getCountries(); // all available countries - used to populate the dropdown
@@ -344,8 +343,14 @@
 
         $scope.onFileSelect =  function ($files) {
             var reader = new FileReader();
+            reader.onloadstart = function () {
+                $scope.setProgress(true);
+            };
             reader.onload = function (e) {
-                $timeout(function () { $scope.uncroppedImage = e.target.result; });
+                $timeout(function () {
+                    $scope.uncroppedImage = e.target.result;
+                    $scope.setProgress(false);
+                });
             };
             reader.readAsDataURL($files[0]); // Read in the image file as a data URL.
         };
@@ -392,12 +397,76 @@
                 console.log(res);
                 ProfileSvc.updateProfile(info); // update the cached Profile object once the server has persisted it
                 console.log(ProfileSvc.getProfile());
+                $scope.goToStep(2);
             }, function (err) {
                 // TODO: handle error
                 console.log(err);
             });
         };
-
         $scope.init();
     }]);
+
+    /**
+     * @ngdoc Controller
+     * @name fvApp.controller: ApplyStorefrontCtrl
+     * @description
+     * # ApplyStorefrontCtrl
+     * Controls the apply 'storefront' step
+     */
+    app.controller('ApplyStorefrontCtrl', ['$scope', '$timeout', 'CatalogueSvc', function ($scope, $timeout, CatalogueSvc) {
+        // show thumbnails in batches of 16 (4 rows of 4 thumbnails)
+        $scope.batch = 16;
+
+        // add an 'All' option to the category collection and set it as the default active category
+        $scope.categories = CatalogueSvc.categories;
+        $scope.categories.unshift('All');
+
+        // bs-tabs needs the idnex as model, not the string value of the category
+        $scope.categories.activeCategoryIndex = 0;
+
+        /*
+            Pagination support for available services. This is initailized to 16 since that is the default
+            thumbnail batch size. The paginationIndex is passed as an argument when filtering services.
+        **/
+        $scope.paginationIndex = 16;
+
+        $scope.getServices = function () {
+            return CatalogueSvc.getServicesInCategory($scope.categories[$scope.categories.activeCategoryIndex], $scope.paginationIndex);
+        };
+
+        $scope.services = $scope.getServices(); // the filtered services (by category and pagination)
+        $scope.allServices = CatalogueSvc.services; // all available services - necessary for autocomplete & pagination
+        $scope.selectedServices = []; // all services selected by the user
+        $scope.selectedService = ''; // the latest services to be selected. Model for autocomplete.
+
+        $scope.selectService = function (service) {
+            !_.contains($scope.selectedServices, service) && $scope.selectedServices.push(service);
+        };
+
+        $scope.editSelected = function (service) {
+            console.log(service);
+        };
+
+        $scope.removeSelected = function (service) {
+            _.remove($scope.selectedServices, function(selectedService) {
+                return selectedService === service;
+            });
+        };
+
+        // loads one more batch of thumbnails
+        $scope.showMore = function () {
+            $scope.paginationIndex += $scope.batch;
+            $scope.services = $scope.getServices();
+        };
+
+        // update the filtered services when the category changes
+        $scope.$watch('categories.activeCategoryIndex', function (newIndex, oldIndex) {
+            if (newIndex === oldIndex) {
+                return;
+            }
+            $scope.services = $scope.getServices();
+        });
+
+    }]);
+
 }());
