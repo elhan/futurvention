@@ -127,7 +127,7 @@
                     <button ng-show="!provider.inProgress && !provider.saved" class="btn btn-save"
                             ng-disabled="innerForm.$invalid || !provider.url" ng-click="saveProvider(provider.name)">save</button>
                     <!-- Spinner: upload in progress -->
-                    <div ng-show="provider.inProgress" class="spinner-icon text-grey-dark text-h3">
+                    <div ng-show="provider.inProgress" class="spinner-icon">
                       <i class="fa fa-circle-o-notch fa-spin fa-1"></i>
                     </div>
                     <!-- Icon: edit-->
@@ -149,7 +149,7 @@
                     Please provide a valid url: 'http://...'
                   </label>
                   <!-- Success label: provider saved-->
-                  <label ng-show="!provider.inProgress && provider.saved" class="label-success col-md-6">
+                  <label ng-show="!provider.inProgress && provider.saved && provider === selectedProviders[selectedProviders.length - 1]" class="label-success col-md-6">
                     <i class="icon-check fa-check"></i>
                     <span>{{provider.name}} profile saved!</span>
                   </label>

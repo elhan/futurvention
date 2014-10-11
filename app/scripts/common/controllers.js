@@ -54,6 +54,7 @@
         $scope.$on('auth-logout-success', function (event) {
             SessionSvc.destroy();
             $scope.setCurrentUser({});
+            $scope.go('/');
             // TODO: add proper logging
             console.log(event);
         });
@@ -408,18 +409,18 @@
 
     /**
      * @ngdoc Controller
-     * @name fvApp.controller: ApplyStorefrontCtrl
+     * @name fvApp.controller: ServiceSelectCtrl
      * @description
-     * # ApplyStorefrontCtrl
-     * Controls the apply 'storefront' step
+     * # ServiceSelectCtrl
+     * Controls the apply 'service select' step
      */
-    app.controller('ApplyStorefrontCtrl', ['$scope', '$timeout', 'CatalogueSvc', function ($scope, $timeout, CatalogueSvc) {
+    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'CatalogueSvc', function ($scope, $timeout, CatalogueSvc) {
         // show thumbnails in batches of 16 (4 rows of 4 thumbnails)
         $scope.batch = 16;
 
         // add an 'All' option to the category collection and set it as the default active category
         $scope.categories = CatalogueSvc.categories;
-        $scope.categories.unshift('All');
+        !_.contains($scope.categories, 'All') && $scope.categories.unshift('All');
 
         // bs-tabs needs the idnex as model, not the string value of the category
         $scope.categories.activeCategoryIndex = 0;
@@ -439,12 +440,18 @@
         $scope.selectedServices = []; // all services selected by the user
         $scope.selectedService = ''; // the latest services to be selected. Model for autocomplete.
 
-        $scope.selectService = function (service) {
-            !_.contains($scope.selectedServices, service) && $scope.selectedServices.push(service);
-        };
-
-        $scope.editSelected = function (service) {
-            console.log(service);
+        /*
+           Fetch the service object for the given service name from the server. When the promise is resolved successfuly,
+           update CatalogueSvc.serviceToEdit (needed to initialize ServiceConfigCtrl), and navigate to the service configuration step
+        **/
+        $scope.editService = function (serviceName) {
+            CatalogueSvc.getService(serviceName).then(function (service) {
+                CatalogueSvc.setServiceToEdit(service);
+                $scope.goToStep(3);
+            },function (error) {
+                // TODO: error handling
+                console.log(error);
+            });
         };
 
         $scope.removeSelected = function (service) {
@@ -467,6 +474,101 @@
             $scope.services = $scope.getServices();
         });
 
+    }]);
+
+    /**
+     * @ngdoc Controller
+     * @name fvApp.controller: ServiceConfigCtrl
+     * @description
+     * # ServiceConfigCtrl
+     * Controls the apply 'service config' step
+     */
+    app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', 'CatalogueSvc', function ($scope, $timeout, $modal, $upload, CatalogueSvc) {
+        $scope.uploadingFile ={};
+
+        var modalEmbedUrl = $modal({
+            scope: $scope,
+            template: 'views/components/modalEmbedUrl.html',
+            show: false,
+            animation: 'am-slide-top',
+            keyboard: true
+        });
+
+        $scope.service = CatalogueSvc.getServiceToEdit();
+
+        // TODO: dynamically adjust from service model
+        $scope.panels = [
+            {
+                title: 'Service Description',
+                state: 'default'
+            },
+            {
+                title: 'Work Samples',
+                state: 'default'
+            },
+            {
+                title: 'Personalize your offering',
+                state: 'default'
+            },
+            {
+                title: 'Pricing / Deadlines',
+                state: 'default'
+            }
+        ];
+
+        $scope.panels.activePanel = 0;
+        $timeout(function () { $scope.panels.activePanel = 0; }); // update the UI
+
+        $scope.setPanelState = function (panel, state) {
+            panel.state = state;
+        };
+
+        $scope.closePanel = function (panel) {
+            $scope.setPanelState(panel, 'done');
+            $scope.panels.activePanel = $scope.panels.indexOf(
+                _.find($scope.panels, function (panel) {
+                    return panel.state === 'default';
+                })
+            );
+        };
+
+        $scope.showEmbedUrlModal = function () {
+            modalEmbedUrl.$promise.then(function () { modalEmbedUrl.show(); });
+        };
+
+        $scope.onFileSelect = function (files) {
+            // TODO: remove mock functionality
+            console.log(files);
+            $upload.upload({
+                url: 'http://localhost:3000/upload',
+                method: 'POST',
+                headers: {'x-filename': files[0].name},
+                file: files[0]
+            }).then(function (res) {
+                console.log(res);
+            }, function (err) {
+                console.log(err);
+            });
+//            if (!files || files.length === 0) {
+//               return;
+//            }
+//            for (var i = 0; i < files.length; i++) {
+//                var files = $files[i];
+//                $scope.upload = $upload.upload({});
+//            }
+        };
+
+    }]);
+
+    /**
+     * @ngdoc Controller
+     * @name fvApp.controller: EmbedUrlCtrl
+     * @description
+     * # EmbedUrlCtrl
+     * Controls the EmbedUrl modal
+     */
+    app.controller('EmbedUrlCtrl', ['$scope', function ($scope) {
+        $scope.urlsToEmbed = [{url: ''}];
     }]);
 
 }());

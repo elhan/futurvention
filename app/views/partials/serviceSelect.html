@@ -1,4 +1,4 @@
-<div class="container-y apply-content apply" ng-controller="ApplyStorefrontCtrl">
+<div class="container-y apply-content apply" ng-controller="ServiceSelectCtrl">
   <div class="apply-header">Build your storefront in a snap</div>
   <div class="text-centered text-h3 text-silver">
     Use our comprehensive catalogue to select services you want to offer, then set your price for each
@@ -14,7 +14,7 @@
           <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
         </div>
         <div class="thumb-overlay">
-          <div class="thumb-overlay-inner" ng-click="editSelected(selectedService)">
+          <div class="thumb-overlay-inner" ng-click="editService(selectedService)">
             <i class="fa fa-pencil"></i>
           </div>
           <div class="divider-thumb-overlay"></div>
@@ -49,7 +49,7 @@
   <!-- Thumbnail Grid: Services By Category -->
   <div class="thumbnail-grid flex-wrap">
     <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb">
-      <div class="thumbnail" ng-click="selectService(service)">
+      <div class="thumbnail" ng-click="editService(service)">
         <div class="wrapper-img">
           <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
         </div>

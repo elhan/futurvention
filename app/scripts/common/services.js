@@ -116,7 +116,7 @@
      */
     app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', function ($http, $q, $upload, $timeout) {
         var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
-            steps = ['import', 'info', 'storefront'], // profile completion steps
+            steps = ['import', 'info', 'service_selection', 'service_config'], // profile completion steps
 //            profileSvcUrl = '/profile',
             countriesUrl = '/countries', //TODO: fix this
             countries = [],
@@ -183,7 +183,7 @@
         };
 
         this.saveProfileImage = function (img) {
-            !img&& console.log('no img');
+            !img && console.log('no img');
             // return $upload.upload({ url: profileSvcUrl, file: img });
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -239,10 +239,41 @@
      * # CatalogueSvc
      * CRUD operations for Catalogue items (services, categories etc)
      */
-    app.service('CatalogueSvc', ['SERVICE_CATALOGUE', function (catalogue) {
-        this.services = _.uniq(_.pluck(catalogue, 'Title'));
+    app.service('CatalogueSvc', ['$http', '$q', '$timeout', 'SERVICE_CATALOGUE', function ($http, $q, $timeout, catalogue) {
 
+        ////////////////////////////////////////////////////////////
+        /// Private variables
+        ////////////////////////////////////////////////////////////
+
+//        var serviceUrl = '/service';
+        var serviceToEdit = {}; // updated when a user chooses to configure a service, and a new service object is fetched from the server
+
+        ////////////////////////////////////////////////////////////
+        /// Public variables
+        ////////////////////////////////////////////////////////////
+
+        this.services = _.uniq(_.pluck(catalogue, 'Title'));
         this.categories = _.uniq(_.pluck(catalogue, 'Category'));
+
+        ////////////////////////////////////////////////////////////
+        /// Getters for service's private objects
+        ////////////////////////////////////////////////////////////
+
+        this.getServiceToEdit =  function () {
+            return serviceToEdit;
+        };
+
+        ////////////////////////////////////////////////////////////
+        /// Setters for the service's private objects
+        ////////////////////////////////////////////////////////////
+
+        this.setServiceToEdit =  function (service) {
+            serviceToEdit = service;
+        };
+
+        ////////////////////////////////////////////////////////////
+        /// Get methods fetch data from the server
+        ////////////////////////////////////////////////////////////
 
         /*
             Filters the available services by category and returns an array of service titles.
@@ -254,6 +285,19 @@
             var filteredCatalogue = category === 'All' ? catalogue : _.where(catalogue, { 'Category': category });
             return _.chain(filteredCatalogue).pluck('Title').uniq().slice(0, paginationIndex).valueOf();
         };
+
+        this.getService = function (serviceName) {
+            !serviceName && console.log('no service was selected');
+//             return  $http.get(serviceUrl, {serviceName: serviceName});
+            // TODO: remove mock functionality
+            var deferred = $q.defer();
+            $timeout(function () {
+              // TODO: remove mock service object
+                deferred.resolve( _.where(catalogue, { 'Title': 'Logo Design' })[0] );
+            });
+            return deferred.promise;
+        };
+
     }]);
 
 }());

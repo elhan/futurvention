@@ -261,4 +261,30 @@
         };
     });
 
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvDynamicInputName
+     * @restrict A
+     *
+     * @description
+     * Generates names for dynamic inputs by concatenating 'inout' with a string passed throught
+     * fv-dynamic-name attribute.
+     *
+     * @example
+     * <input type="url" fv-dynamic-name=someName...
+     */
+    app.directive('fvDynamicName', ['$compile', '$parse', function($compile, $parse) {
+        return {
+            restrict: 'A',
+            terminal: true,
+            priority: 100000,
+            link: function(scope, elem) {
+                var name = $parse(elem.attr('fv-dynamic-name'))(scope);
+                elem.removeAttr('fv-dynamic-name');
+                elem.attr('name', ['input', '-', name].join(''));
+                $compile(elem)(scope);
+            }
+        };
+    }]);
+
 }());

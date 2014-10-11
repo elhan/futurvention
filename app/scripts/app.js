@@ -24,6 +24,7 @@
             'mgcrea.ngStrap.tooltip',
             'mgcrea.ngStrap.select',
             'mgcrea.ngStrap.tab',
+            'mgcrea.ngStrap.collapse',
             'facebook',
             'ngLinkedIn',
             'config',

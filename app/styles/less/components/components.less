@@ -198,8 +198,8 @@ textarea {
 .import-link {
   .wrapper-round;
   .wrapper-icon-s;
-  .bg-white;
   margin: 0 23px;
+  cursor: pointer;
   @media screen and (max-width: 1366px) {
     margin: 0 16px;
   }
@@ -214,10 +214,10 @@ textarea {
   }
 
   .icon-plus {
+    .text-light;
     .icon-centered;
     .text-white;
     .flex-content-centered;
-    font-family: OpenSansLight;
     font-size: 1.2em;
     display: none;
     padding-top: 6px;
@@ -350,6 +350,163 @@ textarea {
   }
 }
 
+// Panels
+// -------------------------
+
+.panel-group .panel {
+  margin-bottom: 10px;
+}
+
+.panel-heading {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+
+  .panel-title {
+    .flex-1;
+    align-items: center;
+    height: 100%;
+    > a {
+      .flex-1;
+      align-items: center;
+      height: 100%;
+      > span {
+        padding-right: 10px;
+      }
+    }
+  }
+
+  .icon-check {
+    .text-p;
+    font-family: FontAwesome;
+  }
+}
+
+.panel-success > .panel-heading {
+  background-color: rgba(2, 196, 102, .2);
+  border-color: rgba(2, 196, 102, .2);
+  color: @greyDark;
+}
+
+// Thumbnails
+// -------------------------
+
+.thumbnail-grid {
+  margin: 20px -15px 0px;
+}
+
+.thumbnail {
+  cursor: pointer;
+  padding: 0px;
+  max-width: 232px;
+
+  .wrapper-img {
+    overflow: hidden;
+    border-top-right-radius: 4px;
+  }
+
+  .thumb-overlay {
+    .text-light;
+    .flex-content-centered;
+    position: absolute;
+    top: 1px;
+    right: 15px; // thumbnails have padding 15px
+    bottom: 90px; //90px = 20px thumbnail margin + 70px caption height
+    left: 15px;
+    background-color: @blueDefault;
+    color: white;
+    opacity: .9;
+    border-top-right-radius: 3px;
+    visibility: hidden;
+    transition: visibility .1s ease-in-out .1s;
+  }
+
+  .caption {
+    height: 70px;
+    overflow: overlay;
+  }
+
+  &:hover {
+    border: 1px solid @blueDefault;
+    box-shadow: 0px 0px 10px lightgrey;
+    .thumb-overlay {
+      visibility: visible;
+    }
+  }
+}
+
+// Modals
+// -------------------------
+
+.fv-modal {
+  .close {
+    .text-light;
+    .text-grey-dark;
+    opacity: 1;
+    width: 16px;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.fv-modal-header {
+  .container-page-inner;
+  .container-y;
+  .flex-content-centered;
+  padding: 60px 0 50px;
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+  }
+  .header-message {
+    .text-centered;
+    .text-m-os;
+    .text-grey;
+    margin-top: 10px;
+  }
+}
+
+.fv-modal-body {
+  .container-y;
+  .flex-content-centered;
+  padding-bottom: 73px;
+
+  .wrapper-form {
+    width: 50%;
+    padding-left: 30px;
+    .btn-link {
+      padding: 0;
+      &:focus {
+        outline: none;
+      }
+      > span {
+        &:focus{
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .wrapper-btn-remove {
+    .flex-content-centered;
+    .text-grey-dark;
+    padding: 0 10px;
+  }
+
+  .wrapper-btn-done {
+    padding-right: 34px;
+  }
+
+  .btn-done {
+    width: 100%;
+    max-height: 38px;
+    padding: 0;
+  }
+}
+
 // Various components
 // -------------------------
 
@@ -395,48 +552,7 @@ textarea {
 
 a {
   color: @blueDefault;
-}
-
-.thumbnail-grid {
-  margin: 20px -15px 0px;
-}
-
-.thumbnail {
-  cursor: pointer;
-  padding: 0px;
-  max-width: 232px;
-
-  .wrapper-img {
-    overflow: hidden;
-    border-top-right-radius: 4px;
-  }
-
-  .thumb-overlay {
-    .flex-content-centered;
-    position: absolute;
-    top: 1px;
-    right: 15px; // thumbnails have padding 15px
-    bottom: 90px; //90px = 20px thumbnail margin + 70px caption height
-    left: 15px;
-    background-color: @blueDefault;
-    color: white;
-    font-family: OpenSansLight;
-    opacity: .9;
-    border-top-right-radius: 3px;
-    visibility: hidden;
-    transition: visibility .1s ease-in-out .1s;
-  }
-
-  .caption {
-    height: 70px;
-    overflow: overlay;
-  }
-
   &:hover {
-    border: 1px solid @blueDefault;
-    box-shadow: 0px 0px 10px lightgrey;
-    .thumb-overlay {
-      visibility: visible;
-    }
+    text-decoration: none;
   }
 }
