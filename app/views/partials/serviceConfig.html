@@ -36,16 +36,37 @@
                 <!-- divider -->
                 <div class="import-link"></div>
                 <div class="container-y" ng-click="showEmbedUrlModal()">
-                  <div class="import-link bg-grey-dark text-white embed">@</div>
+                  <div class="import-link bg-grey-dark text-white">@</div>
                   <div class="label-import-link">Embed Url</div>
                 </div>
               </div>
-              <div class="text-p">
+              <div class="showcase-msg">
                 Click to select samples you want to showcase. You can also reorder them. The first one will be used as cover image.
               </div>
               <!-- Showcase -->
               <div class="flex-wrap">
-                <div></div>
+                <div class="showcase" ng-repeat="item in showcase">
+                  <div ng-class="{'showcase-item': true, 'progress': item.state === 'loading'}"
+                       ng-click="toggleSelection(item)"
+                       fv-bg-image={{item.link}}
+                       fv-data={{item.link}}
+                       fv-draggable="item.state !== 'loading'"
+                       fv-drop-class="drag-over"
+                       fv-on-drop="rearangeShowcase"
+                       fv-droppable>
+                    <!-- Spinner -->
+                    <div class="wrapper-loader" ng-show="item.state === 'loading'">
+                      <div class="loader"></div>
+                    </div>
+                    <!-- Overlay: selected -->
+                    <div class="showcase-overlay selected" ng-show="item.state === 'selected'">
+                      <i class="icon-check fa fa-check"></i>
+                    </div>
+                    <!-- Overlay: drag-over -->
+                    <div class="showcase-overlay"></div>
+                  </div>
+                  <div class="caption">{{item.name}}</div>
+                </div>
               </div>
             </div>
             <!-- Personalize -->

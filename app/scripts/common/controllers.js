@@ -484,7 +484,6 @@
      * Controls the apply 'service config' step
      */
     app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', 'CatalogueSvc', function ($scope, $timeout, $modal, $upload, CatalogueSvc) {
-        $scope.uploadingFile ={};
 
         var modalEmbedUrl = $modal({
             scope: $scope,
@@ -495,6 +494,8 @@
         });
 
         $scope.service = CatalogueSvc.getServiceToEdit();
+
+        $scope.showcase = [];
 
         // TODO: dynamically adjust from service model
         $scope.panels = [
@@ -537,27 +538,75 @@
         };
 
         $scope.onFileSelect = function (files) {
-            // TODO: remove mock functionality
-            console.log(files);
-            $upload.upload({
-                url: 'http://localhost:3000/upload',
-                method: 'POST',
-                headers: {'x-filename': files[0].name},
-                file: files[0]
-            }).then(function (res) {
-                console.log(res);
-            }, function (err) {
-                console.log(err);
+            _.each(files, function (file) {
+                var index;
+
+                // check if the file has already been uploaded
+                if (_.where($scope.showcase, { name: file.name }).length > 0) {
+                    return;
+                }
+
+                $scope.showcase.push({
+                    name: 'Loading...',
+                    link: '',
+                    state: 'loading' // possible states are loading, loaded, selected
+                });
+
+                index = $scope.showcase.length - 1; // keep the item's correct position in the showcase after pushing
+
+                $upload.upload({
+                    url: 'http://localhost:3000/upload',
+                    method: 'POST',
+                    headers: { 'x-filename': file.name },
+                    file: file,
+                }).success(function () {
+                    var fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        $scope.$apply(function () {
+                            _.assign($scope.showcase[index], {
+                                name: file.name,
+                                link: e.target.result,
+                                state: 'loaded'
+                            });
+                        });
+                    };
+                    fileReader.readAsDataURL(file);
+                })
+                .error(function (err) {
+                    console.log(err);
+                    $scope.showcase.splice(index, 1); // remove the item from the showcase
+                });
             });
-//            if (!files || files.length === 0) {
-//               return;
-//            }
-//            for (var i = 0; i < files.length; i++) {
-//                var files = $files[i];
-//                $scope.upload = $upload.upload({});
-//            }
         };
 
+        $scope.rearangeShowcase = function (item) {
+            // The source (dragged) item link is passed via the fv-data attribute into the drop event
+            var sourceIndex, targetIndex,
+                source = JSON.parse(this.event.dataTransfer.getData('Text')),
+                target = item.link;
+
+            if (source === target) {
+                return;
+            }
+
+            sourceIndex = $scope.showcase.indexOf(_.where($scope.showcase, { link: source })[0]);
+            targetIndex = $scope.showcase.indexOf(_.where($scope.showcase, { link: target })[0]);
+
+            $scope.showcase.swap(sourceIndex, targetIndex);
+        };
+
+        $scope.toggleSelection = function (item) {
+            switch (item.state) {
+            case 'selected':
+                item.state = 'loaded';
+                break;
+            case 'loaded':
+                item.state = 'selected';
+                break;
+            default:
+                return;
+            }
+        };
     }]);
 
     /**

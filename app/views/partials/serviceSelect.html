@@ -10,7 +10,7 @@
   <div class="thumbnail-grid flex-wrap selected-services">
     <div ng-repeat="selectedService in selectedServices" class="col-sm-6 col-md-3 wrapper-thumb">
       <div class="thumbnail">
-        <div class="wrapper-img">
+        <div class="wrapper-img flex-content-centered">
           <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
         </div>
         <div class="thumb-overlay">
@@ -34,7 +34,7 @@
     <div class="search-box">
       <div class="inner-addon left-addon">
         <i class="fa fa-search"></i>
-        <input type="text" class="form-control" ng-model="selectedService" ng-options="service for service in services" placeholder="Service name" bs-typeahead />
+        <input type="text" class="form-control" ng-model="selectedService" ng-options="service for service in allServices" placeholder="Service name" bs-typeahead />
       </div>
     </div>
   </div>
@@ -50,7 +50,7 @@
   <div class="thumbnail-grid flex-wrap">
     <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb">
       <div class="thumbnail" ng-click="editService(service)">
-        <div class="wrapper-img">
+        <div class="wrapper-img flex-content-centered">
           <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
         </div>
         <div class="thumb-overlay">+</div>

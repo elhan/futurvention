@@ -222,12 +222,86 @@
 
     /**
      * @ngdoc directive
+     * @name fvApp.directive: fvDraggable
+     * @restrict A
+     *
+     * @description
+     * Enables an element to be dragged.
+     *
+     * @example
+     * <div fv-draggable={{items.length > 0}} ...></div>
+     */
+    app.directive('fvDraggable', function() {
+        return function (scope, element, attrs) {
+            var el = element[0];
+
+            if (attrs.fvDraggable === false) {
+                el.removeAttr('draggable');
+                return;
+            }
+
+            el.draggable = true;
+
+            el.addEventListener('dragstart', function (e) {
+                e.dataTransfer.effectAllowed = 'move';
+                // if the custom fvData attribute is present, pass the data object in the dataTransfer event
+                attrs.fvData && e.dataTransfer.setData('Text', JSON.stringify(attrs.fvData));
+                return false;
+            }, false);
+        };
+    });
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvDroppable
+     * @restrict A
+     * @element: any
+     *
+     * @description
+     * Enables drop functionality on a given element
+     *
+     * @example
+     * <div fv-droppable fv-on-drop="setProgress(true)"> ... </div>
+     */
+    app.directive('fvDroppable', function () {
+        return {
+            scope: {},
+            link: function (scope, element, attrs) {
+                var el = element[0];
+
+                attrs.fvDropClass && el.addEventListener('dragenter', function () {
+                    this.classList.add(attrs.fvDropClass);
+                    return false;
+                }, false);
+
+                attrs.fvDropClass && el.addEventListener('dragleave', function () {
+                    this.classList.remove(attrs.fvDropClass);
+                    return false;
+                }, false);
+
+                el.addEventListener('dragover', function (e) {
+                    e.preventDefault && e.preventDefault(); // enable drop
+                    e.dataTransfer.dropEffect = 'move';
+                    return false;
+                }, false);
+
+                el.addEventListener('drop', function (e) {
+                    e.stopPropagation && e.stopPropagation(); // Stops some browsers from redirecting.
+                    attrs.fvDropClass && this.classList.remove(attrs.fvDropClass);
+                    return false;
+                }, false);
+            }
+        };
+    });
+
+    /**
+     * @ngdoc directive
      * @name fvApp.directive:fvOnDrop
      * @restrict A
      * @element div
      *
      * @description
-     * Execute a controller function on drop
+     * Execute a controller function on drop. The element must be droppable!
      *
      * @example
      * <div fv-on-drop="setProgress(true)"> ... </div>
@@ -236,7 +310,11 @@
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                element.on('drop', function () { scope.$apply(attrs.fvOnDrop); });
+                // element[0].addEventListener('drop', function () { scope.$apply(attrs.fvOnDrop); });
+                element[0].addEventListener('drop', function (e) {
+                    scope.$apply(_.bind(scope[attrs.fvOnDrop], { event: e }, scope.item)); // extend function arguments to include the drop event
+                });
+
             }
         };
     });
@@ -267,7 +345,7 @@
      * @restrict A
      *
      * @description
-     * Generates names for dynamic inputs by concatenating 'inout' with a string passed throught
+     * Generates names for dynamic inputs by concatenating 'input' with a string passed throught
      * fv-dynamic-name attribute.
      *
      * @example
@@ -278,13 +356,32 @@
             restrict: 'A',
             terminal: true,
             priority: 100000,
-            link: function(scope, elem) {
-                var name = $parse(elem.attr('fv-dynamic-name'))(scope);
-                elem.removeAttr('fv-dynamic-name');
-                elem.attr('name', ['input', '-', name].join(''));
-                $compile(elem)(scope);
+            link: function (scope, element) {
+                var name = $parse(element.attr('fv-dynamic-name'))(scope);
+                element.removeAttr('fv-dynamic-name');
+                element.attr('name', ['input', '-', name].join(''));
+                $compile(element)(scope);
             }
         };
     }]);
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvToggleClass
+     * @restrict A
+     *
+     * @description
+     * Toggle a css class passed via the fvClass attribute on an event passed via the fvOn attribute
+     *
+     * @example
+     * <div fv-toggle-class fv-on="mousedown" fv-class="someClass"
+     */
+    app.directive('fvToggleClass', function() {
+        return function (scope, element, attrs) {
+            attrs.fvOn && attrs.fvClass && element[0].addEventListener(attrs.fvOn, function () {
+                this.classList.toggle(attrs.fvClass);
+            });
+        };
+    });
 
 }());
