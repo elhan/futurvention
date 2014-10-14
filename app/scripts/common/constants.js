@@ -69,6 +69,12 @@
         }
     });
 
+    app.constant('EMBEDLY', {
+        key: '05b548d0a515404f8f3da52d93eb402f',
+        domain: 'http://api.embed.ly/1/',
+        oembedAPI: 'oembed'
+    });
+
     app.constant('SERVICE_CATALOGUE', [
         {
             'Category':'Design',

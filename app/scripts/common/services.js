@@ -300,4 +300,17 @@
 
     }]);
 
+    app.service('EmbedlySvc', ['$http', 'EMBEDLY', function ($http, embedly) {
+        this.oembed = function (links, maxWidth, maxHeight) {
+            return $http.get([
+                embedly.domain, embedly.oembedAPI,
+                '?key=', embedly.key,
+                '&urls=', _.pluck(links, 'url').map(encodeURI).join(','),
+                '&maxwidth=', maxWidth,
+                '&maxheight=', maxHeight,
+                '&format=json'
+            ].join(''));
+        };
+    }]);
+
 }());

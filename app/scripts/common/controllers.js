@@ -483,15 +483,22 @@
      * # ServiceConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', 'CatalogueSvc', function ($scope, $timeout, $modal, $upload, CatalogueSvc) {
+    app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', 'CatalogueSvc', 'EmbedlySvc', 'Utils', function ($scope, $timeout, $modal, $upload, CatalogueSvc, EmbedlySvc, Utils) {
 
         var modalEmbedUrl = $modal({
             scope: $scope,
             template: 'views/components/modalEmbedUrl.html',
             show: false,
-            animation: 'am-slide-top',
-            keyboard: true
+            keyboard: false,
+            animation: 'am-slide-top'
         });
+
+        $scope.urlsToEmbed = [{url: ''}];
+
+        $scope.closeModal = function () {
+            Utils.emptyArray($scope.urlsToEmbed);
+            modalEmbedUrl.hide();
+        };
 
         $scope.service = CatalogueSvc.getServiceToEdit();
 
@@ -537,6 +544,21 @@
             modalEmbedUrl.$promise.then(function () { modalEmbedUrl.show(); });
         };
 
+        $scope.addUrls = function () {
+            EmbedlySvc.oembed($scope.urlsToEmbed).then(function (res) {
+                _.each(res.data, function (obj) {
+                    $scope.showcase.push({
+                        name: obj.thumbnail_url,
+                        link: obj.thumbnail_url,
+                        state: 'loaded'
+                    });
+                    $scope.closeModal();
+                });
+            }, function (err) {
+                console.log(err);
+            });
+        };
+
         $scope.onFileSelect = function (files) {
             _.each(files, function (file) {
                 var index;
@@ -555,7 +577,7 @@
                 index = $scope.showcase.length - 1; // keep the item's correct position in the showcase after pushing
 
                 $upload.upload({
-                    url: 'http://localhost:3000/upload',
+                    url: 'http://fvmock.herokuapp.com/upload',
                     method: 'POST',
                     headers: { 'x-filename': file.name },
                     file: file,
@@ -592,32 +614,21 @@
             sourceIndex = $scope.showcase.indexOf(_.where($scope.showcase, { link: source })[0]);
             targetIndex = $scope.showcase.indexOf(_.where($scope.showcase, { link: target })[0]);
 
-            $scope.showcase.swap(sourceIndex, targetIndex);
+            $scope.showcase = Utils.swap($scope.showcase, sourceIndex, targetIndex);
         };
 
         $scope.toggleSelection = function (item) {
             switch (item.state) {
-            case 'selected':
-                item.state = 'loaded';
-                break;
-            case 'loaded':
-                item.state = 'selected';
-                break;
-            default:
-                return;
+                case 'selected':
+                    item.state = 'loaded';
+                    break;
+                case 'loaded':
+                    item.state = 'selected';
+                    break;
+                default:
+                    return;
             }
         };
-    }]);
-
-    /**
-     * @ngdoc Controller
-     * @name fvApp.controller: EmbedUrlCtrl
-     * @description
-     * # EmbedUrlCtrl
-     * Controls the EmbedUrl modal
-     */
-    app.controller('EmbedUrlCtrl', ['$scope', function ($scope) {
-        $scope.urlsToEmbed = [{url: ''}];
     }]);
 
 }());

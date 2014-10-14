@@ -13,18 +13,40 @@
 
         Utils.ELANCE_URL_PATTERN = /^http[s]?:\/\/([^\/]*elance.com)/i;
 
+        // swaps two elements in an array
+        Utils.swap = function (someArray, x, y) {
+            if (! someArray instanceof Array) {
+                return;
+            }
+            var b = someArray[x];
+            someArray[x] = someArray[y];
+            someArray[y] = b;
+            return someArray;
+        };
+
+        Utils.emptyArray = function (someArray) {
+            if (! someArray instanceof Array) {
+                return;
+            }
+            while(someArray.length > 0) {
+                someArray.pop();
+            }
+            return someArray;
+        };
+
+        // returns a collection of url params
+        Utils.getUrlParams = function (url) {
+            var params, tokens;
+            if (!url) {
+                return;
+            }
+            for (var i = 0; i < url.length; ++i) {
+                tokens = url[i].split('=', 2);
+                params[tokens[0]] = tokens.length === 1 ? '' : decodeURIComponent(tokens[1].replace(/\+/g, ' '));
+            }
+            return params;
+        };
+
         return Utils;
     });
-
-    ////////////////////////////////////////////
-    /// Array prototype functions
-    ////////////////////////////////////////////
-
-    Array.prototype.swap = function (x, y) {
-        var b = this[x];
-        this[x] = this[y];
-        this[y] = b;
-        return this;
-    };
-
 }());
