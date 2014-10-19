@@ -488,13 +488,28 @@
         /// Initialisation
         ////////////////////////////////////////////
 
-        $scope.urlsToEmbed = [{url: ''}];
+        $scope.urlsToEmbed = [{ url: '' }];
         $scope.showcaseItems = [];
         $scope.offer = OfferSvc.getOffer();
         $scope.service = {};
 
+        $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
+        $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
+
         CatalogueSvc.getService($scope.offer.serviceName).then(function (service) {
             $scope.service = service;
+            // offer.choices is empty. Extend it to include all ServiceOptions
+            _.each(service.ServiceOptions, function (option) {
+                $scope.offer.choices.push(option);
+            });
+            OfferSvc.updateOffer($scope.offer);
+            // fetch data in order to prefill any pre-existing answers
+            OfferSvc.fetch(service.serviceId, $scope.currentUser).then(function (offerObj) {
+                if (offerObj.choices && offerObj.choices.length > 0) {
+                    OfferSvc.updateOffer(offerObj);
+                    $scope.offer = OfferSvc.getOffer();
+                }
+            });
         });
 
         // TODO: dynamically adjust from service model
@@ -591,6 +606,10 @@
             );
         };
 
+        ////////////////////////////////////////////
+        /// Other scope functions
+        ////////////////////////////////////////////
+
         $scope.onFileSelect = function (files) {
             _.each(files, function (file) {
                 var index;
@@ -683,8 +702,17 @@
             panel.textonly = ! panel.textonly;
         };
 
-        // initialize CameraTag when the camera modal loads
-        $scope.$on('modal.show', function () {
+        $scope.hasAddons = function () {
+            return _.find($scope.service.ServiceOptions, function (option) {
+               return option.isPriceDiscriminator && option.isOptional;
+            });
+        };
+
+        ////////////////////////////////////////////
+        /// Watchers
+        ////////////////////////////////////////////
+
+        $scope.$on('modal.show', function () { // initialize CameraTag when the camera modal loads
             CameraTag.setup();
             CameraTag.observe('fvcam', 'published', function() {
                 var cam = CameraTag.cameras['fvcam'];

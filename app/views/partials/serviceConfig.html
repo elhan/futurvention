@@ -22,7 +22,7 @@
           <div class="panel-body" ng-switch on="panels.activePanel">
             <!-- Service Description -->
             <div ng-switch-when="0">
-              <div class="service-description" ng-bind-html="service.description"></div>
+              <div class="service-description" ng-bind-html="service.Description"></div>
             </div>
             <!-- Work Samples -->
             <div ng-switch-when="1">
@@ -107,10 +107,93 @@
               <textarea class="extra-offer"></textarea>
             </div>
             <!-- Pricing -->
-            <div ng-switch-when="3">
-              <div>
-                Set your price and deadline for the following service configurations
-                <span class="optional-header-part text-i">(leave blank if you don't want to offer a particular one)</span>
+            <div ng-switch-when="3" class="pricing">
+              <!-- Price Discriminator Choices > 1 -->
+              <div ng-if="service.ServiceOptions.length > 1">
+                <div class="container-x">
+                  <div class="text-p-bold">Set your price and deadline for the following service configurations</div>
+                  <div class="optional-header-part text-i text-grey">(leave blank if you don't want to offer a particular one)</div>
+                </div>
+                <div class="wrapper-disc">
+                  <form name="PriceDiscriminatorForm" role="form">
+                    <div class="container-y">
+                      <div ng-repeat="choice in offer.choices">
+                        <div ng-form class="form-group" name="innerForm" ng-if="choice.isPriceDiscriminator && !choice.isOptional">
+                          <div class="container-x">
+                            <div class="container-x wrapper-half">
+                              <div class="choice-name">{{ choice.name }}</div>
+                              <div class="flex-1">
+                                <div class="separator-text">$</div>
+                                <div class="wrapper-price">
+                                  <input type="number" fv-dynamic-name=$index class="form-control input-s" ng-model="choice.price" placeholder="0" ng-required="true"></input>
+                                </div>
+                                <div class="separator-text text-grey">in</div>
+                                <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
+                                        ng-model="choice.value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select></button>
+                              </div>
+                            </div>
+                            <div class="flex-shrink-10"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!-- Price Discriminator Choices === 1 -->
+              <div ng-if="service.ServiceOptions.length > 0">
+                <div class="text-p-bold">Set your price and deadline for this service</div>
+                <div class="wrapper-disc">
+                  <form name="PriceDiscriminatorForm" role="form">
+                    <div class="container-x">
+                      <div class="container-x wrapper-half">
+                        <div class="flex-1">
+                          <div class="text-m text-light flex-content-centered separator-text-l">$</div>
+                          <input type="number" name="inoutPrice" class="form-control input-s input-price" ng-model="offer.choices[0].price" placeholder="0" ng-required="true"></input>
+                          <div class="separator-text text-grey">to be delivered in</div>
+                          <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
+                                  ng-model="offer.choices[0].value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select></button>
+                        </div>
+                      </div>
+                      <div class="flex-shrink-10"></div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <!-- Price Addons -->
+              <div ng-if="hasAddons()">
+                <div class="container-x flex-wrap">
+                  <div class="text-p-bold">Set the extra price you charge and the extra time you need for the following add-ons</div>
+                  <div class="optional-header-part text-i text-grey">(leave blank if you don't want to offer a particular one)</div>
+                </div>
+                <div class="wrapper-disc">
+                  <form name="OfferAddonsForm" role="form">
+                    <div class="container-y">
+                      <div ng-repeat="choice in offer.choices">
+                        <div ng-form class="form-group" name="innerForm" ng-if="choice.isPriceDiscriminator && choice.isOptional">
+                          <div class="container-x">
+                            <div class="container-x wrapper-half">
+                              <div class="choice-name">{{ choice.name }}</div>
+                              <div class="flex-2">
+                                <div class="container-x">
+                                  <div class="separator-text-l">extra</div>
+                                  <div class="separator-text">$</div>
+                                </div>
+                                <div class="wrapper-price">
+                                  <input type="number" fv-dynamic-name=$index class="form-control input-s input-price" ng-model="choice.price" placeholder="0" ng-required="true"></input>
+                                </div>
+                                <div class="separator-text text-grey">in</div>
+                                <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
+                                      ng-model="choice.value" data-html="1" ng-options="deadline for deadline in extraDeadlines" placeholder="1 extra day" bs-select></button>
+                              </div>
+                            </div>
+                            <div class="flex-shrink-10"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
               </div>
             </div>
           </div>

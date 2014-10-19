@@ -297,8 +297,9 @@
      * # OfferSvc
      * Bussiness logic for seller Offers
      */
-    app.service('OfferSvc', ['$http', 'Enum', 'ShowcaseSvc', function ($http, Enum, ShowcaseSvc) {
-        var OfferSvc = {};
+    app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', 'ShowcaseSvc', function ($http, $q, $timeout, Enum, ShowcaseSvc) {
+        var OfferSvc = {},
+            offer = {};
 
         ///////////////////////////////////////////////////////////
         /// Constructors
@@ -308,11 +309,12 @@
             return Object.seal({
                 workSamples: [],
                 status: Enum.OfferStatus.DRAFT,
-                serviceName: ''
+                serviceName: '',
+                choices: []
             });
         };
 
-        var offer = new OfferSvc.Offer(); // the offer being edited by the user
+        offer = new OfferSvc.Offer(); // the offer being edited by the user
 
         ////////////////////////////////////////////////////////////
         /// Setters for the service's private objects
@@ -327,8 +329,7 @@
         };
 
         OfferSvc.updateOffer = function (obj) {
-            // ensure status update validity
-            obj.hasOwnProperty('status') && !_.contains(_.values(Enum.OfferStatus), obj.status) && angular.extend(offer, obj);
+            angular.extend(offer, obj);
         };
 
         /*
@@ -348,6 +349,20 @@
 
         OfferSvc.getOffer = function () {
             return offer;
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Fetch methods
+        ///////////////////////////////////////////////////////////
+
+        OfferSvc.fetch = function (serviceId, userId) {
+//            return $http.get('/offer', { serviceId: serviceId, userId: userId });
+            var deferred = $q.defer();
+            $timeout(function () {
+                // TODO: remove mock service object
+                deferred.resolve(offer);
+            });
+            return deferred.promise;
         };
 
         return OfferSvc;
