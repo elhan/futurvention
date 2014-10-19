@@ -77,22 +77,27 @@
 
     app.constant('SERVICE_CATALOGUE', [
         {
-            'Category':'Design',
-            'Subcategory':'Branding & Identity',
-            'Title':'Logo Design',
-            'Price Discriminator':'Number of concepts: 1,3',
-            'Simple Addon':'1',
-            'Internal Quantity (ND)':'',
-            'Internal Quantity (D)':'',
-            'External Quantity':'',
-            'Portfolio formats':'Image, richmedia, video\n',
-            'Interview video':'',
-            'Seller Spec Amendment':'',
-            'Seller Constraints':'Logo style( from fiverr)???',
-            'Speced':1,
-            'Review':'',
-            'Short Name':'Logo',
-            'Description': [
+            'Category': 'Design',
+            'Subcategory': 'Branding & Identity',
+            'Title': 'Logo Design',
+            'Price_Discriminator': 'Number of concepts: 1,3',
+            'Simple_Addon': '1',
+            'Internal_Quantity (ND)': '',
+            'Internal_Quantity (D)': '',
+            'External_Quantity': '',
+            'Portfolio_formats':'Image, richmedia, video\n',
+            'interview': 'optional',
+            'questions': [
+              '<li>What work have you done in the past that proves your expertise?</li>',
+              '<li>What are your key strengths in logo design that makes you stand out above other sellers?</li>',
+              '<li>Why should the buyer trust you to deliver quality work?</li>'
+            ].join(''),
+            'Seller Spec Amendment': '',
+            'Seller Constraints': 'Logo style( from fiverr)???',
+            'Speced': 1,
+            'Review': '',
+            'Short Name': 'Logo',
+            'description': [
                 '<p>Overview of the service</p>',
                 '<ul>',
                 '<li>Up to 3 original and unique initial design concepts</li>',

@@ -22,7 +22,7 @@
           <div class="panel-body" ng-switch on="panels.activePanel">
             <!-- Service Description -->
             <div ng-switch-when="0">
-              <div class="service-description" ng-bind-html="service.Description"></div>
+              <div class="service-description" ng-bind-html="service.description"></div>
             </div>
             <!-- Work Samples -->
             <div ng-switch-when="1">
@@ -40,19 +40,19 @@
                   <div class="label-import-link">Embed Url</div>
                 </div>
               </div>
-              <div class="showcase-msg">
+              <div class="showcase-msg" ng-show="showcaseItems.length > 0">
                 Click to select samples you want to showcase. You can also reorder them. The first one will be used as cover image.
               </div>
               <!-- Showcase -->
               <div class="flex-wrap">
-                <div class="showcase" ng-repeat="item in showcase">
+                <div class="showcase" ng-repeat="item in showcaseItems">
                   <div ng-class="{'showcase-item': true, 'progress': item.state === 'loading'}"
                        ng-click="toggleSelection(item)"
                        fv-bg-image={{item.link}}
                        fv-data={{item.link}}
                        fv-draggable="item.state !== 'loading'"
                        fv-drop-class="drag-over"
-                       fv-on-drop="rearangeShowcase"
+                       fv-on-drop="rearangeShowcaseItems"
                        fv-droppable>
                     <!-- Spinner -->
                     <div class="wrapper-loader" ng-show="item.state === 'loading'">
@@ -71,11 +71,47 @@
             </div>
             <!-- Personalize -->
             <div ng-switch-when="2">
-              three
+              <div class="container-x text-p-bold">
+                Introduce yourself to potential Buyers
+                <span class="optional-header-part" ng-if="service.interview === 'optional'">(strongly reccomended)</span>
+              </div>
+              <div class="wrapper-icons" ng-show="!panels[2].textonly">
+                <div class="container-y flex-content-centered" ng-click="showCameraTagModal()">
+                  <div class="import-link bg-grey-dark text-white">
+                    <i class="fa fa-video-camera"></i>
+                  </div>
+                  <div class="label-import-link">Upload or record a video from your webcam or phone</div>
+                </div>
+              </div>
+              <!-- Description -->
+              <div ng-show="!panels[2].textonly">
+                <div class="text-p">A picture is 1000 words and a video is 1000 pictures. In a minute, video tells Buyers why the should buy  from you.</div>
+                <p class="text-p">In your recording, try to give short sharp answers within 1 minute to the following:</p>
+              </div>
+              <div class="text-p-bold" ng-if="service.interview === 'optional' || service.interview === 'recommended'" ng-bind-html="service.questions"></div>
+              <!-- Switch textonly state -->
+              <div class="text-p">You will be able to view the video at the end of the recoring if you want.</div>
+              <button class="btn no-padding btn-link text-p" ng-click="toggleTextOnly()">
+                <span ng-show="!panels[2].textonly">Switch to text instead</span>
+                <div ng-show="panels[2].textonly">
+                  <i class="fa fa-video-camera"></i>
+                  <span >Record a video and increase your chances to be approved</span>
+                </div>
+              </button>
+              <!-- Textonly answers -->
+              <div>
+                <textarea class="extra-offer" placeholder="Type your answers here" ng-show="panels[2].textonly"></textarea>
+              </div>
+              <!-- Extra offerings -->
+              <p class="text-p-bold">Do you offer anything extra as part of this service?</p>
+              <textarea class="extra-offer"></textarea>
             </div>
             <!-- Pricing -->
             <div ng-switch-when="3">
-              four
+              <div>
+                Set your price and deadline for the following service configurations
+                <span class="optional-header-part text-i">(leave blank if you don't want to offer a particular one)</span>
+              </div>
             </div>
           </div>
         </div>

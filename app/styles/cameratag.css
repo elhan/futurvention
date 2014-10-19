@@ -1,0 +1,442 @@
+.camera_tag {
+  background: #000;
+  display: inline-block;
+  position: relative;
+  color: #fff;
+  width: 320px;
+  height: 240px;
+  -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  -o-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  font-family: "Gotham", sans-serif;
+}
+
+.camera_tag .cameratag_screen {
+  display: none;
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  text-align: center;
+}
+
+.camera_tag .cameratag_settings_btn {
+  position:absolute;
+  top:5px;
+  right:5px;
+  height:20px;
+}
+
+.camera_tag .cameratag_alternatives {
+  position: absolute;
+  bottom:5px;
+  left:5px;
+  right:5px;
+  font-size:.8em;
+  color:#ccc;
+  text-shadow: 1px 1px 2px #333;
+  text-align:center;
+  display:none;
+}
+
+.camera_tag .cameratag_alternatives a:hover, .camera_tag .cameratag_alternatives a.selected {
+  color:#fff;
+  background:#c7084b;
+  text-shadow:none;
+}
+
+.camera_tag .cameratag_screen .cameratag_prompt {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  background: #000;
+  text-align: center;
+}
+
+.camera_tag .cameratag_screen.cameratag_start {
+  background: -webkit-linear-gradient(top,#000000 0%,#282828 60%,#000000 100%);
+  background: -moz-linear-gradient(top,#000000 0%,#282828 60%,#000000 100%);
+  background: -o-linear-gradient(top,#000000 0%,#282828 60%,#000000 100%);
+  background: -ms-linear-gradient(top,#000000 0%,#282828 60%,#000000 100%);
+  background: linear-gradient(to bottom,#000000 0%,#282828 60%,#000000 100%);
+  padding:10px;
+}
+
+.camera_tag .cameratag_screen.cameratag_start:hover .cameratag_record_button {
+  text-shadow: none;
+}
+
+.camera_tag .cameratag_screen.cameratag_start .cameratag_record_button {
+  position: absolute;
+  display: block;
+  text-align: center;
+  top: 50%;
+  width: 100%;
+  line-height: 1em;
+  margin-top: -1em;
+  text-shadow: none;
+  font-size: 1.5em;
+  color: #fff;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.camera_tag .cameratag_screen.cameratag_start .cameratag_record_button .cameratag_record_circle {
+  color: #c7084b;
+  font-size: 3em;
+  vertical-align: -.2em;
+}
+
+.camera_tag .cameratag_screen.cameratag_detect {
+  background: url(/assets/wave2.png) bottom center no-repeat;
+  background-size: contain;
+}
+
+.camera_tag .cameratag_screen.cameratag_count .cameratag_countdown_status, .camera_tag .cameratag_screen.cameratag_upload .cameratag_upload_status {
+  font-size: 7em;
+  position: absolute;
+  top: 50%;
+  margin-top: -.6em;
+  left: 0px;
+  right: 0px;
+  text-align: center;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+
+
+.camera_tag .cameratag_screen.cameratag_recording img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.camera_tag .cameratag_screen.cameratag_accept {
+  padding: 10px;
+}
+
+.camera_tag .cameratag_screen.cameratag_accept .cameratag_accept_btn, .camera_tag .cameratag_screen.cameratag_accept .cameratag_rerecord_btn, .camera_tag .cameratag_screen.cameratag_accept .cameratag_play_btn {
+  display: block;
+  height: 29%;
+  margin-bottom: 3%;
+  text-align: center;
+  border: solid 1px white;
+  color: #fff;
+  background: #000;
+}
+
+.camera_tag .cameratag_screen.cameratag_accept .cameratag_accept_btn span, .camera_tag .cameratag_screen.cameratag_accept .cameratag_rerecord_btn span, .camera_tag .cameratag_screen.cameratag_accept .cameratag_play_btn span {
+  display: block;
+  top: 50%;
+  position: relative;
+  margin-top: -.5em;
+}
+
+.camera_tag .cameratag_screen.cameratag_accept .cameratag_accept_btn:hover, .camera_tag .cameratag_screen.cameratag_accept .cameratag_rerecord_btn:hover, .camera_tag .cameratag_screen.cameratag_accept .cameratag_play_btn:hover {
+  border: solid 1px #089fbf;
+}
+
+.camera_tag .cameratag_screen.cameratag_accept .cameratag_accept_btn:hover span, .camera_tag .cameratag_screen.cameratag_accept .cameratag_rerecord_btn:hover span, .camera_tag .cameratag_screen.cameratag_accept .cameratag_play_btn:hover span {
+  color: #089fbf;
+}
+
+.camera_tag .cameratag_screen.cameratag_wait {
+  background: #000;
+}
+
+.camera_tag .cameratag_screen.cameratag_wait .cameratag_spinner {
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  text-align: center;
+  left: 0px;
+  right: 0px;
+}
+
+.camera_tag .cameratag_screen.cameratag_wait .cameratag_spinner img {
+  width: 40px;
+}
+
+.camera_tag .cameratag_screen.cameratag_completed {
+  background: #000;
+}
+
+
+
+.camera_tag .cameratag_screen.cameratag_completed .cameratag_thumb_bg {
+  position:absolute;
+  top:0px;
+  bottom:0px;
+  right:0px;
+  left:0px;
+  background-size: contain;
+}
+
+.camera_tag .cameratag_screen.cameratag_completed .cameratag_checkmark {
+  color: #fff;
+  font-size: 2.5em;
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  margin-top: -1em;
+  width: 100%;
+}
+
+.camera_tag .cameratag_screen.cameratag_completed .cameratag_checkmark .check {
+  color: #09a72e;
+}
+
+.camera_tag .cameratag_screen.cameratag_error {
+  background: #000;
+}
+
+.camera_tag .cameratag_screen.cameratag_error .cameratag_error_message {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  text-align: center;
+  top: 50%;
+  margin-top: -1.5em;
+  font-size: 2em;
+  color: #fff;
+}
+
+.camera_tag .cameratag_screen.cameratag_sms .cameratag_sms_prompt {
+  text-align: left;
+  top: 50%;
+  position: absolute;
+  margin-top: -90px;
+  padding:20px;
+  line-height: 1.4em;
+}
+
+
+.camera_tag .cameratag_screen.cameratag_sms .cameratag_sms_prompt input {
+  margin-top:5px;
+  width:100%;
+  font-size:18px;
+  border-top: solid 1px #999;
+  border-bottom: solid 1px #ddd;
+  outline:none;
+  background:#ccc;
+}
+
+
+.camera_tag .cameratag_screen.cameratag_sms .cameratag_sms_prompt .cameratag_send_sms {
+  padding:10px;
+  line-height: 50px;
+  background: #c7084b;
+  color:#fff;
+}
+
+
+.camera_tag .cameratag_screen.cameratag_check_phone .cameratag_check_phone_prompt {
+  position: absolute;
+  top: 50%;
+  margin-top: -1em;
+  font-size: 1.4em;
+  left: 10px;
+  right: 10px;
+  font-weight: 200;
+}
+
+.camera_tag .cameratag_screen.cameratag_check_phone .cameratag_check_phone_url {
+  position:absolute;
+  bottom:5px;
+  font-size:12px;
+  color:#ccc;
+  text-align: center;
+  width:100%;
+}
+
+.cameratag_select_prompt {
+  text-align: center;
+  color:#c7084b;
+  display:block;
+  margin-top:8%;
+  font-weight: bold;
+}
+
+/*
+.cameratag_primary_link {
+position: relative;
+display:inline-block;
+width:30%;
+vertical-align: middle;
+cursor:pointer;
+color:#ccc;
+height:3em;
+margin-top:2em;
+}
+*/
+
+.cameratag_primary_link {
+  position: relative;
+  display:inline-block;
+  vertical-align: middle;
+  cursor:pointer;
+  height:3em;
+  border: 1px solid #d5d5d5;
+  -webkit-box-shadow: 0 0 2px #d5d5d5;
+  -mox-box-shadow: 0 0 2px #d5d5d5;
+  box-shadow: 0 0 2px #d5d5d5;
+  color: #d5d5d5;
+  background-color: white;
+  border-radius: 50%;
+  width: 76px;
+  height:76px;
+  transition: .2s ease-in-out;
+}
+
+.cameratag_primary_link .cameratag_action_icon {
+  font-size:2em;
+  font-family: "FontAwesome";
+  transition:font-size .25s;
+}
+
+.cameratag_primary_link:hover .cameratag_action_icon {
+  font-size:2.5em;
+}
+
+.cameratag_primary_link.cameratag_record_link {
+
+}
+
+.cameratag_primary_link.cameratag_record_link:hover {
+
+}
+
+.cameratag_primary_link.cameratag_sms_link {
+
+}
+.cameratag_primary_link.cameratag_sms_link:hover {
+
+}
+
+.cameratag_primary_link.cameratag_upload_link {
+
+}
+.cameratag_primary_link.cameratag_upload_link:hover {
+
+}
+
+.cameratag_prompt_label {
+  position: absolute;
+  bottom:-20px;
+  left:0px;
+  width:100%;
+  font-size:.8em;
+  height:2em;
+}
+
+/*
+UPLOADER
+*/
+
+.cameratag_uploader_container {
+  position: relative;
+  width:600px;
+  height:65px;
+  border:solid 1px #ccc;
+}
+
+.cameratag_uploader_container .cameratag_uploader_prompt_container {
+  position: absolute;
+  top:10px;
+  right:10px;
+  left:10px;
+  bottom:10px;
+  border:dashed 1px #ccc;
+  text-align: center;
+  cursor:pointer;
+}
+
+.cameratag_uploader_container .cameratag_uploader_prompt_container:hover {
+  background:#ddd;
+}
+
+.cameratag_uploader_container .cameratag_uploader_prompt_container .cameratag_uploader_prompt_title {
+  font-size:14px;
+  color:#c7084b;
+  font-weight: bold;
+}
+
+.cameratag_uploader_container .cameratag_uploader_prompt_container .cameratag_uploader_prompt_desc {
+  font-size:12px;
+  color:#999;
+}
+
+.cameratag_uploader_container .cameratag_uploader_progress_container {
+  position: absolute;
+  top:10px;
+  right:10px;
+  left:10px;
+  bottom:10px;
+  border:dashed 1px #ccc;
+  text-align: center;
+  cursor:pointer;
+  display:none;
+}
+
+.cameratag_uploader_container .cameratag_uploader_progress_container .cameratag_uploader_progress_fill {
+  height:100%;
+  float:left;
+  background:#c7084b;
+  color:#fff;
+}
+
+/*override*/
+
+#fvcam {
+  box-shadow: none;
+}
+
+.cameratag_primary_link {
+  border: 1px solid #d5d5d5;
+  -webkit-box-shadow: 0 0 2px #d5d5d5;
+  -mox-box-shadow: 0 0 2px #d5d5d5;
+  box-shadow: 0 0 2px #d5d5d5;
+  color: #d5d5d5;
+  background-color: white;
+  border-radius: 50%;
+  width: 76px;
+  height:76px;
+  transition: .2s ease-in-out;
+  margin: 10px;
+  padding: 25px 20px;
+}
+
+.cameratag_primary_link:hover {
+  background-color: #2f40d1;
+  color: white;
+  border: 1px solid #2f40d1;
+  -webkit-box-shadow: 0 0 2px #2f40d1;
+  -mox-box-shadow: 0 0 2px #2f40d1;
+  box-shadow: 0 0 2px #2f40d1;
+}
+
+#fvcam_start_screen {
+  background: white;
+}
+
+.cameratag_select_prompt {
+  display: none;
+}
+
+.cameratag_prompt_label {
+  padding-top: 15px;
+}
+
+.cameratag_primary_link:hover .cameratag_action_icon {
+  color: white;
+  font-size: 2em !important;
+}
+
+.cameratag_prompt_label {
+  color: #d5d5d5;
+}
+
+.cameratag_settings_btn {
+  opacity: 0.2;
+}

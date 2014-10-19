@@ -23,7 +23,7 @@
   "jquery": true,
   "forin": true,
   "noempty": true,
-  "predef": ["angular", "_", "Firebase"],
+  "predef": ["angular", "_", "Firebase", "Cameratag"],
   "white": true,
   "expr": true
 }

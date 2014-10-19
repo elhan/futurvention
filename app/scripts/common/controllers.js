@@ -378,7 +378,7 @@
         $scope.savePersonalUrl = function () {
             ProfileSvc.savePersonalUrl($scope.personalUrl).then(function (res) {
                 console.log(res);
-                ProfileSvc.updateProfile({ personalUrl: $scope.personalUrl });
+                ProfileSvc.updateProfile({ personalUrl: $scope  .personalUrl });
             }, function (err) {
                 console.log(err);
                 // TODO: check for specific 'url exists' error
@@ -414,7 +414,7 @@
      * # ServiceSelectCtrl
      * Controls the apply 'service select' step
      */
-    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'CatalogueSvc', function ($scope, $timeout, CatalogueSvc) {
+    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'CatalogueSvc', 'OfferSvc', function ($scope, $timeout, CatalogueSvc, OfferSvc) {
         // show thumbnails in batches of 16 (4 rows of 4 thumbnails)
         $scope.batch = 16;
 
@@ -437,16 +437,16 @@
 
         $scope.services = $scope.getServices(); // the filtered services (by category and pagination)
         $scope.allServices = CatalogueSvc.services; // all available services - necessary for autocomplete & pagination
-        $scope.selectedServices = []; // all services selected by the user
         $scope.selectedService = ''; // the latest services to be selected. Model for autocomplete.
 
         /*
            Fetch the service object for the given service name from the server. When the promise is resolved successfuly,
-           update CatalogueSvc.serviceToEdit (needed to initialize ServiceConfigCtrl), and navigate to the service configuration step
+           update update create and set a new Offer object, which is needed to initialize ServiceConfigCtrl.
+           Then, navigate to the service configuration step
         **/
         $scope.editService = function (serviceName) {
-            CatalogueSvc.getService(serviceName).then(function (service) {
-                CatalogueSvc.setServiceToEdit(service);
+            CatalogueSvc.getService(serviceName).then(function () {
+                OfferSvc.updateOffer({ serviceName: serviceName });
                 $scope.goToStep(3);
             },function (error) {
                 // TODO: error handling
@@ -455,9 +455,7 @@
         };
 
         $scope.removeSelected = function (service) {
-            _.remove($scope.selectedServices, function(selectedService) {
-                return selectedService === service;
-            });
+            CatalogueSvc.removeSelected(service);
         };
 
         // loads one more batch of thumbnails
@@ -483,26 +481,21 @@
      * # ServiceConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', 'CatalogueSvc', 'EmbedlySvc', 'Utils', function ($scope, $timeout, $modal, $upload, CatalogueSvc, EmbedlySvc, Utils) {
+    app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'Utils',
+                                         function ($scope, $timeout, $modal, $upload, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, Utils) {
 
-        var modalEmbedUrl = $modal({
-            scope: $scope,
-            template: 'views/components/modalEmbedUrl.html',
-            show: false,
-            keyboard: false,
-            animation: 'am-slide-top'
-        });
+        ////////////////////////////////////////////
+        /// Initialisation
+        ////////////////////////////////////////////
 
         $scope.urlsToEmbed = [{url: ''}];
+        $scope.showcaseItems = [];
+        $scope.offer = OfferSvc.getOffer();
+        $scope.service = {};
 
-        $scope.closeModal = function () {
-            Utils.emptyArray($scope.urlsToEmbed);
-            modalEmbedUrl.hide();
-        };
-
-        $scope.service = CatalogueSvc.getServiceToEdit();
-
-        $scope.showcase = [];
+        CatalogueSvc.getService($scope.offer.serviceName).then(function (service) {
+            $scope.service = service;
+        });
 
         // TODO: dynamically adjust from service model
         $scope.panels = [
@@ -516,7 +509,8 @@
             },
             {
                 title: 'Personalize your offering',
-                state: 'default'
+                state: 'default',
+                textonly: false
             },
             {
                 title: 'Pricing / Deadlines',
@@ -526,6 +520,63 @@
 
         $scope.panels.activePanel = 0;
         $timeout(function () { $scope.panels.activePanel = 0; }); // update the UI
+
+        ////////////////////////////////////////////
+        /// Modals & modal functions
+        ////////////////////////////////////////////
+
+        var modalEmbedUrl = $modal({
+            scope: $scope,
+            template: 'views/components/modalEmbedUrl.html',
+            show: false,
+            keyboard: false,
+            animation: 'am-slide-top'
+        });
+
+        var modalCameraTag = $modal({
+            scope: $scope,
+            template: 'views/components/modalCameraTag.html',
+            show: false,
+            keyboard: false,
+            backdrop: 'static',
+            animation: 'am-slide-top'
+        });
+
+        $scope.showEmbedUrlModal = function () {
+            modalEmbedUrl.$promise.then(function () { modalEmbedUrl.show(); });
+        };
+
+        $scope.showCameraTagModal = function () {
+            modalCameraTag.$promise.then(function () { modalCameraTag.show(); });
+        };
+
+        $scope.closeEmbedUrlModal = function () {
+            Utils.emptyArray($scope.urlsToEmbed);
+            modalEmbedUrl.hide();
+        };
+
+        $scope.closeCameraTagModal = function () {
+            modalCameraTag.hide();
+        };
+
+        $scope.addUrls = function () {
+            EmbedlySvc.oembed($scope.urlsToEmbed).then(function (res) {
+                _.each(res.data, function (obj) {
+                    $scope.showcaseItems.push({
+                        name: obj.thumbnail_url,
+                        link: obj.thumbnail_url,
+                        state: 'loaded'
+                    });
+                    $scope.closeEmbedUrlModal();
+                });
+            }, function (err) {
+                console.log(err);
+            });
+        };
+
+        ////////////////////////////////////////////
+        /// Panel functions
+        ////////////////////////////////////////////
 
         $scope.setPanelState = function (panel, state) {
             panel.state = state;
@@ -540,44 +591,25 @@
             );
         };
 
-        $scope.showEmbedUrlModal = function () {
-            modalEmbedUrl.$promise.then(function () { modalEmbedUrl.show(); });
-        };
-
-        $scope.addUrls = function () {
-            EmbedlySvc.oembed($scope.urlsToEmbed).then(function (res) {
-                _.each(res.data, function (obj) {
-                    $scope.showcase.push({
-                        name: obj.thumbnail_url,
-                        link: obj.thumbnail_url,
-                        state: 'loaded'
-                    });
-                    $scope.closeModal();
-                });
-            }, function (err) {
-                console.log(err);
-            });
-        };
-
         $scope.onFileSelect = function (files) {
             _.each(files, function (file) {
                 var index;
 
                 // check if the file has already been uploaded
-                if (_.where($scope.showcase, { name: file.name }).length > 0) {
+                if (_.where($scope.showcaseItems, { name: file.name }).length > 0) {
                     return;
                 }
 
-                $scope.showcase.push({
+                $scope.showcaseItems.push({
                     name: 'Loading...',
                     link: '',
                     state: 'loading' // possible states are loading, loaded, selected
                 });
 
-                index = $scope.showcase.length - 1; // keep the item's correct position in the showcase after pushing
+                index = $scope.showcaseItems.length - 1; // keep the item's correct position in the showcase collection after pushing
 
                 $upload.upload({
-                    url: 'http://fvmock.herokuapp.com/upload',
+                    url: 'http://localhost:3000/upload',
                     method: 'POST',
                     headers: { 'x-filename': file.name },
                     file: file,
@@ -585,7 +617,7 @@
                     var fileReader = new FileReader();
                     fileReader.onload = function (e) {
                         $scope.$apply(function () {
-                            _.assign($scope.showcase[index], {
+                            _.assign($scope.showcaseItems[index], {
                                 name: file.name,
                                 link: e.target.result,
                                 state: 'loaded'
@@ -596,12 +628,25 @@
                 })
                 .error(function (err) {
                     console.log(err);
-                    $scope.showcase.splice(index, 1); // remove the item from the showcase
+                    //$scope.showcaseItems.splice(index, 1); // remove the temporary item from the showcase collection
+
+                    //TODO: error handling - REMOVE THIS
+                    var fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        $scope.$apply(function () {
+                            _.assign($scope.showcaseItems[index], {
+                                name: file.name,
+                                link: e.target.result,
+                                state: 'loaded'
+                            });
+                        });
+                    };
+                    fileReader.readAsDataURL(file);
                 });
             });
         };
 
-        $scope.rearangeShowcase = function (item) {
+        $scope.rearangeShowcaseItems = function (item) {
             // The source (dragged) item link is passed via the fv-data attribute into the drop event
             var sourceIndex, targetIndex,
                 source = JSON.parse(this.event.dataTransfer.getData('Text')),
@@ -611,10 +656,10 @@
                 return;
             }
 
-            sourceIndex = $scope.showcase.indexOf(_.where($scope.showcase, { link: source })[0]);
-            targetIndex = $scope.showcase.indexOf(_.where($scope.showcase, { link: target })[0]);
+            sourceIndex = $scope.showcaseItems.indexOf(_.where($scope.showcaseItems, { link: source })[0]);
+            targetIndex = $scope.showcaseItems.indexOf(_.where($scope.showcaseItems, { link: target })[0]);
 
-            $scope.showcase = Utils.swap($scope.showcase, sourceIndex, targetIndex);
+            $scope.showcaseItems = Utils.swap($scope.showcaseItems, sourceIndex, targetIndex);
         };
 
         $scope.toggleSelection = function (item) {
@@ -629,6 +674,28 @@
                     return;
             }
         };
+
+        $scope.toggleTextOnly = function () {
+            var panel = $scope.panels[$scope.panels.activePanel];
+            if (!panel.hasOwnProperty('textonly')) {
+                return;
+            }
+            panel.textonly = ! panel.textonly;
+        };
+
+        // initialize CameraTag when the camera modal loads
+        $scope.$on('modal.show', function () {
+            CameraTag.setup();
+            CameraTag.observe('fvcam', 'published', function() {
+                var cam = CameraTag.cameras['fvcam'];
+                var vid = cam.getVideo();
+                var mp4_url = vid.formats.qvga.mp4_url;
+                var small_thumb_url = vid.formats.qvga.small_thumb_url;
+                var thumb_url = vid.formats.qvga.thumb_url;
+                var video_url = vid.formats.qvga.video_url;
+            });
+        });
+
     }]);
 
 }());

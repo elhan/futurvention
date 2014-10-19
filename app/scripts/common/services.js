@@ -240,66 +240,168 @@
      * CRUD operations for Catalogue items (services, categories etc)
      */
     app.service('CatalogueSvc', ['$http', '$q', '$timeout', 'SERVICE_CATALOGUE', function ($http, $q, $timeout, catalogue) {
-
-        ////////////////////////////////////////////////////////////
-        /// Private variables
-        ////////////////////////////////////////////////////////////
-
-//        var serviceUrl = '/service';
-        var serviceToEdit = {}; // updated when a user chooses to configure a service, and a new service object is fetched from the server
+        var CatalogueSvc = {};
 
         ////////////////////////////////////////////////////////////
         /// Public variables
         ////////////////////////////////////////////////////////////
 
-        this.services = _.uniq(_.pluck(catalogue, 'Title'));
-        this.categories = _.uniq(_.pluck(catalogue, 'Category'));
+        CatalogueSvc.services = _.uniq(_.pluck(catalogue, 'Title'));
+        CatalogueSvc.selectedServices = [];
+        CatalogueSvc.categories = _.uniq(_.pluck(catalogue, 'Category'));
 
         ////////////////////////////////////////////////////////////
-        /// Getters for service's private objects
+        /// Public functions
         ////////////////////////////////////////////////////////////
 
-        this.getServiceToEdit =  function () {
-            return serviceToEdit;
+        CatalogueSvc.selectService = function (service) {
+            CatalogueSvc.selectedServices.push(service);
         };
 
-        ////////////////////////////////////////////////////////////
-        /// Setters for the service's private objects
-        ////////////////////////////////////////////////////////////
-
-        this.setServiceToEdit =  function (service) {
-            serviceToEdit = service;
+        CatalogueSvc.removeSelected = function (service) {
+            _.remove(CatalogueSvc.selectedServices, function (selectedService) {
+                return selectedService === service;
+            });
         };
-
-        ////////////////////////////////////////////////////////////
-        /// Get methods fetch data from the server
-        ////////////////////////////////////////////////////////////
 
         /*
             Filters the available services by category and returns an array of service titles.
             The pagination array defines the number of services returned in one batch.
             If category == All, return all (unique) services.
         **/
-        this.getServicesInCategory = function (category, paginationIndex) {
+        CatalogueSvc.getServicesInCategory = function (category, paginationIndex) {
             // if category is 'All' do not fitler
             var filteredCatalogue = category === 'All' ? catalogue : _.where(catalogue, { 'Category': category });
             return _.chain(filteredCatalogue).pluck('Title').uniq().slice(0, paginationIndex).valueOf();
         };
 
-        this.getService = function (serviceName) {
+        CatalogueSvc.getService = function (serviceName) {
             !serviceName && console.log('no service was selected');
 //             return  $http.get(serviceUrl, {serviceName: serviceName});
             // TODO: remove mock functionality
             var deferred = $q.defer();
             $timeout(function () {
-              // TODO: remove mock service object
+                // TODO: remove mock service object
                 deferred.resolve( _.where(catalogue, { 'Title': 'Logo Design' })[0] );
             });
             return deferred.promise;
         };
 
+        return CatalogueSvc;
     }]);
 
+    /**
+     * @ngdoc service
+     * @name fvApp.service: OfferSvc
+     * @description
+     * # OfferSvc
+     * Bussiness logic for seller Offers
+     */
+    app.service('OfferSvc', ['$http', 'Enum', 'ShowcaseSvc', function ($http, Enum, ShowcaseSvc) {
+        var OfferSvc = {};
+
+        ///////////////////////////////////////////////////////////
+        /// Constructors
+        ///////////////////////////////////////////////////////////
+
+        OfferSvc.Offer = function () {
+            return Object.seal({
+                workSamples: [],
+                status: Enum.OfferStatus.DRAFT,
+                serviceName: ''
+            });
+        };
+
+        var offer = new OfferSvc.Offer(); // the offer being edited by the user
+
+        ////////////////////////////////////////////////////////////
+        /// Setters for the service's private objects
+        ////////////////////////////////////////////////////////////
+
+        OfferSvc.setOffer = function (offerObj) {
+            // ensure object validity
+            if (! (offerObj instanceof OfferSvc.Offer) ) {
+                return;
+            }
+            offer = offerObj;
+        };
+
+        OfferSvc.updateOffer = function (obj) {
+            // ensure status update validity
+            obj.hasOwnProperty('status') && !_.contains(_.values(Enum.OfferStatus), obj.status) && angular.extend(offer, obj);
+        };
+
+        /*
+            Syntactic sugar. Allows controllers to make use of a clean API without having to worry about
+            converting their $scope models to ShowcaseItem format.
+        **/
+        OfferSvc.addWorkSamples = function (samples) {
+            samples && _.each(samples, function (sample) {
+                // TODO: convert to ShowcaseItem
+                offer.workSmaples.push(sample);
+            });
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Getters for service's private objects
+        ///////////////////////////////////////////////////////////
+
+        OfferSvc.getOffer = function () {
+            return offer;
+        };
+
+        return OfferSvc;
+    }]);
+
+    /**
+     * @ngdoc service
+     * @name fvApp.service: EmbedlySvc
+     * @description
+     * # EmbedlySvc
+     * Integration with EmbedLy API
+     */
+    app.service('ShowcaseSvc', ['Enum', function (Enum) {
+        var ShowcaseSvc = {};
+
+        ///////////////////////////////////////////////////////////
+        /// Constructors
+        ///////////////////////////////////////////////////////////
+
+        ShowcaseSvc.ShowcaseFile = function (obj) {
+            if (obj && obj.hasOwnProperty('type') && !_.contains(_.values(Enum.ShowcaseFileType), obj.type)) {
+                throw new TypeError([obj.type, ' is invalid type value'].join(''));
+            }
+            return Object.seal({
+                type: obj.type || Enum.ShowcaseFileType.LINKED,
+                embedCode: obj.embedCode || '',
+                url: obj.url || '',
+                provider: obj.provider || '',
+                relativeUrl: obj.relativeUrl || '',
+                size: obj.size || 0
+            });
+        };
+
+        ShowcaseSvc.ShowcaseItem = function (obj) {
+            if (obj && obj.hasOwnProperty('type') && !_.contains(_.values(Enum.ShowcaseFileType), obj.type)) {
+                throw new TypeError([obj.type, ' is invalid type value'].join(''));
+            }
+            return Object.seal({
+                title: obj.title || '',
+                description: obj.description || '',
+                file: obj.file || {}
+            });
+        };
+
+        return ShowcaseSvc;
+    }]);
+
+    /**
+     * @ngdoc service
+     * @name fvApp.service: EmbedlySvc
+     * @description
+     * # EmbedlySvc
+     * Integration with EmbedLy API
+     */
     app.service('EmbedlySvc', ['$http', 'EMBEDLY', function ($http, embedly) {
         this.oembed = function (links, maxWidth, maxHeight) {
             return $http.get([
