@@ -18,6 +18,17 @@
             HOSTED: 'hosted'
         });
 
+        Enum.Providers = Object.freeze({
+            LINKEDIN: 'linkedIn',
+            ODESK: 'oDesk',
+            ELANCE: 'elance',
+            PPH: 'pph',
+            FREELANCER: 'freelancer',
+            BEHANCE: 'behance',
+            DRIBBBLE: 'dribbble',
+            GITHUB: 'github'
+        });
+
         return Enum;
     });
 }());

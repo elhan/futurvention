@@ -11,11 +11,14 @@
      * All the supported $rootScope events.
      */
     app.constant('EVENTS', {
+        profile: {
+            fetchProfileFailed: 'fetch-profile-failed'
+        },
         user: {
             createSuccess: 'user-creation-success',
             createFailed: 'user-creation-failed',
             updateSuccess: 'user-update-success',
-            updateFailed: 'user-update-failed'
+            updateFailed: 'user-update-failed',
         },
         auth: {
             registrationSuccess: 'auth-registration-success',

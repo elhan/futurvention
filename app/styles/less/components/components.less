@@ -79,6 +79,34 @@ textarea {
   }
 }
 
+.contact-modal {
+  .modal-dialog {
+    max-width: 480px;
+  }
+
+  .fv-modal-body {
+    padding-bottom: 40px;
+  }
+
+  .fv-modal-header {
+    padding: 45px 0 30px;
+  }
+}
+.contact-form {
+  min-width: 400px;
+
+  textarea {
+    width: 100%;
+    min-height: 144px;
+  }
+
+  .btn {
+    .flex-1;
+    .flex-content-centered;
+    height: 45px;
+  }
+}
+
 // Navbar
 // -------------------------
 
@@ -419,17 +447,17 @@ textarea {
 }
 
 .thumb-overlay {
-    top: 1px;
-    right: 15px; // thumbnails have padding 15px
-    bottom: 90px; //90px = 20px thumbnail margin + 70px caption height
-    left: 15px;
-    background-color: @blueDefault;
-    visibility: hidden;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 2px;
-    transition: visibility .1s ease-in-out .1s;
-    color: white;
-    opacity: .9;
+  top: 1px;
+  right: 15px; // thumbnails have padding 15px
+  bottom: 90px; //90px = 20px thumbnail margin + 70px caption height
+  left: 15px;
+  background-color: @blueDefault;
+  visibility: hidden;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 2px;
+  transition: visibility .1s ease-in-out .1s;
+  color: white;
+  opacity: .9;
 }
 
 .thumb-overlay, .showcase-overlay {
@@ -491,6 +519,24 @@ textarea {
   .wrapper-loader {
     padding: 50px;
   }
+}
+
+.wrapper-thumb-placeholder {
+  .flex-content-centered;
+  .text-light;
+  .bg-grey95;
+  .clickable;
+  flex: 1;
+  color: white;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 20px;
+  margin-left: 15px;
+  border-radius: 4px;
+  padding: 0;
+  max-width: 232px;
+  width: 100%;
+  min-height: 223px;
 }
 
 // Modals
@@ -562,6 +608,60 @@ textarea {
     max-height: 38px;
     padding: 0;
   }
+}
+
+.portfolio-viewer {
+  .layer {
+    width: 100%;
+    height:100%;
+  }
+
+  ul {
+    width:100%;
+    height: calc(100% / 3px);
+  }
+}
+
+// Reviews
+// -------------------------
+
+.review {
+  border-bottom: 1px solid @lightGrey;
+  padding: 20px 0;
+  max-width: 800px;
+  margin: 0 auto;
+
+  &.last {
+    border-bottom: 1px solid transparent;
+  }
+
+  .content {
+    min-height: 70px;
+  }
+
+  .wrapper-reviewer-img {
+    .container-y;
+    .flex-content-centered;
+    padding-bottom: 15px;
+    margin-right: 20px;
+    width: 55px;
+    height: 70px;
+  }
+
+  .review-text {
+    .text-p;
+    padding: 5px 55px 20px 0;
+  }
+}
+
+.reviewer-img {
+  .flex-content-centered;
+  .text-h2;
+  .text-lightGrey;
+  .wrapper-lightgrey;
+  .wrapper-round;
+  .flex-1;
+  width: 100%;
 }
 
 // Various components
@@ -636,5 +736,42 @@ a {
   100% {
     transform: rotate(360deg);
     transform:rotate(360deg);
+  }
+}
+
+.alert {
+  display: flex !important;
+  .text-h3;
+  .flex-content-centered;
+  z-index: @zindexMax;
+  position: fixed;
+  top: 80px;
+  font-size: 18px;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+
+  &.top {
+    top: 80px;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+
+  span {
+    display: flex;
+    padding: 15px;
+    align-items: center;
+    border-radius: 4px;
+    font-family: GothamBold;
+  }
+}
+
+.alert-success {
+  span {
+    background-color: @green;
+    color: white;
   }
 }

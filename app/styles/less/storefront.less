@@ -1,0 +1,162 @@
+.storefront {
+  .container-page-inner {
+    padding-bottom: 240px;
+  }
+
+  .profile-cover-container {
+    .container-y;
+    overflow: hidden;
+    margin: 50px 0;
+    height: 238px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, .2);
+    border-radius: 4px;
+  }
+
+  .profile-cover-bg {
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  .storefront-tabs {
+    .container-x;
+    min-height: 59px;
+    padding: 0;
+    line-height: 50px;
+    border-bottom: 1px solid @lightGrey;
+    border-left: 1px solid @lightGrey;
+    border-right: 1px solid @lightGrey;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    .placeholder {
+      width: 155px;
+    }
+  }
+
+  .storefront-tab {
+    .text-grey;
+    .text-p;
+    .flex-content-centered;
+    margin: 0 15px;
+    border-bottom: 2px solid white;
+    cursor: pointer;
+    z-index: 3;
+    &.active {
+      .text-black;
+      border-color: @blueDefault;
+    }
+  }
+
+  .profile-cover-bg {
+    height: 100%;
+    filter: blur(4px);
+    .placeholder {
+        width: 170px;
+    }
+  }
+
+  .wrapper-pic-inner {
+    position: absolute;
+    bottom: 25px;
+    left: 25px;
+    width: 130px;
+    height: 130px;
+    background: rgba(255,255,255,.1);
+    z-index: 1;
+    border-radius: 50%;
+  }
+
+  .wrapper-pic {
+    position: absolute;
+    z-index: 2;
+    height: 238px;
+    top: 165px;
+  }
+
+  .profile-picture-m {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .wrapper-details {
+    .text-white;
+    margin-left: 170px;
+    margin-top: 85px;
+  }
+
+  .wrapper-name {
+    padding-bottom: 5px;
+    padding-right: 5px;
+  }
+
+  .wrapper-link {
+    .container-x;
+    .flex-1;
+    justify-content: flex-end;
+    align-items: center;
+    align-content: center;
+    padding-right: 30px;
+    .icon-link {
+      .text-grey;
+      margin-right: 5px;
+    }
+  }
+
+  .wrapper-share-btn, .wrapper-contact-btn {
+    position: absolute;
+    top: 270px;
+    margin-left: -170px;
+    .btn {
+      font-size: 12px;
+      padding: 13px 33.5px;
+    }
+  }
+
+  .wrapper-contact-btn {
+    margin-left: -117px;
+  }
+
+  .thumbnail-grid {
+    margin-top: 25px;
+  }
+
+  .portfolio-items {
+    .caption {
+      .flex-content-centered;
+      padding: 10px;
+    }
+
+    .wrapper-thumb {
+      margin-bottom: 30px;
+      width: 209px;
+    }
+
+    .wrapper-img {
+      height: 130px;
+    }
+  }
+
+  .divider {
+    margin: 50px 0 60px;
+  }
+
+  .bio {
+    .text-p;
+    text-align: center;
+    padding-top: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  #bio-header {
+    margin-right: 20px;
+    line-height: 20px;
+  }
+
+  .portfolio-footer {
+    .container-x;
+    .flex-content-centered;
+    margin-bottom: 22px;
+  }
+}
+

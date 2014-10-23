@@ -10,7 +10,8 @@
      * # MainCtrl
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
-    app.controller('MainCtrl', ['$scope', '$location', 'USER_ROLES', 'AuthSvc', 'SessionSvc', 'LocalStorageSvc', 'UserSvc', function ($scope, $location, USER_ROLES, AuthSvc, SessionSvc, LocalStorageSvc, UserSvc) {
+    app.controller('MainCtrl', ['$scope', '$location', 'USER_ROLES', 'AuthSvc', 'SessionSvc', 'LocalStorageSvc', 'UserSvc', 'EVENTS',
+                                function ($scope, $location, USER_ROLES, AuthSvc, SessionSvc, LocalStorageSvc, UserSvc, EVENTS) {
 
         // wrappers added to facilitate controller testability
         $scope.userRoles = USER_ROLES;
@@ -42,6 +43,10 @@
             $scope.currentUser = user;
         };
 
+        $scope.updateCurrentUser = function (obj) {
+            angular.extend($scope.currentUser, obj);
+        };
+
         $scope.go = function (path) {
             $location.path(path);
         };
@@ -49,6 +54,15 @@
         $scope.locationAt = function (route) {
             return route === $location.path();
         };
+
+        ////////////////////////////////////////////
+        /// Event handling
+        ////////////////////////////////////////////
+
+        $scope.$on('$routeChangeError', function (e, current, previous, rejection) {
+            console.log(rejection);
+            rejection === EVENTS.profile.fetchProfileFailed && $scope.go('/');
+        });
 
         // update Session object and currentUser model on logout
         $scope.$on('auth-logout-success', function (event) {
@@ -201,9 +215,11 @@
      */
     app.controller('ApplyCtrl', ['$scope', 'ProfileSvc', function ($scope, ProfileSvc) {
         $scope.steps = ProfileSvc.getSteps();
-        $scope.activeStep = $scope.steps[0];
+        $scope.activeStep = ProfileSvc.getActiveStep();
+
         $scope.goToStep = function (step) {
             $scope.activeStep = $scope.steps[step];
+            ProfileSvc.setActiveStep($scope.activeStep);
         };
     }]);
 
@@ -389,6 +405,8 @@
         // on continue, save the rest of the user's info
         $scope.continue = function () {
             var info = {
+                firstName: $scope.currentUser.firstName,
+                lastName: $scope.currentUser.lastName,
                 title: $scope.title,
                 bio: $scope.bio,
                 city: $scope.city,
@@ -481,8 +499,7 @@
      * # ServiceConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'Utils',
-                                         function ($scope, $timeout, $modal, $upload, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, Utils) {
+    app.controller('ServiceConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'Utils', function ($scope, $timeout, $modal, $upload, $location, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, Utils) {
 
         ////////////////////////////////////////////
         /// Initialisation
@@ -504,7 +521,7 @@
             });
             OfferSvc.updateOffer($scope.offer);
             // fetch data in order to prefill any pre-existing answers
-            OfferSvc.fetch(service.serviceId, $scope.currentUser).then(function (offerObj) {
+            OfferSvc.fetchOffer(service.serviceId, $scope.currentUser).then(function (offerObj) {
                 if (offerObj.choices && offerObj.choices.length > 0) {
                     OfferSvc.updateOffer(offerObj);
                     $scope.offer = OfferSvc.getOffer();
@@ -712,15 +729,24 @@
         /// Watchers
         ////////////////////////////////////////////
 
+        $scope.$watch('panels.activePanel', function () {
+            var inProgress = _.find($scope.panels, function (panel) {
+                return panel.state !== 'done';
+            });
+
+            !inProgress && $location.path('/storefront/' + $scope.currentUser.id);
+        });
+
         $scope.$on('modal.show', function () { // initialize CameraTag when the camera modal loads
             CameraTag.setup();
             CameraTag.observe('fvcam', 'published', function() {
                 var cam = CameraTag.cameras['fvcam'];
                 var vid = cam.getVideo();
-                var mp4_url = vid.formats.qvga.mp4_url;
-                var small_thumb_url = vid.formats.qvga.small_thumb_url;
-                var thumb_url = vid.formats.qvga.thumb_url;
-                var video_url = vid.formats.qvga.video_url;
+                console.log(vid);
+//                var mp4_url = vid.formats.qvga.mp4_url;
+//                var small_thumb_url = vid.formats.qvga.small_thumb_url;
+//                var thumb_url = vid.formats.qvga.thumb_url;
+//                var video_url = vid.formats.qvga.video_url;
             });
         });
 
