@@ -74,12 +74,18 @@
             $scope.go('/apply');
         };
 
+        $scope.editOffer = function (offer) {
+            OfferSvc.fetchOffer(offer.serviceId).then(function (offer) {
+                OfferSvc.setOffer(offer);
+            });
+        };
+
         ///////////////////////////////////////////////////////////
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
-        OfferSvc.fetchOfferedServices($scope.userId).then(function (offeredServices) {
-            $scope.offeredServices = offeredServices;
+        OfferSvc.fetchOffers($scope.userId).then(function (offers) {
+            $scope.offers = offers;
         }, function (error) {
             console.log(error);
         });

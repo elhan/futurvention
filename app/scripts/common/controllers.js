@@ -455,25 +455,16 @@
 
         $scope.services = $scope.getServices(); // the filtered services (by category and pagination)
         $scope.allServices = CatalogueSvc.services; // all available services - necessary for autocomplete & pagination
-        $scope.selectedService = ''; // the latest services to be selected. Model for autocomplete.
+        $scope.selectedService = ''; // the latest service to be selected. Model for autocomplete.
 
-        /*
-           Fetch the service object for the given service name from the server. When the promise is resolved successfuly,
-           update update create and set a new Offer object, which is needed to initialize ServiceConfigCtrl.
-           Then, navigate to the service configuration step
-        **/
-        $scope.editService = function (serviceName) {
-            CatalogueSvc.getService(serviceName).then(function () {
-                OfferSvc.updateOffer({ serviceName: serviceName });
-                $scope.goToStep(3);
-            },function (error) {
-                // TODO: error handling
-                console.log(error);
-            });
+        $scope.createOffer = function (serviceName) {
+            OfferSvc.setOffer({});
+            OfferSvc.updateOffer({ serviceName: serviceName });
+            $scope.goToStep(3);
         };
 
-        $scope.removeSelected = function (service) {
-            CatalogueSvc.removeSelected(service);
+        $scope.removeOffer = function (serviceName) {
+            OfferSvc.removeOffer(serviceName);
         };
 
         // loads one more batch of thumbnails
@@ -513,20 +504,26 @@
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
 
+        OfferSvc.fetchOffer().then(function (offer) {
+            offer && OfferSvc.updateOffer(offer);
+            $scope.offer = offer;
+        }, function (error) {
+            console.log(error);
+        });
+
         CatalogueSvc.getService($scope.offer.serviceName).then(function (service) {
             $scope.service = service;
-            // offer.choices is empty. Extend it to include all ServiceOptions
+
+            // When a new Offer is created, offer.choices is initialy empty, so it needs to be extended to include all ServiceOptions
+            if ($scope.offer.choices.length > 0) {
+                return;
+            }
+
             _.each(service.ServiceOptions, function (option) {
                 $scope.offer.choices.push(option);
             });
+
             OfferSvc.updateOffer($scope.offer);
-            // fetch data in order to prefill any pre-existing answers
-            OfferSvc.fetchOffer(service.serviceId, $scope.currentUser).then(function (offerObj) {
-                if (offerObj.choices && offerObj.choices.length > 0) {
-                    OfferSvc.updateOffer(offerObj);
-                    $scope.offer = OfferSvc.getOffer();
-                }
-            });
         });
 
         // TODO: dynamically adjust from service model
@@ -733,8 +730,7 @@
             var inProgress = _.find($scope.panels, function (panel) {
                 return panel.state !== 'done';
             });
-
-            !inProgress && $location.path('/storefront/' + $scope.currentUser.id);
+            !inProgress && $scope.goToStep(2);
         });
 
         $scope.$on('modal.show', function () { // initialize CameraTag when the camera modal loads

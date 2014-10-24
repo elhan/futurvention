@@ -53,7 +53,7 @@
       </div>
     </div>
     <!-- Offered Services Section -->
-    <div ng-if="offeredServices.length > 0">
+    <div ng-if="offers.length > 0">
       <div class="container-x flex-items-end">
         <div id="portfolio-header" class="text-h3 flex-content-centered flex-1">Services Offered</div>
         <div class="text-blue text-p clickable" ng-click="editProfileSection('service_selection')">
@@ -62,10 +62,19 @@
         </div>
       </div>
       <div class="thumbnail-grid flex-wrap">
-        <div ng-repeat="offer in offeredServices" class="col-sm-6 col-md-3 wrapper-thumb">
+        <div ng-repeat="offer in offers" class="col-sm-6 col-md-3 wrapper-thumb">
           <div class="thumbnail">
             <div class="wrapper-img flex-content-centered">
               <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
+            </div>
+            <div class="thumb-overlay">
+              <div class="thumb-overlay-inner" ng-click="editOffer(offer.serviceName)">
+                <i class="fa fa-pencil"></i>
+              </div>
+              <div class="divider-thumb-overlay"></div>
+              <div class="thumb-overlay-inner" ng-click="removeSelected(selectedService)">
+                <i class="fa fa-times"></i>
+              </div>
             </div>
             <div class="caption">
               <div class="container-x flex-content-spread">

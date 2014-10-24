@@ -297,20 +297,6 @@
         CatalogueSvc.selectedServices = [];
         CatalogueSvc.categories = _.uniq(_.pluck(catalogue, 'Category'));
 
-        ////////////////////////////////////////////////////////////
-        /// Public functions
-        ////////////////////////////////////////////////////////////
-
-        CatalogueSvc.selectService = function (service) {
-            CatalogueSvc.selectedServices.push(service);
-        };
-
-        CatalogueSvc.removeSelected = function (service) {
-            _.remove(CatalogueSvc.selectedServices, function (selectedService) {
-                return selectedService === service;
-            });
-        };
-
         /*
             Filters the available services by category and returns an array of service titles.
             The pagination array defines the number of services returned in one batch.
@@ -346,32 +332,30 @@
      */
     app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', function ($http, $q, $timeout, Enum) {
         var OfferSvc = {},
-            offer = {};
+            offer = {},
+            offers = [];
 
         ///////////////////////////////////////////////////////////
         /// Constructors
         ///////////////////////////////////////////////////////////
 
         OfferSvc.Offer = function () {
-            return Object.seal({
+            return {
                 workSamples: [],
                 status: Enum.OfferStatus.DRAFT,
                 serviceName: '',
-                choices: []
-            });
+                choices: [],
+                lowestPrice: ''
+            };
         };
 
         offer = new OfferSvc.Offer(); // the offer being edited by the user
 
-        ////////////////////////////////////////////////////////////
-        /// Setters for the service's private objects
-        ////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////
+        /// Public functions
+        ///////////////////////////////////////////////////////////
 
         OfferSvc.setOffer = function (offerObj) {
-            // ensure object validity
-            if (! (offerObj instanceof OfferSvc.Offer) ) {
-                return;
-            }
             offer = offerObj;
         };
 
@@ -390,9 +374,17 @@
             });
         };
 
-        ///////////////////////////////////////////////////////////
-        /// Getters for service's private objects
-        ///////////////////////////////////////////////////////////
+        OfferSvc.addOffer = function (obj) {
+            var newOffer = obj || offer; // if no args, user the current offer object
+            offers.push(newOffer);
+        };
+
+        OfferSvc.removeOffer = function (serviceName) {
+            var newOffer = serviceName || offer;
+            _.remove(offers, function (serviceName) {
+                return serviceName.serviceName === newOffer.serviceName;
+            });
+        };
 
         OfferSvc.getOffer = function () {
             return offer;
@@ -402,9 +394,10 @@
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
-        OfferSvc.fetchOffer = function (serviceId, userId) {
-            console.log(serviceId, userId);
-            //            return $http.get('/offer', { serviceId: serviceId, userId: userId });
+        OfferSvc.fetchOffer = function (serviceId) {
+            serviceId && console.log(serviceId);
+//            var sid = serviceId || offer.serviceId; //if no serviceId is passed, use the one in the offer obj
+//            return $http.get('/offer', { serviceId: sid });
             var deferred = $q.defer();
             $timeout(function () {
                 // TODO: remove mock service object
@@ -413,24 +406,23 @@
             return deferred.promise;
         };
 
-        OfferSvc.fetchOfferedServices = function () {
+        OfferSvc.fetchOffers = function () {
             // TODO: remove mock service object
-            var OfferedService = function () {
-                return {
-                    serviceName: 'Logo Design',
-                    lowestPrice: '$100'
-                };
-            };
             var offerCount = _.random(3, 20);
-            var offeredServices = [];
+            var newOffer = {};
 
             for (var i = 0; i < offerCount; i++) {
-                offeredServices.push(new OfferedService());
+                newOffer = new OfferSvc.Offer();
+                angular.extend(newOffer, {
+                    serviceName: 'Logo Design',
+                    lowestPrice: '$100'
+                });
+                offers.push(newOffer);
             }
 
             var deferred = $q.defer();
             $timeout(function () {
-                deferred.resolve(offeredServices);
+                deferred.resolve(offers);
             });
             return deferred.promise;
         };
