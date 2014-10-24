@@ -55,11 +55,16 @@
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',
             resolve: {
-                profile: ['$route', 'ProfileSvc', function ($route, ProfileSvc) {
-                    return ProfileSvc.fetchProfile($route.current.params.userId);
-                }],
-                userId: ['$route', function ($route) {
-                    return $route.current.params.userId;
+                userExists: ['$q', '$location', 'ProfileSvc', 'EVENTS', function ($q, $location, ProfileSvc, EVENTS) {
+                    var deferred = $q.defer();
+                    ProfileSvc.fetchPersonalUrlStatus($location.absUrl()).then(function (status) {
+                        // redirect to root if the url does not belong to any user
+                        status ? deferred.resolve() : deferred.reject(EVENTS.profile.fetchProfileFailed);
+                    }, function (error) {
+                        console.log(error);
+                        deferred.reject(EVENTS.profile.fetchProfileFailed);
+                    });
+                    return deferred.promise;
                 }]
             }
         })

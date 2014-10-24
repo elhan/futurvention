@@ -4,8 +4,11 @@
     <fv-timeline-h></fv-timeline-h>
     <!-- Profile picture -->
     <div class="wrapper-pic">
-      <div class="wrapper-pic-inner">
-        <div class="profile-picture-m" fv-bg-image={{profile.image}}></div>
+      <div class="wrapper-pic-inner" ng-click="editProfileSection('info')">
+        <div ng-if="profile.image" class="image-profile profile-picture-m" fv-bg-image={{profile.image}}>
+          <div><i class="fa-centered fa fa-camera"></i></div>
+        </div>
+        <i ng-if="!profile.image" class="text-h2 fa-centered fa fa-camera bg-grey95 wrapper-round clickable"></i>
       </div>
       <!-- Profile details -->
       <div class="container-y wrapper-details">
@@ -37,13 +40,15 @@
             <span>{{ profile.personalUrl }}</span>
           </a>
           <!-- Share btn -->
-          <div class="wrapper-share-btn" ng-if="currentUser.id === userId">
+          <div class="wrapper-share-btn">
             <button class="button btn btn-blue" ng-click="shareProfile()">Share my profile</button>
           </div>
           <!-- Contact btn -->
-          <div class="wrapper-contact-btn" ng-if="currentUser.id !== userId">
-            <button class="button btn btn-blue" ng-click="showContactModal()">Contact</button>
-          </div>
+          <!--
+<div class="wrapper-contact-btn" ng-if="currentUser.id !== userId">
+<button class="button btn btn-blue" ng-click="showContactModal()">Contact</button>
+</div>
+-->
         </div>
       </div>
     </div>

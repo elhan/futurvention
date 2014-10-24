@@ -10,7 +10,7 @@
      * # StorefrontCtrl
      * Controls the storefront page
      */
-    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', function ($scope, $modal, $timeout, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc) {
+    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', function ($scope, $modal, $timeout, $location, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc) {
 
         var contactModal = $modal({
             scope: $scope,
@@ -28,7 +28,9 @@
             keyboard: false
         });
 
-        $scope.portfolio = {};
+        $scope.portfolio = PortfolioSvc.getPortfolio();
+        $scope.profile = {};
+        $scope.isCurrentUser = {};
         $scope.reviews = {};
         $scope.message = '';
         $scope.sender = {
@@ -76,12 +78,6 @@
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.fetchProfile($scope.userId).then(function (profile) {
-            $scope.profile = profile;
-        }, function (error) {
-            console.log(error);
-        });
-
         OfferSvc.fetchOfferedServices($scope.userId).then(function (offeredServices) {
             $scope.offeredServices = offeredServices;
         }, function (error) {
@@ -89,13 +85,21 @@
         });
 
         PortfolioSvc.fetchPortfolio($scope.userId).then(function (portfolio) {
-            $scope.portfolio = portfolio;
+            PortfolioSvc.updatePortfolio(portfolio);
+            $scope.portfolio = PortfolioSvc.getPortfolio();
         }, function (error) {
             console.log(error);
         });
 
         ReviewSvc.fetchReceivedReviews($scope.userId).then(function (reviews) {
             $scope.reviews = reviews;
+        }, function (error) {
+            console.log(error);
+        });
+
+        ProfileSvc.fetchProfile($location.absUrl()).then(function (profile) {
+            $scope.isCurrentUser = $location.absUrl() === $scope.profile.personalUrl;
+            $scope.profile = profile;
         }, function (error) {
             console.log(error);
         });

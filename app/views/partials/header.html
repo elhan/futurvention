@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default navbar-fixed-top navbar-main"
      ng-class="locationAt('/') ? 'navbar-transparent' : 'navbar-dark'">
   <div class="navbar-left">
-    <button class="btn btn-link nav-link btn-left navbar-btn" ng-click="go('/')">SERVICE BUCKET</button>
+    <button class="btn btn-link nav-link navbar-btn" ng-click="go('/')">SERVICE BUCKET</button>
   </div>
   <button ng-if="!isAuthenticated() && !locationAt('/register')" class="btn btn-link nav-link navbar-right navbar-btn" ng-click="go('/register')">Sign up</button>
   <button ng-if="!isAuthenticated() && !locationAt('/login')" class="btn btn-link nav-link navbar-right navbar-btn" ng-click="go('/login')">Login</button>

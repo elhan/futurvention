@@ -1,11 +1,59 @@
-<div class="modal portfolio-viewer fv-modal" tabindex="-1" role="dialog">
+<div class="modal portfolio-viewer fv-modal" tabindex="-1" role="dialog" ng-controller="PortfolioViewerCtrl">
   <div class="modal-dialog modal-lg">
     <div class="modal-content container-page-inner">
-      <ul rn-carousel rn-carousel-controls class="image">
-        <li ng-repeat="item in portfolio.items">
-          <div class="layer"><img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive"></div>
-        </li>
-      </ul>
+      <!-- main carousel -->
+      <div class="wrapper-showcase container-y">
+        <!-- Slides -->
+        <ul rn-carousel rn-carousel-index="showcaseIndex" class="viewer-top image">
+          <li ng-repeat="item in portfolio.items">
+            <div class="layer">
+              <!-- If image -->
+<!--              <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">-->
+              <!-- If PrizmView doc -->
+              <div class="embed-responsive embed-responsive-4by3">
+                <iframe class="viewer embed-responsive-item"
+                        allowfullscreen="true"
+                        ng-src="{{ item.url | prizmUrl | trusted }}"
+                        allowtransparency="true"></iframe>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <!-- Navigation buttons -->
+        <div class="wrapper-nav">
+          <div class="container-x flex-content-spread">
+            <div class="text-white clickable" ng-class="{'invisible': showcaseIndex === 0}" ng-click="showcasePrev()">
+              <i class="fa fa-chevron-left"></i>
+            </div>
+            <div class="text-white clickable" ng-class="{'invisible': showcaseIndex === portfolio.items.length - 1}" ng-click="showcaseNext()">
+              <i class="fa fa-chevron-right"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Controls -->
+      <div class="wrapper-controls">
+        <div class="wrapper-item-name">{{ portfolio.items[showcaseIndex].name }}</div>
+        <div class="container-x">
+        <!-- Download -->
+          <a ng-href={{portfolio.items[showcaseIndex].url}} class="container-x" target="_self" download={{portfolio.items[showcaseIndex].name}}>
+            <div class="icon-download flex-content-centered text-i">
+              <i class="fa fa-download"></i>
+            </div>
+            <div class="text-t">Download</div>
+          </a>
+        </div>
+      </div>
+      <!-- Gallery -->
+      <div class="gallery">
+        <ul rn-carousel rn-carousel-index="galleryIndex" class="image">
+          <li ng-repeat="item in portfolio.items" ng-click="goToShowcaseItem($index)">
+            <div ng-class="{'layer': true, 'active': $index === showcaseIndex}">
+              <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

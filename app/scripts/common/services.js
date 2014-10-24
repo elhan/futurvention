@@ -115,8 +115,8 @@
      * CRUD operations for Seller profiles
      */
     app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'EVENTS', function ($http, $q, $upload, $timeout, EVENTS) {
-
-        var providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
+        var ProfileSvc = {},
+            providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
             steps = ['import', 'info', 'service_selection', 'service_config', 'storefront'], // profile completion steps
             activeStep = 'import',
             countriesUrl = '/countries', //TODO: fix this
@@ -135,13 +135,13 @@
         }());
 
         // Provider object constructor
-        this.Provider = function (name, url) {
+        ProfileSvc.Provider = function (name, url) {
             this.name = name;
             this.url = url;
         };
 
         // returns a new collection of Provider objects that includes all providerNames with blank urls
-        this.initProviders = function () {
+        ProfileSvc.initProviders = function () {
             var self = this, providers = {};
             _.forEach(providerNames, function (name) {
                 providers[name] = new self.Provider(name, '');
@@ -149,7 +149,7 @@
             return providers;
         };
 
-        this.updateProfile = function (obj) {
+        ProfileSvc.updateProfile = function (obj) {
             angular.extend(profile, obj);
         };
 
@@ -157,19 +157,19 @@
         /// Get methods interact with the service's private objects
         ////////////////////////////////////////////////////////////
 
-        this.getActiveStep = function () {
+        ProfileSvc.getActiveStep = function () {
             return activeStep;
         };
 
-        this.getProfile = function () {
+        ProfileSvc.getProfile = function () {
             return profile;
         };
 
-        this.getSteps = function () {
+        ProfileSvc.getSteps = function () {
             return steps;
         };
 
-        this.getCountries = function () {
+        ProfileSvc.getCountries = function () {
             return countries;
         };
 
@@ -177,7 +177,7 @@
         /// Set methods
         ////////////////////////////////////////////
 
-        this.setActiveStep = function (step) {
+        ProfileSvc.setActiveStep = function (step) {
             activeStep = step;
         };
 
@@ -185,7 +185,7 @@
         /// Save methods persist data on the server
         ////////////////////////////////////////////
 
-        this.saveProvider = function (provider) {
+        ProfileSvc.saveProvider = function (provider) {
             //return $http.post(profileSvcUrl, { profileLink: provider.url });
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -195,7 +195,7 @@
             return deferred.promise;
         };
 
-        this.saveProfileImage = function (img) {
+        ProfileSvc.saveProfileImage = function (img) {
             // return $upload.upload({ url: profileSvcUrl, file: img });
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -205,7 +205,7 @@
             return deferred.promise;
         };
 
-        this.savePersonalUrl = function (url) {
+        ProfileSvc.savePersonalUrl = function (url) {
             // return $http.post(profileSvcUrl, { personalUrl: url });
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -215,7 +215,7 @@
             return deferred.promise;
         };
 
-        this.saveProfile = function (info) {
+        ProfileSvc.saveProfile = function (info) {
             // return $http.post(profileSvcUrl, info);
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -229,16 +229,16 @@
         /// Fetch methods fetch data from the server
         ///////////////////////////////////////////////////////////
 
-        this.fetchProfile = function (userId) {
+        ProfileSvc.fetchProfile = function (personalUrl) {
             // TODO: remove mock functionality
             // return $http.get('/profile', {userId: userId});
             var deferred = $q.defer();
             $timeout(function () {
-                if (userId === '1') {
+                if (personalUrl !== 'http://localhost:9000/#/storefront/666997733407685') {
                     deferred.reject(EVENTS.profile.fetchProfileFailed);
                 }
                 deferred.resolve({
-                    image: '../../images/backgrounds/bg3.jpg',
+                    image: 'images/backgrounds/bg3.jpg',
                     firstName: 'Doug',
                     lastName: 'Zagofsky',
                     title: 'Web & Logo Designer',
@@ -252,11 +252,20 @@
             return deferred.promise;
         };
 
+        ProfileSvc.fetchPersonalUrlStatus = function (url) {
+            // TODO: remove mock code
+            var deferred = $q.defer();
+            $timeout(function () {
+                deferred.resolve(url === 'http://localhost:9000/#/storefront/666997733407685');
+            }, 2000);
+            return deferred.promise;
+        };
+
         ///////////////////////////////////////////////////////////
         /// Remove methods perform delete operations on the server
         ///////////////////////////////////////////////////////////
 
-        this.removeProvider = function (provider) {
+        ProfileSvc.removeProvider = function (provider) {
             //return $http.post(profileSvcUrl, { profileLink: '' });
 
             // TODO: remove mock functionality
@@ -267,6 +276,7 @@
             return deferred.promise;
         };
 
+        return ProfileSvc;
     }]);
 
     /**
@@ -436,15 +446,29 @@
      * Manage Portfolio items
      */
     app.service('PortfolioSvc', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
-        var PortfolioSvc = {};
+        var PortfolioSvc = {},
+            portfolio = {};
+
+        PortfolioSvc.updatePortfolio = function (obj) {
+            angular.extend(portfolio, obj);
+        };
+
+        PortfolioSvc.getPortfolio = function () {
+            return portfolio;
+        };
 
         PortfolioSvc.fetchPortfolio = function (userId, index, offset) {
             console.log(userId, index, offset);
 
             // TODO: remove mock service object
             var PortfolioItem = function () {
-                return { title: 'Logo Design' };
+                return {
+                  title: 'Logo Design',
+                  url: 'http://www.accusoft.com/html5viewer/img/btn-file-icon-ppt-sm.png',
+                  name: 'btn-file-icon-ppt-sm.png'
+                };
             };
+
             var itemCount = _.random(3, 20);
             var portfolioItems = [];
 
@@ -459,7 +483,6 @@
                 });
             });
             return deferred.promise;
-
         };
 
         return PortfolioSvc;
