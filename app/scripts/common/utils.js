@@ -17,7 +17,7 @@
 
         Utils.ELANCE_URL_PATTERN = /^http[s]?:\/\/([^\/]*elance.com)/i;
 
-        Utils.isImage = function (mimeType) {
+        Utils.isVideo = function (mimeType) {
             var exp = new RegExp(/video\/*/g);
             return exp.test(mimeType);
         };
@@ -35,31 +35,48 @@
             return params;
         };
 
-        ///////////////////////////////////////////////////////////
-        /// Array functions
-        ///////////////////////////////////////////////////////////
 
-        // swaps two elements in an array
-        Utils.swap = function (someArray, x, y) {
-            if (! someArray instanceof Array) {
-                return;
-            }
-            var b = someArray[x];
-            someArray[x] = someArray[y];
-            someArray[y] = b;
-            return someArray;
-        };
-
-        Utils.emptyArray = function (someArray) {
-            if (! someArray instanceof Array) {
-                return;
-            }
-            while(someArray.length > 0) {
-                someArray.pop();
-            }
-            return someArray;
-        };
 
         return Utils;
     });
+
+    ///////////////////////////////////////////////////////////
+    /// New Array API
+    ///////////////////////////////////////////////////////////
+
+    // swaps two elements in an array
+    if (!Array.prototype.hasOwnProperty('swap')) {
+        Array.prototype.swap = function (x, y) {
+            var b = this[x];
+            this[x] = this[y];
+            this[y] = b;
+            return this;
+        };
+    }
+
+    // empty an array
+    if (!Array.prototype.hasOwnProperty('empty')) {
+        Array.prototype.empty = function () {
+            while (this.length > 0) {
+                this.pop();
+            }
+        };
+    }
+
+    // Finds and removes the first array object that satisfied the given predicate
+    if (!Array.prototype.hasOwnProperty('removed')) {
+        Array.prototype.remove = function (cb) {
+            if (typeof cb !== 'function') {
+                return undefined;
+            }
+
+            for (var i = 0; i < this.length; i++) {
+                if (cb(this[i])) {
+                    return this.splice(i, 1);
+                }
+            }
+
+            return undefined;
+        };
+    }
 }());

@@ -32,6 +32,7 @@
         $scope.profile = {};
         $scope.isCurrentUser = {};
         $scope.reviews = {};
+        $scope.offers = [];
         $scope.message = '';
         $scope.sender = {
             firstName: '',
@@ -74,10 +75,16 @@
             $scope.go('/apply');
         };
 
-        $scope.editOffer = function (offer) {
-            OfferSvc.fetchOffer(offer.serviceId).then(function (offer) {
-                OfferSvc.setOffer(offer);
-            });
+        $scope.removeOffer = function (serviceName) {
+            OfferSvc.removeOffer(serviceName);
+            $scope.offers = OfferSvc.offers;
+        };
+
+        $scope.editOffer = function (serviceName) {
+            OfferSvc.setOffer(_.find($scope.offers, function (offer) {
+                return offer.serviceName === serviceName;
+            }));
+            $scope.editProfileSection('offer_config');
         };
 
         ///////////////////////////////////////////////////////////

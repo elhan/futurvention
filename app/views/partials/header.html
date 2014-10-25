@@ -6,7 +6,7 @@
   <button ng-if="!isAuthenticated() && !locationAt('/register')" class="btn btn-link nav-link navbar-right navbar-btn" ng-click="go('/register')">Sign up</button>
   <button ng-if="!isAuthenticated() && !locationAt('/login')" class="btn btn-link nav-link navbar-right navbar-btn" ng-click="go('/login')">Login</button>
   <div ng-if="isAuthenticated()">
-    <button class="btn btn-link nav-link navbar-right navbar-btn" ng-controller="LoginCtrl" ng-click="logout()">
+    <button class="btn btn-link nav-link navbar-right navbar-btn" ng-controller="AuthCtrl" ng-click="logout()">
       <span>Logout</span>
     </button>
     <button class="btn btn-link nav-link navbar-right navbar-btn" ng-click="go('/storefront/{{ currentUser.id }}')">

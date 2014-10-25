@@ -117,7 +117,7 @@
     app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'EVENTS', function ($http, $q, $upload, $timeout, EVENTS) {
         var ProfileSvc = {},
             providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
-            steps = ['import', 'info', 'service_selection', 'service_config', 'storefront'], // profile completion steps
+            steps = ['import', 'info', 'service_selection', 'offer_config', 'storefront'], // profile completion steps
             activeStep = 'import',
             countriesUrl = '/countries', //TODO: fix this
             countries = [],
@@ -196,6 +196,7 @@
         };
 
         ProfileSvc.saveProfileImage = function (img) {
+            console.log(!img);
             // return $upload.upload({ url: profileSvcUrl, file: img });
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -206,6 +207,7 @@
         };
 
         ProfileSvc.savePersonalUrl = function (url) {
+            console.log(url);
             // return $http.post(profileSvcUrl, { personalUrl: url });
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -216,6 +218,7 @@
         };
 
         ProfileSvc.saveProfile = function (info) {
+            console.log(info);
             // return $http.post(profileSvcUrl, info);
             // TODO: remove mock functionality
             var deferred = $q.defer();
@@ -294,7 +297,6 @@
         ////////////////////////////////////////////////////////////
 
         CatalogueSvc.services = _.uniq(_.pluck(catalogue, 'Title'));
-        CatalogueSvc.selectedServices = [];
         CatalogueSvc.categories = _.uniq(_.pluck(catalogue, 'Category'));
 
         /*
@@ -380,9 +382,9 @@
         };
 
         OfferSvc.removeOffer = function (serviceName) {
-            var newOffer = serviceName || offer;
-            _.remove(offers, function (serviceName) {
-                return serviceName.serviceName === newOffer.serviceName;
+            var offeredServiceName = serviceName || offer.serviceName;
+            offers.remove(function (offer) {
+                return offer.serviceName === offeredServiceName;
             });
         };
 
