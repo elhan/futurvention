@@ -6,9 +6,11 @@
     <div class="wrapper-pic">
       <div class="wrapper-pic-inner" ng-click="editProfileSection('info')">
         <div ng-if="profile.image" class="image-profile profile-picture-m" fv-bg-image={{profile.image}}>
-          <div><i class="fa-centered fa fa-camera"></i></div>
+          <div ng-if="isCurrentUser">
+            <i class="fa-centered fa fa-camera"></i>
+          </div>
         </div>
-        <i ng-if="!profile.image" class="text-h2 fa-centered fa fa-camera bg-grey95 wrapper-round clickable"></i>
+        <i ng-if="!profile.image && isCurrentUser" class="text-h2 fa-centered fa fa-camera bg-grey95 wrapper-round clickable"></i>
       </div>
       <!-- Profile details -->
       <div class="container-y wrapper-details">
@@ -40,15 +42,13 @@
             <span>{{ profile.personalUrl }}</span>
           </a>
           <!-- Share btn -->
-          <div class="wrapper-share-btn">
+          <div class="wrapper-share-btn" ng-if="isCurrentUser">
             <button class="button btn btn-blue" ng-click="shareProfile()">Share my profile</button>
           </div>
           <!-- Contact btn -->
-          <!--
-<div class="wrapper-contact-btn" ng-if="currentUser.id !== userId">
-<button class="button btn btn-blue" ng-click="showContactModal()">Contact</button>
-</div>
--->
+          <div class="wrapper-contact-btn" ng-if="!isCurrentUser">
+            <button class="button btn btn-blue" ng-click="showContactModal()">Contact</button>
+          </div>
         </div>
       </div>
     </div>
@@ -56,7 +56,7 @@
     <div ng-if="offers.length > 0">
       <div class="container-x flex-items-end">
         <div id="portfolio-header" class="text-h3 flex-content-centered flex-1">Services Offered</div>
-        <div class="text-blue text-p clickable" ng-click="editProfileSection('service_selection')">
+        <div class="text-blue text-p clickable" ng-if="isCurrentUser" ng-click="editProfileSection('service_selection')">
           <i class="fa fa-pencil"></i>
           Edit
         </div>
@@ -64,15 +64,15 @@
       <div class="thumbnail-grid flex-wrap">
         <div ng-repeat="offer in offers" class="col-sm-6 col-md-3 wrapper-thumb">
           <div class="thumbnail">
-            <div class="wrapper-img flex-content-centered">
+            <div class="wrapper-img flex-content-centered" ng-click="go('/offer/{{offer.id}}')">
               <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
             </div>
-            <div class="thumb-overlay">
+            <div class="thumb-overlay" ng-if="isCurrentUser">
               <div class="thumb-overlay-inner" ng-click="editOffer(offer.serviceName)">
                 <i class="fa fa-pencil"></i>
               </div>
               <div class="divider-thumb-overlay"></div>
-              <div class="thumb-overlay-inner" ng-click="removeOffer(soffer.serviceName)">
+              <div class="thumb-overlay-inner" ng-click="removeOffer(offer.serviceName)">
                 <i class="fa fa-times"></i>
               </div>
             </div>
@@ -85,7 +85,7 @@
           </div>
         </div>
         <!-- 'Add service' placeholder -->
-        <div class="col-sm-6 col-md-3 wrapper-thumb-placeholder" ng-click="editProfileSection('service_selection')">
+        <div class="col-sm-6 col-md-3 wrapper-thumb-placeholder" ng-if="isCurrentUser" ng-click="editProfileSection('service_selection')">
           <div class="thumb-placeholder flex-content-centered">+</div>
         </div>
       </div>
@@ -111,7 +111,7 @@
           </div>
         </div>
       </div>
-      <div class="portfolio-footer">
+      <div class="portfolio-footer" ng-if="isCurrentUser">
         <div class="text-p text-grey space-after">To add a new portfolio item, you must first associate it with a service. Visit the</div>
         <button class="btn btn-link text-p no-padding" ng-click="editProfileSection('service_selection')">
           <span class="space-after">service selection</span>
@@ -164,8 +164,12 @@
       </div>
       <div class="container-x flex-content-centered">
         <div class="container-x flex-items-end">
-          <div id="bio-header" class="text-h3">About me</div>
-          <div class="text-blue text-p clickable" ng-click="editProfileSection('info')">
+          <div id="bio-header" class="text-h3" ng-if="isCurrentUser">About me</div>
+          <div id="bio-header" class="text-h3" ng-if="!isCurrentUser">
+            <span class="space-after">About</span>
+            <span>{{ profile.firstName }}</span>
+          </div>
+          <div class="text-blue text-p clickable" ng-click="editProfileSection('info')" ng-if="isCurrentUser">
             <i class="fa fa-pencil"></i>
             Edit
           </div>

@@ -49,10 +49,12 @@
         };
 
         $scope.editOffer = function (serviceName) {
-            OfferSvc.setOffer(_.find($scope.offers, function (offer) {
-                return offer.serviceName === serviceName;
-            }));
-            $scope.goToStep(3);
+            OfferSvc.fetchOffer(serviceName, $scope.currentUser.userId).then(function (offer) {
+                OfferSvc.setOffer(offer);
+                $scope.goToStep(3);
+            }, function (error) {
+                console.log(error);
+            });
         };
 
         // loads one more batch of thumbnails

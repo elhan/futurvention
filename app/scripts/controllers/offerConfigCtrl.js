@@ -27,12 +27,8 @@
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
 
-        OfferSvc.fetchOffer().then(function (offer) {
-            offer && OfferSvc.updateOffer(offer);
-            $scope.offer =  OfferSvc.getOffer();
-        }, function (error) {
-            console.log(error);
-        });
+        // before navigating to this step, the respective controller has ensured OffrSvc.offer is suynced
+        $scope.offer =  OfferSvc.getOffer();
 
         CatalogueSvc.getService($scope.offer.serviceName).then(function (service) {
             $scope.service = service;

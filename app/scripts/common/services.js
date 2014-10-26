@@ -247,7 +247,7 @@
                     title: 'Web & Logo Designer',
                     city: 'New York',
                     country: 'USA',
-                    personalUrl: 'google.com',
+                    personalUrl: 'http://localhost:9000/#/storefront/666997733407685',
                     status: 'ProfileComplete',
                     bio: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. '
                 });
@@ -337,12 +337,23 @@
             offer = {},
             offers = [];
 
+        function generateOfferId () {
+            var d = new Date().getTime();
+            var id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = (d + Math.random()*16)%16 | 0;
+                d = Math.floor(d/16);
+                return (c=='x' ? r : (r&0x7|0x8)).toString(16);
+            });
+            return id;
+        }
+
         ///////////////////////////////////////////////////////////
         /// Constructors
         ///////////////////////////////////////////////////////////
 
         OfferSvc.Offer = function () {
             return {
+                id: generateOfferId(),
                 workSamples: [],
                 status: Enum.OfferStatus.DRAFT,
                 serviceName: '',
@@ -396,8 +407,8 @@
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
-        OfferSvc.fetchOffer = function (serviceId) {
-            serviceId && console.log(serviceId);
+        OfferSvc.fetchOffer = function (serviceId, userId) {
+            serviceId && console.log(serviceId, userId);
 //            var sid = serviceId || offer.serviceId; //if no serviceId is passed, use the one in the offer obj
 //            return $http.get('/offer', { serviceId: sid });
             var deferred = $q.defer();

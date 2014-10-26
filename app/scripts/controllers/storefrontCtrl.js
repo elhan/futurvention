@@ -10,7 +10,7 @@
      * # StorefrontCtrl
      * Controls the storefront page
      */
-    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', function ($scope, $modal, $timeout, $location, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc) {
+    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', 'profile', 'userId', function ($scope, $modal, $timeout, $location, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc, profile, userId) {
 
         var contactModal = $modal({
             scope: $scope,
@@ -29,8 +29,9 @@
         });
 
         $scope.portfolio = PortfolioSvc.getPortfolio();
-        $scope.profile = {};
-        $scope.isCurrentUser = {};
+        $scope.profile = profile;
+        $scope.userId = userId;
+        $scope.isCurrentUser = $location.absUrl() === $scope.profile.personalUrl;
         $scope.reviews = {};
         $scope.offers = [];
         $scope.message = '';
@@ -84,12 +85,26 @@
             OfferSvc.setOffer(_.find($scope.offers, function (offer) {
                 return offer.serviceName === serviceName;
             }));
+            OfferSvc.fetchOffer(serviceName, $scope.userId).then(function (offer) {
+                OfferSvc.setOffer(offer);
+                $scope.goToStep(3);
+            }, function (error) {
+                console.log(error);
+            });
             $scope.editProfileSection('offer_config');
         };
 
         ///////////////////////////////////////////////////////////
         /// Fetch functions
         ///////////////////////////////////////////////////////////
+
+        ProfileSvc.fetchProfile($location.absUrl()).then(function (profile) {
+            $scope.isCurrentUser = $location.absUrl() === profile.personalUrl;
+            $scope.isCurrentUser = false;
+            $scope.profile = profile;
+        }, function (error) {
+            console.log(error);
+        });
 
         OfferSvc.fetchOffers($scope.userId).then(function (offers) {
             $scope.offers = offers;
@@ -106,13 +121,6 @@
 
         ReviewSvc.fetchReceivedReviews($scope.userId).then(function (reviews) {
             $scope.reviews = reviews;
-        }, function (error) {
-            console.log(error);
-        });
-
-        ProfileSvc.fetchProfile($location.absUrl()).then(function (profile) {
-            $scope.isCurrentUser = $location.absUrl() === $scope.profile.personalUrl;
-            $scope.profile = profile;
         }, function (error) {
             console.log(error);
         });

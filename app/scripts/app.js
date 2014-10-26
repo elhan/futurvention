@@ -10,32 +10,32 @@
      * Main module of the application.
      */
     var app = angular.module('fvApp',
-        [
-            'ngAnimate',
-            'ngCookies',
-            'ngResource',
-            'ngRoute',
-            'ngSanitize',
-            'ngTouch',
-            'mgcrea.ngStrap',
-            'mgcrea.ngStrap.modal',
-            'mgcrea.ngStrap.helpers.dimensions',
-            'mgcrea.ngStrap.helpers.parseOptions',
-            'mgcrea.ngStrap.tooltip',
-            'mgcrea.ngStrap.select',
-            'mgcrea.ngStrap.tab',
-            'mgcrea.ngStrap.collapse',
-            'mgcrea.ngStrap.button',
-            'mgcrea.ngStrap.alert',
-            'facebook',
-            'ngLinkedIn',
-            'config',
-            'firebase',
-            'angularFileUpload',
-            'ngImgCrop',
-            'duScroll',
-            'angular-carousel'
-        ]);
+                             [
+        'ngAnimate',
+        'ngCookies',
+        'ngResource',
+        'ngRoute',
+        'ngSanitize',
+        'ngTouch',
+        'mgcrea.ngStrap',
+        'mgcrea.ngStrap.modal',
+        'mgcrea.ngStrap.helpers.dimensions',
+        'mgcrea.ngStrap.helpers.parseOptions',
+        'mgcrea.ngStrap.tooltip',
+        'mgcrea.ngStrap.select',
+        'mgcrea.ngStrap.tab',
+        'mgcrea.ngStrap.collapse',
+        'mgcrea.ngStrap.button',
+        'mgcrea.ngStrap.alert',
+        'facebook',
+        'ngLinkedIn',
+        'config',
+        'firebase',
+        'angularFileUpload',
+        'ngImgCrop',
+        'duScroll',
+        'angular-carousel'
+    ]);
 
     app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider
@@ -55,16 +55,20 @@
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',
             resolve: {
-                userExists: ['$q', '$location', 'ProfileSvc', 'EVENTS', function ($q, $location, ProfileSvc, EVENTS) {
-                    var deferred = $q.defer();
-                    ProfileSvc.fetchPersonalUrlStatus($location.absUrl()).then(function (status) {
-                        // redirect to root if the url does not belong to any user
-                        status ? deferred.resolve() : deferred.reject(EVENTS.profile.fetchProfileFailed);
-                    }, function (error) {
-                        console.log(error);
-                        deferred.reject(EVENTS.profile.fetchProfileFailed);
-                    });
-                    return deferred.promise;
+                profile: ['$location', '$route', 'ProfileSvc', function ($location, $route, ProfileSvc) {
+                    return ProfileSvc.fetchProfile($location.absUrl());
+                }],
+                userId: ['$route', function ($route) {
+                    return $route.current.params.userId;
+                }]
+            }
+        })
+        .when('/offer/:offerId', {
+            templateUrl: 'views/offer.html',
+            controller: 'OfferCtrl',
+            resolve: {
+                offer: ['$route', 'OfferSvc', function ($route, OfferSvc) {
+                    return OfferSvc.fetchOffer($route.current.params.offerId);
                 }]
             }
         })
