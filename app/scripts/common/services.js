@@ -45,14 +45,43 @@
      * Interacts with the server to set, get, and delete User objects.
      */
     app.service('UserSvc', function () {
-        var UserSvc = {};
+        var UserSvc = {},
+            user = {};
 
-        UserSvc.setUser = function (user) {
+        UserSvc.User = function (firstName, lastName, id) {
+            return {
+                firstName: '' || firstName,
+                lastName: '' || lastName,
+                id: id || generateUserId()
+            };
+        };
+
+       user = new UserSvc.User();
+
+        function generateUserId () {
+            var d = new Date().getTime();
+            var id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = (d + Math.random()*16)%16 | 0;
+                d = Math.floor(d/16);
+                return (c=='x' ? r : (r&0x7|0x8)).toString(16);
+            });
+            return 'user-'.concat(id);
+        }
+
+        UserSvc.setUser = function (obj) {
+            user = obj;
+        };
+
+        UserSvc.getUser = function () {
+            return user;
+        };
+
+        UserSvc.saveUser = function (user) {
             // TODO: post to server
             localStorage.setItem('user', JSON.stringify(user));
         };
 
-        UserSvc.getUser = function () {
+        UserSvc.fetchUser = function () {
             // TODO: get from server
             return JSON.parse(localStorage.getItem('user'));
         };

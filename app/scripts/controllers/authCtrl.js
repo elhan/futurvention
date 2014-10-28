@@ -42,7 +42,7 @@
 
         $scope.loginFb = function () {
             firebase.$login('facebook', authOptions.facebook).then(function (res) {
-                UserSvc.setUser({ // if the user is not registered, store a new User object
+                UserSvc.saveUser({ // if the user is not registered, store a new User object
                     id: res.id,
                     firstName: res.thirdPartyUserData.first_name,
                     lastName: res.thirdPartyUserData.last_name,
@@ -57,7 +57,7 @@
         $scope.loginLi = function () {
             AuthSvc.loginLi().then(function () {
                 AuthSvc.getLiProfile().then(function (res) {
-                    UserSvc.setUser({ // if the user is not registered, store a new User object
+                    UserSvc.saveUser({ // if the user is not registered, store a new User object
                         id: res.values[0].id,
                         firstName: res.values[0].firstName,
                         lastName: res.values[0].lastName,
@@ -71,7 +71,7 @@
         $scope.login = function (newUser) {
             firebase.$login('password', { email: newUser.email, password: newUser.password }).then(function (session) {
                 newUser.id = session.id; // this is the firebase userId, not the session's id
-                UserSvc.setUser(newUser); // create a new User object in the database
+                UserSvc.saveUser(newUser); // create a new User object in the database
                 $rootScope.$broadcast(authEvents.loginSuccess, session.id, 'password');
             }, function (error) {
                 $rootScope.$broadcast(authEvents.loginFailed, error);

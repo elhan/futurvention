@@ -20,12 +20,12 @@
         // Initialize the Session object when the app first loads if there is a session available in the local storage
         function initSession () {
             var firebaseSession = LocalStorageSvc.getSession(),
-                user = UserSvc.getUser();
+                user = UserSvc.fetchUser();
             if (!user && !firebaseSession) {
                 return; // user is not logged in
             }
             // TODO: implement user roles
-            $scope.setCurrentUser(UserSvc.getUser());
+            $scope.setCurrentUser(UserSvc.fetchUser());
             if (firebaseSession) {
                 SessionSvc.create(firebaseSession.sessionKey, firebaseSession.user.id, firebaseSession.user.provider, $scope.userRoles.user);
             } else {
@@ -77,7 +77,7 @@
             // TODO: proper sessions for LinkeIn!
             provider === 'linkedIn' && SessionSvc.create(Math.random(), userId, provider, $scope.userRoles.user);
             initSession();
-            $scope.setCurrentUser(UserSvc.getUser(SessionSvc.userId));
+            $scope.setCurrentUser(UserSvc.fetchUser(SessionSvc.userId));
             // if the user just registered, redirect him to seller application flow
             $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
             // TODO: add proper logging

@@ -12,7 +12,7 @@
      * Creates a custom slider element
      *
      * @example
-     * <fvslider slidename="bg" count="4" fullscreen="true" keyboard="true" mousewheel="true" indicator="true" navbtn="true"></fvslider>
+     * <fv-slider slidename="bg" count="4" fullscreen="true" keyboard="true" mousewheel="true" indicator="true" navbtn="true"></fv-slider>
      */
     app.directive('fvSlider', ['$document', '$timeout', function ($document, $timeout) {
         //key codes for the arrow up/down events
@@ -380,6 +380,37 @@
         return function (scope, element, attrs) {
             attrs.fvOn && attrs.fvClass && element[0].addEventListener(attrs.fvOn, function () {
                 this.classList.toggle(attrs.fvClass);
+            });
+        };
+    });
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvTabs
+     * @restrict A
+     *
+     * @description
+     * Toggle active state for child fvPane elements
+     *
+     * @example
+     * <div fv-tabs...><div fv-pane...></div><div fv-pane...></div></div>
+     */
+    app.directive('fvTabs', function() {
+        return function (scope, element) {
+            var tabs = _.filter(element.children(), function (el) {
+                return el.hasAttribute('fv-pane');
+            });
+
+            _.forEach(tabs, function (pane, index) {
+                pane.addEventListener('click', function () {
+                    scope.$emit('pane-clicked', index);
+                });
+            });
+
+            scope.$on('pane-clicked', function (e, index) {
+                _.forEach(tabs, function (pane, idx) {
+                    index === idx ? angular.element(pane).addClass('active') : angular.element(pane).removeClass('active');
+                });
             });
         };
     });

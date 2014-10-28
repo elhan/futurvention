@@ -30,12 +30,12 @@
       <!-- Cover picture -->
       <div class="profile-cover-bg" fv-bg-image={{profile.image}}></div>
       <!-- Anchor navigation tabs -->
-      <div class="storefront-tabs">
+      <div class="fv-tabs" fv-tabs>
         <div class="placeholder"></div>
-        <div class="storefront-tab active">SERVICES</div>
-        <a class="storefront-tab" href="#portfolio-header" offset="80" du-smooth-scroll>PORTFOLIO</a>
-        <a class="storefront-tab" href="#reviews-header" offset="80" du-smooth-scroll>REVIEWS</a>
-        <a class="storefront-tab" href="#bio-header" offset="80" du-smooth-scroll>ABOUT ME</a>
+        <div class="fv-tab active" fv-pane>SERVICES</div>
+        <a class="fv-tab" href="#portfolio-header" offset="80" du-smooth-scroll fv-pane>PORTFOLIO</a>
+        <a class="fv-tab" href="#reviews-header" offset="80" du-smooth-scroll fv-pane>REVIEWS</a>
+        <a class="fv-tab" href="#bio-header" offset="80" du-smooth-scroll fv-pane>ABOUT ME</a>
         <div class="wrapper-link text-t">
           <a ng-href="http://{{ profile.personalUrl }}" target="_blank">
             <i class="fa fa-link icon-link"></i>
