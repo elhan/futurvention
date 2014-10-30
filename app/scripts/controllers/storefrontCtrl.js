@@ -10,7 +10,7 @@
      * # StorefrontCtrl
      * Controls the storefront page
      */
-    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', 'profile', 'userId', function ($scope, $modal, $timeout, $location, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc, profile, userId) {
+    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', 'profile', 'userId', 'EVENTS', function ($scope, $modal, $timeout, $location, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc, profile, userId, events) {
 
         var contactModal = $modal({
             scope: $scope,
@@ -26,6 +26,14 @@
             show: false,
             animation: 'am-slide-top',
             keyboard: false
+        });
+
+        var modalImageCrop = $modal({
+            scope: $scope,
+            template: 'views/components/modalImageCrop.html',
+            show: false,
+            animation: 'am-slide-top',
+            keyboard: true
         });
 
         $scope.portfolio = PortfolioSvc.getPortfolio();
@@ -47,18 +55,6 @@
         // this is necessary for ng-repeat to iterate over
         $scope.range = function (rating) {
             return _.range(0, rating);
-        };
-
-        $scope.showContactModal = function () {
-            contactModal.$promise.then(contactModal.show);
-        };
-
-        $scope.closeContactModal = function () {
-            contactModal.$promise.then(contactModal.hide);
-        };
-
-        $scope.showPortfolioViewerModal = function () {
-            portfolioViewerModal.$promise.then(portfolioViewerModal.show);
         };
 
         $scope.contactUser = function () {
@@ -95,12 +91,34 @@
         };
 
         ///////////////////////////////////////////////////////////
+        /// Modal functions functions
+        ///////////////////////////////////////////////////////////
+
+        $scope.showContactModal = function () {
+            contactModal.$promise.then(contactModal.show);
+        };
+
+        $scope.closeContactModal = function () {
+            contactModal.$promise.then(contactModal.hide);
+        };
+
+        $scope.showPortfolioViewerModal = function () {
+            portfolioViewerModal.$promise.then(portfolioViewerModal.show);
+        };
+
+        $scope.showImageCropModal = function () {
+            $scope.isCurrentUser && modalImageCrop.$promise.then(function () {
+                $scope.croppedImage = ''; // reset the croppedImage object
+                modalImageCrop.show();
+            });
+        };
+
+        ///////////////////////////////////////////////////////////
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
         ProfileSvc.fetchProfile($location.absUrl()).then(function (profile) {
             $scope.isCurrentUser = $location.absUrl() === profile.personalUrl;
-            $scope.isCurrentUser = false;
             $scope.profile = profile;
         }, function (error) {
             console.log(error);
@@ -123,6 +141,11 @@
             $scope.reviews = reviews;
         }, function (error) {
             console.log(error);
+        });
+
+        // listen for image update events emmited by the imga ecrop modal
+        $scope.$on(events.profile.profileImageUpdated, function () {
+            $scope.profile.image = ProfileSvc.getProfile().image;
         });
     }]);
 

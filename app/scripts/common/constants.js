@@ -12,7 +12,8 @@
      */
     app.constant('EVENTS', {
         profile: {
-            fetchProfileFailed: 'fetch-profile-failed'
+            fetchProfileFailed: 'fetch-profile-failed',
+            profileImageUpdated: 'profile-image-updated'
         },
         user: {
             createSuccess: 'user-creation-success',

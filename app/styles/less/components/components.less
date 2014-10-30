@@ -92,6 +92,7 @@ textarea {
     padding: 45px 0 30px;
   }
 }
+
 .contact-form {
   min-width: 400px;
 
@@ -111,14 +112,13 @@ textarea {
 // -------------------------
 
 .navbar-main {
-  .text-white;
+  .flex-content-centered;
   height: 54px;
-  padding: 0 67px;
-  .navbar-left {
-    line-height: 46px;
+  .btn-right {
+    padding-right: 0;
   }
-  .navbar-right {
-    line-height: 24px;
+  .btn-left {
+    padding-left: 0;
   }
 }
 
@@ -129,6 +129,62 @@ textarea {
 
 .navbar-dark {
   background-color: black;
+}
+
+.navbar-main, .navbar-footer {
+  .container-x;
+  .text-white;
+  align-items: center;
+  height: 54px;
+  border: 0;
+}
+
+.navbar-footer {
+  .flex-content-spread;
+  .navbar-dark;
+  margin-top: 130px;
+  height: 74px;
+  .btn-link {
+    .text-white;
+    .text-p;
+  }
+
+  .wrapper-social-icon {
+    .bg-white;
+    .text-black;
+    .wrapper-round;
+    .flex-content-centered;
+    width: 40px;
+    height: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+}
+
+.navbar-inner {
+  .container-x;
+  .flex-content-centered;
+  height: 100%;
+  width: 80%;
+  @media screen and (max-width: 1366px) {
+    width: 90%;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 100%;
+  }
+}
+
+.navbar-wrapper {
+  .container-x;
+  height: 100%;
+  width: calc(200% / 3);
+  @media screen and (max-width: 1366px) {
+    width: 80%;
+  }
+  @media screen and (max-width: 1024px) {
+    width: 90%;
+
+  }
 }
 
 // Dividers
@@ -424,8 +480,8 @@ textarea {
 
 .thumbnail {
   cursor: pointer;
-  padding: 0px;
-  max-width: 232px;
+  margin-left: -4px;
+  margin-right: -4px;
 
   .wrapper-img {
     overflow: hidden;
@@ -451,6 +507,8 @@ textarea {
   right: 15px; // thumbnails have padding 15px
   bottom: 90px; //90px = 20px thumbnail margin + 70px caption height
   left: 15px;
+  margin-left: -4px;
+  margin-right: -4px;
   background-color: @blueDefault;
   visibility: hidden;
   border-top-right-radius: 3px;
@@ -621,105 +679,6 @@ textarea {
   }
 }
 
-// Portfolio Viewer
-// -------------------------
-
-.portfolio-viewer {
-  .modal-content {
-    padding: 19px;
-  }
-
-  .layer {
-    width: 100%;
-    height: 100%;
-  }
-
-  .viewer-top {
-    width: 100%;
-    min-height: 440px;
-  }
-
-  .wrapper-control {
-    height: 52px;
-  }
-
-  .btn-link {
-    text-decoration: underline;
-    &:focus {
-      outline: 0;
-    }
-  }
-
-  .wrapper-controls {
-    .container-x;
-    .flex-content-spread;
-    margin: 10px 0;
-  }
-
-  .wrapper-item-name {
-    .text-t;
-    .flex-content-centered;
-    padding-bottom: 2px;
-  }
-
-  .icon-download {
-    .bg-blue-default;
-    .text-white;
-    margin-right: 5px;
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-  }
-
-  .wrapper-nav {
-    width: 114%;
-    height: 0;
-    margin-top: -36.5%;
-    position: absolute;
-    margin-left: -9.8%;
-  }
-
-  .gallery {
-    overflow: hidden;
-
-    &:hover {
-      .layer {
-        background: red;
-      }
-    }
-
-    ul {
-      max-width: 85px;
-      min-height: 55px;
-      overflow: visible;
-    }
-
-    .image {
-      margin-bottom: -6px;
-    }
-
-    .layer {
-      .clickable;
-      .flex-content-centered;
-      max-width: calc(680 / 9px);
-      max-height: calc(440 / 9px);
-      border-radius: 4px;
-      &.active {
-        border: 1px solid @blueDefault;
-        box-shadow: 0px 0px 10px lightgrey;
-        .img-responsive {
-          border: 1px solid #2f40d1;
-          box-shadow: 0 0 10px lightgrey;
-        }
-      }
-
-      .img-responsive {
-        border-radius: 4px;
-      }
-    }
-  }
-}
-
 // Various components
 // -------------------------
 
@@ -741,7 +700,6 @@ textarea {
   .wrapper-round;
   width: 110px;
   height: 110px;
-  cursor: pointer;
 
   &.default {
     .bg-grey95;

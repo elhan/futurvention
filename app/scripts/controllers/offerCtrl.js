@@ -10,24 +10,40 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('OfferCtrl', ['$scope', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', function ($scope, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc) {
+    app.controller('OfferCtrl', ['$scope', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', '$modal', function ($scope, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, $modal) {
         $scope.reviews = [];
         $scope.portfolio = {};
         $scope.service = {};
         $scope.offer = offer;
 
+        var contactModal = $modal({
+            scope: $scope,
+            template: 'views/components/modalContactUser.html',
+            show: false,
+            animation: 'am-slide-top',
+            keyboard: false
+        });
+
+        $scope.showContactModal = function () {
+            contactModal.$promise.then(contactModal.show);
+        };
+
+        $scope.closeContactModal = function () {
+            contactModal.$promise.then(contactModal.hide);
+        };
+
         //TODO: remove
         $scope.user = UserSvc.User('Mark','Twain');
-
-        ReviewSvc.fetchReceivedReviews($scope.user.userId).then(function (reviews) {
-            $scope.reviews = reviews;
-        }, function (error) {
-            console.log(error);
-        });
 
         PortfolioSvc.fetchPortfolio($scope.user.userId).then(function (portfolio) {
             PortfolioSvc.updatePortfolio(portfolio);
             $scope.portfolio = PortfolioSvc.getPortfolio();
+        }, function (error) {
+            console.log(error);
+        });
+
+        ReviewSvc.fetchReceivedReviews($scope.user.userId).then(function (reviews) {
+            $scope.reviews = reviews;
         }, function (error) {
             console.log(error);
         });
@@ -37,6 +53,5 @@
         }, function (error) {
             console.log(error);
         });
-
     }]);
 }());

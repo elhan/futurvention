@@ -1,6 +1,6 @@
 <div class="offer container-page">
-  <div class="container-page-inner">
-    <div class="container-y flex-2">
+  <div class="container-page-inner flex-content-spread">
+    <div class="container-left">
       <div class="fv-page-header">Bespoke Logo Design for only $100</div>
       <!-- Anchor navigation tabs -->
       <div class="fv-tabs" fv-tabs>
@@ -9,56 +9,16 @@
         <a class="fv-tab" href="#description-header" offset="80" du-smooth-scroll fv-pane>Description</a>
         <a class="fv-tab" href="#reviews-header" offset="80" du-smooth-scroll fv-pane>Reviews</a>
       </div>
-      <div class="portfolio-viewer" ng-controller="PortfolioViewerCtrl">
-        <!-- main carousel -->
-        <div class="wrapper-showcase container-y">
-          <!-- Slides -->
-          <ul rn-carousel rn-carousel-index="showcaseIndex" class="viewer-top image">
-            <li ng-repeat="item in portfolio.items">
-              <div class="layer">
-                <!-- If image -->
-                 <img data-src="holder.js/100%x180" alt="100%x180" src="images/backgrounds/bg0.jpg">
-                <!-- If PrizmView doc -->
-<!--
-                <div class="embed-responsive embed-responsive-4by3">
-                  <iframe class="viewer embed-responsive-item"
-                          allowfullscreen="true"
-                          ng-src="{{ item.url | prizmUrl | trusted }}"
-                          allowtransparency="true"></iframe>
-                </div>
--->
-              </div>
-            </li>
-          </ul>
-          <!-- Navigation buttons -->
-          <div class="wrapper-nav">
-            <div class="container-x flex-content-spread">
-              <div class="clickable" ng-class="{'invisible': showcaseIndex === 0}" ng-click="showcasePrev()">
-                <i class="fa fa-chevron-left"></i>
-              </div>
-              <div class="clickable" ng-class="{'invisible': showcaseIndex === portfolio.items.length - 1}" ng-click="showcaseNext()">
-                <i class="fa fa-chevron-right"></i>
-              </div>
-            </div>
-          </div>
-          <!-- Gallery -->
-          <div class="gallery">
-            <ul rn-carousel rn-carousel-index="galleryIndex" class="image">
-              <li ng-repeat="item in portfolio.items" ng-click="goToShowcaseItem($index)">
-                <div ng-class="{'layer': true, 'active': $index === showcaseIndex}">
-                  <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
-                </div>
-              </li>
-            </ul>
-          </div>
-        </div>
+      <!-- Portfolio voiewer - ensure portfolio items have been fetched form the server before compilation -->
+      <div ng-if="portfolio.items && portfolio.items.length > 0">
+        <fv-portfolio-viewer></fv-portfolio-viewer>
       </div>
       <!-- User Info -->
       <div id="info-header" class="text-gotham text-h3">
         <span>About</span>
         <span>{{ user.firstName }}</span>
       </div>
-      <div class="container-x">
+      <div class="container-x clickable" ng-click="showContactModal()">
         <div class="wrapper-icon-video">
           <i class="fa-centered fa fa-camera"></i>
         </div>
@@ -66,6 +26,26 @@
           <span class="space-after">View</span>
           <span class="space-after">{{ user.firstName }}</span>
           <span>live!</span>
+        </div>
+      </div>
+      <div class="info-description">
+        <div>
+          <p class="text-p-bold">
+            <span class="space-after">{{ user.firstName }}</span>
+            <span>'s Experience in Logo Design</span>
+          </p>
+          <p class="text-p">
+            I have created more than 100 bespoke logos and I am sure I can adress any need you have and create a logo according to your taste.
+          </p>
+        </div>
+        <div>
+          <p class="text-p-bold">
+            <span class="space-after">Why buy from</span>
+            <span >{{ user.firstName }}</span>
+          </p>
+          <p class="text-p">
+            You will get superb logo designs and I will also provide support and make any changes required for the next 6 months.
+          </p>
         </div>
       </div>
       <!-- Service Description -->
@@ -113,8 +93,9 @@
         </div>
       </div>
     </div>
-    <div class="container-x flex-1">
+    <div class="container-right">
       <fv-order-box offer={{offer}} class="wrapper-order-box"></fv-order-box>
     </div>
   </div>
 </div>
+<div ng-include="'views/partials/footer.html'"></div>

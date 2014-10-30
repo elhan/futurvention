@@ -1,7 +1,7 @@
-<div class="modal" tabindex="-1" role="dialog">
+<div class="modal" tabindex="-1" role="dialog" ng-controller="ModalImageCropCtrl">
   <div class="modal-content modal-big container-y modal-image-crop">
     <div class="header">
-      <button type="button" class="close" ng-click="closeModal()">&times;</button>
+      <button type="button" class="close" ng-click="$hide()">&times;</button>
     </div>
     <!-- Centered container -->
     <div class="flex-1 flex-content-centered container-y" ng-file-drop="onFileSelect($files)" accept="image/*" fv-on-drop="init(true)">
@@ -30,7 +30,7 @@
     </div>
     <div class="footer container-x bg-white">
       <button class="btn btn-blue btn-small" ng-click="saveProfileImage()">Set as profile photo</button>
-      <button class="btn btn-small btn-lightgrey" ng-click="closeModal()">Cancel</button>
+      <button class="btn btn-small btn-lightgrey" ng-click="$hide()">Cancel</button>
     </div>
   </div>
 </div>

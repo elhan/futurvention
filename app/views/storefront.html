@@ -4,7 +4,7 @@
     <fv-timeline-h></fv-timeline-h>
     <!-- Profile picture -->
     <div class="wrapper-pic">
-      <div class="wrapper-pic-inner" ng-click="editProfileSection('info')">
+      <div class="wrapper-pic-inner" ng-class="{'clickable': isCurrentUser}" ng-click="showImageCropModal()">
         <div ng-if="profile.image" class="image-profile profile-picture-m" fv-bg-image={{profile.image}}>
           <div ng-if="isCurrentUser">
             <i class="fa-centered fa fa-camera"></i>
@@ -28,7 +28,7 @@
     </div>
     <div class="profile-cover-container">
       <!-- Cover picture -->
-      <div class="profile-cover-bg" fv-bg-image={{profile.image}}></div>
+      <div class="profile-cover-bg" fv-bg-image="images/backgrounds/bg3.jpg"></div>
       <!-- Anchor navigation tabs -->
       <div class="fv-tabs" fv-tabs>
         <div class="placeholder"></div>
@@ -65,7 +65,7 @@
         <div ng-repeat="offer in offers" class="col-sm-6 col-md-3 wrapper-thumb">
           <div class="thumbnail">
             <div class="wrapper-img flex-content-centered" ng-click="go('/offer/{{offer.id}}')">
-              <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
+              <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
             </div>
             <div class="thumb-overlay" ng-if="isCurrentUser">
               <div class="thumb-overlay-inner" ng-click="editOffer(offer.serviceName)">
@@ -103,7 +103,7 @@
         <div class="thumbnail-grid flex-wrap">
           <div ng-repeat="item in portfolio.items" class="col-sm-4 col-md-2 wrapper-thumb">
             <div class="wrapper-img flex-content-centered">
-              <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.jpg" class="img-responsive">
+              <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
             </div>
             <div class="caption">
               <div class="text-p-bold">{{ item.title }}</div>
@@ -179,3 +179,4 @@
     </div>
   </div>
 </div>
+<div ng-include="'views/partials/footer.html'"></div>
