@@ -6,11 +6,17 @@
     <div class="wrapper-pic">
       <div class="wrapper-pic-inner" ng-class="{'clickable': isCurrentUser}" ng-click="showImageCropModal()">
         <div ng-if="profile.image" class="image-profile profile-picture-m" fv-bg-image={{profile.image}}>
-          <div ng-if="isCurrentUser">
-            <i class="fa-centered fa fa-camera"></i>
+          <div ng-if="isCurrentUser" class="flex-content-centered">
+            <svg class="icon icon-lightGrey icon-camera">
+              <use xlink:href="#camera"></use>
+            </svg>
           </div>
         </div>
-        <i ng-if="!profile.image && isCurrentUser" class="text-h2 fa-centered fa fa-camera bg-grey95 wrapper-round clickable"></i>
+        <div class="flex-content-centered nopic" ng-if="!profile.image && isCurrentUser">
+          <svg class="icon icon-lightGrey icon-camera">
+            <use xlink:href="#camera"></use>
+          </svg>
+        </div>
       </div>
       <!-- Profile details -->
       <div class="container-y wrapper-details">

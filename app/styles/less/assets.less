@@ -1,3 +1,54 @@
+.icon {
+  width: 60%;
+  height: 60%;
+  transition: .1s ease-in-out;
+}
+
+.icon-light {
+  stroke: white;
+  fill: white;
+  path {
+    stroke:white;
+    fill: white;
+  }
+  &.nofill {
+    fill: none;
+    path {
+      fill: none;
+    }
+  }
+}
+
+.icon-dark {
+  stroke: @greyBlack;
+  fill: @greyBlack;
+  path {
+    stroke: @greyBlack;
+    fill: @greyBlack;
+  }
+  &.nofill {
+    fill: none;
+    path {
+      fill: none;
+    }
+  }
+}
+
+.icon-lightGrey {
+  stroke: @lightGrey;
+  fill: @lightGrey;
+  path {
+    stroke: @lightGrey;
+    fill: @lightGrey;
+  }
+  &.nofill {
+    fill: none;
+    path {
+      fill: none;
+    }
+  }
+}
+
 // Landing page fullscreen backgrounds
 // -------------------------
 .bg0 {
@@ -39,112 +90,25 @@
   align-self: center;
 }
 
-.icon-linkedIn, .icon-behance {
-  font-size: 38px;
+.icon-linkedIn {
+  width: 50%;
+  height: 50%;
+  margin-bottom: 5px;
 }
 
 .icon-odesk {
-  /*  TODO add proper icon  */
-  -webkit-filter: invert(100%);
-  background-size: 70% 70%;
-  background-image: url('../../fonts/odesk.svg');
-  .wrapper-lightgrey & {
-    -webkit-filter: invert(20%);
-  }
-  .selected & {
-    -webkit-filter: none;
-  }
+  margin-top: 2px;
+  width: 75%;
+  height: 75%;
 }
 
 .icon-elance {
-  /*  TODO add a proper icon  */
-  font-size: calc(40 / 48em);
-  line-height: 75px;
-  text-align: center;
-  font-weight: 700;
-  padding-top: 2px;
-}
-
-.icon-dribbble {
-  padding-top: 4px;
-}
-
-.icon-freelancer {
-  /*  TODO add a proper icon  */
-  background-image: url('../../images/icons/freelancer-logo.svg');
-  .wrapper-lightgrey & {
-    opacity: .4;
-  }
+  height: 45%;
+  width: 45%;
 }
 
 .icon-pph {
-  .wrapper-round;
-  position: absolute;
-  border: 4px solid black;
-  width: 56%;
-  height: 56%;
-  top: 22%;
-  left: 22%;
-  -mox-box-shadow: 0 0 2px black;
-  -webkit-box-shadow: 0 0 2px black;
-  box-shadow: 0 0 2px black;
-  .wrapper-lightgrey & {
-    border: 4px solid @lightGrey;
-    -mox-box-shadow: 0 0 2px @lightGrey;
-    -webkit-box-shadow: 0 0 2px @lightGrey;
-    box-shadow: 0 0 2px @lightGrey;
-    .circle-s {
-      background-color: @lightGrey;
-    }
-    .selected & {
-      background-color: white;
-      .circle-s {
-        border: 1px solid @lightGrey;
-        background-color: @lightGrey;
-        -mox-box-shadow: 0 0 1px @lightGrey;
-        -webkit-box-shadow: 0 0 1px @lightGrey;
-        box-shadow: 0 0 1px @lightGrey;
-      }
-    }
-  }
-  .circle-s {
-    border: 1px solide black;
-    border-radius: 50%;
-    background: black;
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    top: 55%;
-    -mox-box-shadow: 0 0 1px black;
-    -webkit-box-shadow: 0 0 1px black;
-    box-shadow: 0 0 1px black;
-
-    .wrapper-lightgrey & {
-      border: 1px solid @lightGrey;
-      -mox-box-shadow: 0 0 1px @lightGrey;
-      -webkit-box-shadow: 0 0 1px @lightGrey;
-      box-shadow: 0 0 1px @lightGrey;
-    }
-  }
-  .quarter-tl {
-    position: absolute;
-    top: 0px;
-    height: 50%;
-    width: 50%;
-    .circle-s {
-      left: 25%;
-    }
-  }
-  .quarter-tr {
-    position: absolute;
-    top: 0px;
-    right: 0;
-    height: 50%;
-    width: 50%;
-    .circle-s {
-      right: 25%;
-    }
-  }
+  border-radius: 50%;
 }
 
 .icon-check {

@@ -1,3 +1,6 @@
+/* global module */
+/* global require */
+
 // Generated on 2014-08-04 using generator-angular 0.9.5
 'use strict';
 
@@ -20,6 +23,8 @@ module.exports = function (grunt) {
     app: require('./bower.json').appPath || 'app',
     dist: 'dist'
   };
+
+  grunt.loadNpmTasks('grunt-svgstore');
 
   // Define the configuration for all the tasks
   grunt.initConfig({
@@ -273,19 +278,32 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif}',
+          src: '{,*/}*.{png,jpg,jpeg,gif,svg}',
           dest: '<%= yeoman.dist %>/images'
         }]
       }
     },
 
     svgmin: {
+      options: {
+        plugins: [
+          {
+            convertPathData: false
+          },
+          {
+            collapseGroups: false
+          },
+          {
+            moveGroupAttrsToElems: false
+          }
+        ]
+      },
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/images',
+          cwd: '<%= yeoman.app %>/images/temp',
           src: '{,*/}*.svg',
-          dest: '<%= yeoman.dist %>/images'
+          dest: '<%= yeoman.app %>/images/svg'
         }]
       }
     },
@@ -433,6 +451,15 @@ module.exports = function (grunt) {
           }
         }
       }
+    },
+
+    svgstore: {
+      options: {},
+      default : {
+        files: {
+          'app/images/icons.svg': ['app/images/svg/*.svg'],
+        },
+      },
     }
   });
 
@@ -470,6 +497,8 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'ngconstant:production',
+    'svgmin',
+    'svgstore',
     'wiredep',
     'less',
     'useminPrepare',

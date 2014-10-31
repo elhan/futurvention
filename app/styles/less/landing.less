@@ -62,6 +62,7 @@ display: none;
     bottom: 90px;
     width: 80%;
     margin: 0 10%;
+    padding: 0;
     .box {
       .flex-content-spread;
       min-height: 260px;
@@ -72,6 +73,103 @@ display: none;
     .container-x;
     .flex-centered;
     padding: 60px 0 70px 0;
+
+    .wrapper-linkedIn {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        background-color: @blueLi;
+        .icon-linkedIn {
+          stroke: white;
+          fill: white;
+        }
+      }
+    }
+
+    .wrapper-odesk {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        background-color: @greenOdesk;
+        .icon-odesk {
+          stroke: white;
+          fill: white;
+        }
+      }
+    }
+
+    .wrapper-elance {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        background-color: @blueElance;
+        .icon-elance {
+          stroke: white;
+          fill: white;
+        }
+      }
+    }
+
+    .wrapper-freelancer {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        .icon-freelancer {
+          stroke: @blueFreelancer;
+          fill: @blueFreelancer;
+        }
+      }
+    }
+
+    .wrapper-pph {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        background-color: @blackMagenta;
+        .icon-pph {
+          background-color: @orangePph;
+          stroke: white;
+          fill: white;
+        }
+      }
+    }
+
+    .wrapper-behance {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        background-color: @blueBehance;
+        .icon-behance {
+          stroke: white;
+          fill: white;
+        }
+      }
+    }
+
+    .wrapper-dribbble {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        background-color: @pink;
+        .icon-dribbble {
+          stroke: white;
+          fill: white;
+        }
+      }
+    }
+
+    .wrapper-github {
+      .import-link;
+      .wrapper-black;
+      &:hover {
+        background-color: @blackMagenta;
+        .icon-github {
+          stroke: white;
+          fill: white;
+        }
+      }
+    }
+
   }
 
   .text-h3 {
@@ -110,19 +208,12 @@ display: none;
       margin: 0 auto;
     }
     .wrapper-icon-m {
-      cursor: pointer;
-      transition: .2s;
-      i {
-        transition: none;
-      }
+      transition: .1s;
       &:hover {
         background-color: @blueDefault;
         color: white;
         border-color: @blueDefault;
         box-shadow: none;
-        i {
-          color: white;
-        }
       }
     }
 

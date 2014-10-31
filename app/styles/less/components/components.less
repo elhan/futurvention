@@ -128,7 +128,21 @@ textarea {
 }
 
 .navbar-dark {
-  background-color: black;
+  background-color: @blackMagenta;
+  .icon-dark {
+    stroke: @blackMagenta;
+    fill: @blackMagenta;
+    path {
+      stroke: @blackMagenta;
+      fill: @blackMagenta;
+    }
+    &.nofill {
+      fill: none;
+      path {
+        fill: none;
+      }
+    }
+  }
 }
 
 .navbar-main, .navbar-footer {
@@ -243,6 +257,9 @@ textarea {
     .label-import-link {
       .text-grey-dark;
     }
+    .icon {
+      .icon-light;
+    }
   }
   &:hover {
     .import-link {
@@ -277,8 +294,8 @@ textarea {
 .import-link {
   .wrapper-round;
   .wrapper-icon-s;
+  .flex-content-centered;
   margin: 0 23px;
-  cursor: pointer;
   @media screen and (max-width: 1366px) {
     margin: 0 16px;
   }
@@ -286,26 +303,27 @@ textarea {
     margin: 0 12px;
   }
 
-  .flex-content-centered;
-  .icon-thirdparty {
-    .cover;
-    .icon-centered;
-  }
-
   .icon-plus {
     .text-light;
-    .icon-centered;
     .text-white;
-    .flex-content-centered;
     font-size: 1.2em;
     display: none;
   }
 }
 
 .import-link-s {
+  .flex-content-centered;
   width: 37px;
   height: 37px;
   margin-right: 14px;
+  .icon {
+    width: 17px;
+    height: 17px;
+  }
+  .icon-odesk {
+    width: 27px;
+    height: 27px;
+  }
 }
 
 // Icon wrappers
@@ -705,9 +723,6 @@ textarea {
     .bg-grey95;
     border: 1px solid @grey95;
     box-shadow: 0 0 2px @grey95;
-    > i {
-      color: @grey80;
-    }
   }
 
   > input {
@@ -718,6 +733,11 @@ textarea {
     padding: 0px;
     margin: 0px;
     overflow: hidden;
+  }
+
+  .icon-camera {
+    width: calc(100% / 3);
+    height: calc(100% / 3);
   }
 }
 
@@ -800,7 +820,7 @@ a {
 
   &:hover {
     > div {
-      display: block;
+      display: flex;
     }
   }
 
@@ -814,5 +834,11 @@ a {
     cursor: pointer;
     width: calc(100% / 3);
     height: calc(100% / 3);
+  }
+
+  .icon {
+    width:50%;
+    height: 50%;
+
   }
 }

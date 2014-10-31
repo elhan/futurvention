@@ -145,7 +145,7 @@
      */
     app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'EVENTS', function ($http, $q, $upload, $timeout, EVENTS) {
         var ProfileSvc = {},
-            providerNames = ['linkedIn', 'oDesk', 'elance', 'peoplePerHour', 'freelancer', 'behance', 'dribbble', 'github'],
+            providerNames = ['linkedIn', 'oDesk', 'elance', 'pph', 'freelancer', 'behance', 'dribbble', 'github'],
             steps = ['import', 'info', 'service_selection', 'offer_config', 'storefront'], // profile completion steps
             activeStep = 'import',
             countriesUrl = '/countries', //TODO: fix this

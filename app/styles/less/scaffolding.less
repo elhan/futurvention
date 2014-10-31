@@ -171,12 +171,18 @@ body, html {
 }
 
 .wrapper-black {
+  transition: .1s ease-in-out;
   .bg-white;
-  -webkit-box-shadow: 0 0 2px white;
-  -mox-box-shadow: 0 0 2px white;
-  box-shadow: 0 0 2px white;
   > div, i, span {
-    color: black;
+    color: @greyBlack;
+  }
+  &:hover {
+    > div, span {
+      color:white;
+    }
+    > .icon-dark {
+      stroke: white;
+    }
   }
 }
 

@@ -3,14 +3,16 @@
   <div class="text-centered text-h3 text-silver">
     Compile profile information from multiple sites and showcase your expertise with pushbutton ease
   </div>
-  <div class="icons-import content-center flex-content-centered">
+  <div class="content-center flex-content-centered">
     <!--LinkedIn-->
     <div class="import-link-wrap"
          ng-class="{'selected': isSelected('linkedIn')}"
          ng-click="toggleSelection('linkedIn')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-thirdparty">
-          <i class="fa-centered fa fa-linkedin icon-linkedIn"></i>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-linkedIn">
+            <use xlink:href="#linkedIn"></use>
+          </svg>
         </div>
         <div class="icon-plus">+</div>
       </div>
@@ -21,7 +23,11 @@
          ng-class="{'selected': isSelected('oDesk')}"
          ng-click="toggleSelection('oDesk')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-odesk icon-thirdparty"></div>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-odesk">
+            <use xlink:href="#odesk"></use>
+          </svg>
+        </div>
         <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">oDesk</div>
@@ -31,8 +37,10 @@
          ng-class="{'selected': isSelected('elance')}"
          ng-click="toggleSelection('elance')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-thirdparty container-y">
-          <div class="icon-elance">E</div>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-elance">
+            <use xlink:href="#elance"></use>
+          </svg>
         </div>
         <div class="icon-plus">+</div>
       </div>
@@ -40,18 +48,13 @@
     </div>
     <!--PeoplePerHour-->
     <div class="import-link-wrap"
-         ng-class="{'selected': isSelected('peoplePerHour')}"
-         ng-click="toggleSelection('peoplePerHour')">
+         ng-class="{'selected': isSelected('pph')}"
+         ng-click="toggleSelection('pph')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-thirdparty">
-          <div class="col-xs-1 wrapper-round icon-pph icon-wrapper-s bg-white">
-            <div class="quarter-tl">
-              <span class="circle-s"></span>
-            </div>
-            <div class="quarter-tr">
-              <span class="circle-s"></span>
-            </div>
-          </div>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-pph">
+            <use xlink:href="#pph"></use>
+          </svg>
         </div>
         <div class="icon-plus">+</div>
       </div>
@@ -62,7 +65,11 @@
          ng-class="{'selected': isSelected('freelancer')}"
          ng-click="toggleSelection('freelancer')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-freelancer icon-thirdparty"></div>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-freelancer">
+            <use xlink:href="#freelancer"></use>
+          </svg>
+        </div>
         <div class="icon-plus">+</div>
       </div>
       <div class="label-import-link text-lightGrey">Freelancer</div>
@@ -72,8 +79,10 @@
          ng-class="{'selected': isSelected('behance')}"
          ng-click="toggleSelection('behance')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-thirdparty">
-          <i class="fa-centered fa fa-behance icon-behance"></i>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-behance">
+            <use xlink:href="#behance"></use>
+          </svg>
         </div>
         <div class="icon-plus">+</div>
       </div>
@@ -84,8 +93,10 @@
          ng-class="{'selected': isSelected('dribbble')}"
          ng-click="toggleSelection('dribbble')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-thirdparty">
-          <i class="fa-centered fa fa-dribbble icon-dribbble"></i>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-dribbble">
+            <use xlink:href="#dribbble"></use>
+          </svg>
         </div>
         <div class="icon-plus">+</div>
       </div>
@@ -96,8 +107,10 @@
          ng-class="{'selected': isSelected('github')}"
          ng-click="toggleSelection('github')">
       <div class="col-xs-1 import-link wrapper-lightgrey">
-        <div class="icon-thirdparty">
-          <i class="fa-centered fa fa-github"></i>
+        <div class="icon-thirdparty flex-content-centered">
+          <svg class="icon icon-lightGrey icon-github">
+            <use xlink:href="#github"></use>
+          </svg>
         </div>
         <div class="icon-plus">+</div>
       </div>
@@ -114,9 +127,12 @@
             <div ng-repeat="provider in selectedProviders">
               <div ng-form class="form-group" name="innerForm" ng-class="{'has-error': innerForm.$error.url}">
                 <div class="container-x flex-content-centered">
+                  <!-- Provider icon -->
                   <div class="flex-1 flex-content-end">
-                    <div class="import-link-s wrapper-darkGrey wrapper-round bg-darkgrey"></div>
+                    <div class="import-link-s wrapper-darkGrey wrapper-round bg-darkgrey" ng-include="'views/partials/dynamicIcon.html'">
+                    </div>
                   </div>
+                  <!-- Provider input -->
                   <div class="flex-2">
                     <input fv-auto-focus type="url" class="form-control input-s input-provider" name="{{provider.name}}"
                            ng-model="provider.url" placeholder="enter your {{provider.name}} profile url"
