@@ -19,6 +19,9 @@
 .btn-link {
   color: @blueDefault !important;
   text-decoration: none !important;
+  &:focus {
+    outline: none;
+  }
 }
 
 // Navbar Login & Registration links
@@ -79,9 +82,6 @@
     background-color: @blueActive;
     border-color: @blueActive;
     drop-shadow: 3px;
-  }
-  i {
-    color: white;
   }
 }
 

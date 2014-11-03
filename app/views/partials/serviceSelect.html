@@ -15,11 +15,15 @@
         </div>
         <div class="thumb-overlay">
           <div class="thumb-overlay-inner" ng-click="editOffer(offer.serviceName)">
-            <i class="fa fa-pencil"></i>
+            <svg class="icon icon-light">
+              <use xlink:href="#edit"></use>
+            </svg>
           </div>
           <div class="divider-thumb-overlay"></div>
           <div class="thumb-overlay-inner" ng-click="removeOffer(offer.serviceName)">
-            <i class="fa fa-times"></i>
+            <svg class="icon icon-light">
+              <use xlink:href="#close"></use>
+            </svg>
           </div>
         </div>
         <div class="caption">
@@ -33,7 +37,9 @@
     <span class="text-h3">Service Catalogue</span>
     <div class="search-box">
       <div class="inner-addon left-addon">
-        <i class="fa fa-search"></i>
+        <svg class="icon">
+          <use xlink:href="#search-dark"></use>
+        </svg>
         <input type="text" class="form-control" ng-model="selectedService" ng-options="offer for service in offers" placeholder="Service name" bs-typeahead />
       </div>
     </div>
@@ -69,7 +75,7 @@
   <!-- Continue button -->
   <div class="container-x flex-content-centered">
     <div class="container-x col-sm-6 col-md-3">
-      <button type="submit" class="btn btn-continue flex-1" ng-disabled="true" ng-click="goToStep(1)">Continue</button>
+      <button type="submit" class="btn btn-continue flex-1" ng-disabled="offers.length === 0" ng-click="go('/storefront/666997733407685')">Continue</button>
     </div>
   </div>
 </div>

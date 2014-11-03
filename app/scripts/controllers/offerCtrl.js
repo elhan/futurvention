@@ -24,6 +24,11 @@
             keyboard: false
         });
 
+        // this is necessary for ng-repeat to iterate over
+        $scope.range = function (rating) {
+            return _.range(0, rating);
+        };
+
         $scope.showContactModal = function () {
             contactModal.$promise.then(contactModal.show);
         };

@@ -83,7 +83,7 @@
             }));
             OfferSvc.fetchOffer(serviceName, $scope.userId).then(function (offer) {
                 OfferSvc.setOffer(offer);
-                $scope.goToStep(3);
+                $scope.activeStep = $scope.steps[3];
             }, function (error) {
                 console.log(error);
             });

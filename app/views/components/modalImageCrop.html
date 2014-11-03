@@ -11,12 +11,13 @@
         </img-crop>
       </div>
       <div class="container-x flex-content-centered">
-        <div ng-show="inProgress">
-          <i class="fa fa-spinner fa-spin fa-1 text-silver"></i>
+        <!-- Spinner -->
+        <div class="wrapper-loader"  ng-show="inProgress">
+          <div class="loader"></div>
         </div>
         <div ng-hide="inProgress" class="container-y text-silver">
-          <div class="flex-1">
-            <i class="fa-centered fa fa-picture-o"></i>
+          <div class="flex-1 flex-content-centered">
+            <span class="glyphicon glyphicon-picture"></span>
           </div>
           <div class="flex-1 wrapper-text text-h2">Drag a photo here</div>
           <div class="flex-1">

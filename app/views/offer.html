@@ -19,8 +19,10 @@
         <span>{{ user.firstName }}</span>
       </div>
       <div class="container-x clickable" ng-click="showContactModal()">
-        <div class="wrapper-icon-video">
-          <i class="fa-centered fa fa-camera"></i>
+        <div class="wrapper-icon-video flex-content-centered">
+          <svg class="icon icon-light text-p">
+            <use xlink:href="#camera"></use>
+          </svg>
         </div>
         <div class="flex-content-centered text-blue text-i">
           <span class="space-after">View</span>
@@ -72,11 +74,11 @@
                 <div class="container-x text-p">
                   <!-- full stars -->
                   <div class="text-yellow" ng-repeat="star in range(review.rating)">
-                    <i class="fa fa-star"></i>
+                    <span class="glyphicon glyphicon-star"></span>
                   </div>
                   <!-- empty stars -->
                   <div class="text-yellow" ng-repeat="star in range(5 - review.rating)">
-                    <i class="fa fa-star-o"></i>
+                    <span class="glyphicon glyphicon-star-empty"></span>
                   </div>
                 </div>
               </div>

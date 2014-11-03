@@ -144,18 +144,22 @@
                             ng-disabled="innerForm.$invalid || !provider.url" ng-click="saveProvider(provider.name)">save</button>
                     <!-- Spinner: upload in progress -->
                     <div ng-show="provider.inProgress" class="spinner-icon">
-                      <i class="fa fa-circle-o-notch fa-spin fa-1"></i>
+                      <div class="loader"></div>
                     </div>
                     <!-- Icon: edit-->
                     <div ng-show="provider.saved && !provider.inProgress" class="action-icon edit text-h3" ng-click="editProvider(provider)"
                          focus-on="click" focus-input="{{provider.name}}" fv-focus-input
                          data-title="Edit your {{provider.name}} profile link" bs-tooltip>
-                      <i class="fa fa-pencil"></i>
+                      <svg class="icon icon-dark text-p">
+                        <use xlink:href="#edit"></use>
+                      </svg>
                     </div>
                     <!-- Icon: remove-->
                     <div ng-show="provider.saved && !provider.inProgress" class="action-icon remove text-h3" ng-click="removeProvider(provider)"
                          data-title="Remove your {{provider.name}} profile link" bs-tooltip>
-                      <i class="fa fa-times"></i>
+                      <svg class="icon icon-dark text-p">
+                        <use xlink:href="#close"></use>
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -166,7 +170,9 @@
                   </label>
                   <!-- Success label: provider saved-->
                   <label ng-show="!provider.inProgress && provider.saved && provider === selectedProviders[selectedProviders.length - 1]" class="label-success col-md-6">
-                    <i class="icon-check fa-check"></i>
+                    <svg class="icon icon-green text-p">
+                      <use xlink:href="#tick"></use>
+                    </svg>
                     <span>{{provider.name}} profile saved!</span>
                   </label>
                 </div>

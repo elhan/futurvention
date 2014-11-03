@@ -57,12 +57,12 @@ textarea {
     position: relative;
   }
 
-  .inner-addon .fa {
+  .inner-addon .icon {
     position: absolute;
-    padding: 10px;
     pointer-events: none;
-    font-size: 14px;
-    color: @lightGrey;
+    width: 14px;
+    left: 10px;
+    top: 7px;
   }
 
   .left-addon .glyphicon  {
@@ -125,6 +125,7 @@ textarea {
 .navbar-transparent {
   background: rgba(0, 0, 0, .3);
   border: none;
+  padding: 0 40px;
 }
 
 .navbar-dark {
@@ -246,7 +247,7 @@ textarea {
   .container-y;
   .flex-content-centered;
   .text-white;
-  > div, i {
+  > div {
     transition: .2s;
   }
   &.selected {
@@ -387,15 +388,9 @@ textarea {
   .label-s;
   .text-green;
   .flex-content-start;
-  padding-left: 0px;
   background-color: white !important; //bootstrap override
-  i {
-    font-family: FontAwesome;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 1em;
-    padding-left: 0;
-    padding-right: 5px;
+  .icon {
+    margin-right: 5px;
   }
 }
 
@@ -542,6 +537,10 @@ textarea {
   justify-content: center;
   align-items: center;
   height: 100%;
+  .icon {
+    width: 20%;
+    height: 20px;
+  }
 }
 
 .thumb-overlay, .showcase-overlay {
@@ -576,8 +575,9 @@ textarea {
   &.selected {
     //fade @green background to .8
     background-color: rgba(2, 196, 102, .8);
-    i {
-      color: white;
+    svg {
+      width: calc(100% / 3px);
+      height: calc(100% / 3px);
     }
   }
   .drag-over & {

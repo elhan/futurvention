@@ -373,16 +373,6 @@ module.exports = function (grunt) {
           cwd: 'bower_components/bootstrap/dist',
           src: 'fonts/*',
           dest: '<%= yeoman.dist %>'
-        }, {
-          expand: true,
-          cwd: 'bower_components/font-awesome',
-          src: 'fonts/*',
-          dest: '<%= yeoman.dist %>'
-        }, {
-          expand: true,
-          cwd: 'bower_components/lato/font',
-          src: '*',
-          dest: '<%= yeoman.dist %>/fonts',
         }]
       },
       styles: {
@@ -497,7 +487,6 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'ngconstant:production',
-    'svgmin',
     'svgstore',
     'wiredep',
     'less',

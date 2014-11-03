@@ -1,7 +1,7 @@
 <div class="container-y apply-content apply-service-config" ng-controller="OfferConfigCtrl">
   <div class="container-x">
     <button class="btn btn-link text-p" ng-click="goToStep(2)">
-      <i class="fa fa-angle-double-left"></i>
+      <span class="space-after">&lt;&lt;</span>
       <span>Back to service catalogue</span>
     </button>
   </div>
@@ -16,7 +16,9 @@
               {{ panel.title }}
             </a>
           </div>
-          <i ng-if="panel.state === 'done'" class="icon-check fa-check"></i>
+          <svg ng-if="panel.state === 'done'" class="icon icon-green text-p">
+            <use xlink:href="#tick"></use>
+          </svg>
         </div>
         <div class="panel-collapse" bs-collapse-target>
           <div class="panel-body" ng-switch on="panels.activePanel">
@@ -29,7 +31,9 @@
               <div class="wrapper-icons">
                 <div class="container-y" ng-file-select="onFileSelect($files)" data-multiple="true">
                   <div class="import-link bg-grey-dark text-white">
-                    <i class="fa fa-cloud-upload"></i>
+                    <svg class="icon icon-light">
+                      <use xlink:href="#upload"></use>
+                    </svg>
                   </div>
                   <div class="label-import-link">Upload</div>
                 </div>
@@ -60,7 +64,9 @@
                     </div>
                     <!-- Overlay: selected -->
                     <div class="showcase-overlay selected" ng-show="item.state === 'selected'">
-                      <i class="icon-check fa fa-check"></i>
+                      <svg class="icon icon-light">
+                        <use xlink:href="#tick"></use>
+                      </svg>
                     </div>
                     <!-- Overlay: drag-over -->
                     <div class="showcase-overlay"></div>
@@ -77,8 +83,8 @@
               </div>
               <div class="wrapper-icons" ng-show="!panels[2].textonly">
                 <div class="container-y flex-content-centered" ng-click="showCameraTagModal()">
-                  <div class="import-link bg-grey-dark text-white">
-                    <i class="fa fa-video-camera"></i>
+                  <div class="import-link bg-grey-dark text-white clickable">
+                    <span class="glyphicon glyphicon-facetime-video"></span>
                   </div>
                   <div class="label-import-link">Upload or record a video from your webcam or phone</div>
                 </div>
@@ -94,7 +100,7 @@
               <button class="btn no-padding btn-link text-p" ng-click="toggleTextOnly()">
                 <span ng-show="!panels[2].textonly">Switch to text instead</span>
                 <div ng-show="panels[2].textonly">
-                  <i class="fa fa-video-camera"></i>
+                  <span class="glyphicon glyphicon-facetime-video text-blue"></span>
                   <span >Record a video and increase your chances to be approved</span>
                 </div>
               </button>

@@ -44,7 +44,9 @@
         <a class="fv-tab" href="#bio-header" offset="80" du-smooth-scroll fv-pane>ABOUT ME</a>
         <div class="wrapper-link text-t">
           <a ng-href="http://{{ profile.personalUrl }}" target="_blank">
-            <i class="fa fa-link icon-link"></i>
+            <svg class="icon icon-blue text-p">
+              <use xlink:href="#url"></use>
+            </svg>
             <span>{{ profile.personalUrl }}</span>
           </a>
           <!-- Share btn -->
@@ -63,7 +65,9 @@
       <div class="container-x flex-items-end">
         <div id="portfolio-header" class="text-h3 flex-content-centered flex-1">Services Offered</div>
         <div class="text-blue text-p clickable" ng-if="isCurrentUser" ng-click="editProfileSection('service_selection')">
-          <i class="fa fa-pencil"></i>
+          <svg class="icon icon-dark text-i icon-blue">
+            <use xlink:href="#edit"></use>
+          </svg>
           Edit
         </div>
       </div>
@@ -75,11 +79,15 @@
             </div>
             <div class="thumb-overlay" ng-if="isCurrentUser">
               <div class="thumb-overlay-inner" ng-click="editOffer(offer.serviceName)">
-                <i class="fa fa-pencil"></i>
+                <svg class="icon icon-light">
+                  <use xlink:href="#edit"></use>
+                </svg>
               </div>
               <div class="divider-thumb-overlay"></div>
               <div class="thumb-overlay-inner" ng-click="removeOffer(offer.serviceName)">
-                <i class="fa fa-times"></i>
+                <svg class="icon icon-light">
+                  <use xlink:href="#close"></use>
+                </svg>
               </div>
             </div>
             <div class="caption">
@@ -150,11 +158,11 @@
               <div class="container-x text-p">
                 <!-- full stars -->
                 <div class="text-yellow" ng-repeat="star in range(review.rating)">
-                  <i class="fa fa-star"></i>
+                  <span class="glyphicon glyphicon-star"></span>
                 </div>
                 <!-- empty stars -->
                 <div class="text-yellow" ng-repeat="star in range(5 - review.rating)">
-                  <i class="fa fa-star-o"></i>
+                  <span class="glyphicon glyphicon-star-empty"></span>
                 </div>
               </div>
             </div>
@@ -176,7 +184,9 @@
             <span>{{ profile.firstName }}</span>
           </div>
           <div class="text-blue text-p clickable" ng-click="editProfileSection('info')" ng-if="isCurrentUser">
-            <i class="fa fa-pencil"></i>
+            <svg class="icon icon-light">
+              <use xlink:href="#edit"></use>
+            </svg>
             Edit
           </div>
         </div>

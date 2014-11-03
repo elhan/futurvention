@@ -1,7 +1,7 @@
 <nav class="navbar navbar-default navbar-fixed-top navbar-main"
      ng-class="locationAt('/') ? 'navbar-transparent' : 'navbar-dark'">
-  <div class="navbar-inner">
-    <div class="navbar-wrapper">
+  <div ng-class="{'navbar-inner': !locationAt('/'), 'flex-1': locationAt('/')}">
+    <div class="navbar-wrapper" ng-class="{'flex-1': locationAt('/')}">
       <div class="container-y flex-content-centered">
         <button class="btn btn-link nav-link navbar-btn btn-left" ng-click="go('/')">SERVICE BUCKET</button>
       </div>
