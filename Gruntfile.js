@@ -301,9 +301,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/images/temp',
+          cwd: '<%= yeoman.app %>/fonts',
           src: '{,*/}*.svg',
-          dest: '<%= yeoman.app %>/images/svg'
+          dest: '<%= yeoman.app %>/fonts'
         }]
       }
     },
@@ -394,8 +394,7 @@ module.exports = function (grunt) {
       ],
       dist: [
         'copy:styles',
-        'imagemin',
-        'svgmin'
+        'imagemin'
       ]
     },
 

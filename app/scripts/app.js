@@ -10,7 +10,7 @@
      * Main module of the application.
      */
     var app = angular.module('fvApp',
-                             [
+    [
         'ngAnimate',
         'ngCookies',
         'ngResource',
@@ -27,10 +27,7 @@
         'mgcrea.ngStrap.collapse',
         'mgcrea.ngStrap.button',
         'mgcrea.ngStrap.alert',
-        'facebook',
-        'ngLinkedIn',
         'config',
-        'firebase',
         'angularFileUpload',
         'ngImgCrop',
         'duScroll',
@@ -78,18 +75,7 @@
     }]);
 
     // Initialize authentication providers. The api keys differ by enviropment (development, production)
-    app.config(['FacebookProvider', '$linkedInProvider', '$alertProvider', 'ENV', 'AUTH_PROVIDER_OPTIONS', function(FacebookProvider, $linkedInProvider, $alertProvider, ENV, AUTH_PROVIDER_OPTIONS) {
-        var authOptions = AUTH_PROVIDER_OPTIONS;
-
-        FacebookProvider.init(ENV.fbApiKey, authOptions.facebook);
-
-        $linkedInProvider.options({
-            appKey: ENV.liApiKey,
-            scope: authOptions.linkedIn.scope,
-            authorize: authOptions.linkedIn.authorize,
-            credentials_cookie: authOptions.linkedIn.credentials_cookie
-        });
-
+    app.config(['$alertProvider', function($alertProvider) {
         angular.extend($alertProvider.defaults, {
             animation: 'am-fade-and-slide-top',
             placement: 'top',

@@ -4,27 +4,6 @@
 
     /**
      * @ngdoc service
-     * @name fvApp.service:SessionSvc
-     * @description
-     * # SessionSvc
-     * A singleton object following the service style to cash the user's session info.
-     */
-    app.service('SessionSvc', function () {
-        this.create = function (sessionId, userId, provider, userRole) {
-            this.id = sessionId;
-            this.userId = userId;
-            this.userRole = userRole;
-        };
-        this.destroy = function () {
-            this.id = null;
-            this.userId = null;
-            this.userRole = null;
-        };
-        return this;
-    });
-
-    /**
-     * @ngdoc service
      * @name fvApp.service:LocalStorageSvc
      * @description
      * # LocalStorageSvc
@@ -101,40 +80,9 @@
      * # AuthSvc
      * A service to handle email authentication and authorization.
      */
-    app.service('AuthSvc', ['$firebaseSimpleLogin', '$linkedIn', '$cookies', 'SessionSvc', 'AUTH_PROVIDER_OPTIONS', 'ENV', function ($firebaseSimpleLogin, $linkedIn, $cookies, SessionSvc, AUTH_PROVIDER_OPTIONS, ENV) {
-        var authOptions = AUTH_PROVIDER_OPTIONS,
-            environment = ENV;
-
-        this.isAuthenticated = function () {
-            return !!SessionSvc.userId;
-        };
-
-        this.isAuthorized = function (authorizedRoles) {
-            if (!angular.isArray(authorizedRoles)) {
-                authorizedRoles = [authorizedRoles];
-            }
-            return (this.isAuthenticated() &&
-                    authorizedRoles.indexOf(SessionSvc.userRole) !== -1);
-        };
-
-        this.firebaseAuth =  function () {
-            return $firebaseSimpleLogin(new Firebase(environment.firebaseUrl));
-        };
-
-        this.loginLi = function () {
-            return $linkedIn.authorize();
-        };
-
-        this.getLiProfile = function () {
-            return $linkedIn.profile('me', authOptions.linkedIn.fields);
-        };
-
-        this.getLiCookie = function () {
-            return $cookies[['linkedin_oauth_', environment.liApiKey, '_crc'].join('')];
-        };
-
-        return this;
-    }]);
+    app.service('AuthSvc', function () {
+        //TODO
+    });
 
     /**
      * @ngdoc service
