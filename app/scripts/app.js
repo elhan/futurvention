@@ -48,6 +48,9 @@
         .when('/forgotPassword', {
             templateUrl: 'views/forgotPassword.html'
         })
+        .when('/resetPassword', {
+            templateUrl: 'views/resetPassword.html'
+        })
         .when('/apply', {
             templateUrl: 'views/apply.html'
         })
@@ -77,7 +80,7 @@
         });
     }]);
 
-    // Initialize authentication providers. The api keys differ by enviropment (development, production)
+    // Default settings for the alertProvider
     app.config(['$alertProvider', function($alertProvider) {
         angular.extend($alertProvider.defaults, {
             animation: 'am-fade-and-slide-top',

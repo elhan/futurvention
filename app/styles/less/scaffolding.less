@@ -19,7 +19,8 @@ body, html {
   .fullscreen;
 }
 
-// CUSTOM FLEX CLASSES
+// Custom flex classes
+// -------------------------
 
 .flex {
   display: flex;
@@ -76,6 +77,11 @@ body, html {
   align-items: flex-end;
 }
 
+.flex-items-start {
+  display: flex;
+  align-items: flex-start;
+}
+
 .flex-wrap {
   .flex;
   flex-wrap: wrap;
@@ -89,7 +95,9 @@ body, html {
   flex-shrink: 10;
 }
 
-// CONTAINERS
+// Containers
+// -------------------------
+
 .container-x {
   display: flex;
   flex-direction: row;
@@ -127,12 +135,16 @@ body, html {
   margin: 0 auto;
 }
 
-// BOX CLASSES
+// Box classes
+// -------------------------
+
 .box-s {
   max-width: 276px;
 }
 
-// WRAPPER CLASSES
+// Wrapper classes
+// -------------------------
+
 .content-wrap {
   display: inline-block;
 }
@@ -196,4 +208,11 @@ body, html {
   -mox-box-shadow: 0 0 1px @greyDark;
   -webkit-box-shadow: 0 0 1px @greyDark;
   box-shadow: 0 0 1px @greyDark;
+}
+
+// Various
+// -------------------------
+
+.width-1-3 {
+  width: calc(100% / 3);
 }

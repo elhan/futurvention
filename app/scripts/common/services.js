@@ -70,13 +70,6 @@
             localStorage.removeItem('user');
         };
 
-        UserSvc.resetPassword = function (email) {
-            //TODO
-            var deferred = $q.defer();
-            deferred.resolve(email);
-            return deferred.promise;
-        };
-
         return UserSvc;
     }]);
 
@@ -87,9 +80,24 @@
      * # AuthSvc
      * A service to handle email authentication and authorization.
      */
-    app.service('AuthSvc', function () {
-        //TODO
-    });
+    app.service('AuthSvc', ['$q', function ($q) {
+        var AuthSvc = {};
+
+        AuthSvc.forgotPassword = function (email) {
+            //TODO
+            var deferred = $q.defer();
+            deferred.resolve(email);
+            return deferred.promise;
+        };
+
+        AuthSvc.resetPassword = function (email) {
+            //TODO
+            var deferred = $q.defer();
+            deferred.resolve(email);
+            return deferred.promise;
+        };
+        return AuthSvc;
+    }]);
 
     /**
      * @ngdoc service

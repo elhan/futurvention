@@ -51,11 +51,13 @@
       <div class="form-group container-x flex-items-centered flex-content-spread">
         <div class="container-x">
           <input type="checkbox" name="rememberMe" ng-model="newUser.rememberMe">
-          <div class="space-left text-i text-grey">Stay signed in</div>
+          <div class="space-left text-i text-grey">Remember me</div>
         </div>
         <a href="" ng-click="go('/forgotPassword')" class="text-i">Forgot password?</a>
       </div>
-      <button type="submit" class="btn btn-blue btn-lg btn-big" ng-disabled="loginForm.$invalid">Submit</button>
+      <div class="flex">
+        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="loginForm.$invalid">Submit</button>
+      </div>
     </form>
     <div class="link-box text-grey text-p">Don't have an account?
       <span class="text-darkBlue" ng-click="go('/register')">Create one here.</span>

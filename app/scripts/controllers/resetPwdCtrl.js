@@ -5,20 +5,20 @@
 
     /**
      * @ngdoc Controller
-     * @name fvApp.controller:ForgotPwdCtrl
+     * @name fvApp.controller:ResetPwdCtrl
      * @description
-     * # ForgotPwdCtrl
+     * # ResetPwdCtrl
      * Controls the reset password page
      */
-    app.controller('ForgotPwdCtrl', ['$scope', 'AuthSvc', '$alert', function ($scope, AuthSvc, $alert) {
+    app.controller('ResetPwdCtrl', ['$scope', 'AuthSvc', '$alert', function ($scope, AuthSvc, $alert) {
         $scope.email = '';
 
-        $scope.forgotPassword = function () {
-            AuthSvc.forgotPassword($scope.email).then(function (response) {
+        $scope.resetPassword = function () {
+            AuthSvc.resetPassword($scope.email).then(function (response) {
                 //TODO
                 console.log(response);
                 $alert({
-                    content: 'We sent you an email. Follow the instructions to create a new password.',
+                    content: 'Your password has been reset!',
                     type: 'success',
                     dismissable: true
                 });

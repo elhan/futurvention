@@ -38,11 +38,11 @@
 
         $scope.$on('$routeChangeError', function (e, current, previous, rejection) {
             console.log(rejection);
-            rejection === events.profile.fetchProfileFailed && $scope.go('/');
+            $scope.go('/');
         });
 
         // update Session object and currentUser model on logout
-        $scope.$on('auth-logout-success', function (event) {
+        $scope.$on(events.auth.logoutSuccess, function (event) {
             $scope.setCurrentUser({});
             $scope.go('/');
             // TODO: add proper logging
@@ -50,7 +50,7 @@
         });
 
         // update Session object and currentUser model on login
-        $scope.$on('auth-login-success', function (event) {
+        $scope.$on(events.auth.loginSuccess, function (event) {
             // if the user just registered, redirect him to seller application flow
             $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
             // TODO: add proper logging
