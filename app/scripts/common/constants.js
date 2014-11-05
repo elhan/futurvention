@@ -55,22 +55,13 @@
 
     /**
      * @ngdoc Object
-     * @name fvApp.constant:AUTH_PROVIDER_OPTIONS
+     * @name fvApp.constant:PATHS
      * @description
-     * # AUTH_PROVIDER_OPTIONS
-     * Authentication provider options
+     * # PATHS
+     * Rest paths
      */
-    app.constant('AUTH_PROVIDER_OPTIONS', {
-        facebook: {
-            //            rememberMe: true,
-            scope: 'public_profile, email'
-        },
-        linkedIn: {
-            scope: 'r_emailaddress r_fullprofile',
-            fields: ['id', 'first-name', 'last-name', 'email-address'],
-            authorize: true,
-            credentials_cookie: true // only supported for https!
-        }
+    app.constant('PATHS', {
+        auth: 'http://localhost:9000/'
     });
 
     app.constant('EMBEDLY', {

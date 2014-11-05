@@ -23,7 +23,7 @@
      * # UserSvc
      * Interacts with the server to set, get, and delete User objects.
      */
-    app.service('UserSvc', function () {
+    app.service('UserSvc', ['$q', function ($q) {
         var UserSvc = {},
             user = {};
 
@@ -70,8 +70,15 @@
             localStorage.removeItem('user');
         };
 
+        UserSvc.resetPassword = function (email) {
+            //TODO
+            var deferred = $q.defer();
+            deferred.resolve(email);
+            return deferred.promise;
+        };
+
         return UserSvc;
-    });
+    }]);
 
     /**
      * @ngdoc service

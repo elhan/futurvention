@@ -45,6 +45,9 @@
         .when('/login', {
             templateUrl: 'views/login.html'
         })
+        .when('/forgotPassword', {
+            templateUrl: 'views/forgotPassword.html'
+        })
         .when('/apply', {
             templateUrl: 'views/apply.html'
         })
