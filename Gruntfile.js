@@ -461,7 +461,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'ngconstant:development',
-      'wiredep',
+//      'wiredep',
       'less',
       'concurrent:server',
       'autoprefixer',
@@ -487,7 +487,7 @@ module.exports = function (grunt) {
     'clean:dist',
     'ngconstant:production',
     'svgstore',
-    'wiredep',
+//    'wiredep',
     'less',
     'useminPrepare',
     'concurrent:dist',

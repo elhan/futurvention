@@ -427,12 +427,18 @@ textarea {
     color: #262626;
     background-color: #f5f5f5;
   }
+
+  &.active {
+    color:red;
+  }
 }
 
-.wrapper-drop-country {
-  display: flex;
-  flex: 1;
-  height: 48px;
+.dropdown-menu {
+  max-height: 200px;
+  overflow-x: hidden;
+}
+
+.wrapper-drop-city {
   padding-left: 20px;
 
   > button {

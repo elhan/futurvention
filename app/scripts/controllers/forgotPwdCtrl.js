@@ -10,19 +10,20 @@
      * # ForgotPwdCtrl
      * Controls the reset password page
      */
-    app.controller('ForgotPwdCtrl', ['$scope', 'AuthSvc', '$alert', function ($scope, AuthSvc, $alert) {
+    app.controller('ForgotPwdCtrl', ['$scope', 'AuthSvc', 'NotificationSvc', function ($scope, AuthSvc, NotificationSvc) {
         $scope.email = '';
 
         $scope.forgotPassword = function () {
             AuthSvc.forgotPassword($scope.email).then(function (response) {
                 //TODO
                 console.log(response);
-                $alert({
+                NotificationSvc.show({
                     content: 'We sent you an email. Follow the instructions to create a new password.',
                     type: 'success',
                     dismissable: true
+                }).then(function () {
+                    $scope.go('/login');
                 });
-                $scope.go('/login');
             }, function () {
                 //TODO
             });

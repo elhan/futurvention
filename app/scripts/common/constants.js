@@ -61,7 +61,10 @@
      * Rest paths
      */
     app.constant('PATHS', {
-        auth: 'http://localhost:9000/'
+        root: 'https://futurvention.azurewebsites.net/public.svc/',
+        public: {
+            auth: 'http://localhost:9000/',
+        }
     });
 
     app.constant('EMBEDLY', {

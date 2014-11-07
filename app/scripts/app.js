@@ -10,7 +10,7 @@
      * Main module of the application.
      */
     var app = angular.module('fvApp',
-    [
+                             [
         'ngAnimate',
         'ngCookies',
         'ngResource',
@@ -27,11 +27,15 @@
         'mgcrea.ngStrap.collapse',
         'mgcrea.ngStrap.button',
         'mgcrea.ngStrap.alert',
+        'mgcrea.ngStrap.typeahead',
         'config',
         'angularFileUpload',
         'ngImgCrop',
         'duScroll',
-        'angular-carousel'
+        'angular-carousel',
+        'ui.validate',
+        'breeze.angular',
+        'angucomplete'
     ]);
 
     app.config(['$routeProvider', function ($routeProvider) {
@@ -80,6 +84,8 @@
         });
     }]);
 
+    app.value('duScrollGreedy', true);
+
     // Default settings for the alertProvider
     app.config(['$alertProvider', function($alertProvider) {
         angular.extend($alertProvider.defaults, {
@@ -90,6 +96,7 @@
         });
     }]);
 
-    app.value('duScrollGreedy', true);
-
+    app.run(['breeze', function (breeze) {
+        !breeze && console.log('breeze not loaded!');
+    }]);
 }());

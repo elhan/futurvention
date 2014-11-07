@@ -111,20 +111,7 @@
             providerNames = ['linkedIn', 'oDesk', 'elance', 'pph', 'freelancer', 'behance', 'dribbble', 'github'],
             steps = ['import', 'info', 'service_selection', 'offer_config', 'storefront'], // profile completion steps
             activeStep = 'import',
-            countriesUrl = '/countries', //TODO: fix this
-            countries = [],
             profile = {};
-
-        // Initialize the available countries when the service is first instantiated
-        (function initCountries () {
-            $http.get(countriesUrl).success(function (res) {
-                countries = res;
-            }).error(function (error) {
-                //TODO: handle errors & defaults
-                countries = ['Uk', 'USA', 'Greece'];
-                console.log(error);
-            });
-        }());
 
         // Provider object constructor
         ProfileSvc.Provider = function (name, url) {
@@ -159,10 +146,6 @@
 
         ProfileSvc.getSteps = function () {
             return steps;
-        };
-
-        ProfileSvc.getCountries = function () {
-            return countries;
         };
 
         ////////////////////////////////////////////
