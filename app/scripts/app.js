@@ -44,16 +44,20 @@
             templateUrl: 'views/main.html'
         })
         .when('/register', {
-            templateUrl: 'views/register.html'
+            templateUrl: 'views/register.html',
+            controller: 'RegistrationCtrl'
         })
         .when('/login', {
-            templateUrl: 'views/login.html'
+            templateUrl: 'views/login.html',
+            controller: 'LoginCtrl'
         })
         .when('/forgotPassword', {
-            templateUrl: 'views/forgotPassword.html'
+            templateUrl: 'views/forgotPassword.html',
+            controller: 'ForgotPwdCtrl'
         })
         .when('/resetPassword', {
-            templateUrl: 'views/resetPassword.html'
+            templateUrl: 'views/resetPassword.html',
+            controller: 'ResetPwdCtrl'
         })
         .when('/apply', {
             templateUrl: 'views/apply.html'

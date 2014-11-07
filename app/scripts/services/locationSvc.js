@@ -13,13 +13,17 @@
         var LocationSvc = {},
 
             dataService = new breeze.DataService({
-                serviceName: paths.root,
+                serviceName: paths.public,
                 hasServerMetadata: false
             }),
 
             manager = new breeze.EntityManager({ dataService: dataService });
 
-        function buildCountriesCollection (response) {
+        ///////////////////////////////////////////////////////////
+        /// Private functions
+        ///////////////////////////////////////////////////////////
+
+        function filterCountriesCollection (response) {
             return _.pluck(response.results[0].value, function (obj) {
                 return {
                     name: obj.Name.Literals[0].Text,
@@ -28,11 +32,15 @@
             });
         }
 
-        function buildCitiesCollection (response) {
+        function filterCitiesCollection (response) {
             return _.pluck(response.data.value, function (city) {
                 return city.Name.Literals[0].Text;
             });
         }
+
+        ///////////////////////////////////////////////////////////
+        /// Public API
+        ///////////////////////////////////////////////////////////
 
         /**
          * Searches cities by countryID and a string prefix, and returns an array of city names.
@@ -47,7 +55,7 @@
             console.log(prefix);
             var deferred = $q.defer(),
                 url = [
-                    'https://futurvention.azurewebsites.net/public.svc/',
+                    paths.public,
                     'CitiesByPrefix',
                     '?format=json',
                     '&countryID=',
@@ -59,7 +67,7 @@
                 ].join('');
 
             $http.get(url).then(function (response) {
-                deferred.resolve(buildCitiesCollection(response));
+                deferred.resolve(filterCitiesCollection(response));
             }, function (error) {
                 deferred.reject(error);
             });
@@ -78,7 +86,7 @@
                 query = new breeze.EntityQuery('CountriesLocations').expand('Name.Literals');
 
             manager.executeQuery(query).then(function (response) {
-                deferred.resolve(buildCountriesCollection(response));
+                deferred.resolve(filterCountriesCollection(response));
             }, function (error) {
                 console.log(error);
             });

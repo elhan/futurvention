@@ -27,9 +27,9 @@
             invalidPassword: false
         };
 
-        $scope.register = function (registerData) {
-            AuthSvc.register(registerData).then(function () {
-                //TODO
+        $scope.register = function (newUser) {
+            AuthSvc.register(newUser).then(function (response) {
+                console.log(response);
             }, function () {
                 //TODO
             });

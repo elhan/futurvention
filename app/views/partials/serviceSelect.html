@@ -40,7 +40,7 @@
         <svg class="icon">
           <use xlink:href="#search-dark"></use>
         </svg>
-        <input type="text" class="form-control" ng-model="selectedService" ng-options="offer for service in offers" placeholder="Service name" bs-typeahead />
+        <input type="text" class="form-control" ng-model="selectedService" ng-options="service.serviceName for service in services" placeholder="Service name" bs-typeahead />
       </div>
     </div>
   </div>
@@ -48,26 +48,27 @@
   <div class="container-x">
     <div class="text-p">
       <div ng-model="categories.activeCategoryIndex" bs-tabs>
-        <div ng-repeat="category in categories" title="{{ category }}" bs-pane></div>
+        <div ng-repeat="category in categories" title="{{ category.categoryName }}" bs-pane></div>
       </div>
     </div>
   </div>
   <!-- Thumbnail Grid: Services By Category -->
   <div class="thumbnail-grid flex-wrap">
     <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb">
-      <div class="thumbnail" ng-click="createOffer(service)">
+      <div class="thumbnail" ng-click="$parent.selectedService = service">
         <div class="wrapper-img flex-content-centered">
-          <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
+          <img ng-if="!service.thumbnail" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
+          <img ng-if="service.thumbnail" ng-src="thumbnail.link" class="img-responsive">
         </div>
         <div class="thumb-overlay">+</div>
         <div class="caption">
-          <div class="text-p-bold">{{ service }}</div>
+          <div class="text-p-bold">{{ service.serviceName }}</div>
         </div>
       </div>
     </div>
   </div>
   <!-- Show more button -->
-  <div class="wrapper-showmore" ng-show="services.length >= paginationIndex">
+  <div class="wrapper-showmore" ng-show="services.length >= offset">
     <button class="btn btn-link text-p" ng-click="showMore()">
       <span>Show more services</span>
     </button>

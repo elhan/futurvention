@@ -35,6 +35,9 @@
             return params;
         };
 
+      Utils.capitalize = function (str) {
+          return str.charAt(0).toUpperCase() + str.slice(1);
+      };
 
 
         return Utils;
@@ -77,6 +80,20 @@
             }
 
             return undefined;
+        };
+    }
+
+    // Merges an array passed as param into the original array.
+    if (!Array.prototype.hasOwnProperty('merge')) {
+        Array.prototype.merge = function (array) {
+            if (!array instanceof Array) {
+                return undefined;
+            }
+
+            for (var i = 0; i < array.length; i++) {
+                this.push(array[i]);
+            }
+            return this;
         };
     }
 }());

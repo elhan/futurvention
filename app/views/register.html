@@ -1,4 +1,4 @@
-<div ng-controller="RegistrationCtrl" class="register box col-md-6 col-md-offset-3">
+<div class="register box col-md-6 col-md-offset-3">
   <div class="header-wrap">
     <div class="text-h1">APPLY TO JOIN OUR EXCLUSIVE COMMUNITY</div>
     <div class="text-h1">OF HIGH-END FREELANCERS</div>
@@ -23,7 +23,7 @@
     <!--inline divider-->
     <div class="divider text-p"><span>OR</span></div>
     <!--The actual login form-->
-    <form name="loginForm" class="reg-form" role="form" ng-submit="register(newUser)">
+    <form name="registrationForm" class="reg-form" role="form" ng-submit="register(newUser)">
       <label class="label-title text-grey text-p">Sign up with an email account</label>
       <!-- first name input-->
       <div class="form-group">
@@ -34,9 +34,9 @@
         <input type="text" name="inputLastName" class="form-control" ng-model="newUser.lastName" placeholder="Last name" ng-required="true">
       </div>
       <!-- email input -->
-      <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.emailTaken || authError.invalidEmail}">
+      <div class="form-group" ng-class="{'has-error': registrationForm.inputEmail.$error.email || authError.emailTaken || authError.invalidEmail}">
         <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email" ng-change="clearAuthError()" placeholder="Enter email" ng-required="true">
-        <label ng-show="loginForm.inputEmail.$error.email" class="label-warn" for="inputEmail">
+        <label ng-show="registrationForm.inputEmail.$error.email" class="label-warn" for="inputEmail">
           Please include a '@' in the email address.
         </label>
         <label ng-show="authError.emailTaken && authError.emailTaken === newUser.email" class="control-label label-s" for="inputEmail">
@@ -47,14 +47,14 @@
         </label>
       </div>
       <!-- password input -->
-      <div class="form-group" ng-class="{'has-error': loginForm.inputPassword.$error.minlength}">
+      <div class="form-group" ng-class="{'has-error': registrationForm.inputPassword.$error.minlength}">
         <input type="password" name="inputPassword" class="form-control" ng-model="newUser.password" ng-minlength="6" placeholder="Password" ng-required="true">
-        <label ng-show="loginForm.inputPassword.$error.minlength" class="label-warn" for="inputPassword">
+        <label ng-show="registrationForm.inputPassword.$error.minlength" class="label-warn" for="inputPassword">
             This field needs to be at least 6 characters long.
         </label>
       </div>
       <div class="flex">
-        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="loginForm.$invalid">Submit</button>
+        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="registrationForm.$invalid">Submit</button>
       </div>
       <div class="link-tc text-grey text-i">By clicking SignUp you agree to our
         <span class="text-grey-dark">T&C's</span>

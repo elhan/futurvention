@@ -75,32 +75,6 @@
 
     /**
      * @ngdoc service
-     * @name fvApp.service:AuthSvc
-     * @description
-     * # AuthSvc
-     * A service to handle email authentication and authorization.
-     */
-    app.service('AuthSvc', ['$q', function ($q) {
-        var AuthSvc = {};
-
-        AuthSvc.forgotPassword = function (email) {
-            //TODO
-            var deferred = $q.defer();
-            deferred.resolve(email);
-            return deferred.promise;
-        };
-
-        AuthSvc.resetPassword = function (email) {
-            //TODO
-            var deferred = $q.defer();
-            deferred.resolve(email);
-            return deferred.promise;
-        };
-        return AuthSvc;
-    }]);
-
-    /**
-     * @ngdoc service
      * @name fvApp.service:ProfileSvc
      * @description
      * # ProfileSvc
@@ -255,49 +229,6 @@
         };
 
         return ProfileSvc;
-    }]);
-
-    /**
-     * @ngdoc service
-     * @name fvApp.service: CatalogueSvc
-     * @description
-     * # CatalogueSvc
-     * CRUD operations for Catalogue items (services, categories etc)
-     */
-    app.service('CatalogueSvc', ['$http', '$q', '$timeout', 'SERVICE_CATALOGUE', function ($http, $q, $timeout, catalogue) {
-        var CatalogueSvc = {};
-
-        ////////////////////////////////////////////////////////////
-        /// Public variables
-        ////////////////////////////////////////////////////////////
-
-        CatalogueSvc.services = _.uniq(_.pluck(catalogue, 'Title'));
-        CatalogueSvc.categories = _.uniq(_.pluck(catalogue, 'Category'));
-
-        /*
-            Filters the available services by category and returns an array of service titles.
-            The pagination array defines the number of services returned in one batch.
-            If category == All, return all (unique) services.
-        **/
-        CatalogueSvc.getServicesInCategory = function (category, paginationIndex) {
-            // if category is 'All' do not fitler
-            var filteredCatalogue = category === 'All' ? catalogue : _.where(catalogue, { 'Category': category });
-            return _.chain(filteredCatalogue).pluck('Title').uniq().slice(0, paginationIndex).valueOf();
-        };
-
-        CatalogueSvc.getService = function (serviceName) {
-            !serviceName && console.log('no service was selected');
-            //             return  $http.get(serviceUrl, {serviceName: serviceName});
-            // TODO: remove mock functionality
-            var deferred = $q.defer();
-            $timeout(function () {
-                // TODO: remove mock service object
-                deferred.resolve( _.where(catalogue, { 'Title': 'Logo Design' })[0] );
-            });
-            return deferred.promise;
-        };
-
-        return CatalogueSvc;
     }]);
 
     /**

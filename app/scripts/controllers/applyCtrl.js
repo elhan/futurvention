@@ -18,6 +18,8 @@
             $scope.activeStep = $scope.steps[step];
             ProfileSvc.setActiveStep($scope.activeStep);
         };
+
+        $scope.goToStep(2);
     }]);
 
 }());

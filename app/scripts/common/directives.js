@@ -143,6 +143,26 @@
 
     /**
      * @ngdoc directive
+     * @name fvApp.directive:fvScrollTo
+     * @restrict A
+     *
+     * @description
+     * Listens for broadcasted events and scrolls to the bottom of the page. The event to listen for is passed
+     *
+     * @example
+     * <form fv-scroll-to={{someExp}}></form>
+     */
+    app.directive('fvScrollTo', ['$document', '$timeout', function ($document, $timeout) {
+        return {
+            restrict: 'A',
+            link: function (scope, element, attrs) {
+                $timeout(attrs.fvScrollTo && $document.scrollToElement(element));
+            }
+        };
+    }]);
+
+    /**
+     * @ngdoc directive
      * @name fvApp.directive:fvAutoFocus
      * @restrict A
      * @element window, input, select, textarea, a
