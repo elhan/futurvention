@@ -69,33 +69,33 @@
           </svg>
         </div>
       </div>
+      <!-- Location -->
+      <div class="form-group container-x">
+        <div class="label-l label-location">Location</div>
+        <div class="flex-2 location-wrapper flex-content-spread">
+          <div class="btn-group flex-1">
+            <button type="button" class="select-country btn btn-default" ng-model="countryName" data-html="1" ng-options="countryName for countryName in countryNames"
+                    data-placeholder="Country" bs-select>
+              Action <span class="caret"></span>
+            </button>
+          </div>
+          <div class="form-group container-x flex-2 wrapper-drop-city">
+            <input type="text" class="form-control input-s" name="infoCity" placeholder="City"
+                   ng-model="selectedCity"
+                   ng-options="city for city in cities"
+                   ng-disabled="!countryName"
+                   ng-minlength="3"
+                   ng-keyup="searchCity(profileInfoForm.infoCity.$viewValue)"
+                   bs-typeahead>
+          </div>
+        </div>
+        <div class="flex-1 flex-items-centered">
+          <svg ng-if="city && country" class="icon-tick-location">
+            <use xlink:href="#tick"></use>
+          </svg>
+        </div>
+      </div>
     </form>
-    <!-- Location -->
-    <div class="form-group container-x">
-      <div class="label-l label-location">Location</div>
-      <div class="flex-2 location-wrapper flex-content-spread">
-        <div class="btn-group flex-1">
-          <button type="button" class="select-country btn btn-default" ng-model="countryName" data-html="1" ng-options="countryName for countryName in countryNames"
-                  data-placeholder="Country" bs-select>
-            Action <span class="caret"></span>
-          </button>
-        </div>
-        <div class="form-group container-x flex-2 wrapper-drop-city">
-          <input type="text" class="form-control input-s" name="infoCity" placeholder="City"
-                 ng-model="selectedCity"
-                 ng-options="city for city in cities"
-                 ng-disabled="!countryName"
-                 ng-minlength="3"
-                 ng-keydown="searchCity()"
-                 bs-typeahead>
-        </div>
-      </div>
-      <div class="flex-1 flex-items-centered">
-        <svg ng-if="city && country" class="icon-tick-location">
-          <use xlink:href="#tick"></use>
-        </svg>
-      </div>
-    </div>
     <!-- Continue button -->
     <div class="container-x flex-content-centered">
       <div class="flex-1"></div>

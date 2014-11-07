@@ -83,15 +83,15 @@
             });
         };
 
-        $scope.searchCity = function (city) {
-            LocationSvc.searchCity($scope.country.countryID, city).then(function (cities) {
+        $scope.searchCity = _.throttle(function (prefix) {
+            prefix && LocationSvc.searchCity($scope.country.countryID, prefix).then(function (cities) {
                 $timeout(function () {
                     $scope.cities = cities;
                 });
             }, function (error) {
                 console.log(error);
             });
-        };
+        }, 700);
 
         // listen for image update events emmited by the imga ecrop modal
         $scope.$on(events.profile.profileImageUpdated, function () {

@@ -1,5 +1,3 @@
-/*global Predicate */
-
 (function () {
     'use strict';
     var app = angular.module('fvApp');
@@ -46,6 +44,7 @@
          * returns Array[String]
          */
         LocationSvc.searchCity = function (countryID, prefix) {
+            console.log(prefix);
             var deferred = $q.defer(),
                 url = [
                     'https://futurvention.azurewebsites.net/public.svc/',
