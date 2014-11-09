@@ -13,6 +13,7 @@
     app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'CatalogueSvc', 'OfferSvc', function ($scope, $timeout, CatalogueSvc, OfferSvc) {
         //  Pagination support for available services. Initailized to the default thumbnail batch size.
         $scope.offset = 0;
+        $scope.batch = CatalogueSvc.batch;
 
         $scope.offers = [];
         $scope.services = []; // the filtered services (by category and pagination)
@@ -23,14 +24,17 @@
         $scope.getServices = function () {
             CatalogueSvc.getServices($scope.offset).then(function (services) {
                 $scope.services.merge(services);
+                $scope.services.totalCount = services.length;
+                $scope.allServices = CatalogueSvc.services; // make sure the services have ben fetched
             }, function (error) {
                 console.log(error);
             });
         };
 
         $scope.getServicesUnderCategory = function (categoryID) {
-            CatalogueSvc.getServicesUnderCategory(categoryID, $scope.offset).then(function (services) {
-                $scope.services.merge(services);
+            CatalogueSvc.getServicesUnderCategory(categoryID, $scope.offset).then(function (result) {
+                $scope.services.merge(result.services);
+                $scope.services.totalCount = result.totalCount;
             }, function (error) {
                 console.log(error);
             });
@@ -38,7 +42,7 @@
 
         // loads one more batch of thumbnails
         $scope.showMore = function () {
-            $scope.offset += CatalogueSvc.batch;
+            $scope.offset += $scope.batch;
             var categoryID = $scope.categories[$scope.categories.activeCategoryIndex].categoryID;
             categoryID === null ? $scope.getServices() : $scope.getServicesUnderCategory(categoryID);
         };
@@ -51,9 +55,9 @@
             console.log(error);
         });
 
-        $scope.createOffer = function (serviceName) {
+        $scope.createOffer = function (serviceID) {
             OfferSvc.setOffer(new OfferSvc.Offer());
-            OfferSvc.updateOffer({ serviceName: serviceName });
+            OfferSvc.updateOffer({ serviceID: serviceID });
             $timeout(function () { $scope.goToStep(3); });
         };
 //
@@ -97,7 +101,7 @@
             }
         });
 
-        $scope.$watch('selectedService.serviceID', function (newServiceId, oldServiceId) {
+        $scope.$watch('selectedService.serviceID', function (newServiceId) {
             newServiceId && $scope.createOffer(newServiceId);
         });
 

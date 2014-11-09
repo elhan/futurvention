@@ -32,16 +32,18 @@
             });
         }
 
-        function filterServices (response, offset) {
-            var services = _.pluck(response.results[0].value, function (obj) {
+        function filterServices (response) {
+            return _.pluck(response.results[0].value, function (obj) {
                 return {
                     serviceID: obj.ID,
                     serviceName: obj.ShortTitle.Literals[0].Text,
                     thumbnail: obj.ThumbnailFile
                 };
             });
-            // ensure that the first batch will be delivered properly
-            return services.slice(offset, offset + CatalogueSvc.batch);
+        }
+
+        function filterTotalCount (response) {
+            return response.results[0]['odata.count'];
         }
 
         ///////////////////////////////////////////////////////////
@@ -77,7 +79,8 @@
         };
 
         /**
-         * Returns a collection of city objects
+         * Returns a collection of Service objects. If all services have been already fetched, return the cached object instead
+         * of fetching fresh data from the server.
          * @public
          *
          * returns Array[{name: String, cityID: String}]
@@ -86,8 +89,12 @@
             var deferred = $q.defer(),
                 query = new breeze.EntityQuery('Services').expand('ShortTitle.Literals, ThumbnailFile');
 
-            manager.executeQuery(query).then(function (response) {
-                deferred.resolve(filterServices(response, offset));
+            // return the cached object if services have already been fetched from the server
+            CatalogueSvc.services.length > 0 && deferred.resolve(CatalogueSvc.services.slice(offset, offset + CatalogueSvc.batch));
+
+            CatalogueSvc.services.length === 0 && manager.executeQuery(query).then(function (response) {
+                CatalogueSvc.services = filterServices(response);
+                deferred.resolve(CatalogueSvc.services.slice(offset, offset + CatalogueSvc.batch));
             }, function (error) {
                 deferred.reject(error);
             });
@@ -96,7 +103,7 @@
         };
 
         /**
-         * Returns a collection of city objects
+         * Returns a collection of Service objects filtered by categoryID
          * @public
          *
          * returns Array[{name: String, cityID: String}]
@@ -105,10 +112,16 @@
             var deferred = $q.defer(),
                 query = new breeze.EntityQuery('ServicesUnderCategory')
                     .withParameters({CategoryID: categoryID})
-                    .expand('ShortTitle.Literals, ThumbnailFile');
+                    .skip(offset)
+                    .take(CatalogueSvc.batch)
+                    .expand('ShortTitle.Literals, ThumbnailFile')
+                    .inlineCount();
 
             manager.executeQuery(query).then(function (response) {
-                deferred.resolve(filterServices(response, offset));
+                deferred.resolve({
+                    services: filterServices(response),
+                    totalCount: filterTotalCount (response)
+                });
             }, function (error) {
                 deferred.reject(error);
             });

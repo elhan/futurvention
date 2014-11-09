@@ -40,7 +40,7 @@
         <svg class="icon">
           <use xlink:href="#search-dark"></use>
         </svg>
-        <input type="text" class="form-control" ng-model="selectedService" ng-options="service.serviceName for service in services" placeholder="Service name" bs-typeahead />
+        <input type="text" class="form-control" ng-model="selectedService" ng-options="service.serviceName for service in allServices" placeholder="Service name" bs-typeahead />
       </div>
     </div>
   </div>
@@ -68,7 +68,7 @@
     </div>
   </div>
   <!-- Show more button -->
-  <div class="wrapper-showmore" ng-show="services.length >= offset">
+  <div class="wrapper-showmore" ng-show="services.length < services.totalCount">
     <button class="btn btn-link text-p" ng-click="showMore()">
       <span>Show more services</span>
     </button>
