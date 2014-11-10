@@ -1,0 +1,48 @@
+// Alerts
+// -------------------------
+
+.alert {
+  display: flex !important;
+  .flex-content-centered;
+  .text-white;
+  height: 38px;
+  z-index: @zindexMax;
+  position: fixed;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+
+  &.top {
+    top: 54px;
+  }
+
+  &:focus {
+    outline: 0;
+  }
+}
+
+.alert-content {
+  .text-p;
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.alert-content-icon {
+  font-size: calc(18 / 48em);
+  line-height: calc(26 / 18em);
+}
+
+.alert-error {
+  background-color: @red;
+}
+
+.alert-success {
+  background-color: @greenLight;
+}
+
+.alert-warning {
+  background-color: @gold;
+}

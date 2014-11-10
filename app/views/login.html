@@ -22,7 +22,7 @@
     <!--inline divider-->
     <div class="divider text-p"><span>OR</span></div>
     <!--The actual login form-->
-    <form name="loginForm" class="reg-form" role="form" ng-submit="login(newUser)">
+    <form name="loginForm" class="reg-form" role="form" ng-submit="login(newUser)" autocomplete="on">
       <label class="label-title text-grey text-p">Sign in with an email account</label>
       <!-- email input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.email || authError.invalidEmail || authError.invalidUser}">

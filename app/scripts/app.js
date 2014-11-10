@@ -95,8 +95,9 @@
         angular.extend($alertProvider.defaults, {
             animation: 'am-fade-and-slide-top',
             placement: 'top',
-            duration: 4,
-            dismissable: false
+//            duration: 4,
+            dismissable: false,
+            template: 'views/components/alert.html'
         });
     }]);
 

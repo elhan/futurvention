@@ -61,10 +61,10 @@
         root: 'https://futurvention.azurewebsites.net/',
         public: 'https://futurvention.azurewebsites.net/public.svc/',
         account: {
-            register: 'https://futurvention.azurewebsites.net/Account/Register',
-            login: 'https://futurvention.azurewebsites.net/Account/Login',
-            logout: 'https://futurvention.azurewebsites.net/Account/Logout',
-            userInfo: 'https://futurvention.azurewebsites.net/Account/UserInfo'
+            register: 'https://futurvention.azurewebsites.net/AccountApi/Register',
+            login: 'https://futurvention.azurewebsites.net/AccountApi/Login',
+            logout: 'https://futurvention.azurewebsites.net/AccountApi/Logout',
+            userInfo: 'https://futurvention.azurewebsites.net/AccountApi/UserInfo'
         },
     });
 

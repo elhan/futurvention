@@ -11,7 +11,6 @@
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
     app.controller('MainCtrl', ['$scope', '$location', 'EVENTS', 'MESSAGES', 'AccountSvc', 'NotificationSvc', function ($scope, $location, events, msg, AccountSvc, NotificationSvc) {
-
         /*
             A setter function for the currentUser object. This is neccessary since assigning
             a new value to currentUser from a child scope would otherwise result in a shadow property.
@@ -38,15 +37,22 @@
 
         $scope.$on('$routeChangeError', function (e, current, previous, rejection) {
             console.log(rejection);
+            NotificationSvc.show({
+                content: msg.error.generic,
+                type: 'error',
+                dismissable: true
+            });
             $scope.go('/');
         });
 
         $scope.$on(events.auth.loginSuccess, function () {
             AccountSvc.getUserInfo().then(function (user) {
+                console.log(user);
                 $scope.setCurrentUser = user;
                 // TODO redirect user depending on profile completetion state
                 $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
-            }, function () {
+            }, function (error) {
+                console.log(error);
                 NotificationSvc.show({
                     content: msg.error.generic,
                     type: 'error',
