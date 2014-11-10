@@ -10,7 +10,7 @@
      * # RegistrationCtrl
      * Controlls of the registration page
      */
-  app.controller('RegistrationCtrl', ['$scope', '$rootScope', 'EVENTS', 'AuthSvc', function ($scope, $rootScope, EVENTS, AuthSvc) {
+    app.controller('RegistrationCtrl', ['$scope', '$rootScope', 'EVENTS', 'AccountSvc', function ($scope, $rootScope, events, AccountSvc) {
 
         // the models for the registration form
         $scope.newUser = {
@@ -28,15 +28,20 @@
         };
 
         $scope.register = function (newUser) {
-            AuthSvc.register(newUser).then(function (response) {
-                console.log(response);
-            }, function () {
-                //TODO
+            AccountSvc.register(newUser).then(function () {
+                AccountSvc.getUserInfo().then(function (response) {
+                    console.log(response);
+                }, function (error) {
+                    console.log(error);
+                });
+            }, function (error) {
+                // TODO: error handling
+                console.log(error);
             });
         };
 
         // Registration error handling
-        $scope.$on('auth-registration-failed', function (event, error) {
+        $scope.$on(events.auth.registrationFailed, function (event, error) {
             switch (error.code) {
             case 'EMAIL_TAKEN':
                 // cache last taken email to properly display errors

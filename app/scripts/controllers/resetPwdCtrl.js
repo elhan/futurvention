@@ -10,22 +10,24 @@
      * # ResetPwdCtrl
      * Controls the reset password page
      */
-    app.controller('ResetPwdCtrl', ['$scope', 'AuthSvc', 'NotificationSvc', function ($scope, AuthSvc, NotificationSvc) {
+    app.controller('ResetPwdCtrl', ['$scope', 'MESSAGES', 'AccountSvc', 'NotificationSvc', function ($scope, msg, AccountSvc, NotificationSvc) {
         $scope.email = '';
 
         $scope.resetPassword = function () {
-            AuthSvc.resetPassword($scope.email).then(function (response) {
-                //TODO
-                console.log(response);
+            AccountSvc.resetPassword($scope.email).then(function () {
                 NotificationSvc.show({
-                    content: 'Your password has been reset!',
+                    content: msg.success.resetPassword,
                     type: 'success',
                     dismissable: true
                 }).then(function () {
                     $scope.go('/login');
                 });
             }, function () {
-                //TODO
+                NotificationSvc.show({
+                    content: msg.error.generic,
+                    type: 'error',
+                    dismissable: true
+                });
             });
         };
     }]);

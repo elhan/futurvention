@@ -10,7 +10,7 @@
      * # MainCtrl
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
-    app.controller('MainCtrl', ['$scope', '$location', 'EVENTS', function ($scope, $location, events) {
+    app.controller('MainCtrl', ['$scope', '$location', 'EVENTS', 'MESSAGES', 'AccountSvc', 'NotificationSvc', function ($scope, $location, events, msg, AccountSvc, NotificationSvc) {
 
         /*
             A setter function for the currentUser object. This is neccessary since assigning
@@ -41,21 +41,33 @@
             $scope.go('/');
         });
 
-        // update Session object and currentUser model on logout
-        $scope.$on(events.auth.logoutSuccess, function (event) {
-            $scope.setCurrentUser({});
-            $scope.go('/');
-            // TODO: add proper logging
-            console.log(event);
+        $scope.$on(events.auth.loginSuccess, function () {
+            AccountSvc.getUserInfo().then(function (user) {
+                $scope.setCurrentUser = user;
+                // TODO redirect user depending on profile completetion state
+                $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
+            }, function () {
+                NotificationSvc.show({
+                    content: msg.error.generic,
+                    type: 'error',
+                    dismissable: true
+                });
+            });
         });
 
-        // update Session object and currentUser model on login
-        $scope.$on(events.auth.loginSuccess, function (event) {
-            // if the user just registered, redirect him to seller application flow
-            $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
-            // TODO: add proper logging
-            console.log(event);
+        $scope.$on(events.auth.logoutSuccess, function () {
+            $scope.setCurrentUser({});
+            $scope.go('/');
         });
+
+        $scope.$on(events.auth.logoutFailed, function () {
+            NotificationSvc.show({
+                content: msg.error.logoutFailed,
+                type: 'error',
+                dismissable: true
+            });
+        });
+
     }]);
 
 }());
