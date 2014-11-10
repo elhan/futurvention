@@ -96,7 +96,7 @@
             animation: 'am-fade-and-slide-top',
             placement: 'top',
 //            duration: 4,
-            dismissable: false,
+            dismissable: true,
             template: 'views/components/alert.html'
         });
     }]);

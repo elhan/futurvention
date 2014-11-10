@@ -19,16 +19,14 @@
                 console.log(response);
                 NotificationSvc.show({
                     content: msg.success.createNewPassword,
-                    type: 'success',
-                    dismissable: true
+                    type: 'success'
                 }).then(function () {
                     $scope.go('/login');
                 });
             }, function () {
                 NotificationSvc.show({
                     content: msg.error.generic,
-                    type: 'error',
-                    dismissable: true
+                    type: 'error'
                 });
             });
         };

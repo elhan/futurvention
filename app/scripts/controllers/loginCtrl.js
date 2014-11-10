@@ -43,8 +43,7 @@
                     console.log(event, error);
                     NotificationSvc.show({
                         content: msg.error.generic,
-                        type: 'error',
-                        dismissable: true
+                        type: 'error'
                     });
                 }
             });

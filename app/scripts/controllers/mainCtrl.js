@@ -39,8 +39,7 @@
             console.log(rejection);
             NotificationSvc.show({
                 content: msg.error.generic,
-                type: 'error',
-                dismissable: true
+                type: 'error'
             });
             $scope.go('/');
         });
@@ -55,8 +54,7 @@
                 console.log(error);
                 NotificationSvc.show({
                     content: msg.error.generic,
-                    type: 'error',
-                    dismissable: true
+                    type: 'error'
                 });
             });
         });
@@ -69,8 +67,7 @@
         $scope.$on(events.auth.logoutFailed, function () {
             NotificationSvc.show({
                 content: msg.error.logoutFailed,
-                type: 'error',
-                dismissable: true
+                type: 'error'
             });
         });
 

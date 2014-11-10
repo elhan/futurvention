@@ -1,5 +1,4 @@
 <div class="alert" ng-class="[type ? 'alert-' + type : null]">
-  <button type="button" class="close" ng-if="dismissable" ng-click="$hide()">&times;</button>
   <strong ng-bind="title"></strong>&nbsp;
   <div ng-switch on="type" class="alert-content-icon flex-content-centered">
     <span class="glyphicon glyphicon-remove-circle" ng-switch-when="error"></span>
@@ -11,4 +10,5 @@
     </span>
   </div>
   <span class="alert-content" ng-bind-html="content"></span>
+  <button type="button" class="close" ng-if="dismissable" ng-click="$hide()">&times;</button>
 </div>
