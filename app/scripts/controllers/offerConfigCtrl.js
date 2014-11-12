@@ -23,6 +23,8 @@
         $scope.showcaseItems = [];
         $scope.offer = OfferSvc.getOffer();
         $scope.service = {};
+        $scope.priceDiscriminators= [];
+        $scope.addons = [];
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
@@ -30,19 +32,21 @@
         // before navigating to this step, the respective controller has ensured OffrSvc.offer is suynced
         $scope.offer =  OfferSvc.getOffer();
 
-        CatalogueSvc.getService($scope.offer.serviceName).then(function (service) {
+        CatalogueSvc.getService($scope.offer.serviceID).then(function (service) {
+            console.log(service);
+
             $scope.service = service;
 
-            // When a new Offer is created, offer.choices is initialy empty, so it needs to be extended to include all ServiceOptions
-            if ($scope.offer.choices.length > 0) {
-                return;
-            }
-
-            _.each(service.ServiceOptions, function (option) {
-                $scope.offer.choices.push(option);
+            $scope.priceDiscriminators = _.filter(service.options, function (option) {
+                return option.isPriceDiscriminator && option.isMandatory;
             });
 
-            OfferSvc.updateOffer($scope.offer);
+            $scope.addons = _.filter(service.options, function (option) {
+                return option.isPriceDiscriminator && !option.isMandatory;
+            });
+
+        }, function (error) {
+            console.log(error);
         });
 
         // TODO: dynamically adjust from service model
@@ -90,9 +94,9 @@
             animation: 'am-slide-top'
         });
 
-        $scope.showEmbedUrlModal = function () {
+        $scope.showEmbedUrlModal = _.throttle(function () {
             modalEmbedUrl.$promise.then(function () { modalEmbedUrl.show(); });
-        };
+        }, 700);
 
         $scope.showCameraTagModal = function () {
             modalCameraTag.$promise.then(function () { modalCameraTag.show(); });
@@ -233,12 +237,6 @@
                 return;
             }
             panel.textonly = ! panel.textonly;
-        };
-
-        $scope.hasAddons = function () {
-            return _.find($scope.service.ServiceOptions, function (option) {
-                return option.isPriceDiscriminator && option.isOptional;
-            });
         };
 
         ////////////////////////////////////////////

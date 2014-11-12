@@ -1,5 +1,6 @@
 <nav class="navbar navbar-default navbar-fixed-top navbar-main"
-     ng-class="locationAt('/') ? 'navbar-transparent' : 'navbar-dark'">
+     ng-class="locationAt('/') ? 'navbar-transparent' : 'navbar-dark'"
+     ng-controller="HeaderCtrl">
   <div ng-class="{'navbar-inner': !locationAt('/'), 'flex-1': locationAt('/')}">
     <div class="navbar-wrapper" ng-class="{'flex-1': locationAt('/')}">
       <div class="container-y flex-content-centered">
@@ -9,12 +10,12 @@
         <button ng-if="!isAuthenticated() && !locationAt('/register')" class="btn btn-link nav-link" ng-click="go('/register')">Sign up</button>
         <button ng-if="!isAuthenticated() && !locationAt('/login')" class="btn btn-link nav-link" ng-click="go('/login')">Login</button>
         <div class="container-x">
-          <button class="btn btn-link nav-link" ng-controller="LoginCtrl" ng-click="logout()">
+          <button class="btn btn-link nav-link" ng-click="logout()">
             <span>Logout</span>
           </button>
-          <button class="btn btn-link nav-link btn-right" ng-click="go('/storefront/{{ currentUser.id }}')">
-            <span>{{currentUser.firstName}}</span>
-            <span>{{currentUser.lastName}}</span>
+          <button type="button" class="btn btn-header-dropdown" data-animation="am-flip-x" bs-dropdown="dropdown">
+            <span>{{currentUser.firstName}}Hemingway</span>
+            <span class="glyphicon glyphicon-chevron-down"></span>
           </button>
         </div>
       </div>

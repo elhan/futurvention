@@ -60,11 +60,12 @@
     app.constant('PATHS', {
         root: 'https://futurvention.azurewebsites.net/',
         public: 'https://futurvention.azurewebsites.net/public.svc/',
+        cached: 'https://futurvention.azurewebsites.net/CachedPublic.svc/',
         account: {
-            register: 'https://futurvention.azurewebsites.net/AccountApi/Register',
-            login: 'https://futurvention.azurewebsites.net/AccountApi/Login',
-            logout: 'https://futurvention.azurewebsites.net/AccountApi/Logout',
-            userInfo: 'https://futurvention.azurewebsites.net/AccountApi/UserInfo'
+            register: 'https://futurvention.azurewebsites.net/api/AccountApi/Register',
+            login: 'https://futurvention.azurewebsites.net/api/AccountApi/Login',
+            logout: 'https://futurvention.azurewebsites.net/api/AccountApi/Logout',
+            userInfo: 'https://futurvention.azurewebsites.net/api/AccountApi/UserInfo'
         },
     });
 

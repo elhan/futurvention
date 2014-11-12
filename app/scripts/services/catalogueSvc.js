@@ -13,15 +13,15 @@
         var CatalogueSvc = {},
 
             dataService = new breeze.DataService({
-                serviceName: paths.public,
+                serviceName: paths.cached,
                 hasServerMetadata: false
             }),
 
             manager = new breeze.EntityManager({ dataService: dataService });
 
-        ///////////////////////////////////////////////////////////
-        /// Private functions
-        ///////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////
+        /// Filter functions transfrom odata response objects to friendly objects
+        //////////////////////////////////////////////////////////////////////////
 
         function filterRootCategories (response) {
             return _.pluck(response.results[0].value, function (obj) {
@@ -36,14 +36,73 @@
             return _.pluck(response.results[0].value, function (obj) {
                 return {
                     serviceID: obj.ID,
-                    serviceName: obj.ShortTitle.Literals[0].Text,
-                    thumbnail: obj.ThumbnailFile
+                    shortTitle: obj.ShortTitle.Literals[0].Text,
+                    thumbnail: { link: obj.ThumbnailFile.Url }
                 };
             });
         }
 
         function filterTotalCount (response) {
             return response.results[0]['odata.count'];
+        }
+
+        function filterFullService (response) {
+            var obj = response.results[0].value[0];
+            var service =  {
+                serviceID: obj.ID,
+                title: obj.Title && obj.Title.Literals[0].Text,
+                shortTitle: obj.ShortTitle && obj.ShortTitle.Literals[0].Text,
+                description: obj.Description && obj.Description.Literals[0].Text,
+                deliverables: obj.ExpectedDeliverables && obj.ExpectedDeliverables.Literals[0].Text,
+                provision: obj.BuyerProvision && obj.BuyerProvision.Literals[0].Text,
+                options: obj.Options,
+                excluded: obj.ExcludedServices && obj.ExcludedServices.Literals[0].Text,
+                viewHint: obj.ViewHint,
+                thumbnail: { link: obj.ThumbnailFile.Url },
+                showcasePrompt: obj.ShowcasePrompt && obj.ShowcasePrompt.Literals[0].Text
+            };
+
+            service.allowedShowcaseFileTypes = _.pluck(obj.AllowedShowcaseFileTypes, function (type) {
+                return type.Name && type.Name.Literals[0].Text;
+            });
+
+            service.options = obj.Options.map(function (option) {
+                return {
+                    isPriceDiscriminator: option.IsPriceDiscriminator,
+                    isMandatory: option.IsMandatory,
+                    isDaysDiscriminator: option.IsDaysDiscriminator,
+                    sellerTitle: option.SellerTitle && option.SellerTitle.Literals[0].Text,
+                    choices: option.Choices.map(function (choice) {
+                        return {
+                            name: choice.Name && choice.Name.Literals[0].Text,
+                            value: choice.value
+                        };
+                    })
+                };
+            });
+
+            service.fields = obj.Fields.map(function (field) {
+                return {
+                    allowedFileTypes:  _.pluck(field.AllowedFileTypes, function (type) {
+                        return type.Name && type.Name.Literals[0].Text;
+                    }),
+                    order: field.Order,
+                    isMandatory: field && field.IsRequired ? true : false,
+                    sellerLabel: field && field.SellerLabel && field.SellerLabel.Literals[0].Text
+                };
+            });
+
+            // service interview is the service field with order === 0
+            service.interview = _.find(service.fields, function (field) {
+                return field.order === 0;
+            });
+
+            // remove interview from fields
+            _.remove(service.fields, function (field) {
+                return field.order === 0;
+            });
+
+            return service;
         }
 
         ///////////////////////////////////////////////////////////
@@ -57,7 +116,7 @@
          * Returns a collection of city objects
          * @public
          *
-         * returns Array[{name: String, cityID: String}]
+         * @returns Array[{name: String, cityID: String}]
          */
         CatalogueSvc.getRootCategories = function () {
             var deferred = $q.defer(),
@@ -79,11 +138,50 @@
         };
 
         /**
+         * Returns a single fully expanded Service object, given a serviceID.
+         * @public
+         *
+         * @returns {Object} a Service object
+         */
+        CatalogueSvc.getService = function (serviceID) {
+            var deferred = $q.defer(),
+                query = new breeze.EntityQuery('Services')
+                    .where('ID', 'eq', serviceID)
+                    .expand([
+                        'Title.Literals',
+                        'ShortTitle.Literals',
+                        'Description.Literals',
+                        'ThumbnailFile',
+                        'ExpectedDeliverables.Literals',
+                        'BuyerProvision.Literals',
+                        'ExcludedServices.Literals',
+                        'AllowedShowcaseFileTypes.Name.Literals',
+                        'ShowcasePrompt.Literals',
+                        'Fields',
+                        'Fields.AllowedFileTypes.Name.Literals',
+                        'Fields.AllowedFileTypes.MimeTypes',
+                        'Fields.SellerLabel.Literals',
+                        'Fields.Order',
+                        'Options.SellerTitle.Literals',
+                        'Options.Choices.Name.Literals'
+                    ].join(', '));
+
+            manager.executeQuery(query).then(function (response) {
+                console.log(response);
+                deferred.resolve(filterFullService(response));
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
+        /**
          * Returns a collection of Service objects. If all services have been already fetched, return the cached object instead
          * of fetching fresh data from the server.
          * @public
          *
-         * returns Array[{name: String, cityID: String}]
+         * @returns Array[{name: String, cityID: String}]
          */
         CatalogueSvc.getServices = function (offset) {
             var deferred = $q.defer(),
@@ -106,7 +204,7 @@
          * Returns a collection of Service objects filtered by categoryID
          * @public
          *
-         * returns Array[{name: String, cityID: String}]
+         * @returns Array[{name: String, cityID: String}]
          */
         CatalogueSvc.getServicesUnderCategory = function (categoryID, offset) {
             var deferred = $q.defer(),

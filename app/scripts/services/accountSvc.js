@@ -23,10 +23,18 @@
         };
 
         AccountSvc.login = function (user) {
-            return $http.post(paths.account.login, {
-                Email: user.email,
-                Password: user.password,
-                RememberMe: true,
+            return $http({
+                url: paths.account.login,
+                method: 'POST',
+                data: {
+                    Email: user.email,
+                    Password: user.password,
+                    RememberMe: true
+                },
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8'
+                }
             });
         };
 

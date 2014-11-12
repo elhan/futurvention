@@ -40,7 +40,7 @@
         <svg class="icon">
           <use xlink:href="#search-dark"></use>
         </svg>
-        <input type="text" class="form-control" ng-model="selectedService" ng-options="service.serviceName for service in allServices" placeholder="Service name" bs-typeahead />
+        <input type="text" class="form-control" ng-model="selectedService" ng-options="service.shortTitle for service in allServices" placeholder="Service name" bs-typeahead />
       </div>
     </div>
   </div>
@@ -57,18 +57,18 @@
     <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb">
       <div class="thumbnail" ng-click="$parent.selectedService = service">
         <div class="wrapper-img flex-content-centered">
-          <img ng-if="!service.thumbnail" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
-          <img ng-if="service.thumbnail" ng-src="thumbnail.link" class="img-responsive">
+          <img ng-if="!service.thumbnail.link" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
+          <img ng-if="service.thumbnail.link" ng-src="{{service.thumbnail.link}}" class="img-responsive">
         </div>
         <div class="thumb-overlay">+</div>
         <div class="caption">
-          <div class="text-p-bold">{{ service.serviceName }}</div>
+          <div class="text-p-bold">{{ service.shortTitle }}</div>
         </div>
       </div>
     </div>
   </div>
   <!-- Show more button -->
-  <div class="wrapper-showmore" ng-show="services.length < services.totalCount">
+  <div class="wrapper-showmore" ng-show="services.length < allServices.length">
     <button class="btn btn-link text-p" ng-click="showMore()">
       <span>Show more services</span>
     </button>

@@ -91,11 +91,14 @@
     app.value('duScrollGreedy', true);
 
     // Default settings for the alertProvider
-    app.config(['$alertProvider', function($alertProvider) {
+    app.config(['$alertProvider', '$httpProvider', function($alertProvider, $httpProvider) {
+        $httpProvider.defaults.useXDomain = true;
+        delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
         angular.extend($alertProvider.defaults, {
             animation: 'am-fade-and-slide-top',
             placement: 'top',
-//            duration: 4,
+            duration: 4,
             dismissable: true,
             template: 'views/components/alert.html'
         });

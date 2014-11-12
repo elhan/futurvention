@@ -5,6 +5,12 @@
       <span>Back to service catalogue</span>
     </button>
   </div>
+  <div class="container-x">
+    <div class="wrapper-img">
+      <img ng-if="service.thumbnail.link" ng-src="{{service.thumbnail.link}}" class="img-responsive">
+    </div>
+    <div class="wrapper-title text-h2">{{ service.title }}</div>
+  </div>
   <div class="panel-group" ng-model="panels.activePanel" startCollapsed="false" animation="am-slide-top" bs-collapse>
     <div ng-repeat="panel in panels">
       <div ng-class="{'panel':true, 'panel-success': panel.state === 'done', 'panel-default': panel.state === 'default'}">
@@ -24,24 +30,48 @@
           <div class="panel-body" ng-switch on="panels.activePanel">
             <!-- Service Description -->
             <div ng-switch-when="0">
-              <div class="service-description" ng-bind-html="service.Description"></div>
+              <div ng-if="service.description">
+                <div class="text-p-bold">Overview of the service</div>
+                <div class="text-p" ng-bind-html="service.description"></div>
+              </div>
+              <div ng-if="service.deliverables">
+                <div class="text-p-bold">What you are expected to deliver</div>
+                <div class="text-p" ng-bind-html="service.deliverables"></div>
+              </div>
+              <div ng-if="service.provision">
+                <div class="text-p-bold">What the buyer will provide before you start working</div>
+                <div class="text-p" ng-bind-html="service.provision"></div>
+              </div>
+              <div ng-if="service.excluded">
+                <div class="text-p-bold">What you are expected to deliver</div>
+                <div class="text-p" ng-bind-html="service.excluded"></div>
+              </div>
             </div>
             <!-- Work Samples -->
             <div ng-switch-when="1">
+              <div class="text-p">{{ service.showcasePrompt }}</div>
               <div class="wrapper-icons">
-                <div class="container-y" ng-file-select="onFileSelect($files)" data-multiple="true">
-                  <div class="import-link bg-grey-dark text-white">
-                    <svg class="icon icon-light">
-                      <use xlink:href="#upload"></use>
-                    </svg>
+                <div class="container-x">
+                  <div class="container-y flex-1 clickable">
+                    <div class="import-link bg-grey-dark text-white">
+                      <svg class="icon icon-light nostroke icon-import">
+                        <use xlink:href="#import"></use>
+                      </svg>
+                    </div>
+                    <div class="label-import-link">Select from imported</div>
                   </div>
-                  <div class="label-import-link">Upload</div>
-                </div>
-                <!-- divider -->
-                <div class="import-link"></div>
-                <div class="container-y" ng-click="showEmbedUrlModal()">
-                  <div class="import-link bg-grey-dark text-white embed">@</div>
-                  <div class="label-import-link">Embed Url</div>
+                  <div class="container-y flex-1 clickable" ng-file-select="onFileSelect($files)" data-multiple="true">
+                    <div class="import-link bg-grey-dark text-white">
+                      <svg class="icon icon-light">
+                        <use xlink:href="#upload"></use>
+                      </svg>
+                    </div>
+                    <div class="label-import-link">Upload</div>
+                  </div>
+                  <div class="container-y flex-1 clickable" ng-click="showEmbedUrlModal()">
+                    <div class="import-link bg-grey-dark text-white embed">@</div>
+                    <div class="label-import-link">Embed Url</div>
+                  </div>
                 </div>
               </div>
               <div class="showcase-msg" ng-show="showcaseItems.length > 0">
@@ -77,26 +107,27 @@
             </div>
             <!-- Personalize -->
             <div ng-switch-when="2">
-              <div class="container-x text-p-bold">
+              <p class="container-x text-p">
                 Introduce yourself to potential Buyers
-                <span class="optional-header-part" ng-if="service.interview === 'optional'">(strongly reccomended)</span>
-              </div>
-              <div class="wrapper-icons" ng-show="!panels[2].textonly">
-                <div class="container-y flex-content-centered" ng-click="showCameraTagModal()">
-                  <div class="import-link bg-grey-dark text-white clickable">
-                    <span class="glyphicon glyphicon-facetime-video"></span>
-                  </div>
-                  <div class="label-import-link">Upload or record a video from your webcam or phone</div>
-                </div>
-              </div>
-              <!-- Description -->
+                <span class="optional-header-part text-grey" ng-if="!service.interview.isMandatory">(strongly reccomended)</span>
+              </p>
+              <!-- !textonly -->
               <div ng-show="!panels[2].textonly">
-                <div class="text-p">A picture is 1000 words and a video is 1000 pictures. In a minute, video tells Buyers why the should buy  from you.</div>
-                <p class="text-p">In your recording, try to give short sharp answers within 1 minute to the following:</p>
+                <div class="wrapper-icons">
+                  <div class="container-y flex-content-centered" ng-click="showCameraTagModal()">
+                    <div class="import-link bg-grey-dark text-white clickable">
+                      <span class="glyphicon glyphicon-facetime-video"></span>
+                    </div>
+                    <div class="label-import-link">Upload or record a video from your webcam or phone</div>
+                  </div>
+                </div>
+                <div class="text-p">A picture is 1000 words and a video is 1000 pictures. In a minute, video tells Buyers why they should buy from you.</div>
+                <p class="text-p">In your recording, try to give short sharp answers within 1 minute to the following (You will be able to view the video at the end of the recoring if you want):</p>
               </div>
-              <div class="text-p-bold" ng-if="service.interview === 'optional' || service.interview === 'recommended'" ng-bind-html="service.questions"></div>
+              <!-- Service interview -->
+              <p class="text-p italic" ng-if="service.interview" ng-bind-html="service.interview.sellerLabel"></p>
+              <textarea ng-if="panels[2].textonly" placeholder="Type your answers here"></textarea>
               <!-- Switch textonly state -->
-              <div class="text-p">You will be able to view the video at the end of the recoring if you want.</div>
               <button class="btn no-padding btn-link text-p" ng-click="toggleTextOnly()">
                 <span ng-show="!panels[2].textonly">Switch to text instead</span>
                 <div ng-show="panels[2].textonly">
@@ -104,38 +135,58 @@
                   <span >Record a video and increase your chances to be approved</span>
                 </div>
               </button>
-              <!-- Textonly answers -->
-              <div>
-                <textarea class="extra-offer" placeholder="Type your answers here" ng-show="panels[2].textonly"></textarea>
+              <!-- Service options: !PriceDiscriminator -->
+              <div ng-repeat="option in service.options | filter: { isPriceDiscriminator: false }" class="space-top-bottom-2x">
+                <p class="text-p-bold">{{ option.sellerTitle }}</p>
+                <div class="container-x" ng-if="option.choices.length < 5" ng-repeat="choice in option.choices">
+                  <input type="checkbox">
+                  <div class="text-i space-left">{{ choice.name }}</div>
+                </div>
+                <div class="container-x">
+                  <button ng-if="option.choices.length > 5" class="btn btn-default"
+                          data-multiple="1"
+                          ng-model="selectedChoices"
+                          ng-options="choice.name as choice.name for choice in option.choices"
+                          bs-select>
+                  </button>
+                </div>
               </div>
-              <!-- Extra offerings -->
-              <p class="text-p-bold">Do you offer anything extra as part of this service?</p>
-              <textarea class="extra-offer"></textarea>
+              <!-- Service fields -->
+              <div ng-repeat="field in service.fields">
+                <p class="text-p-bold">{{ field.sellerLabel }}</p>
+                <textarea placeholder="Type your answers here"></textarea>
+              </div>
             </div>
             <!-- Pricing -->
             <div ng-switch-when="3" class="pricing">
-              <!-- Price Discriminator Choices > 1 -->
-              <div ng-if="service.ServiceOptions.length > 1">
-                <div class="container-x">
+              <!-- Price Discriminators > 1 -->
+              <div ng-repeat="option in priceDiscriminators">
+                <!-- Choices > 1 -->
+                <div ng-if="option.choices.length > 1" class="container-x">
                   <div class="text-p-bold">Set your price and deadline for the following service configurations</div>
                   <div class="optional-header-part text-i text-grey">(leave blank if you don't want to offer a particular one)</div>
                 </div>
+                <!-- Choices === 1 -->
+                <div ng-if="option.choices.length === 1" class="text-p-bold">Set your price and deadline for this service</div>
                 <div class="wrapper-disc">
                   <form name="PriceDiscriminatorForm" role="form">
-                    <div class="container-y">
-                      <div ng-repeat="choice in offer.choices">
-                        <div ng-form class="form-group" name="innerForm" ng-if="choice.isPriceDiscriminator && !choice.isOptional">
+                    <!-- Choices > 1 -->
+                    <div ng-if="option.choices.length > 1" class="container-y">
+                      <div ng-repeat="choice in option.choices">
+                        <div ng-form class="form-group" name="innerForm">
+                          <!-- input row -->
                           <div class="container-x">
                             <div class="container-x wrapper-half">
                               <div class="choice-name">{{ choice.name }}</div>
                               <div class="flex-1">
                                 <div class="separator-text">$</div>
                                 <div class="wrapper-price">
-                                  <input type="number" fv-dynamic-name=$index class="form-control input-s" ng-model="choice.price" placeholder="0" ng-required="true"></input>
+                                  <input type="number" fv-dynamic-name=$index class="form-control input-s" ng-model="option.price" placeholder="0" ng-required="true"></input>
                                 </div>
                                 <div class="separator-text text-grey">in</div>
                                 <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
-                                        ng-model="choice.value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select></button>
+                                        ng-model="option.value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select>
+                                </button>
                               </div>
                             </div>
                             <div class="flex-shrink-10"></div>
@@ -143,22 +194,16 @@
                         </div>
                       </div>
                     </div>
-                  </form>
-                </div>
-              </div>
-              <!-- Price Discriminator Choices === 1 -->
-              <div ng-if="service.ServiceOptions.length > 0">
-                <div class="text-p-bold">Set your price and deadline for this service</div>
-                <div class="wrapper-disc">
-                  <form name="PriceDiscriminatorForm" role="form">
-                    <div class="container-x">
+                    <!-- Choices === 1 -->
+                    <div ng-if="option.choices.length === 1" class="container-x">
                       <div class="container-x wrapper-half">
                         <div class="flex-1">
                           <div class="text-m text-light flex-content-centered separator-text-l">$</div>
                           <input type="number" name="inoutPrice" class="form-control input-s input-price" ng-model="offer.choices[0].price" placeholder="0" ng-required="true"></input>
                           <div class="separator-text text-grey">to be delivered in</div>
                           <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
-                                  ng-model="offer.choices[0].value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select></button>
+                                  ng-model="offer.choices[0].value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select>
+                          </button>
                         </div>
                       </div>
                       <div class="flex-shrink-10"></div>
@@ -167,7 +212,7 @@
                 </div>
               </div>
               <!-- Price Addons -->
-              <div ng-if="hasAddons()">
+              <div ng-if="addons.length > 0">
                 <div class="container-x flex-wrap">
                   <div class="text-p-bold">Set the extra price you charge and the extra time you need for the following add-ons</div>
                   <div class="optional-header-part text-i text-grey">(leave blank if you don't want to offer a particular one)</div>
@@ -175,11 +220,11 @@
                 <div class="wrapper-disc">
                   <form name="OfferAddonsForm" role="form">
                     <div class="container-y">
-                      <div ng-repeat="choice in offer.choices">
-                        <div ng-form class="form-group" name="innerForm" ng-if="choice.isPriceDiscriminator && choice.isOptional">
+                      <div ng-repeat="option in addons">
+                        <div ng-form class="form-group" name="innerForm">
                           <div class="container-x">
                             <div class="container-x wrapper-half">
-                              <div class="choice-name">{{ choice.name }}</div>
+                              <div class="choice-name">{{ option.sellerTitle }}</div>
                               <div class="flex-2">
                                 <div class="container-x">
                                   <div class="separator-text-l">extra</div>
@@ -190,7 +235,8 @@
                                 </div>
                                 <div class="separator-text text-grey">in</div>
                                 <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
-                                      ng-model="choice.value" data-html="1" ng-options="deadline for deadline in extraDeadlines" placeholder="1 extra day" bs-select></button>
+                                        ng-model="choice.value" data-html="1" ng-options="deadline for deadline in extraDeadlines" placeholder="1 extra day" bs-select>
+                                </button>
                               </div>
                             </div>
                             <div class="flex-shrink-10"></div>
