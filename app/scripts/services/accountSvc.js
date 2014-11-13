@@ -9,7 +9,7 @@
      * # AccountSvc
      * A service to handle authentication, authorization, and User objects.
      */
-    app.service('AccountSvc', ['$q', '$http', 'PATHS', function ($q, $http, paths) {
+    app.service('AccountSvc', ['$q', '$http', 'PATHS', 'MESSAGES', 'NotificationSvc', function ($q, $http, paths, msg, NotificationSvc) {
         var AccountSvc = {};
 
         AccountSvc.register = function (newUser) {
@@ -23,18 +23,10 @@
         };
 
         AccountSvc.login = function (user) {
-            return $http({
-                url: paths.account.login,
-                method: 'POST',
-                data: {
-                    Email: user.email,
-                    Password: user.password,
-                    RememberMe: true
-                },
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json; charset=utf-8'
-                }
+            return $http.post(paths.account.login, {
+                Email: user.email,
+                Password: user.password,
+                RememberMe: true
             });
         };
 
@@ -49,15 +41,44 @@
             return deferred.promise;
         };
 
-        AccountSvc.resetPassword = function (email) {
-            //TODO
-            var deferred = $q.defer();
-            deferred.resolve(email);
-            return deferred.promise;
+        AccountSvc.resetPassword = function (credentials) {
+            return $http.post(paths.account.resetPassword, credentials);
         };
 
         AccountSvc.getUserInfo = function () {
-            return $http.get(paths.account.userInfo);
+            var deferred = $q.defer();
+
+            $http.get(paths.account.userInfo).then(function (response) {
+                deferred.resolve({
+                    email: response.data.UserName,
+                    userID: response.data.UserID,
+                    authProvider: response.data.LoginProvider,
+                    hasRegistered: response.data.HasRegistered
+                });
+            }, function (error) {
+                console.log(error);
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
+        AccountSvc.externalLogins = function () {
+            return $http.get(paths.account.externalLogins);
+        };
+
+        AccountSvc.externalLogin = function (authProvider) {
+            AccountSvc.externalLogins().then(function (response) {
+                window.location.replace(paths.root + _.find(response.data, function (provider) {
+                    return provider.Name === authProvider;
+                }).Url);
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({
+                    content: msg.error.generic,
+                    type: 'error'
+                });
+            });
         };
 
         return AccountSvc;

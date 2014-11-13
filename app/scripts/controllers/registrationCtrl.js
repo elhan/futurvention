@@ -10,7 +10,7 @@
      * # RegistrationCtrl
      * Controlls of the registration page
      */
-    app.controller('RegistrationCtrl', ['$scope', '$rootScope', 'EVENTS', 'AccountSvc', function ($scope, $rootScope, events, AccountSvc) {
+    app.controller('RegistrationCtrl', ['$scope', '$rootScope', 'EVENTS', 'Utils', 'AccountSvc', function ($scope, $rootScope, events, utils, AccountSvc) {
 
         // the models for the registration form
         $scope.newUser = {
@@ -20,15 +20,18 @@
             password: ''
         };
 
-        // initialize errors
+        // initialize server-side errors
         $scope.authError = {
-            emailTaken: false,
-            invalidEmail: false,
-            invalidPassword: false
+            email: [],
+            password: []
         };
 
-        $scope.register = function (newUser) {
-            AccountSvc.register(newUser).then(function () {
+        $scope.register = function (provider) {
+            if (provider) { //facebook or linkedin
+                AccountSvc.externalLogin(provider);
+                return;
+            }
+            AccountSvc.register($scope.newUser).then(function () {
                 AccountSvc.getUserInfo().then(function (response) {
                     console.log(response);
                 }, function (error) {
@@ -40,9 +43,37 @@
             });
         };
 
+        ///////////////////////////////////////////////////////////
+        /// Custom validation functions
+        ///////////////////////////////////////////////////////////
+
+        $scope.isEmail = function (email) {
+            return utils.testEmailPattern(email);
+        };
+
+        $scope.hasDigits = function (pwd) {
+            return /\d+/g.test(pwd);
+        };
+
+        $scope.hasNonAlphanumeric = function (pwd) {
+            return /\W/g.test(pwd);
+        };
+
+        $scope.hasLowercase = function (pwd) {
+            return /[a-z]/.test(pwd);
+        };
+
+        $scope.hasUppercase = function (pwd) {
+            return /[A-Z]/.test(pwd);
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Event handlers
+        ///////////////////////////////////////////////////////////
+
         // Registration error handling
         $scope.$on(events.auth.registrationFailed, function (event, error) {
-            switch (error.code) {
+            switch (error.status) {
             case 'EMAIL_TAKEN':
                 // cache last taken email to properly display errors
                 $scope.authError.emailTaken = $scope.newUser.email;

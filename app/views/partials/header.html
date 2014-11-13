@@ -9,12 +9,12 @@
       <div class="container-x flex-1 flex-content-end">
         <button ng-if="!isAuthenticated() && !locationAt('/register')" class="btn btn-link nav-link" ng-click="go('/register')">Sign up</button>
         <button ng-if="!isAuthenticated() && !locationAt('/login')" class="btn btn-link nav-link" ng-click="go('/login')">Login</button>
-        <div class="container-x">
+        <div ng-if="isAuthenticated()" class="container-x">
           <button class="btn btn-link nav-link" ng-click="logout()">
             <span>Logout</span>
           </button>
           <button type="button" class="btn btn-header-dropdown" data-animation="am-flip-x" bs-dropdown="dropdown">
-            <span>{{currentUser.firstName}}Hemingway</span>
+            <span>{{currentUser.firstName}}</span>
             <span class="glyphicon glyphicon-chevron-down"></span>
           </button>
         </div>

@@ -91,9 +91,29 @@
     app.value('duScrollGreedy', true);
 
     // Default settings for the alertProvider
-    app.config(['$alertProvider', '$httpProvider', function($alertProvider, $httpProvider) {
+    app.config(['$alertProvider', '$httpProvider', function ($alertProvider, $httpProvider) {
+        $httpProvider.defaults.withCredentials = true;
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+        // 401 unauthorized interceptor: redirect to login page
+        $httpProvider.responseInterceptors.push(['$q', '$location', 'PATHS', function ($q, $location, paths) {
+            return function (promise) {
+                return promise.then(function (response) {
+                    return response;
+                }, function (error) {
+                    if (error.status === 401) {
+                        console.log(error);
+                        // exclude user info calls as they are only used to determine auth status
+                        if (error.config.url !== paths.account.userInfo) {
+                            $location.path('/login');
+                        }
+                        return error;
+                    }
+                    return $q.reject(error);
+                });
+            };
+        }]);
 
         angular.extend($alertProvider.defaults, {
             animation: 'am-fade-and-slide-top',

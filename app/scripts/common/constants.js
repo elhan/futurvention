@@ -58,14 +58,16 @@
      * Rest paths
      */
     app.constant('PATHS', {
-        root: 'https://futurvention.azurewebsites.net/',
+        root: 'https://futurvention.azurewebsites.net',
         public: 'https://futurvention.azurewebsites.net/public.svc/',
         cached: 'https://futurvention.azurewebsites.net/CachedPublic.svc/',
         account: {
-            register: 'https://futurvention.azurewebsites.net/api/AccountApi/Register',
-            login: 'https://futurvention.azurewebsites.net/api/AccountApi/Login',
-            logout: 'https://futurvention.azurewebsites.net/api/AccountApi/Logout',
-            userInfo: 'https://futurvention.azurewebsites.net/api/AccountApi/UserInfo'
+            register: 'https://futurvention.azurewebsites.net/api/Account/Register',
+            login: 'https://futurvention.azurewebsites.net/api/Account/Login',
+            logout: 'https://futurvention.azurewebsites.net/api/Account/Logout',
+            userInfo: 'https://futurvention.azurewebsites.net/api/Account/UserInfo',
+            resetPassword: 'https://futurvention.azurewebsites.net/api/Account/ChangePassword',
+            externalLogins: 'https://futurvention.azurewebsites.net/api/Account/ExternalLogins?returnUrl=http://client.futurvention.com:9000&generateState=true'
         },
     });
 
@@ -85,5 +87,8 @@
             resetPassword: 'Your password has been reset!'
         }
     });
+
+    // thirdparty profile & portfolio providers
+    app.constant('IMPORT_PROVIDERS', ['linkedIn', 'oDesk', 'elance', 'pph', 'freelancer', 'behance', 'dribbble', 'github']);
 
 }());

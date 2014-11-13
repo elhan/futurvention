@@ -5,6 +5,10 @@
     app.service('Utils', function () {
         var Utils = {};
 
+        Utils.capitalize = function (str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        };
+
         ///////////////////////////////////////////////////////////
         /// Regex patterns & matching functions
         ///////////////////////////////////////////////////////////
@@ -35,10 +39,9 @@
             return params;
         };
 
-      Utils.capitalize = function (str) {
-          return str.charAt(0).toUpperCase() + str.slice(1);
-      };
-
+        Utils.testEmailPattern = function (str) {
+            return /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/im.test(str);
+        };
 
         return Utils;
     });

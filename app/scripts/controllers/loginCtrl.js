@@ -10,7 +10,7 @@
      * # LoginCtrl
      * Controller of the login form
      */
-    app.controller('LoginCtrl', ['$scope', '$rootScope', 'EVENTS', 'MESSAGES', 'AccountSvc', 'NotificationSvc', function ($scope, $rootScope, events, msg, AccountSvc, NotificationSvc) {
+    app.controller('LoginCtrl', ['$scope', '$rootScope', 'EVENTS', 'MESSAGES', 'Utils', 'AccountSvc', 'NotificationSvc', function ($scope, $rootScope, events, msg, utils, AccountSvc, NotificationSvc) {
         // the models for the registration form
         $scope.newUser = {
             email: '',
@@ -19,25 +19,25 @@
 
         // initialize errors
         $scope.authError = {
-            invalidEmail: false,
-            invalidPassword: false
+            credentials: false
         };
 
-        $scope.login = function (loginData) {
-            AccountSvc.login(loginData).then(function (response) {
-                console.log(response);
+        $scope.clearAuthError =  function () {
+            $scope.authError.credentials = false;
+        };
+
+        $scope.login = function (provider) {
+            if (provider) { // Facebook or LinkedIn
+                AccountSvc.externalLogin(provider);
+                return;
+            }
+            AccountSvc.login($scope.newUser).then(function () {
                 $rootScope.$broadcast(events.auth.loginSuccess, event);
             }, function (error) {
-                // TODO: sync with new backend
-                switch (error.code) {
-                case 'INVALID_USER':
-                    $scope.authError.invalidUser = $scope.newUser.email;
-                    break;
-                case 'INVALID_EMAIL':
-                    $scope.authError.invalidEmail = $scope.newUser.email;
-                    break;
-                case 'INVALID_PASSWORD':
-                    $scope.authError.invalidPassword= $scope.newUser.password;
+                console.log(error);
+                switch (error.status) {
+                case 401: //unauthorized
+                    $scope.authError.credentials = true;
                     break;
                 default:
                     console.log(event, error);
@@ -47,6 +47,30 @@
                     });
                 }
             });
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Custom validation functions
+        ///////////////////////////////////////////////////////////
+
+        $scope.isEmail = function (email) {
+            return utils.testEmailPattern(email);
+        };
+
+        $scope.hasDigits = function (pwd) {
+            return /\d+/g.test(pwd);
+        };
+
+        $scope.hasNonAlphanumeric = function (pwd) {
+            return /\W/g.test(pwd);
+        };
+
+        $scope.hasLowercase = function (pwd) {
+            return /[a-z]/.test(pwd);
+        };
+
+        $scope.hasUppercase = function (pwd) {
+            return /[A-Z]/.test(pwd);
         };
 
     }]);

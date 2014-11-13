@@ -11,10 +11,18 @@
      * Controls the reset password page
      */
     app.controller('ResetPwdCtrl', ['$scope', 'MESSAGES', 'AccountSvc', 'NotificationSvc', function ($scope, msg, AccountSvc, NotificationSvc) {
-        $scope.email = '';
+        $scope.oldPassword = '';
+        $scope.newPassword = '';
+        $scope.confirmPassword = '';
 
         $scope.resetPassword = function () {
-            AccountSvc.resetPassword($scope.email).then(function () {
+            var credentials = {
+                OldPassword: $scope.oldPassword,
+                NewPassword: $scope.newPassword,
+                ConfirmPassword: $scope.confirmPassword
+            };
+
+            AccountSvc.resetPassword(credentials).then(function () {
                 NotificationSvc.show({
                     content: msg.success.resetPassword,
                     type: 'success'

@@ -10,13 +10,12 @@
      * # MainCtrl
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
-    app.controller('MainCtrl', ['$scope', '$location', 'EVENTS', 'MESSAGES', 'AccountSvc', 'NotificationSvc', function ($scope, $location, events, msg, AccountSvc, NotificationSvc) {
-        /*
-            A setter function for the currentUser object. This is neccessary since assigning
-            a new value to currentUser from a child scope would otherwise result in a shadow property.
-        **/
-        $scope.setCurrentUser = function (user) {
-            $scope.currentUser = user;
+    app.controller('MainCtrl', ['$scope', '$location', '$q', 'EVENTS', 'MESSAGES', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', function ($scope, $location, $q, events, msg, AccountSvc, NotificationSvc, ProfileSvc) {
+        $scope.currentUser = {};
+        $scope.session = {};
+
+        $scope.isAuthenticated = function () {
+            return !_.isEmpty($scope.currentUser);
         };
 
         $scope.updateCurrentUser = function (obj) {
@@ -24,7 +23,10 @@
         };
 
         $scope.go = function (path) {
+            var deferred = $q.defer();
             $location.path(path);
+            deferred.resolve();
+            return deferred.promise;
         };
 
         $scope.locationAt = function (route) {
@@ -45,9 +47,8 @@
         });
 
         $scope.$on(events.auth.loginSuccess, function () {
-            AccountSvc.getUserInfo().then(function (user) {
-                console.log(user);
-                $scope.setCurrentUser = user;
+            AccountSvc.getUserInfo().then(function (session) {
+                $scope.session = session;
                 // TODO redirect user depending on profile completetion state
                 $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
             }, function (error) {
@@ -60,7 +61,7 @@
         });
 
         $scope.$on(events.auth.logoutSuccess, function () {
-            $scope.setCurrentUser({});
+            $scope.session = {};
             $scope.go('/');
         });
 
@@ -69,6 +70,43 @@
                 content: msg.error.logoutFailed,
                 type: 'error'
             });
+        });
+
+        $scope.$watch('session', function (newValue, oldValue) {
+            switch (true) {
+            case newValue === oldValue:
+                return;
+            case _.isEmpty(newValue):
+                $scope.currentUser = {};
+                break;
+            default:
+                ProfileSvc.fetchProfile().then(function (user) {
+                    $scope.currentUser = user;
+                }, function (error) {
+                    // TODO: error handling
+                    console.log(error);
+                });
+            }
+        });
+
+        ////////////////////////////////////////////
+        /// Initialization
+        ////////////////////////////////////////////
+
+        //if there are any authentication errors passed as query string by the backend, show the appropriate message and redirect to login
+        $location.search().error && $scope.go('/login').then(function () {
+            $location.url($location.path()); // clear the error param
+            NotificationSvc.show({
+                content: $location.search().error,
+                type: 'error'
+            });
+        });
+
+        // check user authentication status when loading the app
+        AccountSvc.getUserInfo().then(function (session) {
+            $scope.session = session;
+        }, function (error) {
+            console.log(error);
         });
 
     }]);
