@@ -4,20 +4,6 @@
 
     /**
      * @ngdoc service
-     * @name fvApp.service:LocalStorageSvc
-     * @description
-     * # LocalStorageSvc
-     * A service for interacting with the localStorage object.
-     */
-    app.service('LocalStorageSvc', function () {
-        this.getSession = function () {
-            return JSON.parse(localStorage.getItem('firebaseSession'));
-        };
-        return this;
-    });
-
-    /**
-     * @ngdoc service
      * @name fvApp.service: PortfolioSvc
      * @description
      * # PortfolioSvc

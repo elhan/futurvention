@@ -31,6 +31,11 @@
             notAuthenticated: 'auth-not-authenticated',
             notAuthorized: 'auth-not-authorized'
         },
+        importer: {
+            profileReady: 'imp-profile-ready',
+            portfolioReady: 'imp-portfolio-ready',
+            reviewsReady: 'imp-reviews-ready'
+        },
         ui: {
             providerSelected: 'ui-provider-selected'
         }
@@ -69,6 +74,16 @@
             resetPassword: 'https://futurvention.azurewebsites.net/api/Account/ChangePassword',
             externalLogins: 'https://futurvention.azurewebsites.net/api/Account/ExternalLogins?returnUrl=http://client.futurvention.com:9000&generateState=true'
         },
+        importer: {
+            import: 'https://futurvention.azurewebsites.net/api/ExtService/import',
+            checkProgress: 'https://futurvention.azurewebsites.net/api/ExtService/checkprogress',
+            fetchProfile: 'https://futurvention.azurewebsites.net/api/ExtService/getprofiles',
+            fetchPortfolio: 'https://futurvention.azurewebsites.net/api/ExtService/getportfolios',
+        }
+    });
+
+    app.constant('ROUTES', {
+        public: ['/', '/login', '/register']
     });
 
     app.constant('EMBEDLY', {
@@ -89,6 +104,6 @@
     });
 
     // thirdparty profile & portfolio providers
-    app.constant('IMPORT_PROVIDERS', ['linkedIn', 'oDesk', 'elance', 'pph', 'freelancer', 'behance', 'dribbble', 'github']);
+    app.constant('IMPORT_PROVIDERS', ['linkedin', 'odesk', 'elance', 'pph', 'freelancer', 'behance', 'dribbble', 'github']);
 
 }());

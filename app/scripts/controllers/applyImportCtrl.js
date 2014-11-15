@@ -10,78 +10,48 @@
      * # ApplyImportCtrl
      * Controls the apply 'import' step
      */
-    app.controller('ApplyImportCtrl', ['$scope', '$timeout', 'EVENTS', 'ProfileSvc', function ($scope, $timeout, events, ProfileSvc) {
-        $scope.providers = ProfileSvc.initProviders();
-        $scope.selectedProviders = [];
+    app.controller('ApplyImportCtrl', ['$scope', 'EVENTS', 'ImporterSvc', function ($scope, events, ImporterSvc) {
+        $scope.importers = ImporterSvc.getImporters();
+
+        $scope.selected = new ImporterSvc.ImporterCollection();
+        $scope.selectedImporters = $scope.selected.importers;
+
+        $scope.done = ImporterSvc.getImporters('done');
 
         // toggles the given provider's selection state
-        $scope.toggleSelection = function (providerName) {
-            var provider = $scope.providers[providerName];
-            provider.selected = !provider.selected;
-            if (provider.selected) {
-                $scope.$broadcast(events.ui.providerSelected, providerName); // required to auto scroll down
-                $scope.selectedProviders.push(provider);
-            } else {
-                _.remove($scope.selectedProviders, function (selectedProvider) {
-                    return selectedProvider.name === provider.name;
-                });
+        $scope.toggleSelection = function (importer) {
+            if($scope.isSelected(importer)) {
+                _.remove($scope.selectedImporters, importer);
+                return;
             }
+            $scope.selectedImporters.push(importer);
+            $scope.$broadcast(events.ui.providerSelected, importer.provider); // required to auto scroll down
         };
 
-        // returns the giver provider's selection state
-        $scope.isSelected = function (providerName) {
-            return $scope.providers[providerName].selected;
+        $scope.isSelected = function (importer) {
+            return $scope.selectedImporters.indexOf(importer) > -1;
         };
 
-        $scope.hasUnsavedProviders = function () {
-            return _.find($scope.selectedProviders, function (provider) {
-                return !provider.saved; // return the first unsaved provider in selectedProviders
-            });
+        $scope.import = function () {
+            ImporterSvc.import($scope.selectedImporters);
         };
 
-        // save a provider link on the backend
-        $scope.saveProvider = function (providerName) {
-            var provider = $scope.providers[providerName];
-            provider.inProgress = true;
+//        $scope.$on(events.importer.profileReady, function () {
+//            $scope.goToStep(1);
+//        });
 
-            ProfileSvc.saveProvider(provider).then(function (res) {
-                console.log(res);
-                provider.saved = true;
-                provider.inProgress = false;
-                ProfileSvc.updateProfile({
-                    providers: new ProfileSvc.Provider(provider.name, provider.url)
-                });
-                console.log(ProfileSvc.getProfile());
+        $scope.$on(events.importer.portfolioReady, function () {
+            console.log(ImporterSvc.getImporters('done'));
+            ImporterSvc.fetchPortfolio().then(function (response) {
+                console.log(response);
             }, function (error) {
-                //TODO: error handling
-                provider.inProgress = false;
                 console.log(error);
             });
-        };
+        });
 
-        // remove a provider link & corresponding data
-        $scope.removeProvider = function (provider) {
-            provider.inProgress = true;
-            ProfileSvc.removeProvider(provider).then(function () {
-                provider.selected = false;
-                provider.saved = false;
-                provider.inProgress = false;
-                provider.url = '';
-                _.remove($scope.selectedProviders, provider);
-                ProfileSvc.updateProfile({
-                    providers: new ProfileSvc.Provider(provider.name, '')
-                });
-                console.log(ProfileSvc.getProfile());
-            }, function (error) {
-                //TODO: error handling
-                provider.inProgress = false;
-                console.log(error);
-            });
-        };
-
-        $scope.editProvider = function (provider) {
-            provider.saved = false;
-        };
+        $scope.$on(events.importer.reviewsReady, function () {
+            console.log(ImporterSvc.getImporters('done'));
+        });
     }]);
 
 }());

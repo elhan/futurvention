@@ -10,13 +10,9 @@
      * # MainCtrl
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
-    app.controller('MainCtrl', ['$scope', '$location', '$q', 'EVENTS', 'MESSAGES', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', function ($scope, $location, $q, events, msg, AccountSvc, NotificationSvc, ProfileSvc) {
+    app.controller('MainCtrl', ['$scope', '$location', '$q', '$cookies', 'EVENTS', 'MESSAGES', 'ROUTES', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', function ($scope, $location, $q, $cookies, events, msg, routes, AccountSvc, NotificationSvc, ProfileSvc) {
         $scope.currentUser = {};
         $scope.session = {};
-
-        $scope.isAuthenticated = function () {
-            return !_.isEmpty($scope.currentUser);
-        };
 
         $scope.updateCurrentUser = function (obj) {
             angular.extend($scope.currentUser, obj);
@@ -36,6 +32,10 @@
         ////////////////////////////////////////////
         /// Event handling
         ////////////////////////////////////////////
+
+        $scope.$on('$routeChangeStart', function (e, next) {
+            !$scope.session.hasRegistered && routes.public.indexOf(next.originalPath) === -1 && $scope.go('/');
+        });
 
         $scope.$on('$routeChangeError', function (e, current, previous, rejection) {
             console.log(rejection);

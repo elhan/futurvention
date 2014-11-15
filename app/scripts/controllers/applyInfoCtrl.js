@@ -10,7 +10,7 @@
      * # ApplyInfoCtrl
      * Controls the apply 'info' step
      */
-    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'ProfileSvc', 'LocationSvc', 'EVENTS', function ($scope, $modal, $timeout, ProfileSvc, LocationSvc, events) {
+    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'ProfileSvc', 'LocationSvc', 'ImporterSvc', function ($scope, $modal, $timeout, events, ProfileSvc, LocationSvc, ImporterSvc) {
         var modalImageCrop = $modal({
             scope: $scope,
             template: 'views/components/modalImageCrop.html',
@@ -18,6 +18,8 @@
             animation: 'am-slide-top',
             keyboard: true
         });
+
+        $scope.profile;
 
         $scope.showImageCropModal = function () {
             modalImageCrop.$promise.then(function () {
@@ -27,10 +29,9 @@
         };
 
         $scope.personalUrlExists = false; // true if the user has set a url that already exists. Used to display error label
-        $scope.profileImage = ProfileSvc.getProfile().image; // default, in case the user already has a profile image
 
         $scope.personalUrl = '';
-        $scope.title = '';
+
         $scope.selectedCity = '';
         $scope.cities = [];
 
@@ -64,23 +65,23 @@
 
         // on continue, save the rest of the user's info
         $scope.continue = function () {
-            var info = {
-                firstName: $scope.currentUser.firstName,
-                lastName: $scope.currentUser.lastName,
-                title: $scope.title,
-                bio: $scope.bio,
-                city: $scope.selectedCity,
-                country: $scope.country
-            };
-            ProfileSvc.saveProfile(info).then(function (res) {
-                console.log(res);
-                ProfileSvc.updateProfile(info); // update the cached Profile object once the server has persisted it
-                console.log(ProfileSvc.getProfile());
-                $scope.goToStep(2);
-            }, function (err) {
-                // TODO: handle error
-                console.log(err);
-            });
+//            var info = {
+//                firstName: $scope.currentUser.firstName,
+//                lastName: $scope.currentUser.lastName,
+//                title: $scope.title,
+//                bio: $scope.bio,
+//                city: $scope.selectedCity,
+//                country: $scope.country
+//            };
+//            ProfileSvc.saveProfile(info).then(function (res) {
+//                console.log(res);
+//                ProfileSvc.updateProfile(info); // update the cached Profile object once the server has persisted it
+//                console.log(ProfileSvc.getProfile());
+//                $scope.goToStep(2);
+//            }, function (err) {
+//                // TODO: handle error
+//                console.log(err);
+//            });
         };
 
         $scope.searchCity = _.throttle(function (prefix) {
@@ -105,6 +106,23 @@
             $scope.country = _.find($scope.countries, function (country) {
                 return country.name === $scope.countryName;
             });
+        });
+
+        ///////////////////////////////////////////////////////////
+        /// Initialization
+        ///////////////////////////////////////////////////////////
+
+        // TODO: if profile exists, fetch it from database
+
+        // loadfrom imported
+        ImporterSvc.fetchProfile().then(function (profile) {
+            $scope.profile = profile || new ProfileSvc.SimpleProfile();
+            $scope.profileImage = $scope.profile.image;
+            $scope.countryName = $scope.profile.country;
+            console.log($scope.profile);
+            $scope.$apply();
+        }, function (error) {
+            console.log(error);
         });
     }]);
 

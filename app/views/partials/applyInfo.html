@@ -49,10 +49,10 @@
       <div class="form-group container-x">
         <div class="label-l">Headline / Title</div>
         <div class="flex-2">
-          <input type="text" class="form-control input-s" name="infoTitle" ng-model="title" placeholder="eg. UX Designer">
+          <input type="text" class="form-control input-s" name="infoTitle" ng-model="profile.headline" placeholder="eg. UX Designer">
         </div>
         <div class="flex-1 flex-items-centered">
-          <svg ng-if="title" class="icon icon-green text-p space-left">
+          <svg ng-if="profile.headline" class="icon icon-green text-p space-left">
             <use xlink:href="#tick"></use>
           </svg>
         </div>
@@ -61,7 +61,7 @@
       <div class="form-group container-x">
         <div class="label-l label-bio">Bio</div>
         <div class="flex-2 textarea-wrapper">
-          <textarea class="textarea-info" name="infoBio" placeholder="Try to be as detailed and personal as possible" ng-model="bio"></textarea>
+          <textarea class="textarea-info" name="infoBio" placeholder="Try to be as detailed and personal as possible" ng-model="profile.bio"></textarea>
         </div>
         <div class="flex-1 flex-items-centered ">
           <svg ng-if="bio" class="icon icon-green text-p space-left">

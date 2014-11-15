@@ -16,6 +16,20 @@
             activeStep = 'import',
             profile = {};
 
+        // used to fetch data from importers
+        ProfileSvc.SimpleProfile = function (options) {
+            return {
+                firstName: options.FirstName || '',
+                lastName: options.LastName || '',
+                bio: options.Bio || '',
+                skills: options.Skills || [],
+                headline: options.Headline || '',
+                country: options.Country || '',
+                city: options.City || '',
+                image: options.Photo || ''
+            };
+        };
+
         // Provider object constructor
         ProfileSvc.Provider = function (name, url) {
             this.name = name;
