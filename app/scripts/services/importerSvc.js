@@ -10,51 +10,83 @@
      * CRUD operations for eternal data (importers)
      */
     app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'ProfileSvc', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, ProfileSvc) {
-        var all, done, inProgress, polling, stopPolling, startPolling,
+        var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
             ImporterSvc = {};
 
         // return an array of completed jobs, depending on status byte flags
         function getComplete (status) {
-            switch (status) {
-            case 1:
-                return ['profile'];
+            var complete = [];
+
+            status.match('Profile') && complete.push('profile');
+            status.match('Portfolio') && complete.push('portfolio');
+            status.match('Reviews') && complete.push('reviews');
+
+            switch (complete.length) {
+            case 0:
+                return ['none'];
             case 3:
-                return ['portfolio'];
-            case 4:
-                return ['profile', 'portfolio'];
-            case 5:
-                return ['reviews'];
-            case 6:
-                return ['profile', 'reviews'];
-            case 8:
-                return ['portfolio', 'reviews'];
-            case 9:
-                return ['profile', 'portfolio', 'reviews'];
+                return ['all'];
+            default:
+                return complete;
             }
+        }
+
+        function broadcastImporterEvent(type, importer) {
+            var event;
+            switch (type) {
+            case 'profile':
+                event = events.importer.profileReady;
+                break;
+            case 'portfolio':
+                event = events.importer.portfolioReady;
+                break;
+            case 'reviews':
+                event = events.importer.reviewsReady;
+                break;
+            }
+            $timeout(function () { $rootScope.$broadcast(event, importer); });
         }
 
         // callback for status polling
         function checkStatus () {
             $http.post(paths.importer.checkProgress, inProgress.capitalize()).then(function (response) {
-                var idx, removed;
+                var idx, importer;
                 _.each(response.data, function (obj) {
-                    if (getComplete(obj.Status) && getComplete(obj.Status).indexOf('profile') === -1) {
+                    idx = _.pluck(inProgress.importers, 'guid').indexOf(obj.Guid); // find the index of the corresponding importer in progress
+                    importer = idx > -1 ? inProgress.importers[idx] : null;
+
+                    if (!importer || getComplete(obj.Status).indexOf('none') !== -1) {
                         return;
                     }
-                    idx = _.pluck(inProgress.importers, 'guid').indexOf(obj.Guid); // find the index of the corresponding importer in progress
-                    // remove the importer from the progress collection and ad it to the done collection
-//                    removed = idx > -1 ? inProgress.importers.splice(idx, 1) : null;
-                    // if there are no more importers in progress, stop polling
-//                    removed && done.importers.indexOf(removed) === -1 && done.importers.merge(removed);
-                    removed = inProgress.importers[idx];
-                    done.importers.indexOf(removed) === -1 && done.importers.merge(removed);
-                    $timeout(function () {
-                        // notify controllers that at least one profile is ready
-                        $rootScope.$broadcast(events.importer.profileReady);
-                    });
-                    // TODO: REMOVE
-                    getComplete(obj.Status).indexOf('portfolio') !== -1 && $rootScope.$broadcast(events.importer.portfolioReady);
-                    getComplete(obj.Status).indexOf('reviews') !== -1 && $rootScope.$broadcast(events.importer.reviewsReady);
+
+                    if (getComplete(obj.Status).indexOf('all') > -1) {
+                        done.importers.indexOf(importer) === -1 && done.importers.push(importer);
+                        inProgress.importers.splice(idx, 1);
+                        broadcastImporterEvent('profile', importer);
+                        broadcastImporterEvent('portfolio', importer);
+                        broadcastImporterEvent('reviews', importer);
+                        return;
+                    }
+
+                    if (getComplete(obj.Status).indexOf('profile') > -1) {
+                        profileDone.importers.indexOf(importer) === -1 && profileDone.push(importer);
+                        broadcastImporterEvent('profile', importer);
+                    }
+
+                    if (getComplete(obj.Status).indexOf('portfolio') > -1) {
+                        portfoliosDone.importers.indexOf(importer) === -1 && portfoliosDone.push(importer);
+                        broadcastImporterEvent('portfolio', importer);
+                    }
+
+                    if (getComplete(obj.Status).indexOf('reviews') > -1) {
+                        reviewsDone.importers.indexOf(importer) === -1 && reviewsDone.push(importer);
+                        broadcastImporterEvent('reviews', importer);
+                    }
+
+                    if (inProgress.importers.length === 0) {
+                        stopPolling();
+                    }
+
                 });
             }, function (error) {
                 console.log(error);
@@ -124,6 +156,8 @@
                 return inProgress.getImporters();
             case 'done':
                 return done.getImporters() ;
+            case 'profileDone':
+                return profileDone.getImporters();
             default:
                 return all.getImporters();
             }
@@ -186,8 +220,7 @@
             var deferred = $q.defer();
 
             $http.post(paths.importer.fetchPortfolio, done.capitalize()).then(function (response) {
-                console.log(response, new ProfileSvc.SimpleProfile(response.data[0].data.response.data.PersonalInfo));
-                deferred.resolve(new ProfileSvc.SimpleProfile(response.data[0].data.response.data.PersonalInfo));
+                deferred.resolve(response.data[0].data.response.data.portfolios);
             }, function (error) {
                 console.log(error);
                 deferred.reject(error);
@@ -200,9 +233,12 @@
         /// Initialization
         ///////////////////////////////////////////////////////////
 
-        all = new ImporterSvc.ImporterCollection(),
-        done = new ImporterSvc.ImporterCollection(),
-        inProgress = new ImporterSvc.ImporterCollection();
+        all = new ImporterSvc.ImporterCollection();
+        done = new ImporterSvc.ImporterCollection(); // Importers that have finished profile, reviews & portfolios
+        inProgress = new ImporterSvc.ImporterCollection(); // all Importers currently in progress
+        profileDone = new ImporterSvc.ImporterCollection(); // all Importers with profile complete
+        reviewsDone = new ImporterSvc.ImporterCollection(); // all Importers with reviews status complete
+        portfoliosDone = new ImporterSvc.ImporterCollection(); // all Importers with portfolios complete
 
         _.each(providerNames, function (providerName) {
             all.importers.push(new ImporterSvc.Importer({ Provider: providerName }));

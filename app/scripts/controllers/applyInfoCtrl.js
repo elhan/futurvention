@@ -10,7 +10,7 @@
      * # ApplyInfoCtrl
      * Controls the apply 'info' step
      */
-    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'ProfileSvc', 'LocationSvc', 'ImporterSvc', function ($scope, $modal, $timeout, events, ProfileSvc, LocationSvc, ImporterSvc) {
+    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'ProfileSvc', 'LocationSvc', 'ImporterSvc', 'NotificationSvc', function ($scope, $modal, $timeout, events, ProfileSvc, LocationSvc, ImporterSvc, NotificationSvc) {
         var modalImageCrop = $modal({
             scope: $scope,
             template: 'views/components/modalImageCrop.html',
@@ -99,12 +99,37 @@
             $scope.profileImage = ProfileSvc.getProfile().image;
         });
 
+        ///////////////////////////////////////////////////////////
+        /// Event handling
+        ///////////////////////////////////////////////////////////
+
         $scope.$watch('countryName', function (newValue, oldValue) {
             if (newValue === oldValue) {
                 return;
             }
             $scope.country = _.find($scope.countries, function (country) {
                 return country.name === $scope.countryName;
+            });
+        });
+
+        $scope.$on(events.importer.portfolioReady, function (event, importer) {
+            console.log(ImporterSvc.getImporters('done'));
+            ImporterSvc.fetchPortfolio().then(function (response) {
+                console.log(response);
+                NotificationSvc.show({
+                    content: 'Portfolio imported from ' + importer.provider,
+                    type: 'success'
+                });
+            }, function (error) {
+                console.log(error);
+            });
+        });
+
+        $scope.$on(events.importer.reviewsReady, function (event, importer) {
+            console.log(ImporterSvc.getImporters('done'));
+            NotificationSvc.show({
+                content: 'Reviews imported from ' + importer.provider,
+                type: 'success'
             });
         });
 
@@ -116,11 +141,11 @@
 
         // loadfrom imported
         ImporterSvc.fetchProfile().then(function (profile) {
-            $scope.profile = profile || new ProfileSvc.SimpleProfile();
-            $scope.profileImage = $scope.profile.image;
-            $scope.countryName = $scope.profile.country;
-            console.log($scope.profile);
-            $scope.$apply();
+            $timeout(function () {
+                $scope.profile = profile || new ProfileSvc.SimpleProfile();
+                $scope.profileImage = $scope.profile.image;
+                $scope.countryName = $scope.profile.country;
+            });
         }, function (error) {
             console.log(error);
         });

@@ -89,7 +89,7 @@
     // Merges an array passed as param into the original array.
     if (!Array.prototype.hasOwnProperty('merge')) {
         Array.prototype.merge = function (array) {
-            if (!array instanceof Array) {
+            if (!(array instanceof Array)) {
                 return undefined;
             }
 

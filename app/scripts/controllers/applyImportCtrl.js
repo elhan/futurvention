@@ -10,13 +10,13 @@
      * # ApplyImportCtrl
      * Controls the apply 'import' step
      */
-    app.controller('ApplyImportCtrl', ['$scope', 'EVENTS', 'ImporterSvc', function ($scope, events, ImporterSvc) {
+    app.controller('ApplyImportCtrl', ['$scope', 'EVENTS', 'ImporterSvc', 'NotificationSvc', function ($scope, events, ImporterSvc, NotificationSvc) {
         $scope.importers = ImporterSvc.getImporters();
 
         $scope.selected = new ImporterSvc.ImporterCollection();
         $scope.selectedImporters = $scope.selected.importers;
 
-        $scope.done = ImporterSvc.getImporters('done');
+        $scope.done = ImporterSvc.getImporters('profileDone');
 
         // toggles the given provider's selection state
         $scope.toggleSelection = function (importer) {
@@ -36,22 +36,18 @@
             ImporterSvc.import($scope.selectedImporters);
         };
 
-//        $scope.$on(events.importer.profileReady, function () {
-//            $scope.goToStep(1);
-//        });
+        ///////////////////////////////////////////////////////////
+        /// Event handling
+        ///////////////////////////////////////////////////////////
 
-        $scope.$on(events.importer.portfolioReady, function () {
-            console.log(ImporterSvc.getImporters('done'));
-            ImporterSvc.fetchPortfolio().then(function (response) {
-                console.log(response);
-            }, function (error) {
-                console.log(error);
+        $scope.$on(events.importer.profileReady, function (event, importer) {
+            NotificationSvc.show({
+                content: 'Profile imported from ' + importer.provider,
+                type: 'success'
             });
+            $scope.goToStep(1);
         });
 
-        $scope.$on(events.importer.reviewsReady, function () {
-            console.log(ImporterSvc.getImporters('done'));
-        });
     }]);
 
 }());
