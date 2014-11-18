@@ -9,6 +9,31 @@
             return str.charAt(0).toUpperCase() + str.slice(1);
         };
 
+        Utils.capitalizeKeys = function (obj) {
+            var capitalized = {};
+            var values = _.values(obj);
+            _.each(_.keys(obj), function (key, idx) {
+                capitalized[Utils.capitalize(key)] = values[idx];
+            });
+            return capitalized;
+        };
+
+        Utils.camelCaseKeys = function (obj) {
+            if (!_.isObject(obj)) {
+                return;
+            }
+            var camel = {};
+            var values = _.values(obj);
+            _.each(_.keys(obj), function (key, idx) {
+                if (/[a-z]/.test(key)) { // if not all CAPITALS
+                    camel[key.charAt(0).toLowerCase() + key.slice(1)] = _.isObject(obj[key]) ? Utils.camelCaseKeys(values[idx]) : values[idx];
+                } else {
+                    camel[key] = values[idx];
+                }
+            });
+            return camel;
+        };
+
         ///////////////////////////////////////////////////////////
         /// Regex patterns & matching functions
         ///////////////////////////////////////////////////////////

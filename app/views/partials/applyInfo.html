@@ -33,11 +33,11 @@
       <div class="form-group container-x" ng-class="{'has-error': urlExists}">
         <div class="label-l">Your Personal Url</div>
         <div class="flex-2">
-          <input type="text" class="form-control flex-1 input-info-url input-s" name="infoUrl" ng-model="personalUrl" ng-blur="savePersonalUrl()" ng-focus="personalUrlExists = false" autocomplete="on">
+          <input type="text" class="form-control flex-1 input-info-url input-s" name="infoUrl" ng-model="moniker" autocomplete="on">
           <div class="label-r">.servicebucket.com</div>
         </div>
         <div class="flex-1 flex-items-centered">
-          <svg ng-if="getProfile()['personalUrl']" class="icon icon-green text-p space-left">
+          <svg ng-if="moniker" class="icon icon-green text-p space-left">
             <use xlink:href="#tick"></use>
           </svg>
         </div>

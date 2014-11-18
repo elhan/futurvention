@@ -196,7 +196,7 @@
             var deferred = $q.defer();
 
             $http.post(paths.importer.fetchProfile, done.capitalize()).then(function (response) {
-                deferred.resolve(new ProfileSvc.SimpleProfile(response.data[0].data.response.data.PersonalInfo));
+                deferred.resolve(new ProfileSvc.SimpleProfile(response.data.length > 0 ? response.data[0].data.response.data.PersonalInfo : {}));
             }, function (error) {
                 console.log(error);
                 deferred.reject(error);
@@ -228,6 +228,14 @@
 
             return deferred.promise;
         };
+
+        ///////////////////////////////////////////////////////////
+        /// Watchers
+        ///////////////////////////////////////////////////////////
+
+        $rootScope.$on(events.auth.sessionTimeout, function () {
+            stopPolling();
+        });
 
         ///////////////////////////////////////////////////////////
         /// Initialization

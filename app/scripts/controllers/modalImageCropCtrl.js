@@ -10,9 +10,7 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('ModalImageCropCtrl', ['$scope', 'ProfileSvc', '$timeout', 'EVENTS', function ($scope, ProfileSvc, $timeout, events) {
-
-        $scope.profileImage = ProfileSvc.getProfile().image; // default, in case the user already has a profile image
+    app.controller('ModalImageCropCtrl', ['$rootScope', '$scope', '$timeout', '$upload', 'ProfileSvc', 'EVENTS', function ($rootScope, $scope, $timeout, $upload, ProfileSvc, events) {
 
         /*
             Expose the init function on the scope, as the fv-on-drop directive needs to call it.
@@ -48,18 +46,16 @@
             $scope.inProgress = state;
         };
 
-        // expose this on scope as some form inputs need to be aware of the profile completion state
-        $scope.getProfile = function () {
-            return ProfileSvc.getProfile();
-        };
-
         $scope.saveProfileImage = function () {
-            ProfileSvc.saveProfileImage($scope.croppedImage).then(function (res) {
-                console.log(res);
-                ProfileSvc.updateProfile({ image: $scope.croppedImage });
-                $scope.profileImage = angular.copy($scope.croppedImage);
-                $scope.$emit(events.profile.profileImageUpdated);
-                $scope.$hide();
+            $upload.upload({
+                url: 'https://futurvention.azurewebsites.net/api/Self/Avatar',
+                file: $scope.croppedImage
+            }).then(function () {
+                ProfileSvc.fetchOwnProfile().then(function () { // update profile
+                    $rootScope.$broadcast(events.profile.profileUpdated);
+                }, function (error) {
+                    console.log(error);
+                });
             }, function (err) {
                 // TODO: error handling
                 console.log(err);

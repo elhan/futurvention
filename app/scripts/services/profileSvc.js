@@ -9,7 +9,7 @@
      * # ProfileSvc
      * CRUD operations for Seller profiles
      */
-    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', function ($http, $q, $upload, $timeout, importProviders) {
+    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', 'PATHS', 'Utils', function ($http, $q, $upload, $timeout, importProviders, paths, utils) {
         var ProfileSvc = {},
             providerNames = importProviders,
             steps = ['import', 'info', 'service_selection', 'offer_config', 'storefront'], // profile completion steps
@@ -26,9 +26,48 @@
                 headline: options.Headline || '',
                 country: options.Country || '',
                 city: options.City || '',
-                image: options.Photo || ''
+                image: options.Photo || '',
+                moniker: '',
+                profileID: ''
             };
         };
+
+//        ProfileSvc.Profile = function (options) {
+//            return {
+//                moniker: options.Moniker || '',
+//                firstName: options.FirstName || '',
+//                lastName: options.LastName || '',
+//                title: options.Title || '',
+//                description: options.Description || '',
+//                resume: options.Resume || '',
+//                status: options.Status || 'new',
+//                sourceUrl: options.SourceUrl || '',
+//                location: options.Location || {},
+//                photoID: options.PhotoID || '',
+//                photo: options.Photo || '',
+//                user: options.User || {},
+//                sourceID: options.SourceID || '',
+//                source: options.Source || {},
+//                showcases: options.Showcases || [],
+//                reviews: options.Reviews || [],
+//                profileID: options.ID || '',
+//                creationDate: options.CreationDate || '',
+//                modificationDate: options.modificationDate || ''
+//            };
+//        };
+//
+//        ProfileSvc.Profile.prototype.simplify = function () {
+//            return new ProfileSvc.SimpleProfile({
+//                firstName: this.firstName,
+//                lastName: this.lastName,
+//                bio: this.description,
+//                skills: this.resume,
+//                headline: this.status,
+//                country: this.location.country,
+//                city: this.location.city,
+//                image: this.photo
+//            });
+//        };
 
         // Provider object constructor
         ProfileSvc.Provider = function (name, url) {
@@ -65,6 +104,25 @@
             return steps;
         };
 
+        ProfileSvc.getSimpleProfile = function () {
+            console.log(ProfileSvc.profile);
+            if (!ProfileSvc.profile) {
+                return ProfileSvc.SimpleProfile({});
+            }
+            return angular.extend(ProfileSvc.SimpleProfile({}), {
+                firstName: ProfileSvc.profile.user && ProfileSvc.profile.user.firstName,
+                lastName: ProfileSvc.profile.user && ProfileSvc.profile.user.lastName,
+                bio: ProfileSvc.profile.description,
+                skills: ProfileSvc.profile.resume,
+                headline: ProfileSvc.profile.title,
+                country: ProfileSvc.profile.location && ProfileSvc.profile.location.country,
+                city: ProfileSvc.profile.location && ProfileSvc.profile.location.city,
+                image: ProfileSvc.profile.user && ProfileSvc.profile.user.avatar,
+                moniker: ProfileSvc.profile.moniker,
+                profileID: ProfileSvc.profile.ID
+            });
+        };
+
         ////////////////////////////////////////////
         /// Set methods
         ////////////////////////////////////////////
@@ -89,30 +147,45 @@
             // TODO: remove mock functionality
         };
 
-        ProfileSvc.saveProfile = function (info) {
-            // TODO: remove mock functionality
+        ProfileSvc.saveProfile = function (profile) {
+            return $http.post(paths.sellerManagement.profile, profile);
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Update methods
+        ///////////////////////////////////////////////////////////
+
+        ProfileSvc.updateProfile = function (profile) {
+            return $http({
+                method: 'PATCH',
+                url: paths.sellerManagement.profile + profile.ID,
+                data: profile
+            });
         };
 
         ///////////////////////////////////////////////////////////
         /// Fetch methods fetch data from the server
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.fetchProfile = function (personalUrl) {
+        ProfileSvc.fetchOwnProfile = function () {
             var deferred = $q.defer();
-            deferred.resolve();
+
+            $http.get(paths.sellerManagement.ownProfile).then(function (response) {
+                ProfileSvc.profile = utils.camelCaseKeys(response.data);
+                deferred.resolve();
+            }, function (error) {
+                deferred.reject(error);
+            });
+
             return deferred.promise;
         };
 
-        ProfileSvc.fetchPersonalUrlStatus = function (url) {
-            // TODO: remove mock code
+        ProfileSvc.fetchProfileStatus = function () {
+            return $http.get(paths.sellerManagement.profileStatus);
         };
 
-        ///////////////////////////////////////////////////////////
-        /// Remove methods perform delete operations on the server
-        ///////////////////////////////////////////////////////////
-
-        ProfileSvc.removeProvider = function (provider) {
-            // TODO: remove mock functionality
+        ProfileSvc.fetchPersonalUrlStatus = function (moniker) {
+            return $http.get(paths.sellerManagement.monikerExists(moniker));
         };
 
         return ProfileSvc;

@@ -13,7 +13,7 @@
     app.constant('EVENTS', {
         profile: {
             fetchProfileFailed: 'fetch-profile-failed',
-            profileImageUpdated: 'profile-image-updated'
+            profileUpdated: 'profile-updated'
         },
         user: {
             createSuccess: 'user-creation-success',
@@ -79,6 +79,18 @@
             checkProgress: 'https://futurvention.azurewebsites.net/api/ExtService/checkprogress',
             fetchProfile: 'https://futurvention.azurewebsites.net/api/ExtService/getprofiles',
             fetchPortfolio: 'https://futurvention.azurewebsites.net/api/ExtService/getportfolios',
+        },
+        sellerManagement: {
+            profile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
+            ownProfile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile?expand=User',
+            profileStatus: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
+            monikerExists: function (moniker) {
+                return [
+                    'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
+                    moniker,
+                    '/exists'
+                ].join('');
+            }
         }
     });
 
@@ -99,7 +111,8 @@
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',
-            resetPassword: 'Your password has been reset!'
+            resetPassword: 'Your password has been reset!',
+            profileImported: 'Your profile has been imported from '
         }
     });
 

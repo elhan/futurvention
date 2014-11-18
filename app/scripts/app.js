@@ -66,9 +66,6 @@
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',
             resolve: {
-                profile: ['$location', '$route', 'ProfileSvc', function ($location, $route, ProfileSvc) {
-                    return ProfileSvc.fetchProfile($location.absUrl());
-                }],
                 userId: ['$route', function ($route) {
                     return $route.current.params.userId;
                 }]
@@ -97,7 +94,7 @@
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
         // 401 unauthorized interceptor: redirect to login page
-        $httpProvider.responseInterceptors.push(['$q', '$location', 'PATHS', function ($q, $location, paths) {
+        $httpProvider.responseInterceptors.push(['$rootScope', '$q', '$location', 'PATHS', 'MESSAGES', 'EVENTS', function ($rootScope, $q, $location, paths, msg, events) {
             return function (promise) {
                 return promise.then(function (response) {
                     return response;
@@ -106,6 +103,7 @@
                         console.log(error);
                         // exclude user info calls as they are only used to determine auth status
                         if (error.config.url !== paths.account.userInfo) {
+                            $rootScope.$broadcast(events.auth.sessionTimeout, event);
                             $location.path('/login');
                         }
                         return error;

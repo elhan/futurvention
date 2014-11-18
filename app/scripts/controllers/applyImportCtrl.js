@@ -10,7 +10,7 @@
      * # ApplyImportCtrl
      * Controls the apply 'import' step
      */
-    app.controller('ApplyImportCtrl', ['$scope', 'EVENTS', 'ImporterSvc', 'NotificationSvc', function ($scope, events, ImporterSvc, NotificationSvc) {
+    app.controller('ApplyImportCtrl', ['$scope', 'EVENTS', 'MESSAGES', 'ImporterSvc', 'NotificationSvc', function ($scope, events, msg, ImporterSvc, NotificationSvc) {
         $scope.importers = ImporterSvc.getImporters();
 
         $scope.selected = new ImporterSvc.ImporterCollection();
@@ -42,7 +42,7 @@
 
         $scope.$on(events.importer.profileReady, function (event, importer) {
             NotificationSvc.show({
-                content: 'Profile imported from ' + importer.provider,
+                content: msg.success.profileImported + importer.provider,
                 type: 'success'
             });
             $scope.goToStep(1);

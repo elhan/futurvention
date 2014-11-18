@@ -117,7 +117,7 @@
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.fetchProfile($location.absUrl()).then(function (profile) {
+        ProfileSvc.fetchProfile($scope.session.userID).then(function (profile) {
             $scope.isCurrentUser = $location.absUrl() === profile.personalUrl;
             $scope.profile = profile;
         }, function (error) {
@@ -144,7 +144,7 @@
         });
 
         // listen for image update events emmited by the imga ecrop modal
-        $scope.$on(events.profile.profileImageUpdated, function () {
+        $scope.$on(events.profile.profileUpdated, function () {
             $scope.profile.image = ProfileSvc.getProfile().image;
         });
     }]);

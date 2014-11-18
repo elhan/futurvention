@@ -10,7 +10,7 @@
      * # MainCtrl
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
-    app.controller('MainCtrl', ['$scope', '$location', '$q', '$cookies', 'EVENTS', 'MESSAGES', 'ROUTES', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', function ($scope, $location, $q, $cookies, events, msg, routes, AccountSvc, NotificationSvc, ProfileSvc) {
+    app.controller('MainCtrl', ['$scope', '$location', '$q', '$cookies', '$timeout', 'EVENTS', 'MESSAGES', 'ROUTES', 'Utils', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', 'UserSvc', function ($scope, $location, $q, $cookies, $timeout, events, msg, routes, utils, AccountSvc, NotificationSvc, ProfileSvc, UserSvc) {
         $scope.currentUser = {};
         $scope.session = {};
 
@@ -76,12 +76,27 @@
             switch (true) {
             case newValue === oldValue:
                 return;
-            case _.isEmpty(newValue):
+            case _.isEmpty(newValue): //logout
                 $scope.currentUser = {};
                 break;
-            default:
-                ProfileSvc.fetchProfile().then(function (user) {
-                    $scope.currentUser = user;
+            default: // login
+                ProfileSvc.fetchProfileStatus().then(function (response) {
+                    if (response.data !== 'null') { // profile exists
+                        ProfileSvc.fetchOwnProfile().then(function () {
+                            $scope.currentUser = ProfileSvc.profile.user;
+                        }, function (error) {
+                            // TODO: error handling
+                            console.log(error);
+                        });
+                    } else {
+                        $scope.currentUser = utils.camelCaseKeys(new UserSvc.User());
+                    }
+                }, function (error) {
+                    console.log(error);
+                });
+
+                ProfileSvc.fetchOwnProfile().then(function () {
+                    $scope.currentUser = ProfileSvc.profile ? ProfileSvc.profile.user : utils.camelCaseKeys(new UserSvc.User());
                 }, function (error) {
                     // TODO: error handling
                     console.log(error);

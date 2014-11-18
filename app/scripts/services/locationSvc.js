@@ -67,6 +67,7 @@
                 ].join('');
 
             $http.get(url).then(function (response) {
+                console.log(response);
                 deferred.resolve(filterCitiesCollection(response));
             }, function (error) {
                 deferred.reject(error);
@@ -86,6 +87,7 @@
                 query = new breeze.EntityQuery('CountriesLocations').expand('Name.Literals');
 
             manager.executeQuery(query).then(function (response) {
+                console.log(response);
                 deferred.resolve(filterCountriesCollection(response));
             }, function (error) {
                 console.log(error);

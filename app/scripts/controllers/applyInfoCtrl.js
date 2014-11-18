@@ -19,7 +19,7 @@
             keyboard: true
         });
 
-        $scope.profile;
+        $scope.profile = new ProfileSvc.SimpleProfile({});
 
         $scope.showImageCropModal = function () {
             modalImageCrop.$promise.then(function () {
@@ -30,7 +30,7 @@
 
         $scope.personalUrlExists = false; // true if the user has set a url that already exists. Used to display error label
 
-        $scope.personalUrl = '';
+        $scope.moniker = '';
 
         $scope.selectedCity = '';
         $scope.cities = [];
@@ -52,19 +52,51 @@
             return ProfileSvc.getProfile();
         };
 
-        $scope.savePersonalUrl = function () {
-            ProfileSvc.savePersonalUrl($scope.personalUrl).then(function (res) {
-                console.log(res);
-                ProfileSvc.updateProfile({ personalUrl: $scope.personalUrl });
+        $scope.checkPersonalUrl = function () {
+            ProfileSvc.fetchPersonalUrlStatus($scope.moniker).then(function (res) {
+                $scope.personalUrlExists = res.data;
             }, function (err) {
                 console.log(err);
-                // TODO: check for specific 'url exists' error
-                $scope.personalUrlExists = true;
             });
         };
 
         // on continue, save the rest of the user's info
         $scope.continue = function () {
+            //                moniker: options.Moniker || '',
+            //                firstName: options.FirstName || '',
+            //                lastName: options.LastName || '',
+            //                title: options.Title || '',
+            //                description: options.Description || '',
+            //                resume: options.Resume || '',
+            //                status: options.Status || 'new',
+            //                sourceUrl: options.SourceUrl || '',
+            //                location: options.Location || {},
+            //                photoID: options.PhotoID || '',
+            //                photo: options.Photo || '',
+            //                user: options.User || {},
+            //                sourceID: options.SourceID || '',
+            //                source: options.Source || {},
+            //                showcases: options.Showcases || [],
+            //                reviews: options.Reviews || [],
+            //                profileID: options.ID || '',
+            //                creationDate: options.CreationDate || '',
+            //                modificationDate: options.modificationDate || ''
+
+            var prof = {
+                ID: ProfileSvc.profile.ID,
+                Moniker: $scope.moniker
+            };
+
+            ProfileSvc.updateProfile(prof).then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
+//            ProfileSvc.saveProfile(prof).then(function (response) {
+//                console.log(response);
+//            }, function (error) {
+//                console.log(error);
+//            });
 //            var info = {
 //                firstName: $scope.currentUser.firstName,
 //                lastName: $scope.currentUser.lastName,
@@ -94,11 +126,6 @@
             });
         }, 700);
 
-        // listen for image update events emmited by the imga ecrop modal
-        $scope.$on(events.profile.profileImageUpdated, function () {
-            $scope.profileImage = ProfileSvc.getProfile().image;
-        });
-
         ///////////////////////////////////////////////////////////
         /// Event handling
         ///////////////////////////////////////////////////////////
@@ -110,6 +137,10 @@
             $scope.country = _.find($scope.countries, function (country) {
                 return country.name === $scope.countryName;
             });
+        });
+
+        $scope.$watch('moniker', function (newValue, oldValue) {
+            newValue && newValue !== oldValue && $scope.checkPersonalUrl();
         });
 
         $scope.$on(events.importer.portfolioReady, function (event, importer) {
@@ -133,22 +164,50 @@
             });
         });
 
+        $scope.$on(events.profile.profileUpdated, function (event) {
+            $timeout(function () {
+                $scope.profile = ProfileSvc.getSimpleProfile();
+                $scope.profileImage = $scope.profile.image;
+                $scope.countryName = $scope.profile.country;
+                $scope.moniker = $scope.profile.moniker;
+            });
+        });
+
         ///////////////////////////////////////////////////////////
         /// Initialization
         ///////////////////////////////////////////////////////////
 
-        // TODO: if profile exists, fetch it from database
-
-        // loadfrom imported
-        ImporterSvc.fetchProfile().then(function (profile) {
-            $timeout(function () {
-                $scope.profile = profile || new ProfileSvc.SimpleProfile();
-                $scope.profileImage = $scope.profile.image;
-                $scope.countryName = $scope.profile.country;
-            });
+        ProfileSvc.fetchProfileStatus().then(function (response) {
+            //profile already exists
+            if (response && response !== 'null') {
+                ProfileSvc.fetchOwnProfile().then(function () {
+                    $timeout(function () {
+                        $scope.profile = ProfileSvc.getSimpleProfile();
+                        $scope.profileImage = $scope.profile.image;
+                        $scope.countryName = $scope.profile.country;
+                        $scope.moniker = $scope.profile.moniker;
+                    });
+                }, function (error) {
+                    console.log(error);
+                });
+            } else {
+                // loadfrom imported
+                ImporterSvc.fetchProfile().then(function (profile) {
+                    $timeout(function () {
+                        $scope.profile = profile || new ProfileSvc.SimpleProfile({});
+                        $scope.profileImage = $scope.profile.image;
+                        $scope.countryName = $scope.profile.country;
+                        $scope.moniker = $scope.profile.moniker;
+                    });
+                }, function (error) {
+                    console.log(error);
+                });
+            }
         }, function (error) {
             console.log(error);
         });
+
+
     }]);
 
 }());
