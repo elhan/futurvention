@@ -37,9 +37,6 @@
             contactModal.$promise.then(contactModal.hide);
         };
 
-        //TODO: remove
-        $scope.user = UserSvc.User('Mark','Twain');
-
         PortfolioSvc.fetchPortfolio($scope.user.userId).then(function (portfolio) {
             PortfolioSvc.updatePortfolio(portfolio);
             $scope.portfolio = PortfolioSvc.getPortfolio();

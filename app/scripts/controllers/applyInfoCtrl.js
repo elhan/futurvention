@@ -10,7 +10,7 @@
      * # ApplyInfoCtrl
      * Controls the apply 'info' step
      */
-    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'ProfileSvc', 'LocationSvc', 'ImporterSvc', 'NotificationSvc', function ($scope, $modal, $timeout, events, ProfileSvc, LocationSvc, ImporterSvc, NotificationSvc) {
+    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'Odata', 'ProfileSvc', 'LocationSvc', 'ImporterSvc', 'NotificationSvc', function ($scope, $modal, $timeout, events, odata, ProfileSvc, LocationSvc, ImporterSvc, NotificationSvc) {
         var modalImageCrop = $modal({
             scope: $scope,
             template: 'views/components/modalImageCrop.html',
@@ -66,8 +66,8 @@
         $scope.continue = function () {
             var payload = {
                 Moniker: $scope.moniker,
-                Title: $scope.profile.headline,
-                Description: $scope.profile.bio,
+                Title: new odata.Multilingual({ Text: $scope.profile.headline }),
+                Description: new odata.Multilingual({ Text: $scope.profile.bio }),
                 Location: _.find($scope.cities, function (city) {
                     return city.name === $scope.selectedCity;
                 }).ID
@@ -142,7 +142,7 @@
             $scope.profileExists = response && response !== 'null';
 
             // load existing profiles from the backend
-            $scope.profileExists && ProfileSvc.fetchOwnProfile().then(function () {
+            !$scope.profileExists && ProfileSvc.fetchOwnProfile().then(function () {
                 $timeout(function () {
                     $scope.profile = ProfileSvc.getSimpleProfile();
                     $scope.profileImage = $scope.profile.image;
@@ -154,12 +154,14 @@
             });
 
             // populate new profiles from imported
-            !$scope.profileExists && ImporterSvc.fetchProfile().then(function (profile) {
+            $scope.profileExists && ImporterSvc.fetchProfile().then(function (profile) {
                 $timeout(function () {
                     $scope.profile = profile || new ProfileSvc.SimpleProfile({});
                     $scope.profileImage = $scope.profile.image;
                     $scope.countryName = $scope.profile.country;
                     $scope.moniker = $scope.profile.moniker;
+                    var pr = new odata.SellerProfile();
+                    console.log(pr.fromImported(profile));
                 });
             }, function (error) {
                 console.log(error);

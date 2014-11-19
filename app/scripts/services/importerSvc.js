@@ -10,7 +10,7 @@
      * CRUD operations for eternal data (importers)
      */
     app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'ProfileSvc', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, ProfileSvc) {
-        var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
+        var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling, portfolios,
             ImporterSvc = {};
 
         // return an array of completed jobs, depending on status byte flags
@@ -198,7 +198,8 @@
             var deferred = $q.defer();
 
             $http.post(paths.importer.fetchProfile, done.capitalize()).then(function (response) {
-                deferred.resolve(new ProfileSvc.SimpleProfile(response.data.length > 0 ? response.data[0].data.response.data.PersonalInfo : {}));
+//                deferred.resolve(new ProfileSvc.SimpleProfile(response.data.length > 0 ? response.data[0].data.response.data.PersonalInfo : {}));
+                deferred.resolve(response.data[0].data.response.data.PersonalInfo);
             }, function (error) {
                 console.log(error);
                 deferred.reject(error);
@@ -222,7 +223,8 @@
             var deferred = $q.defer();
 
             $http.post(paths.importer.fetchPortfolio, done.capitalize()).then(function (response) {
-                deferred.resolve(response.data[0].data.response.data.portfolios);
+                console.log(response);
+                deferred.resolve();
             }, function (error) {
                 console.log(error);
                 deferred.reject(error);

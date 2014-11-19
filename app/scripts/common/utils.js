@@ -5,6 +5,10 @@
     app.service('Utils', function () {
         var Utils = {};
 
+        ///////////////////////////////////////////////////////////
+        /// String Case functions
+        ///////////////////////////////////////////////////////////
+
         Utils.capitalize = function (str) {
             return str.charAt(0).toUpperCase() + str.slice(1);
         };

@@ -32,30 +32,6 @@
             };
         };
 
-//        ProfileSvc.Profile = function (options) {
-//            return {
-//                moniker: options.Moniker || '',
-//                firstName: options.FirstName || '',
-//                lastName: options.LastName || '',
-//                title: options.Title || '',
-//                description: options.Description || '',
-//                resume: options.Resume || '',
-//                status: options.Status || 'new',
-//                sourceUrl: options.SourceUrl || '',
-//                location: options.Location || {},
-//                photoID: options.PhotoID || '',
-//                photo: options.Photo || '',
-//                user: options.User || {},
-//                sourceID: options.SourceID || '',
-//                source: options.Source || {},
-//                showcases: options.Showcases || [],
-//                reviews: options.Reviews || [],
-//                profileID: options.ID || '',
-//                creationDate: options.CreationDate || '',
-//                modificationDate: options.modificationDate || ''
-//            };
-//        };
-//
 //        ProfileSvc.Profile.prototype.simplify = function () {
 //            return new ProfileSvc.SimpleProfile({
 //                firstName: this.firstName,
@@ -167,6 +143,7 @@
             var deferred = $q.defer();
 
             $http.get(paths.sellerManagement.ownProfile).then(function (response) {
+                console.log(response);
                 ProfileSvc.profile = utils.camelCaseKeys(response.data);
                 deferred.resolve();
             }, function (error) {
