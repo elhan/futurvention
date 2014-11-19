@@ -10,7 +10,7 @@
      * # ServiceSelectCtrl
      * Controls the apply 'service select' step
      */
-    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'CatalogueSvc', 'OfferSvc', function ($scope, $timeout, CatalogueSvc, OfferSvc) {
+    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'EVENTS', 'MESSAGES', 'CatalogueSvc', 'OfferSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, events, msg, CatalogueSvc, OfferSvc, NotificationSvc, ImporterSvc) {
         //  Pagination support for available services. Initailized to the default thumbnail batch size.
         $scope.offset = 0;
         $scope.batch = CatalogueSvc.batch;
@@ -84,6 +84,24 @@
 //            console.log(error);
 //        });
 //
+
+        ///////////////////////////////////////////////////////////
+        /// Event handling
+        ///////////////////////////////////////////////////////////
+
+        $scope.$on(events.importer.portfolioReady, function (event, importer) {
+            console.log(ImporterSvc.getImporters('done'));
+            ImporterSvc.fetchPortfolio().then(function (response) {
+                console.log(response);
+                NotificationSvc.show({
+                    content: 'Portfolio imported from ' + importer.provider,
+                    type: 'success'
+                });
+            }, function (error) {
+                console.log(error);
+            });
+        });
+
         // update the filtered services when the category changes
         $scope.$watch('categories.activeCategoryIndex', function (newIndex, oldIndex) {
             switch (true) {
@@ -105,5 +123,10 @@
             newServiceId && $scope.createOffer(newServiceId);
         });
 
+        $scope.try = function () {
+            console.log(ImporterSvc.getImporters('portfoliosDone'));
+            console.log(ImporterSvc.getImporters('profileDone'));
+            console.log(ImporterSvc.getImporters('reviewsDone'));
+        };
     }]);
 }());

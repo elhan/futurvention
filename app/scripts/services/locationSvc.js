@@ -34,7 +34,10 @@
 
         function filterCitiesCollection (response) {
             return _.pluck(response.data.value, function (city) {
-                return city.Name.Literals[0].Text;
+                return {
+                    name: city.Name.Literals[0].Text,
+                    ID: city.ID
+                };
             });
         }
 

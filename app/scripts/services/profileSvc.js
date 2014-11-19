@@ -84,10 +84,6 @@
             return providers;
         };
 
-        ProfileSvc.updateProfile = function (obj) {
-            angular.extend(profile, obj);
-        };
-
         ////////////////////////////////////////////////////////////
         /// Get methods interact with the service's private objects
         ////////////////////////////////////////////////////////////
@@ -155,10 +151,10 @@
         /// Update methods
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.updateProfile = function (profile) {
+        ProfileSvc.updateProfile = function (profile, userID) {
             return $http({
                 method: 'PATCH',
-                url: paths.sellerManagement.profile + profile.ID,
+                url: paths.sellerManagement.profile + userID,
                 data: profile
             });
         };

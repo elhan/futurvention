@@ -158,6 +158,8 @@
                 return done.getImporters() ;
             case 'profileDone':
                 return profileDone.getImporters();
+            case 'portfoliosDone':
+                return portfoliosDone.getImporters();
             default:
                 return all.getImporters();
             }

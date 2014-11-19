@@ -82,7 +82,7 @@
           <div class="form-group container-x flex-2 wrapper-drop-city">
             <input type="text" class="form-control input-s" name="infoCity" placeholder="City"
                    ng-model="selectedCity"
-                   ng-options="city for city in cities"
+                   ng-options="cityName for cityName in cityNames"
                    ng-disabled="!countryName"
                    ng-minlength="3"
                    ng-keyup="searchCity(profileInfoForm.infoCity.$viewValue)"
