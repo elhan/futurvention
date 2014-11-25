@@ -11,6 +11,7 @@
      */
     app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'MESSAGES', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, msg, odata) {
         var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
+            portfolio = [],
             ImporterSvc = {};
 
         // return an array of completed jobs, depending on status byte flags
@@ -223,14 +224,14 @@
          * Checks the done collection for importers that have finished importing their portfolio,
          * then performs a request to the backend to fetch the portfolio objects.
          *
-         * @returns {Portfolio}
+         * @returns Array.<Showcase>
          */
         ImporterSvc.fetchPortfolios = function () {
             var deferred = $q.defer();
-//            portfoliosDone && portfoliosDone.importers.length > 0 && console.log(portfoliosDone.importers, portfoliosDone.importers.capitalize());
             portfoliosDone && portfoliosDone.importers.length > 0 && $http.post(paths.importer.fetchPortfolios, portfoliosDone.importers).then(function (response) {
                 console.log(response);
-                deferred.resolve();
+                // TODO: send the imported data to the backend
+                deferred.resolve(portfolio);
             }, function (error) {
                 console.log(error);
                 deferred.reject(error);

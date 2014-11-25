@@ -2,7 +2,7 @@
     'use strict';
     var app = angular.module('fvApp');
 
-    app.factory('Odata', ['Utils', function (utils) {
+    app.factory('Odata', ['Utils', 'PROVIDERS_ENUM', function (utils, providers) {
         var Odata = {};
 
         //////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@
         ////////////////////////////////////////////////////////////
 
         /**
-         * @ngdoc class
+         * @constructor
          * @param {Object} options: extends Literal defaults
          */
         Odata.Literal = function (options) {
@@ -49,14 +49,12 @@
             utils.updateProperties(self, options);
         };
 
-//        Odata.Literal.inherits(OdataObject);
-
         ////////////////////////////////////////////////////////////
         /// Multilingual
         ////////////////////////////////////////////////////////////
 
         /**
-         * Multilingual class
+         * @constructor
          * @param {Object} options: extends Multilingual defaults
          */
         Odata.Multilingual = function (options) {
@@ -66,14 +64,12 @@
             utils.updateProperties(self, options);
         };
 
-//        Odata.Multilingual.inherits(OdataObject);
-
         ////////////////////////////////////////////////////////////
         /// Location
         ////////////////////////////////////////////////////////////
 
         /**
-         * Location class
+         * @constructor
          * @param {Object} options: extends Location defaults
          */
         Odata.Location = function (options) {
@@ -84,8 +80,6 @@
             utils.updateProperties(self, options);
         };
 
-//        Odata.Location.inherits(OdataObject);
-
         Odata.Location.method('getName', function () {
             return this.Name && this.Name.Literals[0].Text;
         });
@@ -95,7 +89,7 @@
         ////////////////////////////////////////////////////////////
 
         /**
-         * SellerProfile class
+         * @constructor
          * @param {Object} options: extends Multilingual defaults
          */
         Odata.SellerProfile = function (options) {
@@ -111,7 +105,7 @@
             self.Status = null;
             self.LocationID = 0;
             self.UserID = 0;
-            self.User = null;
+//            self.User = null;
 
             /**
              * @ngdoc property
@@ -133,7 +127,7 @@
         };
 
         /**
-         * SellerProfile Function
+         * @constructor
          * @param {Object} importedProfile: imported profile object
          */
         Odata.SellerProfile.prototype.fromImported = function (imp) {
@@ -160,7 +154,7 @@
         Odata.SellerProfile.inheritFunctions(OdataObject, ['setMultilingual']);
 
         /**
-         * SellerProfile class
+         * @constructor
          * @param {Object} options: extends Multilingual defaults
          */
         Odata.User =  function (options) {
@@ -179,6 +173,164 @@
             self.Roles = [];
 
             utils.updateProperties(self, options);
+        };
+
+        /**
+         * @constructor
+         * @param {Object} options: extends defaults
+         */
+        Odata.File = function (options) {
+            var self = this;
+
+            /** @type FileType */
+            self.FileType = null;
+
+            /** @type Integer */
+            self.FileTypeID = null;
+
+            /** @type Multilingual */
+            self.Name = null;
+
+            /** @type Integer */
+            self.OwnerID = 0;
+
+            utils.updateProperties(self, options);
+        }
+
+        /**
+         * @constructor
+         * @param {Object} options: extends defaults
+         */
+        Odata.FileType = function (options) {
+            var self = this;
+
+            /** @type Integer */
+            self.ID = 0;
+
+            /** @type Multilingual */
+            self.Name = 0;
+
+            /** @type Array.<ServiceField> */
+            self.AllowedInServiceFields = [];
+
+            /** @type Array.<Service> */
+            self.AllowedInServices = [];
+
+            /** @type Enum */
+            self.MediumCategory = 0;
+
+            /** @type Array.<MimeType> */
+            self.MimeTypes = 0;
+
+            utils.updateProperties(self, options);
+        }
+
+        /**
+         * @constructor
+         * @param {Object} options: extends defaults
+         */
+        Odata.Showcase = function (options) {
+            var self = this;
+
+            /** @type Multilingual */
+            self.Description = null;
+
+            /** @type Multilingual */
+            self.Title = null;
+
+            /** @type Array.<ShowcaseItem> */
+            self.Items = [];
+
+            /** @type Array.<Offer> */
+            self.Offers = [];
+
+            /** @type Integer */
+            self.Order = 0;
+
+            /** @type Integer */
+            self.SellerProfileID = 0;
+
+            /** @type Integer */
+            self.SourceID = 0;
+
+            utils.updateProperties(self, options);
+        }
+
+        Odata.Showcase.prototype.fromImported =  function (imp) {
+            if (!imp) {
+                return;
+            }
+
+            var self = this;
+
+            utils.updateProperties(self, {
+                Description: imp.Description ? new Odata.Multilingual({ Literals: [ new Odata.Literal({ Text: imp.Description }) ] }) : null,
+                Title: new Odata.Multilingual({ Literals: [ new Odata.Literal({ Text: imp.Description }) ] }),
+                Items: [ new Odata.ShowcaseItem().fromImported(imp) ]
+            });
+
+            return self;
+        };
+
+        /**
+         * @constructor
+         * @param {Object} options: extends defaults
+         */
+        Odata.ShowcaseItem = function (options) {
+            var self = this;
+
+            /** @type Multilingual */
+            self.Description = null;
+
+            /** @type Multilingual */
+            self.Title = null;
+
+            /** @type Integer */
+            self.Order = 0;
+
+            /** @type Integer */
+            self.ShowcaseID = 0;
+
+            /** @type Showcase */
+            self.Showcase = null;
+
+            /** @type Integer */
+            self.FileID = 0;
+
+            /** @type File */
+            self.File = null;
+
+            /** @type Integer */
+            self.ThumbnailID = 0;
+
+            /** @type File */
+            self.Thumbnail = null;
+
+            utils.updateProperties(self, options);
+        }
+
+        /**
+         * Creates a new Showcase item from an imported showcase object
+         * @param {Object} imp:  An imported portfolio item
+         * @param {Showcase} showcase: The Showcase to which this ShowcaseItem belongs
+         * @returns {ShowcaseItem}
+         */
+        Odata.ShowcaseItem.prototype.fromImported =  function (imp, showcase) {
+            if (!imp) {
+                return;
+            }
+
+            var self = this;
+
+            utils.updateProperties(self, {
+                Description: imp.Description ? new Odata.Multilingual({ Literals: [ new Odata.Literal({ Text: imp.Description }) ] }) : null,
+                Title: new Odata.Multilingual({ Literals: [ new Odata.Literal({ Text: imp.Description }) ] }),
+                File: new Odata.File().fromImported(imp),
+                Thumbnail: new Odata.File().fromImported(imp, 'thumbnail'),
+                Showcase: showcase ? showcase : null
+            });
+
+            return self;
         };
 
         return Odata;

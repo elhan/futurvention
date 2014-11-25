@@ -67,7 +67,7 @@
         $scope.$on(events.user.updateSuccess, function (event, user) {
             $scope.currentUser = user;
             $scope.avatar = encodeURI(paths.file.hosted + user.Avatar.RelativeUrl);
-            ProfileSvc.updateProfile({ UserID: user.ID });
+//            ProfileSvc.updateProfile({ User: user });
         });
 
         $scope.$watch('session', function (newValue, oldValue) {

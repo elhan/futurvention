@@ -127,4 +127,15 @@
     // thirdparty profile & portfolio providers
     app.constant('IMPORT_PROVIDERS', ['linkedin', 'odesk', 'elance', 'pph', 'freelancer', 'behance', 'dribbble', 'github']);
 
+    // Used to determine imported file paths
+    app.constant('PROVIDERS_ENUM', {
+        behance: 1,
+        dribbble: 2,
+        elance: 3,
+        freelancer: 4,
+        github: 5,
+        odesk: 6,
+        peopleperhour: 7
+    });
+
 }());
