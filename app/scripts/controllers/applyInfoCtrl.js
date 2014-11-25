@@ -10,7 +10,7 @@
      * # ApplyInfoCtrl
      * Controls the apply 'info' step
      */
-    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'Odata', 'ProfileSvc', 'LocationSvc', 'ImporterSvc', 'NotificationSvc', function ($scope, $modal, $timeout, events, odata, ProfileSvc, LocationSvc, ImporterSvc, NotificationSvc) {
+    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'Utils', 'Odata', 'ProfileSvc', 'LocationSvc', 'ImporterSvc', 'NotificationSvc', function ($scope, $modal, $timeout, events, utils, odata, ProfileSvc, LocationSvc, ImporterSvc, NotificationSvc) {
         var modalImageCrop = $modal({
             scope: $scope,
             template: 'views/components/modalImageCrop.html',
@@ -19,7 +19,7 @@
             keyboard: true
         });
 
-        $scope.profile = new ProfileSvc.SimpleProfile({});
+        $scope.profile = ProfileSvc.getProfile();
         $scope.profileExists = false;
 
         $scope.showImageCropModal = function () {
@@ -29,34 +29,23 @@
             });
         };
 
-        $scope.personalUrlExists = false; // true if the user has set a url that already exists. Used to display error label
+        $scope.monikerIsValid = false; // true if the user has set a url that already exists. Used to display error label
 
-        $scope.moniker = '';
+        $scope.title = '';
+        $scope.bio = '';
 
-        $scope.selectedCity = '';
+        $scope.city = {};
         $scope.cities = [];
+        $scope.cityName = '';
         $scope.cityNames = [];
 
-        $scope.country = '';
         $scope.countries = []; // all available countries
         $scope.countryName = ''; //model for the country dropdown
         $scope.countryNames = []; //data dor the countries dropdown
 
-        LocationSvc.getCountries().then(function (countries) {
-            $scope.countries = countries;
-            $scope.countryNames = _.pluck(countries, 'name');
-        }, function (error) {
-            console.log(error);
-        });
-
-        // expose this on scope as some form inputs need to be aware of the profile completion state
-        $scope.getProfile = function () {
-            return ProfileSvc.getProfile();
-        };
-
-        $scope.checkPersonalUrl = function () {
-            ProfileSvc.fetchPersonalUrlStatus($scope.moniker).then(function (res) {
-                $scope.personalUrlExists = res.data;
+        $scope.validateMoniker = function () {
+            ProfileSvc.validateMoniker($scope.profile.Moniker).then(function (res) {
+                $scope.monikerIsValid = !res.data; // returns true if moniker exists
             }, function (err) {
                 console.log(err);
             });
@@ -64,24 +53,14 @@
 
         // on continue, save the rest of the user's info
         $scope.continue = function () {
-            var payload = {
-                Moniker: $scope.moniker,
-                Title: new odata.Multilingual({ Text: $scope.profile.headline }),
-                Description: new odata.Multilingual({ Text: $scope.profile.bio }),
-                Location: _.find($scope.cities, function (city) {
-                    return city.name === $scope.selectedCity;
-                }).ID
-            };
-
             if ($scope.profileExists) { // update existing profile
-                ProfileSvc.updateProfile(payload, $scope.profile.profileID).then(function (response) {
+                ProfileSvc.patchProfile(utils.removeEmptyProperties($scope.profile), $scope.profile.ID).then(function (response) {
                     console.log(response);
                 }, function (error) {
                     console.log(error);
                 });
             } else { // create a new profile
-                payload.UserID = $scope.currentUser.ID;
-                ProfileSvc.saveProfile(payload).then(function (response) {
+                ProfileSvc.createProfile(utils.removeEmptyProperties($scope.profile)).then(function (response) {
                     console.log(response);
                 }, function (error) {
                     console.log(error);
@@ -90,10 +69,12 @@
         };
 
         $scope.searchCity = _.throttle(function (prefix) {
-            prefix && LocationSvc.searchCity($scope.country.countryID, prefix).then(function (cities) {
+            prefix && LocationSvc.searchCity($scope.country.ID, prefix).then(function (cities) {
                 $timeout(function () {
                     $scope.cities = cities;
-                    $scope.cityNames = _.pluck(cities, 'name');
+                    $scope.cityNames = _.map(cities, function (city) {
+                        return city.getName();
+                    });
                 });
             }, function (error) {
                 console.log(error);
@@ -104,33 +85,66 @@
         /// Event handling
         ///////////////////////////////////////////////////////////
 
+        // update countryName when profile is updated.
+        $scope.$watch('profile', function (newValue, oldValue) {
+            if (!newValue || newValue === oldValue) {
+                return;
+            }
+            $scope.countryName = _.find($scope.countries, function (country) {
+                return country.ID === $scope.profile.LocationID;
+            }).getName();
+        });
+
+        // profile.LocationID should always be the ID of the selected city.
+        $scope.$watch('cityName', function (newValue, oldValue) {
+            if (!newValue || newValue === oldValue) {
+                return;
+            }
+            $scope.city = _.find($scope.cities, function (city) {
+                return city.getName() === $scope.cityName;
+            });
+            $scope.profile.LocationID = $scope.city && $scope.city.ID;
+        });
+
+        // searching for cities depends on the ID of the selected country
         $scope.$watch('countryName', function (newValue, oldValue) {
-            if (newValue === oldValue) {
+            if (!newValue || newValue === oldValue) {
                 return;
             }
             $scope.country = _.find($scope.countries, function (country) {
-                return country.name === $scope.countryName;
+                return country.getName() === $scope.countryName;
             });
         });
 
-        $scope.$watch('moniker', function (newValue, oldValue) {
-            newValue && newValue !== oldValue && $scope.checkPersonalUrl();
+        $scope.$watch('profile.Moniker', function (newValue, oldValue) {
+            // TODO: add client validation and handle server validation messages
+            newValue && newValue !== oldValue && $scope.validateMoniker();
+        });
+
+        $scope.$watch('bio', function (newValue, oldValue) {
+            if (!newValue || newValue === oldValue) {
+                return;
+            }
+            $scope.profile.setMultilingual('Description', newValue);
+        });
+
+        $scope.$watch('title', function (newValue, oldValue) {
+            if (!newValue || newValue === oldValue) {
+                return;
+            }
+            $scope.profile.setMultilingual('Title', newValue);
         });
 
         $scope.$on(events.importer.reviewsReady, function (event, importer) {
-            console.log(ImporterSvc.getImporters('done'));
             NotificationSvc.show({
                 content: 'Reviews imported from ' + importer.provider,
                 type: 'success'
             });
         });
 
-        $scope.$on(events.profile.profileUpdated, function (event) {
+        $scope.$on(events.profile.profileUpdated, function () {
             $timeout(function () {
-                $scope.profile = ProfileSvc.getSimpleProfile();
-                $scope.profileImage = $scope.profile.image;
-                $scope.countryName = $scope.profile.country;
-                $scope.moniker = $scope.profile.moniker;
+                $scope.profile = ProfileSvc.getProfile();
             });
         });
 
@@ -138,37 +152,37 @@
         /// Initialization
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.fetchProfileStatus().then(function (response) {
-            $scope.profileExists = response && response !== 'null';
-
-            // load existing profiles from the backend
-            !$scope.profileExists && ProfileSvc.fetchOwnProfile().then(function () {
-                $timeout(function () {
-                    $scope.profile = ProfileSvc.getSimpleProfile();
-                    $scope.profileImage = $scope.profile.image;
-                    $scope.countryName = $scope.profile.country;
-                    $scope.moniker = $scope.profile.moniker;
-                });
-            }, function (error) {
-                console.log(error);
+        LocationSvc.getCountries().then(function (countries) {
+            $scope.countries = countries;
+            $scope.countryNames = _.map(countries, function (country) {
+                return country.getName();
             });
-
-            // populate new profiles from imported
-            $scope.profileExists && ImporterSvc.fetchProfile().then(function (profile) {
-                $timeout(function () {
-                    $scope.profile = profile || new ProfileSvc.SimpleProfile({});
-                    $scope.profileImage = $scope.profile.image;
-                    $scope.countryName = $scope.profile.country;
-                    $scope.moniker = $scope.profile.moniker;
-                    var pr = new odata.SellerProfile();
-                    console.log(pr.fromImported(profile));
-                });
-            }, function (error) {
-                console.log(error);
-            });
-
         }, function (error) {
             console.log(error);
+        });
+
+        ProfileSvc.fetchProfileStatus().then(function () {
+            $scope.profileExists = true;
+
+            // populate from existing profile
+            ProfileSvc.fetchOwnProfile().then(function () {
+                $timeout(function () {
+                    $scope.profile = ProfileSvc.getProfile();
+                });
+            }, function (error) {
+                console.log(error);
+            });
+
+        }, function () {
+            $scope.profileExists = false;
+            //check if there are any imported profiles, then populate new profiles from imported
+            ImporterSvc.fetchProfile().then(function () {
+                $timeout(function () {
+                    $scope.profile = ProfileSvc.getProfile();
+                });
+            }, function (error) {
+                console.log(error);
+            });
         });
 
     }]);

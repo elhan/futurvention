@@ -5,6 +5,25 @@
     app.service('Utils', function () {
         var Utils = {};
 
+        Utils.updateProperties = function (original, extension) {
+            extension && _.forOwn(original, function (num, key) {
+                if (extension.hasOwnProperty(key)) {
+                    original[key] = extension[key];
+                }
+            });
+            return original;
+        };
+
+        Utils.removeEmptyProperties = function (obj) {
+            var isDefaultID, isDefaultProperty, isEmptyArray;
+            return _.pick(obj, function (value) {
+                isDefaultID = typeof value === Number && value === 0;
+                isDefaultProperty = value === null;
+                isEmptyArray = value instanceof Array && value.length === 0;
+                return !isDefaultID && !isDefaultProperty && !isEmptyArray;
+            });
+        };
+
         ///////////////////////////////////////////////////////////
         /// String Case functions
         ///////////////////////////////////////////////////////////
@@ -127,5 +146,60 @@
             }
             return this;
         };
+    }
+
+    ///////////////////////////////////////////////////////////
+    /// New Function API
+    ///////////////////////////////////////////////////////////
+
+    /**
+     * Adds a public method to the Function.prototype.
+     * Used to implement classical inheritance.
+     *
+     * http://www.crockford.com/javascript/inheritance.html#sugar
+     */
+    if (!Function.prototype.hasOwnProperty('method')) {
+        Function.prototype.method = function (name, func) {
+            this.prototype[name] = func;
+            return this;
+        };
+    }
+
+    /**
+     * Adds 'inherits' & 'uber' methods to the Function.prototype.
+     * Used to implement classical inheritance.
+     *
+     * http://www.crockford.com/javascript/inheritance.html#sugar
+     */
+    if (!Function.prototype.hasOwnProperty('inherits')) {
+        Function.method('inherits', function (Parent) {
+            this.prototype = new Parent();
+            this.prototype.constructor = parent;
+            return this;
+        });
+    }
+
+    /**
+     * Lets a constructor inherit functions from any object.
+     */
+    if (!Function.prototype.hasOwnProperty('inheritFunctions')) {
+        // TODO: extend this to incude inheritance from another constructor or from the object's prototype
+        Function.prototype.inheritFunctions = function (parent, functionNames) {
+            if (!parent || !functionNames || !(parent instanceof Object) || !(functionNames instanceof Array)) {
+                return;
+            }
+
+            var name, self = this;
+
+            for (var i = 0; i < functionNames.length; i++) {
+                name = functionNames[i];
+                if (parent.hasOwnProperty(name) && parent[name] instanceof Function) {
+                    self.prototype[name] = parent[name];
+                }
+            }
+
+            return self;
+        };
+
     }
 }());

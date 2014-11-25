@@ -2,8 +2,39 @@
     'use strict';
     var app = angular.module('fvApp');
 
-    app.factory('Odata', function () {
+    app.factory('Odata', ['Utils', function (utils) {
         var Odata = {};
+
+        //////////////////////////////////////////////////////////////////
+        /// OdataObject functions can be 'inherited' by all Odata objects.
+        //////////////////////////////////////////////////////////////////
+
+        var OdataObject = {};
+
+        OdataObject.setMultilingual = function (key, value) {
+            var self = this;
+
+            switch (true) {
+            case !value || !self.hasOwnProperty(key):
+                break;
+            case self[key] === null:
+                self[key] = new Odata.Multilingual({
+                    Literals: [new Odata.Literal({ Text: value })]
+                });
+                break;
+            case self[key] instanceof Odata.Multilingual: // default language
+                self[key].Literals[0].Text = value;
+                break;
+            default:
+                // TODO: update language
+            }
+
+            return self;
+        };
+
+        ////////////////////////////////////////////////////////////
+        /// Literal
+        ////////////////////////////////////////////////////////////
 
         /**
          * @ngdoc class
@@ -11,13 +42,18 @@
          */
         Odata.Literal = function (options) {
             var self = this;
-
+            self.ID = 0;
             self.Text = null;
             self.LanguageID = 1;
             self.IsDefault = true;
-
-            angular.extend(self, options);
+            utils.updateProperties(self, options);
         };
+
+//        Odata.Literal.inherits(OdataObject);
+
+        ////////////////////////////////////////////////////////////
+        /// Multilingual
+        ////////////////////////////////////////////////////////////
 
         /**
          * Multilingual class
@@ -25,12 +61,16 @@
          */
         Odata.Multilingual = function (options) {
             var self = this;
-
-            self.ID =  0;
+            self.ID = 0;
             self.Literals =  [];
-
-            angular.extend(self, options);
+            utils.updateProperties(self, options);
         };
+
+//        Odata.Multilingual.inherits(OdataObject);
+
+        ////////////////////////////////////////////////////////////
+        /// Location
+        ////////////////////////////////////////////////////////////
 
         /**
          * Location class
@@ -38,13 +78,21 @@
          */
         Odata.Location = function (options) {
             var self = this;
-
             self.ID = 0;
             self.ParentID = 0;
             self.Name = null;
-
-            angular.extend(self, options);
+            utils.updateProperties(self, options);
         };
+
+//        Odata.Location.inherits(OdataObject);
+
+        Odata.Location.method('getName', function () {
+            return this.Name && this.Name.Literals[0].Text;
+        });
+
+        ////////////////////////////////////////////////////////////
+        /// SellerProfile
+        ////////////////////////////////////////////////////////////
 
         /**
          * SellerProfile class
@@ -53,6 +101,7 @@
         Odata.SellerProfile = function (options) {
             var self = this;
 
+            self.ID = 0;
             self.Moniker = null;
             self.FirstName = null;
             self.LastName = null;
@@ -61,7 +110,7 @@
             self.Resume = null;
             self.Status = null;
             self.LocationID = 0;
-            self.PhotoID = 0;
+            self.UserID = 0;
             self.User = null;
 
             /**
@@ -80,9 +129,7 @@
              */
             self.Reviews = [];
 
-            self.ProfileID = 0;
-
-            angular.extend(self, options);
+            utils.updateProperties(self, options);
         };
 
         /**
@@ -90,13 +137,13 @@
          * @param {Object} importedProfile: imported profile object
          */
         Odata.SellerProfile.prototype.fromImported = function (imp) {
-            var self = this;
-
             if (!imp) {
                 return;
             }
 
-            angular.extend(self, {
+            var self = this;
+
+            utils.updateProperties(self, {
                 FirstName: imp.FirstName,
                 LastName: imp.LastName,
                 Description: new Odata.Multilingual({
@@ -110,7 +157,31 @@
             return self;
         };
 
+        Odata.SellerProfile.inheritFunctions(OdataObject, ['setMultilingual']);
+
+        /**
+         * SellerProfile class
+         * @param {Object} options: extends Multilingual defaults
+         */
+        Odata.User =  function (options) {
+            var self = this;
+
+            self.ID = 0;
+            self.Guid = '';
+            self.Avatar = null;
+            self.AvatarID = 0;
+            self.IsSystem = false;
+            self.IsAnonymous = false;
+            self.FirstName = null;
+            self.LastName = null;
+            self.PreferredLanguageID = 1;
+            self.Registrations = [];
+            self.Roles = [];
+
+            utils.updateProperties(self, options);
+        };
+
         return Odata;
-    });
+    }]);
 
 }());

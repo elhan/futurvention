@@ -33,7 +33,7 @@
         },
         importer: {
             profileReady: 'imp-profile-ready',
-            portfolioReady: 'imp-portfolio-ready',
+            portfoliosReady: 'imp-portfolios-ready',
             reviewsReady: 'imp-reviews-ready'
         },
         ui: {
@@ -78,11 +78,11 @@
             import: 'https://futurvention.azurewebsites.net/api/ExtService/import',
             checkProgress: 'https://futurvention.azurewebsites.net/api/ExtService/checkprogress',
             fetchProfile: 'https://futurvention.azurewebsites.net/api/ExtService/getprofiles',
-            fetchPortfolio: 'https://futurvention.azurewebsites.net/api/ExtService/getportfolios',
+            fetchPortfolios: 'https://futurvention.azurewebsites.net/api/ExtService/getportfolios',
         },
         sellerManagement: {
             profile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
-            ownProfile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile?expand=User',
+            ownProfile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile',
             profileStatus: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
             monikerExists: function (moniker) {
                 return [
@@ -91,6 +91,13 @@
                     '/exists'
                 ].join('');
             }
+        },
+        user: {
+            self: 'https://futurvention.azurewebsites.net/api/Self?expand=Avatar',
+            ownAvatar: 'https://futurvention.azurewebsites.net/api/Self/Avatar'
+        },
+        file: {
+            hosted: 'https://ergmaimages.blob.core.windows.net/userdata/'
         }
     });
 
@@ -108,6 +115,7 @@
         error: {
             generic: 'Something went wrong. Please try again later.',
             logoutFailed: 'Something went wrong. Please try logging out again.',
+            profileImportFailed: 'No profiles could be imported'
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',

@@ -223,22 +223,16 @@
      * @example
      * <div fv-bg-image="someBackgroundImage"> ... </div>
      */
-    app.directive('fvBgImage', function () {
+    app.directive('fvBgImage', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
                 attrs.$observe('fvBgImage', function (newImg, oldImg) {
-                    if (!newImg || newImg === oldImg) {
-                        return;
-                    }
-                    element.css({
-                        'background-image': ['url(', newImg, ')'].join(''),
-                        'background-size' : 'cover'
-                    });
+                    newImg && newImg !== oldImg && element.css('background-image', ['url("', newImg, '")'].join(''));
                 }, true);
             }
         };
-    });
+    }]);
 
     /**
      * @ngdoc directive

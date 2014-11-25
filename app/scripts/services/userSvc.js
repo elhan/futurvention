@@ -9,32 +9,21 @@
      * # OfferSvc
      * Bussiness logic for seller Offers
      */
-    app.service('UserSvc', ['$http', '$q', function ($http, $q) {
+    app.service('UserSvc', ['$rootScope', '$http', '$q', 'PATHS', 'EVENTS', 'Odata', function ($rootScope, $http, $q, paths, events, odata) {
         var UserSvc = {};
 
-        ///////////////////////////////////////////////////////////
-        /// Constructors
-        ///////////////////////////////////////////////////////////
+        UserSvc.fetchUser = function () {
+            var deferred = $q.defer();
 
-        UserSvc.User = function (options) {
-            return {
-                Avatar: options && options.avatar || '',
-                AvatarID: options && options.avatarID || '',
-                FirstName: options && options.firstName || '',
-                LastName: options && options.firstName || '',
-                Guid: options && options.guid || '',
-                ID: options && options.userID || '',
-                IsAnonymous: options && options.isAnonymous || false,
-                IsSystem: options && options.isSystem || false,
-                OwnedFiles: options && options.ownedFiles || [],
-                PreferredLanguage: options && options.preferredLanguage || {},
-                PreferredLanguageID: options && options.preferredLanguageID || 1,
-                RegistrationStatus: options && options.registrationStatus || 'Verified', // TODO: change to 'PendingVerification'
-                Registrations: options && options.registrations || [],
-                Roles: options && options.roles || [],
-                SellerProfile: options && options.SellerProfile || null,
-                SellerProfileID: options && options.sellerProfileID || null
-            };
+            $http.get(paths.user.self).then(function (response) {
+                var user = new odata.User(response.data);
+                $rootScope.$broadcast(events.user.updateSuccess, user);
+                deferred.resolve(user);
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
         };
 
         return UserSvc;

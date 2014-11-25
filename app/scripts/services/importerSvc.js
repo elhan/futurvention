@@ -9,17 +9,22 @@
      * # ImporterSvc
      * CRUD operations for eternal data (importers)
      */
-    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'ProfileSvc', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, ProfileSvc) {
-        var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling, portfolios,
+    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'MESSAGES', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, msg, odata) {
+        var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
             ImporterSvc = {};
 
         // return an array of completed jobs, depending on status byte flags
         function getComplete (status) {
+            if (!status) {
+                return;
+            }
+
             var complete = [];
 
-            status.match('Profile') && complete.push('profile');
-            status.match('Portfolio') && complete.push('portfolio');
-            status.match('Reviews') && complete.push('reviews');
+            // 0 = importing, 1 = downloading, 2 = completed, null = does not exist
+            status.Profile !== null && status.Profile === 2 && complete.push('profile');
+            status.Reviews !== null && status.Reviews === 2 && complete.push('reviews');
+            status.Portfolio !== null && status.Portfolio.CurrentStatus === 2 && complete.push('portfolio');
 
             switch (complete.length) {
             case 0:
@@ -37,8 +42,8 @@
             case 'profile':
                 event = events.importer.profileReady;
                 break;
-            case 'portfolio':
-                event = events.importer.portfolioReady;
+            case 'portfolios':
+                event = events.importer.portfoliosReady;
                 break;
             case 'reviews':
                 event = events.importer.reviewsReady;
@@ -55,31 +60,31 @@
                     idx = _.pluck(inProgress.importers, 'guid').indexOf(obj.Guid); // find the index of the corresponding importer in progress
                     importer = idx > -1 ? inProgress.importers[idx] : null;
 
-                    if (!importer || getComplete(obj.Status).indexOf('none') !== -1) {
+                    if (!importer || getComplete(obj).indexOf('none') !== -1) {
                         return;
                     }
 
-                    if (getComplete(obj.Status).indexOf('all') > -1) {
+                    if (getComplete(obj).indexOf('all') > -1 && (done.importers.length === 0 || done.importers.indexOf(importer) === -1)) {
                         done.importers.indexOf(importer) === -1 && done.importers.push(importer);
                         inProgress.importers.splice(idx, 1);
                         broadcastImporterEvent('profile', importer);
-                        broadcastImporterEvent('portfolio', importer);
+                        broadcastImporterEvent('portfolios', importer);
                         broadcastImporterEvent('reviews', importer);
                         return;
                     }
 
-                    if (getComplete(obj.Status).indexOf('profile') > -1) {
-                        profileDone.importers.indexOf(importer) === -1 && profileDone.push(importer);
+                    if (getComplete(obj).indexOf('profile') > -1 && (profileDone.importers.length === 0 || profileDone.importers.indexOf(importer) === -1)) {
+                        profileDone.importers.push(importer);
                         broadcastImporterEvent('profile', importer);
                     }
 
-                    if (getComplete(obj.Status).indexOf('portfolio') > -1) {
-                        portfoliosDone.importers.indexOf(importer) === -1 && portfoliosDone.push(importer);
-                        broadcastImporterEvent('portfolio', importer);
+                    if (getComplete(obj).indexOf('portfolio') > -1 && (portfoliosDone.importers.length === 0 || portfoliosDone.importers.indexOf(importer) === -1)) {
+                        portfoliosDone.importers.push(importer);
+                        broadcastImporterEvent('portfolios', importer);
                     }
 
-                    if (getComplete(obj.Status).indexOf('reviews') > -1) {
-                        reviewsDone.importers.indexOf(importer) === -1 && reviewsDone.push(importer);
+                    if (getComplete(obj).indexOf('reviews') > -1 && (reviewsDone.importers.length === 0 || reviewsDone.importers.indexOf(importer) === -1)) {
+                        reviewsDone.importers.push(importer);
                         broadcastImporterEvent('reviews', importer);
                     }
 
@@ -197,9 +202,10 @@
         ImporterSvc.fetchProfile = function () {
             var deferred = $q.defer();
 
-            $http.post(paths.importer.fetchProfile, done.capitalize()).then(function (response) {
-//                deferred.resolve(new ProfileSvc.SimpleProfile(response.data.length > 0 ? response.data[0].data.response.data.PersonalInfo : {}));
-                deferred.resolve(response.data[0].data.response.data.PersonalInfo);
+            profileDone.length === 0 && deferred.reject(msg.error.profileImportFailed);
+
+            profileDone.length > 0 && $http.post(paths.importer.fetchProfile, profileDone.capitalize()).then(function (response) {
+                deferred.resolve(new odata.SellerProfile(response.data[0].data.response.data.PersonalInfo));
             }, function (error) {
                 console.log(error);
                 deferred.reject(error);
@@ -219,10 +225,10 @@
          *
          * @returns {Portfolio}
          */
-        ImporterSvc.fetchPortfolio = function () {
+        ImporterSvc.fetchPortfolios = function () {
             var deferred = $q.defer();
-
-            $http.post(paths.importer.fetchPortfolio, done.capitalize()).then(function (response) {
+//            portfoliosDone && portfoliosDone.importers.length > 0 && console.log(portfoliosDone.importers, portfoliosDone.importers.capitalize());
+            portfoliosDone && portfoliosDone.importers.length > 0 && $http.post(paths.importer.fetchPortfolios, portfoliosDone.importers).then(function (response) {
                 console.log(response);
                 deferred.resolve();
             }, function (error) {

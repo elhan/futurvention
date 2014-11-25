@@ -20,7 +20,7 @@
 
         // toggles the given provider's selection state
         $scope.toggleSelection = function (importer) {
-            if($scope.isSelected(importer)) {
+            if ($scope.isSelected(importer)) {
                 _.remove($scope.selectedImporters, importer);
                 return;
             }
@@ -39,19 +39,6 @@
         ///////////////////////////////////////////////////////////
         /// Event handling
         ///////////////////////////////////////////////////////////
-
-//        $scope.$on(events.importer.portfolioReady, function (event, importer) {
-//            console.log(ImporterSvc.getImporters('done'));
-//            ImporterSvc.fetchPortfolio().then(function (response) {
-//                console.log(response);
-//                NotificationSvc.show({
-//                    content: 'Portfolio imported from ' + importer.provider,
-//                    type: 'success'
-//                });
-//            }, function (error) {
-//                console.log(error);
-//            });
-//        });
 
         $scope.$on(events.importer.profileReady, function (event, importer) {
             NotificationSvc.show({

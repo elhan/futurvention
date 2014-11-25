@@ -10,8 +10,8 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('ModalImageCropCtrl', ['$rootScope', '$scope', '$timeout', '$upload', 'ProfileSvc', 'EVENTS', function ($rootScope, $scope, $timeout, $upload, ProfileSvc, events) {
-
+    app.controller('ModalImageCropCtrl', ['$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'EVENTS', 'MESSAGES', 'UserSvc', 'NotificationSvc', function ($rootScope, $scope, $timeout, $upload, paths, events, msg, UserSvc, NotificationSvc) {
+        $scope.file = {};
         /*
             Expose the init function on the scope, as the fv-on-drop directive needs to call it.
             progressState is passed as an argument to enable setting the initial progress state to true
@@ -40,21 +40,25 @@
                 });
             };
             reader.readAsDataURL($files[0]); // Read in the image file as a data URL.
+            $scope.file = $files[0];
         };
 
         $scope.setProgress = function (state) {
             $scope.inProgress = state;
         };
 
-        $scope.saveProfileImage = function () {
+        $scope.saveAvatar = function () {
             $upload.upload({
-                url: 'https://futurvention.azurewebsites.net/api/Self/Avatar',
-                file: $scope.croppedImage
+                url: paths.user.ownAvatar,
+                file: $scope.file,
+                fileFormDataName: $scope.file.name,
             }).then(function () {
-                ProfileSvc.fetchOwnProfile().then(function () { // update profile
-                    $rootScope.$broadcast(events.profile.profileUpdated);
+                UserSvc.fetchUser().then(function () {
+                    // fetch user fires an event that will notify MainCtrl to update currentUser
+                    $scope.$hide();
                 }, function (error) {
                     console.log(error);
+                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
                 });
             }, function (err) {
                 // TODO: error handling

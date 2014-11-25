@@ -11,12 +11,12 @@
       <div class="label-l label-picture">Add your photo</div>
       <div class="flex-2">
         <div class="modal-lg profile-picture-m default wrapper-round clickable flex-content-centered" ng-click="showImageCropModal()">
-          <div class="flex-content-centered" ng-if="!profileImage">
+          <div class="flex-content-centered" ng-if="!avatar">
             <svg class="icon icon-lightGrey icon-camera">
               <use xlink:href="#camera"></use>
             </svg>
           </div>
-          <div ng-if="profileImage" fv-bg-image="{{profileImage}}" class="image-profile">
+          <div ng-if="avatar" fv-bg-image="{{avatar}}" class="image-profile">
             <div class="flex-content-centered">
               <svg class="icon icon-light icon-camera">
                 <use xlink:href="#camera"></use>
@@ -33,11 +33,11 @@
       <div class="form-group container-x" ng-class="{'has-error': urlExists}">
         <div class="label-l">Your Personal Url</div>
         <div class="flex-2">
-          <input type="text" class="form-control flex-1 input-info-url input-s" name="infoUrl" ng-model="moniker" autocomplete="on">
+          <input type="text" class="form-control flex-1 input-info-url input-s" name="infoUrl" ng-model="profile.Moniker" autocomplete="on">
           <div class="label-r">.servicebucket.com</div>
         </div>
         <div class="flex-1 flex-items-centered">
-          <svg ng-if="moniker" class="icon icon-green text-p space-left">
+          <svg ng-if="profile.Moniker" class="icon icon-green text-p space-left">
             <use xlink:href="#tick"></use>
           </svg>
         </div>
@@ -49,10 +49,10 @@
       <div class="form-group container-x">
         <div class="label-l">Headline / Title</div>
         <div class="flex-2">
-          <input type="text" class="form-control input-s" name="infoTitle" ng-model="profile.headline" placeholder="eg. UX Designer">
+          <input type="text" class="form-control input-s" name="infoTitle" ng-model="title" placeholder="eg. UX Designer">
         </div>
         <div class="flex-1 flex-items-centered">
-          <svg ng-if="profile.headline" class="icon icon-green text-p space-left">
+          <svg ng-if="title" class="icon icon-green text-p space-left">
             <use xlink:href="#tick"></use>
           </svg>
         </div>
@@ -61,7 +61,7 @@
       <div class="form-group container-x">
         <div class="label-l label-bio">Bio</div>
         <div class="flex-2 textarea-wrapper">
-          <textarea class="textarea-info" name="infoBio" placeholder="Try to be as detailed and personal as possible" ng-model="profile.bio"></textarea>
+          <textarea class="textarea-info" name="infoBio" placeholder="Try to be as detailed and personal as possible" ng-model="bio"></textarea>
         </div>
         <div class="flex-1 flex-items-centered ">
           <svg ng-if="bio" class="icon icon-green text-p space-left">
@@ -81,7 +81,7 @@
           </div>
           <div class="form-group container-x flex-2 wrapper-drop-city">
             <input type="text" class="form-control input-s" name="infoCity" placeholder="City"
-                   ng-model="selectedCity"
+                   ng-model="cityName"
                    ng-options="cityName for cityName in cityNames"
                    ng-disabled="!countryName"
                    ng-minlength="3"
@@ -90,7 +90,7 @@
           </div>
         </div>
         <div class="flex-1 flex-items-centered">
-          <svg ng-if="city && country" class="icon-tick-location">
+          <svg ng-if="cityName && countryName" class="icon-tick-location">
             <use xlink:href="#tick"></use>
           </svg>
         </div>
@@ -100,7 +100,8 @@
     <div class="container-x flex-content-centered">
       <div class="flex-1"></div>
       <div class="wrapper-continue-2">
-        <button type="submit" class="btn btn-continue" ng-disabled="!(city && country && bio && personalUrl && profileImage)" ng-click="continue()">Continue</button>
+<!--        <button type="submit" class="btn btn-continue" ng-disabled="!(city && country && profile.Description && profile.Moniker)" ng-click="continue()">Continue</button>-->
+        <button type="submit" class="btn btn-continue"  ng-click="continue()">Continue</button>
       </div>
       <div class="flex-1"></div>
     </div>

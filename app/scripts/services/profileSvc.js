@@ -9,41 +9,12 @@
      * # ProfileSvc
      * CRUD operations for Seller profiles
      */
-    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', 'PATHS', 'Utils', function ($http, $q, $upload, $timeout, importProviders, paths, utils) {
+    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', 'PATHS', 'Utils', 'Odata', function ($http, $q, $upload, $timeout, importProviders, paths, utils, odata) {
         var ProfileSvc = {},
             providerNames = importProviders,
             steps = ['import', 'info', 'service_selection', 'offer_config', 'storefront'], // profile completion steps
             activeStep = 'import',
-            profile = {};
-
-        // used to fetch data from importers
-        ProfileSvc.SimpleProfile = function (options) {
-            return {
-                firstName: options.FirstName || '',
-                lastName: options.LastName || '',
-                bio: options.Bio || '',
-                skills: options.Skills || [],
-                headline: options.Headline || '',
-                country: options.Country || '',
-                city: options.City || '',
-                image: options.Photo || '',
-                moniker: '',
-                profileID: ''
-            };
-        };
-
-//        ProfileSvc.Profile.prototype.simplify = function () {
-//            return new ProfileSvc.SimpleProfile({
-//                firstName: this.firstName,
-//                lastName: this.lastName,
-//                bio: this.description,
-//                skills: this.resume,
-//                headline: this.status,
-//                country: this.location.country,
-//                city: this.location.city,
-//                image: this.photo
-//            });
-//        };
+            profile = new odata.SellerProfile();
 
         // Provider object constructor
         ProfileSvc.Provider = function (name, url) {
@@ -76,25 +47,6 @@
             return steps;
         };
 
-        ProfileSvc.getSimpleProfile = function () {
-            console.log(ProfileSvc.profile);
-            if (!ProfileSvc.profile) {
-                return ProfileSvc.SimpleProfile({});
-            }
-            return angular.extend(ProfileSvc.SimpleProfile({}), {
-                firstName: ProfileSvc.profile.user && ProfileSvc.profile.user.firstName,
-                lastName: ProfileSvc.profile.user && ProfileSvc.profile.user.lastName,
-                bio: ProfileSvc.profile.description,
-                skills: ProfileSvc.profile.resume,
-                headline: ProfileSvc.profile.title,
-                country: ProfileSvc.profile.location && ProfileSvc.profile.location.country,
-                city: ProfileSvc.profile.location && ProfileSvc.profile.location.city,
-                image: ProfileSvc.profile.user && ProfileSvc.profile.user.avatar,
-                moniker: ProfileSvc.profile.moniker,
-                profileID: ProfileSvc.profile.ID
-            });
-        };
-
         ////////////////////////////////////////////
         /// Set methods
         ////////////////////////////////////////////
@@ -104,33 +56,30 @@
         };
 
         ////////////////////////////////////////////
-        /// Save methods persist data on the server
+        /// Update methods update Service objects
         ////////////////////////////////////////////
 
-        ProfileSvc.saveProvider = function (provider) {
-            // TODO: remove mock functionality
+        ProfileSvc.updateProfile = function (obj) {
+            utils.updateProperties(profile, obj);
         };
 
-        ProfileSvc.saveProfileImage = function (img) {
-            // TODO: remove mock functionality
-        };
+        ////////////////////////////////////////////
+        /// Create methods persist data on the server
+        ////////////////////////////////////////////
 
-        ProfileSvc.savePersonalUrl = function (url) {
-            // TODO: remove mock functionality
-        };
-
-        ProfileSvc.saveProfile = function (profile) {
-            return $http.post(paths.sellerManagement.profile, profile);
+        ProfileSvc.createProfile = function (profile) {
+            console.log(JSON.stringify(profile));
+            return $http.post(paths.sellerManagement.ownProfile, profile);
         };
 
         ///////////////////////////////////////////////////////////
-        /// Update methods
+        /// Patch methods update objects on the backend
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.updateProfile = function (profile, userID) {
+        ProfileSvc.patchProfile = function (profile, userID) {
             return $http({
                 method: 'PATCH',
-                url: paths.sellerManagement.profile + userID,
+                url: paths.sellerManagement.ownProfile,
                 data: profile
             });
         };
@@ -142,10 +91,24 @@
         ProfileSvc.fetchOwnProfile = function () {
             var deferred = $q.defer();
 
-            $http.get(paths.sellerManagement.ownProfile).then(function (response) {
+            $http.get(paths.sellerManagement.ownProfile + '?expand=User, Title/Literals, Description/Literals').then(function (response) {
                 console.log(response);
-                ProfileSvc.profile = utils.camelCaseKeys(response.data);
-                deferred.resolve();
+                utils.updateProperties(profile, response.data);
+                deferred.resolve(profile);
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
+        ProfileSvc.fetchProfile = function (moniker) {
+            var deferred = $q.defer();
+
+            $http.get(paths.sellerManagement.profile + moniker).then(function (response) {
+                console.log(response);
+                utils.updateProperties(profile, response.data);
+                deferred.resolve(profile);
             }, function (error) {
                 deferred.reject(error);
             });
@@ -154,10 +117,18 @@
         };
 
         ProfileSvc.fetchProfileStatus = function () {
-            return $http.get(paths.sellerManagement.profileStatus);
+            var deferred = $q.defer();
+
+            $http.get(paths.sellerManagement.profileStatus).then(function (response) {
+                response && response.data !== 'null' ? deferred.resolve() : deferred.reject();
+            }, function (error) {
+                console.log(error);
+            });
+
+            return deferred.promise;
         };
 
-        ProfileSvc.fetchPersonalUrlStatus = function (moniker) {
+        ProfileSvc.validateMoniker = function (moniker) {
             return $http.get(paths.sellerManagement.monikerExists(moniker));
         };
 

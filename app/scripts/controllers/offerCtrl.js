@@ -37,12 +37,13 @@
             contactModal.$promise.then(contactModal.hide);
         };
 
-        PortfolioSvc.fetchPortfolio($scope.user.userId).then(function (portfolio) {
-            PortfolioSvc.updatePortfolio(portfolio);
-            $scope.portfolio = PortfolioSvc.getPortfolio();
-        }, function (error) {
-            console.log(error);
-        });
+        //TODO
+//        PortfolioSvc.fetchPortfolio($scope.user.userId).then(function (portfolio) {
+//            PortfolioSvc.updatePortfolio(portfolio);
+//            $scope.portfolio = PortfolioSvc.getPortfolio();
+//        }, function (error) {
+//            console.log(error);
+//        });
 
         ReviewSvc.fetchReceivedReviews($scope.user.userId).then(function (reviews) {
             $scope.reviews = reviews;

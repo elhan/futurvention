@@ -62,12 +62,18 @@
         .when('/apply', {
             templateUrl: 'views/apply.html'
         })
-        .when('/storefront/:userId', {
+        .when('/storefront/:moniker', {
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',
             resolve: {
-                userId: ['$route', function ($route) {
-                    return $route.current.params.userId;
+                profile: ['$route', '$q', 'ProfileSvc', function ($route, $q, ProfileSvc) {
+                    var deferred = $q.defer();
+                    ProfileSvc.fetchProfile($route.current.params.moniker).then(function (profile) {
+                        deferred.resolve(profile);
+                    }, function (error) {
+                        deferred.reject(error);
+                    });
+                    return deferred.promise;
                 }]
             }
         })

@@ -10,8 +10,9 @@
      * # MainCtrl
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
-    app.controller('MainCtrl', ['$scope', '$location', '$q', '$cookies', '$timeout', 'EVENTS', 'MESSAGES', 'ROUTES', 'Utils', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', 'UserSvc', function ($scope, $location, $q, $cookies, $timeout, events, msg, routes, utils, AccountSvc, NotificationSvc, ProfileSvc, UserSvc) {
+    app.controller('MainCtrl', ['$scope', '$location', '$q', '$cookies', '$timeout', 'EVENTS', 'MESSAGES', 'ROUTES', 'PATHS', 'Utils', 'Odata', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', 'UserSvc', function ($scope, $location, $q, $cookies, $timeout, events, msg, routes, paths, utils, odata, AccountSvc, NotificationSvc, ProfileSvc, UserSvc) {
         $scope.currentUser = {};
+        $scope.avatar = {};
         $scope.session = {};
 
         $scope.updateCurrentUser = function (obj) {
@@ -39,10 +40,7 @@
 
         $scope.$on('$routeChangeError', function (e, current, previous, rejection) {
             console.log(rejection);
-            NotificationSvc.show({
-                content: msg.error.generic,
-                type: 'error'
-            });
+            NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             $scope.go('/');
         });
 
@@ -53,10 +51,7 @@
                 $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
             }, function (error) {
                 console.log(error);
-                NotificationSvc.show({
-                    content: msg.error.generic,
-                    type: 'error'
-                });
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
         });
 
@@ -66,10 +61,13 @@
         });
 
         $scope.$on(events.auth.logoutFailed, function () {
-            NotificationSvc.show({
-                content: msg.error.logoutFailed,
-                type: 'error'
-            });
+            NotificationSvc.show({content: msg.error.logoutFailed, type: 'error' });
+        });
+
+        $scope.$on(events.user.updateSuccess, function (event, user) {
+            $scope.currentUser = user;
+            $scope.avatar = encodeURI(paths.file.hosted + user.Avatar.RelativeUrl);
+            ProfileSvc.updateProfile({ UserID: user.ID });
         });
 
         $scope.$watch('session', function (newValue, oldValue) {
@@ -80,27 +78,7 @@
                 $scope.currentUser = {};
                 break;
             default: // login
-                ProfileSvc.fetchProfileStatus().then(function (response) {
-                    if (response.data !== 'null') { // profile exists
-                        ProfileSvc.fetchOwnProfile().then(function () {
-                            $scope.currentUser = ProfileSvc.profile.user;
-                        }, function (error) {
-                            // TODO: error handling
-                            console.log(error);
-                        });
-                    } else {
-                        $scope.currentUser = utils.camelCaseKeys(new UserSvc.User());
-                    }
-                }, function (error) {
-                    console.log(error);
-                });
-
-                ProfileSvc.fetchOwnProfile().then(function () {
-                    $scope.currentUser = ProfileSvc.profile ? ProfileSvc.profile.user : utils.camelCaseKeys(new UserSvc.User());
-                }, function (error) {
-                    // TODO: error handling
-                    console.log(error);
-                });
+                UserSvc.fetchUser();
             }
         });
 
@@ -111,10 +89,7 @@
         //if there are any authentication errors passed as query string by the backend, show the appropriate message and redirect to login
         $location.search().error && $scope.go('/login').then(function () {
             $location.url($location.path()); // clear the error param
-            NotificationSvc.show({
-                content: $location.search().error,
-                type: 'error'
-            });
+            NotificationSvc.show({ content: $location.search().error, type: 'error' });
         });
 
         // check user authentication status when loading the app

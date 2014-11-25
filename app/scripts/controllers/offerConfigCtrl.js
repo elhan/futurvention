@@ -13,7 +13,7 @@
      * # OfferConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', function ($scope, $timeout, $modal, $upload, $location, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc) {
+    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, PortfolioSvc, ImporterSvc) {
 
         ////////////////////////////////////////////
         /// Initialisation
@@ -199,6 +199,25 @@
                     };
                     fileReader.readAsDataURL(file);
                 });
+
+                // TODO
+//                $upload.upload({
+//                    url: paths.user.ownAvatar,
+//                    file: $scope.file,
+//                    fileFormDataName: $scope.file.name,
+//                }).then(function () {
+//                    UserSvc.fetchUser().then(function () {
+//                        // fetch user fires an event that will notify MainCtrl to update currentUser
+//                        $scope.$hide();
+//                    }, function (error) {
+//                        console.log(error);
+//                        NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+//                    });
+//                }, function (err) {
+//                    // TODO: error handling
+//                    console.log(err);
+//                });
+
             });
         };
 
@@ -242,6 +261,14 @@
         ////////////////////////////////////////////
         /// Watchers
         ////////////////////////////////////////////
+
+        ImporterSvc.fetchPortfolios().then(function (portfolio) {
+//            PortfolioSvc.updatePortfolio(portfolio);
+//            $scope.portfolio = PortfolioSvc.getPortfolio();
+            console.log(portfolio);
+        }, function (error) {
+            console.log(error);
+        });
 
         $scope.$watch('panels.activePanel', function () {
             var inProgress = _.find($scope.panels, function (panel) {

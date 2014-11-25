@@ -114,15 +114,9 @@
         };
 
         ///////////////////////////////////////////////////////////
-        /// Fetch functions
+        /// Initialization
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.fetchProfile($scope.session.userID).then(function (profile) {
-            $scope.isCurrentUser = $location.absUrl() === profile.personalUrl;
-            $scope.profile = profile;
-        }, function (error) {
-            console.log(error);
-        });
 
         OfferSvc.fetchOffers($scope.userId).then(function (offers) {
             $scope.offers = offers;
@@ -130,12 +124,13 @@
             console.log(error);
         });
 
-        PortfolioSvc.fetchPortfolio($scope.userId).then(function (portfolio) {
-            PortfolioSvc.updatePortfolio(portfolio);
-            $scope.portfolio = PortfolioSvc.getPortfolio();
-        }, function (error) {
-            console.log(error);
-        });
+        //TODO
+//        PortfolioSvc.fetchPortfolio($scope.userId).then(function (portfolio) {
+//            PortfolioSvc.updatePortfolio(portfolio);
+//            $scope.portfolio = PortfolioSvc.getPortfolio();
+//        }, function (error) {
+//            console.log(error);
+//        });
 
         ReviewSvc.fetchReceivedReviews($scope.userId).then(function (reviews) {
             $scope.reviews = reviews;

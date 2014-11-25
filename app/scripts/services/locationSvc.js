@@ -9,7 +9,7 @@
      * # LocationSvc
      * Provider for Location resources
      */
-    app.service('LocationSvc', ['$q', '$http', 'breeze', 'PATHS', function ($q, $http, breeze, paths) {
+    app.service('LocationSvc', ['$q', '$http', 'breeze', 'PATHS', 'Odata', function ($q, $http, breeze, paths, odata) {
         var LocationSvc = {},
 
             dataService = new breeze.DataService({
@@ -23,21 +23,9 @@
         /// Private functions
         ///////////////////////////////////////////////////////////
 
-        function filterCountriesCollection (response) {
-            return _.pluck(response.results[0].value, function (obj) {
-                return {
-                    name: obj.Name.Literals[0].Text,
-                    countryID: obj.ID
-                };
-            });
-        }
-
-        function filterCitiesCollection (response) {
-            return _.pluck(response.data.value, function (city) {
-                return {
-                    name: city.Name.Literals[0].Text,
-                    ID: city.ID
-                };
+        function filterLocationCollection (locations) {
+            return _.map(locations, function (location) {
+                return new odata.Location(location);
             });
         }
 
@@ -55,7 +43,6 @@
          * returns Array[String]
          */
         LocationSvc.searchCity = function (countryID, prefix) {
-            console.log(prefix);
             var deferred = $q.defer(),
                 url = [
                     paths.public,
@@ -71,7 +58,7 @@
 
             $http.get(url).then(function (response) {
                 console.log(response);
-                deferred.resolve(filterCitiesCollection(response));
+                deferred.resolve(filterLocationCollection(response.data.value));
             }, function (error) {
                 deferred.reject(error);
             });
@@ -90,8 +77,7 @@
                 query = new breeze.EntityQuery('CountriesLocations').expand('Name.Literals');
 
             manager.executeQuery(query).then(function (response) {
-                console.log(response);
-                deferred.resolve(filterCountriesCollection(response));
+                deferred.resolve(filterLocationCollection(response.results[0].value));
             }, function (error) {
                 console.log(error);
             });
