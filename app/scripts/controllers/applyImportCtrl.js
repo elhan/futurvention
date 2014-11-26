@@ -33,7 +33,7 @@
         };
 
         $scope.import = function () {
-            ImporterSvc.import($scope.selectedImporters);
+            ImporterSvc.import($scope.selected);
         };
 
         ///////////////////////////////////////////////////////////

@@ -34,7 +34,8 @@
         importer: {
             profileReady: 'imp-profile-ready',
             portfoliosReady: 'imp-portfolios-ready',
-            reviewsReady: 'imp-reviews-ready'
+            reviewsReady: 'imp-reviews-ready',
+            status: 'imp-status'
         },
         ui: {
             providerSelected: 'ui-provider-selected'

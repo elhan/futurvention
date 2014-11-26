@@ -49,59 +49,94 @@
             </div>
             <!-- Work Samples -->
             <div ng-switch-when="1">
-              <div class="text-p">{{ service.showcasePrompt }}</div>
-              <div class="wrapper-icons">
-                <div class="container-x">
-                  <div class="container-y flex-1 clickable">
-                    <div class="import-link bg-grey-dark text-white">
-                      <svg class="icon icon-light nostroke icon-import">
-                        <use xlink:href="#import"></use>
-                      </svg>
+              <!-- Owned Showcases -->
+              <div ng-if="activeWorkSamples === 'owned'">
+                <div class="text-p">{{ service.showcasePrompt }}</div>
+                <div class="wrapper-icons">
+                  <div class="container-x">
+                    <div class="container-y flex-1 clickable">
+                      <div class="import-link bg-grey-dark text-white">
+                        <svg class="icon icon-light nostroke icon-import">
+                          <use xlink:href="#import"></use>
+                        </svg>
+                      </div>
+                      <div class="label-import-link">Select from imported</div>
                     </div>
-                    <div class="label-import-link">Select from imported</div>
-                  </div>
-                  <div class="container-y flex-1 clickable" ng-file-select="onFileSelect($files)" data-multiple="true">
-                    <div class="import-link bg-grey-dark text-white">
-                      <svg class="icon icon-light">
-                        <use xlink:href="#upload"></use>
-                      </svg>
+                    <div class="container-y flex-1 clickable" ng-file-select="onFileSelect($files)" data-multiple="true">
+                      <div class="import-link bg-grey-dark text-white">
+                        <svg class="icon icon-light">
+                          <use xlink:href="#upload"></use>
+                        </svg>
+                      </div>
+                      <div class="label-import-link">Upload</div>
                     </div>
-                    <div class="label-import-link">Upload</div>
+                    <div class="container-y flex-1 clickable" ng-click="showEmbedUrlModal()">
+                      <div class="import-link bg-grey-dark text-white embed">@</div>
+                      <div class="label-import-link">Embed Url</div>
+                    </div>
                   </div>
-                  <div class="container-y flex-1 clickable" ng-click="showEmbedUrlModal()">
-                    <div class="import-link bg-grey-dark text-white embed">@</div>
-                    <div class="label-import-link">Embed Url</div>
+                </div>
+                <div class="showcase-msg" ng-show="showcaseItems.length > 0">
+                  Click to select samples you want to showcase. You can also reorder them. The first one will be used as cover image.
+                </div>
+                <!-- Showcase -->
+                <div class="flex-wrap">
+                  <div class="showcase" ng-repeat="item in showcaseItems">
+                    <div ng-class="{'showcase-item': true, 'progress': item.state === 'loading'}"
+                         ng-click="toggleSelection(item)"
+                         fv-bg-image={{item.link}}
+                         fv-data={{item.link}}
+                         fv-draggable="item.state !== 'loading'"
+                         fv-drop-class="drag-over"
+                         fv-on-drop="rearangeShowcaseItems"
+                         fv-droppable>
+                      <!-- Spinner -->
+                      <div class="wrapper-loader" ng-show="item.state === 'loading'">
+                        <div class="loader"></div>
+                      </div>
+                      <!-- Overlay: selected -->
+                      <div class="showcase-overlay selected" ng-show="item.state === 'selected'">
+                        <svg class="icon icon-light">
+                          <use xlink:href="#tick"></use>
+                        </svg>
+                      </div>
+                      <!-- Overlay: drag-over -->
+                      <div class="showcase-overlay"></div>
+                    </div>
+                    <div class="caption">{{item.name}}</div>
                   </div>
                 </div>
               </div>
-              <div class="showcase-msg" ng-show="showcaseItems.length > 0">
-                Click to select samples you want to showcase. You can also reorder them. The first one will be used as cover image.
+              <!-- Imported Showcases -->
+              <div class="container-x">
+                <div ng-if="activeWorkSamples === 'imported'">
+                  <button class="btn btn-link text-p" ng-click="activeWorkSamples = 'owned'">
+                    <span class="space-after">&lt;&lt;</span>
+                    <span>Back to service catalogue</span>
+                  </button>
+                </div>
               </div>
-              <!-- Showcase -->
-              <div class="flex-wrap">
-                <div class="showcase" ng-repeat="item in showcaseItems">
-                  <div ng-class="{'showcase-item': true, 'progress': item.state === 'loading'}"
-                       ng-click="toggleSelection(item)"
-                       fv-bg-image={{item.link}}
-                       fv-data={{item.link}}
-                       fv-draggable="item.state !== 'loading'"
-                       fv-drop-class="drag-over"
-                       fv-on-drop="rearangeShowcaseItems"
-                       fv-droppable>
-                    <!-- Spinner -->
+              <div class="container-y">
+                <div class="text-p">Click to select imported samples you want to showcase as part of this service</div>
+                <div ng-repeat="importedPortfolio in importedPortfolios">
+                  <div ng-if="portfolioDone(importedPortfolio)" class="container-x">
+                    <svg  class="icon icon-green text-p space-left">
+                      <use xlink:href="#tick"></use>
+                    </svg>
+                    <div class="text-p-bold">{{ importedPortfolio.Provider }}</div>
+                    <div class="text-p space-after"></div>
+                    <div class="text-p">portfolio items imported</div>
+                  </div>
+<!--
+                  <div ng-if="getPortfolioCompletionState(importedPortfolio).total > getPortfolioCompletionState(importedPortfolio).count" class="container-x">
                     <div class="wrapper-loader" ng-show="item.state === 'loading'">
                       <div class="loader"></div>
                     </div>
-                    <!-- Overlay: selected -->
-                    <div class="showcase-overlay selected" ng-show="item.state === 'selected'">
-                      <svg class="icon icon-light">
-                        <use xlink:href="#tick"></use>
-                      </svg>
-                    </div>
-                    <!-- Overlay: drag-over -->
-                    <div class="showcase-overlay"></div>
+                    <div class="text-p-bold">{{ importedPortfolio.provider }}</div>
+                    <div class="text-p space-after">{{ getPortfolioCompletionState(importedPortfolio).count }}</div>
+                    <div class="text-p">portfolio items imported</div>
                   </div>
-                  <div class="caption">{{item.name}}</div>
+-->
                 </div>
               </div>
             </div>

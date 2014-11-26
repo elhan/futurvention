@@ -11,7 +11,7 @@
      */
     app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'MESSAGES', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, msg, odata) {
         var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
-            portfolio = [],
+            importedPortfolios = [],
             ImporterSvc = {};
 
         // return an array of completed jobs, depending on status byte flags
@@ -30,7 +30,7 @@
             switch (complete.length) {
             case 0:
                 return ['none'];
-            case 3:
+            case 2:
                 return ['all'];
             default:
                 return complete;
@@ -57,6 +57,9 @@
         function checkStatus () {
             $http.post(paths.importer.checkProgress, inProgress.capitalize()).then(function (response) {
                 var idx, importer;
+
+                $rootScope.$broadcast(events.importer.status, response); // a generic status event
+
                 _.each(response.data, function (obj) {
                     idx = _.pluck(inProgress.importers, 'guid').indexOf(obj.Guid); // find the index of the corresponding importer in progress
                     importer = idx > -1 ? inProgress.importers[idx] : null;
@@ -141,7 +144,8 @@
         };
 
         ImporterSvc.ImporterCollection.prototype.addImporters = function (importers) {
-            this.importers.merge(importers);
+            this.importers = _.union(this.importers, importers);
+            return this;
         };
 
         ImporterSvc.ImporterCollection.prototype.capitalize = function () {
@@ -178,7 +182,7 @@
         ImporterSvc.import = function (selected) {
             var deferred = $q.defer();
 
-            $http.post(paths.importer.import, selected).then(function (response) {
+            $http.post(paths.importer.import, selected.capitalize()).then(function (response) {
                 inProgress.addImporters(filterFetchedImporters(response));
                 !angular.isDefined(polling) && startPolling(); // if polling is not in progress, start it
             }, function (error) {
@@ -224,14 +228,19 @@
          * Checks the done collection for importers that have finished importing their portfolio,
          * then performs a request to the backend to fetch the portfolio objects.
          *
-         * @returns Array.<Showcase>
+         * @returns Array.<Object>
          */
         ImporterSvc.fetchPortfolios = function () {
-            var deferred = $q.defer();
-            portfoliosDone && portfoliosDone.importers.length > 0 && $http.post(paths.importer.fetchPortfolios, portfoliosDone.importers).then(function (response) {
+            var deferred = $q.defer(),
+                importers = new ImporterSvc.ImporterCollection();
+
+            importers.setImporters(_.union(inProgress.importers, portfoliosDone.importers));
+
+            portfoliosDone && $http.post(paths.importer.fetchPortfolios, importers.capitalize()).then(function (response) {
                 console.log(response);
+                importedPortfolios = response;
                 // TODO: send the imported data to the backend
-                deferred.resolve(portfolio);
+                deferred.resolve(response);
             }, function (error) {
                 console.log(error);
                 deferred.reject(error);
@@ -239,6 +248,21 @@
 
             return deferred.promise;
         };
+
+        /**
+         * @ngdoc method
+         * @name fvApp.service:ImporterSvc
+         * @function
+         *
+         * @description
+         * Pipes the imported portfolio objects to the backend. The backend processes
+         * the imported data into a collection of Showcase objects.
+         *
+         * @returns Array.<Showcase>
+         */
+        ImporterSvc.saveImportedPortfolios = function () {
+            // TODO
+        }
 
         ///////////////////////////////////////////////////////////
         /// Watchers

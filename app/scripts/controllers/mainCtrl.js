@@ -61,7 +61,7 @@
         });
 
         $scope.$on(events.auth.logoutFailed, function () {
-            NotificationSvc.show({content: msg.error.logoutFailed, type: 'error' });
+            NotificationSvc.show({ content: msg.error.logoutFailed, type: 'error' });
         });
 
         $scope.$on(events.user.updateSuccess, function (event, user) {

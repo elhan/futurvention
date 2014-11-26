@@ -13,7 +13,7 @@
      * # OfferConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, PortfolioSvc, ImporterSvc) {
+    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'EVENTS', 'PROVIDERS_ENUM', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, events, providers, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, PortfolioSvc, ImporterSvc) {
 
         ////////////////////////////////////////////
         /// Initialisation
@@ -25,6 +25,13 @@
         $scope.service = {};
         $scope.priceDiscriminators= [];
         $scope.addons = [];
+        $scope.importedPortfolios = [];
+        $scope.status = {}; // the current importer status
+
+        // can be 'owned' or 'imported'. Controls which work samples section is visible
+        $scope.activeWorkSamples = 'imported';
+
+
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
@@ -258,23 +265,50 @@
             panel.textonly = ! panel.textonly;
         };
 
+        $scope.fetchImportedPortfolios = function () {
+            ImporterSvc.fetchPortfolios().then(function (portfolios) {
+                $scope.importedPortfolios = portfolios.data;
+            }, function (error) {
+                console.log(error);
+            });
+        };
+
+        // for a given importedPortfolio, and a given status, check the completion status
+        $scope.getPortfolioCompletionState = function (importedPortfolio) {
+            var providerStatus = _.find($scope.status, function (provider) {
+                return provider.Provider === providers[importedPortfolio.Provider];
+            });
+            return providerStatus;
+        }
+
+        $scope.portfolioDone =  function (importedPortfolio) {
+            var state = $scope.getPortfolioCompletionState(importedPortfolio);
+            console.log(state.Portfolio.Total, state.Portfolio.Count);
+            return state.Portfolio.Total === state.Portfolio.Count;
+        }
+
+        $scope.portfolioImporting =  function (importedPortfolio) {
+            var state = $scope.getPortfolioCompletionState(importedPortfolio);
+            return state.Portfolio.Total > state.Portfolio.Count;
+        }
+
         ////////////////////////////////////////////
         /// Watchers
         ////////////////////////////////////////////
-
-        ImporterSvc.fetchPortfolios().then(function (portfolio) {
-//            PortfolioSvc.updatePortfolio(portfolio);
-//            $scope.portfolio = PortfolioSvc.getPortfolio();
-            console.log(portfolio);
-        }, function (error) {
-            console.log(error);
-        });
 
         $scope.$watch('panels.activePanel', function () {
             var inProgress = _.find($scope.panels, function (panel) {
                 return panel.state !== 'done';
             });
             !inProgress && $scope.goToStep(2);
+        });
+
+        $scope.$on(events.importer.status, function (event, status) {
+            if ($scope.status === status) {
+                return;
+            }
+            $scope.status = status.data;
+            $scope.fetchImportedPortfolios();
         });
 
         $scope.$on('modal.show', function () { // initialize CameraTag when the camera modal loads
@@ -289,6 +323,12 @@
                 //                var video_url = vid.formats.qvga.video_url;
             });
         });
+
+        ////////////////////////////////////////////
+        /// Init
+        ////////////////////////////////////////////
+
+        $scope.fetchImportedPortfolios();
 
     }]);
 }());
