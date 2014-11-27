@@ -13,50 +13,42 @@
      * # OfferConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'EVENTS', 'PROVIDERS_ENUM', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, events, providers, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, PortfolioSvc, ImporterSvc) {
-
-        ////////////////////////////////////////////
-        /// Initialisation
-        ////////////////////////////////////////////
-
-        $scope.urlsToEmbed = [{ url: '' }];
-        $scope.showcaseItems = [];
-        $scope.offer = OfferSvc.getOffer();
-        $scope.service = {};
-        $scope.priceDiscriminators= [];
-        $scope.addons = [];
-        $scope.importedPortfolios = [];
-        $scope.status = {}; // the current importer status
-
-        // can be 'owned' or 'imported'. Controls which work samples section is visible
-        $scope.activeWorkSamples = 'imported';
-
-
+    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, events, providers, paths, msg, utils, odata, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
+        var modalEmbedUrl, modalCameraTag;
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
 
+        $scope.urlsToEmbed = [{ url: '' }];
+
+        /**
+         * Items added by embed url modal or file upload
+         * @type Array.<SimpleShowcaseItem>
+         */
+        $scope.showcaseItems = [];
+
+         /** @type Array.<Showcase> */
+        $scope.showcaseCollection = [];
+
+        $scope.offer = OfferSvc.getOffer();
+        $scope.service = {};
+        $scope.priceDiscriminators= [];
+        $scope.addons = [];
+
+        $scope.importedPortfolios = [];
+        $scope.selectedPortfolios = [];
+        $scope.status = {}; // the current importer status
+
+        // can be 'owned' or 'imported'. Controls which work samples section is visible
+        $scope.activeWorkSamples = 'owned';
+
         // before navigating to this step, the respective controller has ensured OffrSvc.offer is suynced
         $scope.offer =  OfferSvc.getOffer();
 
-        CatalogueSvc.getService($scope.offer.serviceID).then(function (service) {
-            console.log(service);
+        ////////////////////////////////////////////
+        /// Panels and panel functions
+        ////////////////////////////////////////////
 
-            $scope.service = service;
-
-            $scope.priceDiscriminators = _.filter(service.options, function (option) {
-                return option.isPriceDiscriminator && option.isMandatory;
-            });
-
-            $scope.addons = _.filter(service.options, function (option) {
-                return option.isPriceDiscriminator && !option.isMandatory;
-            });
-
-        }, function (error) {
-            console.log(error);
-        });
-
-        // TODO: dynamically adjust from service model
         $scope.panels = [
             {
                 title: 'Service Description',
@@ -78,13 +70,25 @@
         ];
 
         $scope.panels.activePanel = 0;
-        $timeout(function () { $scope.panels.activePanel = 0; }); // update the UI
+
+        $scope.setPanelState = function (panel, state) {
+            panel.state = state;
+        };
+
+        $scope.closePanel = function (panel) {
+            $scope.setPanelState(panel, 'done');
+            $scope.panels.activePanel = $scope.panels.indexOf(
+                _.find($scope.panels, function (panel) {
+                    return panel.state === 'default';
+                })
+            );
+        };
 
         ////////////////////////////////////////////
         /// Modals & modal functions
         ////////////////////////////////////////////
 
-        var modalEmbedUrl = $modal({
+        modalEmbedUrl = $modal({
             scope: $scope,
             template: 'views/components/modalEmbedUrl.html',
             show: false,
@@ -92,7 +96,7 @@
             animation: 'am-slide-top'
         });
 
-        var modalCameraTag = $modal({
+        modalCameraTag = $modal({
             scope: $scope,
             template: 'views/components/modalCameraTag.html',
             show: false,
@@ -119,35 +123,29 @@
         };
 
         $scope.addUrls = function () {
-            EmbedlySvc.oembed($scope.urlsToEmbed).then(function (res) {
-                _.each(res.data, function (obj) {
-                    $scope.showcaseItems.push({
-                        name: obj.thumbnail_url,
-                        link: obj.thumbnail_url,
-                        state: 'loaded'
-                    });
-                    $scope.closeEmbedUrlModal();
-                });
-            }, function (err) {
-                console.log(err);
+            var urls = [];
+
+            _.each($scope.urlsToEmbed, function (obj) {
+                urls.push(obj.url);
             });
-        };
 
-        ////////////////////////////////////////////
-        /// Panel functions
-        ////////////////////////////////////////////
+            modalEmbedUrl.hide();
 
-        $scope.setPanelState = function (panel, state) {
-            panel.state = state;
-        };
-
-        $scope.closePanel = function (panel) {
-            $scope.setPanelState(panel, 'done');
-            $scope.panels.activePanel = $scope.panels.indexOf(
-                _.find($scope.panels, function (panel) {
-                    return panel.state === 'default';
-                })
-            );
+            PortfolioSvc.addShowcaseFromUrl(urls, $scope.service.serviceID).then(function (response) {
+                var showcase, showcaseItem;
+                _.each(response.data, function (fetchedShowcase) {
+                    showcase = new odata.Showcase(fetchedShowcase);
+                    showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
+                    $scope.showcaseCollection.push(showcase);
+                    $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
+                });
+            }, function (error) {
+                console.log(error);
+                // user tried to embed a type of file not supported for this service
+                if (error.data.ExceptionType === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
+                    NotificationSvc.show({ content: error.data.ExceptionMessage, type: 'error' });
+                }
+            });
         };
 
         ////////////////////////////////////////////
@@ -155,76 +153,27 @@
         ////////////////////////////////////////////
 
         $scope.onFileSelect = function (files) {
+            var fileNames = [];
+
             _.each(files, function (file) {
-                var index;
+                fileNames.push(file.name);
+            });
 
-                // check if the file has already been uploaded
-                if (_.where($scope.showcaseItems, { name: file.name }).length > 0) {
-                    return;
-                }
-
-                $scope.showcaseItems.push({
-                    name: 'Loading...',
-                    link: '',
-                    state: 'loading' // possible states are loading, loaded, selected
-                });
-
-                index = $scope.showcaseItems.length - 1; // keep the item's correct position in the showcase collection after pushing
-
-                $upload.upload({
-                    url: 'http://localhost:3000/upload',
-                    method: 'POST',
-                    headers: { 'x-filename': file.name },
-                    file: file,
-                }).success(function () {
-                    var fileReader = new FileReader();
-                    fileReader.onload = function (e) {
-                        $scope.$apply(function () {
-                            _.assign($scope.showcaseItems[index], {
-                                name: file.name,
-                                link: e.target.result,
-                                state: 'loaded'
-                            });
-                        });
-                    };
-                    fileReader.readAsDataURL(file);
-                })
-                .error(function (err) {
-                    console.log(err);
-                    //$scope.showcaseItems.splice(index, 1); // remove the temporary item from the showcase collection
-
-                    //TODO: error handling - REMOVE THIS
-                    var fileReader = new FileReader();
-                    fileReader.onload = function (e) {
-                        $scope.$apply(function () {
-                            _.assign($scope.showcaseItems[index], {
-                                name: file.name,
-                                link: e.target.result,
-                                state: 'loaded'
-                            });
-                        });
-                    };
-                    fileReader.readAsDataURL(file);
-                });
-
-                // TODO
-//                $upload.upload({
-//                    url: paths.user.ownAvatar,
-//                    file: $scope.file,
-//                    fileFormDataName: $scope.file.name,
-//                }).then(function () {
-//                    UserSvc.fetchUser().then(function () {
-//                        // fetch user fires an event that will notify MainCtrl to update currentUser
-//                        $scope.$hide();
-//                    }, function (error) {
-//                        console.log(error);
-//                        NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-//                    });
-//                }, function (err) {
-//                    // TODO: error handling
-//                    console.log(err);
-//                });
-
+            $upload.upload({
+                url: paths.sellerManagement.showcases + $scope.service.serviceID,
+                file: files,
+                fileFormDataName: fileNames
+            }).then(function (response) {
+                var showcase, showcaseItem;
+               _.each(response.data, function (fetchedShowcase) {
+                   showcase = new odata.Showcase(fetchedShowcase);
+                   showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
+                   $scope.showcaseCollection.push(showcase);
+                   $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
+               });
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
         };
 
@@ -246,15 +195,22 @@
 
         $scope.toggleSelection = function (item) {
             switch (item.state) {
-                case 'selected':
-                    item.state = 'loaded';
-                    break;
-                case 'loaded':
-                    item.state = 'selected';
-                    break;
-                default:
-                    return;
+            case 'selected':
+                item.state = 'loaded';
+                break;
+            case 'loaded':
+                item.state = 'selected';
+                break;
+            default:
+                return;
             }
+        };
+
+        $scope.togglePortfolioSelection = function (item) {
+            var selected  = $scope.selectedPortfolios;
+            selected.indexOf(item) === -1 ? selected.push(item) : selected.remove(function (portfolio) {
+                return portfolio === item;
+            });
         };
 
         $scope.toggleTextOnly = function () {
@@ -274,23 +230,52 @@
         };
 
         // for a given importedPortfolio, and a given status, check the completion status
-        $scope.getPortfolioCompletionState = function (importedPortfolio) {
-            var providerStatus = _.find($scope.status, function (provider) {
-                return provider.Provider === providers[importedPortfolio.Provider];
+        $scope.getPortfolioCompletionState = function (portfolioProvider) {
+            return _.find($scope.status, function (provider) {
+                return provider.Provider === providers[portfolioProvider];
             });
-            return providerStatus;
-        }
+        };
 
-        $scope.portfolioDone =  function (importedPortfolio) {
-            var state = $scope.getPortfolioCompletionState(importedPortfolio);
-            console.log(state.Portfolio.Total, state.Portfolio.Count);
-            return state.Portfolio.Total === state.Portfolio.Count;
-        }
+        $scope.portfolioDone =  function (portfolioProvider) {
+            var state = $scope.getPortfolioCompletionState(portfolioProvider);
+            /*
+                If all portfolios have finished downloading before the controller is initialized,
+                state will be undefined since no status events will be broadcasted.
+            **/
+            return state ? state.Portfolio.Total === state.Portfolio.Count : true;
+        };
 
-        $scope.portfolioImporting =  function (importedPortfolio) {
-            var state = $scope.getPortfolioCompletionState(importedPortfolio);
-            return state.Portfolio.Total > state.Portfolio.Count;
-        }
+        $scope.portfolioImporting =  function (portfolioProvider) {
+            var state = $scope.getPortfolioCompletionState(portfolioProvider);
+            /*
+                If all portfolios have finished downloading before the controller is initialized,
+                state will be undefined since no status events will be broadcasted.
+            **/
+            return state ? state.Portfolio.Total > state.Portfolio.Count : false;
+        };
+
+        $scope.getPortfoliosCount = function (portfolioProvider) {
+            var state = $scope.getPortfolioCompletionState(portfolioProvider);
+            var portfolio = _.find($scope.importedPortfolios, function (portfolio) {
+                return portfolio.Provider ===  portfolioProvider;
+            });
+            return state ? state.Portfolio.Count : portfolio.data.length;
+        };
+
+        $scope.toggleActiveWorkSamples = function () {
+            $scope.activeWorkSamples = $scope.activeWorkSamples === 'owned' ? 'imported' : 'owned';
+        };
+
+        $scope.getImportedLink = function (item) {
+            return [
+                paths.file.imported,
+                $scope.currentUser.Guid, '/',
+                item.Provider, '/',
+                item.FolderName, '/',
+                item.ThumbnailAsset.Folder, '/',
+                item.ThumbnailAsset.Name
+            ].join('');
+        };
 
         ////////////////////////////////////////////
         /// Watchers
@@ -317,10 +302,10 @@
                 var cam = CameraTag.cameras['fvcam'];
                 var vid = cam.getVideo();
                 console.log(vid);
-                //                var mp4_url = vid.formats.qvga.mp4_url;
-                //                var small_thumb_url = vid.formats.qvga.small_thumb_url;
-                //                var thumb_url = vid.formats.qvga.thumb_url;
-                //                var video_url = vid.formats.qvga.video_url;
+//                var mp4_url = vid.formats.qvga.mp4_url;
+//                var small_thumb_url = vid.formats.qvga.small_thumb_url;
+//                var thumb_url = vid.formats.qvga.thumb_url;
+//                var video_url = vid.formats.qvga.video_url;
             });
         });
 
@@ -328,7 +313,28 @@
         /// Init
         ////////////////////////////////////////////
 
-        $scope.fetchImportedPortfolios();
+        CatalogueSvc.getService($scope.offer.serviceID).then(function (service) {
+            $scope.service = service;
+
+            $scope.priceDiscriminators = _.filter(service.options, function (option) {
+                return option.isPriceDiscriminator && option.isMandatory;
+            });
+
+            $scope.addons = _.filter(service.options, function (option) {
+                return option.isPriceDiscriminator && !option.isMandatory;
+            });
+
+        }, function (error) {
+            console.log(error);
+        });
+
+        $timeout(function () { $scope.panels.activePanel = 0; }); // update the UI
+
+        ImporterSvc.fetchCachedPortfolios($scope.currentUser.Guid).then(function (portfolios) {
+            $scope.importedPortfolios = portfolios.data;
+        }, function (error) {
+            console.log(error);
+        });
 
     }]);
 }());

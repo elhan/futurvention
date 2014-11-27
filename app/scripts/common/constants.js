@@ -76,6 +76,7 @@
             externalLogins: 'https://futurvention.azurewebsites.net/api/Account/ExternalLogins?returnUrl=http://client.futurvention.com:9000&generateState=true'
         },
         importer: {
+            importedData: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/',
             import: 'https://futurvention.azurewebsites.net/api/ExtService/import',
             checkProgress: 'https://futurvention.azurewebsites.net/api/ExtService/checkprogress',
             fetchProfile: 'https://futurvention.azurewebsites.net/api/ExtService/getprofiles',
@@ -85,6 +86,8 @@
             profile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
             ownProfile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile',
             profileStatus: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
+            importedShowcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/ImportedShowcases?serviceID=',
+            showcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/SellerProfiles/OwnProfile/SingleItemShowcases?serviceID=',
             monikerExists: function (moniker) {
                 return [
                     'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
@@ -98,7 +101,8 @@
             ownAvatar: 'https://futurvention.azurewebsites.net/api/Self/Avatar'
         },
         file: {
-            hosted: 'https://ergmaimages.blob.core.windows.net/userdata/'
+            hosted: 'https://ergmaimages.blob.core.windows.net/userdata/',
+            imported: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/'
         }
     });
 

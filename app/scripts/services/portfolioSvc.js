@@ -9,7 +9,7 @@
      * # PortfolioSvc
      * Manage Portfolio items
      */
-    app.service('PortfolioSvc', ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
+    app.service('PortfolioSvc', ['$http', '$q', '$timeout', 'PATHS', function ($http, $q, $timeout, paths) {
         var PortfolioSvc = {},
             portfolio = {};
 
@@ -21,32 +21,15 @@
             return portfolio;
         };
 
-        PortfolioSvc.fetchPortfolio = function (userId, index, offset) {
-            console.log(userId, index, offset);
-
-            // TODO: remove mock service object
-            var PortfolioItem = function () {
-                return {
-                    title: 'Logo Design',
-                    url: 'http://www.accusoft.com/html5viewer/img/btn-file-icon-ppt-sm.png',
-                    name: 'btn-file-icon-ppt-sm.png'
-                };
-            };
-
-            var itemCount = _.random(3, 20);
-            var portfolioItems = [];
-
-            for (var i = 0; i < itemCount; i++) {
-                portfolioItems.push(new PortfolioItem());
-            }
-
+        PortfolioSvc.fetchPortfolio = function () {
+            // TODO
             var deferred = $q.defer();
-            $timeout(function () {
-                deferred.resolve({
-                    items: portfolioItems
-                });
-            });
+
             return deferred.promise;
+        };
+
+        PortfolioSvc.addShowcaseFromUrl = function (urls, serviceID) {
+            return $http.put(paths.sellerManagement.showcases + serviceID, urls);
         };
 
         return PortfolioSvc;

@@ -54,7 +54,7 @@
                 <div class="text-p">{{ service.showcasePrompt }}</div>
                 <div class="wrapper-icons">
                   <div class="container-x">
-                    <div class="container-y flex-1 clickable">
+                    <div class="container-y flex-1 clickable" ng-click="toggleActiveWorkSamples()">
                       <div class="import-link bg-grey-dark text-white">
                         <svg class="icon icon-light nostroke icon-import">
                           <use xlink:href="#import"></use>
@@ -103,40 +103,64 @@
                       <!-- Overlay: drag-over -->
                       <div class="showcase-overlay"></div>
                     </div>
-                    <div class="caption">{{item.name}}</div>
+                    <div class="caption">{{ item.name }}</div>
                   </div>
                 </div>
               </div>
               <!-- Imported Showcases -->
-              <div class="container-x">
-                <div ng-if="activeWorkSamples === 'imported'">
-                  <button class="btn btn-link text-p" ng-click="activeWorkSamples = 'owned'">
-                    <span class="space-after">&lt;&lt;</span>
-                    <span>Back to service catalogue</span>
-                  </button>
+              <div ng-if="activeWorkSamples === 'imported'">
+                <div class="container-x">
+                <button class="btn btn-link text-p" ng-click="toggleActiveWorkSamples()">
+                  <span class="space-after">&lt;&lt;</span>
+                  <span>Back to service catalogue</span>
+                </button>
                 </div>
-              </div>
-              <div class="container-y">
-                <div class="text-p">Click to select imported samples you want to showcase as part of this service</div>
-                <div ng-repeat="importedPortfolio in importedPortfolios">
-                  <div ng-if="portfolioDone(importedPortfolio)" class="container-x">
-                    <svg  class="icon icon-green text-p space-left">
-                      <use xlink:href="#tick"></use>
-                    </svg>
-                    <div class="text-p-bold">{{ importedPortfolio.Provider }}</div>
-                    <div class="text-p space-after"></div>
-                    <div class="text-p">portfolio items imported</div>
-                  </div>
-<!--
-                  <div ng-if="getPortfolioCompletionState(importedPortfolio).total > getPortfolioCompletionState(importedPortfolio).count" class="container-x">
-                    <div class="wrapper-loader" ng-show="item.state === 'loading'">
-                      <div class="loader"></div>
+                <div class="container-y">
+                  <div class="text-p space-bottom">Click to select imported samples you want to showcase as part of this service</div>
+                  <div ng-repeat="importedPortfolio in importedPortfolios">
+                    <div class="space-bottom" ng-switch on="portfolioDone(importedPortfolio.Provider)">
+                      <div ng-switch-when="true" class="container-x flex-items-centered">
+                        <svg  class="icon icon-green text-p space-left">
+                          <use xlink:href="#tick"></use>
+                        </svg>
+                        <div class="text-p-bold space-left">{{ importedPortfolio.Provider }}</div>
+                        <div class="text-p space-after"> - </div>
+                        <div class="text-p space-after" ng-bind="getPortfoliosCount(importedPortfolio.Provider)"></div>
+                        <div class="text-p space-after">portfolio items imported</div>
+                      </div>
+                      <div ng-switch-when="false" class="container-x flex-items-centered">
+                        <div class="wrapper-loader" ng-show="item.state === 'loading'">
+                          <div class="loader"></div>
+                        </div>
+                        <div class="text-p-bold space-left">{{ importedPortfolio.Provider }}</div>
+                        <div class="text-p space-after"> - </div>
+                        <div class="text-p space-after" ng-bind="getPortfoliosCount(importedPortfolio.Provider)"></div>
+                        <div class="text-p">portfolio items imported</div>
+                      </div>
                     </div>
-                    <div class="text-p-bold">{{ importedPortfolio.provider }}</div>
-                    <div class="text-p space-after">{{ getPortfolioCompletionState(importedPortfolio).count }}</div>
-                    <div class="text-p">portfolio items imported</div>
                   </div>
--->
+                </div>
+                <!-- Imported Showcase -->
+                <div ng-repeat="portfolio in importedPortfolios">
+                  <div>{{ portfolio.Provider }}</div>
+                  <div class="flex-wrap">
+                    <div class="showcase" ng-repeat="item in portfolio.data">
+                      <div class="showcase-item thumbnail"
+                           ng-click="togglePortfolioSelection(item)"
+                           fv-bg-image={{getImportedLink(item)}}
+                           fv-data={{getImportedLink(item)}}>
+                        <!-- Overlay: selected -->
+                        <div class="showcase-overlay selected" ng-show="selectedPortfolios.indexOf(item) > -1">
+                          <svg class="icon icon-light">
+                            <use xlink:href="#tick"></use>
+                          </svg>
+                        </div>
+                        <!-- Overlay: drag-over -->
+                        <div class="showcase-overlay"></div>
+                      </div>
+                      <div class="caption">{{item.name}}</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

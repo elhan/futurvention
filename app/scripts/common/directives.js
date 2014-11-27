@@ -223,7 +223,7 @@
      * @example
      * <div fv-bg-image="someBackgroundImage"> ... </div>
      */
-    app.directive('fvBgImage', ['$timeout', function ($timeout) {
+    app.directive('fvBgImage', function () {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
@@ -232,7 +232,7 @@
                 }, true);
             }
         };
-    }]);
+    });
 
     /**
      * @ngdoc directive

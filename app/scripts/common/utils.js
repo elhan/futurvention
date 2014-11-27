@@ -118,7 +118,7 @@
     }
 
     // Finds and removes the first array object that satisfied the given predicate
-    if (!Array.prototype.hasOwnProperty('removed')) {
+    if (!Array.prototype.hasOwnProperty('remove')) {
         Array.prototype.remove = function (cb) {
             if (typeof cb !== 'function') {
                 return undefined;

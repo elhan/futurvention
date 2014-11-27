@@ -76,7 +76,7 @@
         /// Patch methods update objects on the backend
         ///////////////////////////////////////////////////////////
 
-        ProfileSvc.patchProfile = function (profile, userID) {
+        ProfileSvc.patchProfile = function (profile) {
             return $http({
                 method: 'PATCH',
                 url: paths.sellerManagement.ownProfile,

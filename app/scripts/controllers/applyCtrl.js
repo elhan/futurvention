@@ -19,7 +19,7 @@
             ProfileSvc.setActiveStep($scope.activeStep);
         };
 
-        $scope.goToStep(0);
+        $scope.goToStep(2);
     }]);
 
 }());

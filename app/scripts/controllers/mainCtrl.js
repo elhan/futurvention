@@ -66,7 +66,7 @@
 
         $scope.$on(events.user.updateSuccess, function (event, user) {
             $scope.currentUser = user;
-            $scope.avatar = encodeURI(paths.file.hosted + user.Avatar.RelativeUrl);
+            $scope.avatar = user && user.Avatar ? encodeURI(paths.file.hosted + user.Avatar.RelativeUrl) : null;
 //            ProfileSvc.updateProfile({ User: user });
         });
 

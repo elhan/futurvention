@@ -2,7 +2,7 @@
     'use strict';
     var app = angular.module('fvApp');
 
-    app.factory('Odata', ['Utils', 'PROVIDERS_ENUM', function (utils, providers) {
+    app.factory('Odata', ['PROVIDERS_ENUM', 'PATHS', 'Utils', function (providers, paths, utils) {
         var Odata = {};
 
         //////////////////////////////////////////////////////////////////
@@ -153,6 +153,10 @@
 
         Odata.SellerProfile.inheritFunctions(OdataObject, ['setMultilingual']);
 
+        ////////////////////////////////////////////////////////////
+        /// user
+        ////////////////////////////////////////////////////////////
+
         /**
          * @constructor
          * @param {Object} options: extends Multilingual defaults
@@ -195,7 +199,7 @@
             self.OwnerID = 0;
 
             utils.updateProperties(self, options);
-        }
+        };
 
         /**
          * @constructor
@@ -223,7 +227,7 @@
             self.MimeTypes = 0;
 
             utils.updateProperties(self, options);
-        }
+        };
 
         /**
          * @constructor
@@ -231,6 +235,9 @@
          */
         Odata.Showcase = function (options) {
             var self = this;
+
+            /** @type Integer */
+            self.ID = 0;
 
             /** @type Multilingual */
             self.Description = null;
@@ -254,7 +261,7 @@
             self.SourceID = 0;
 
             utils.updateProperties(self, options);
-        }
+        };
 
         Odata.Showcase.prototype.fromImported =  function (imp) {
             if (!imp) {
@@ -278,6 +285,9 @@
          */
         Odata.ShowcaseItem = function (options) {
             var self = this;
+
+            /** @type Integer */
+            self.ID = 0;
 
             /** @type Multilingual */
             self.Description = null;
@@ -307,7 +317,7 @@
             self.Thumbnail = null;
 
             utils.updateProperties(self, options);
-        }
+        };
 
         /**
          * Creates a new Showcase item from an imported showcase object
@@ -331,6 +341,49 @@
             });
 
             return self;
+        };
+
+        /**
+         * Creates a new SimpleShowcaseItem using the properties of this ShowcaseItem. Modifying
+         * properties explicitly is supported by the addition of the options object.
+         * @param {Object} imp:  An imported portfolio item
+         * @param {Showcase} showcase: The Showcase to which this ShowcaseItem belongs
+         * @returns {ShowcaseItem}
+         */
+        Odata.ShowcaseItem.prototype.toSimpleShowcaseItem = function (options) {
+            var self = this;
+            return utils.updateProperties(new Odata.SimpleShowcaseItem({
+                ID: self.ID,
+                name: self.Title.Literals[0].Text,
+                link: self.getThumbnail()
+            }), options);
+        };
+
+        Odata.ShowcaseItem.prototype.getThumbnail = function () {
+            return this.Thumbnail.hasOwnProperty('Url') ? this.Thumbnail.Url : paths.file.hosted + this.Thumbnail.RelativeUrl;
+        };
+
+        /**
+         * Creates a new SimpleShowcaseItem to be used by templates
+         * @param {Object} options:  overrides the default object properties
+         * @returns {SimpleShowcaseItem}
+         */
+        Odata.SimpleShowcaseItem = function (options) {
+            var self = this;
+
+            /** @type Integer */
+            self.ID = 0;
+
+            /** @type {String} */
+            self.name = '';
+
+            /** @type {String} */
+            self.link = '';
+
+            /** @type {String} loading | loaded | selected */
+            self.state = 'loading';
+
+            utils.updateProperties(self, options);
         };
 
         return Odata;

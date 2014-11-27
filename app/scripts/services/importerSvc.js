@@ -9,7 +9,7 @@
      * # ImporterSvc
      * CRUD operations for eternal data (importers)
      */
-    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'MESSAGES', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, msg, odata) {
+    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, msg, utils, odata) {
         var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
             importedPortfolios = [],
             ImporterSvc = {};
@@ -30,7 +30,7 @@
             switch (complete.length) {
             case 0:
                 return ['none'];
-            case 2:
+            case 3:
                 return ['all'];
             default:
                 return complete;
@@ -92,10 +92,6 @@
                         broadcastImporterEvent('reviews', importer);
                     }
 
-                    if (inProgress.importers.length === 0) {
-                        stopPolling();
-                    }
-
                 });
             }, function (error) {
                 console.log(error);
@@ -118,9 +114,11 @@
         ///////////////////////////////////////////////////////////
 
         ImporterSvc.Importer = function (options) {
-            this.provider = options.Provider || '';
-            this.url = options.Url || '';
-            this.guid = options.Guid || '';
+            var self = this;
+            self.provider = '';
+            self.url = '';
+            self.guid = '';
+            utils.updateProperties(self, options);
         };
 
         ImporterSvc.Importer.prototype.capitalize = function () {
@@ -234,12 +232,16 @@
             var deferred = $q.defer(),
                 importers = new ImporterSvc.ImporterCollection();
 
-            importers.setImporters(_.union(inProgress.importers, portfoliosDone.importers));
+            /*
+                'inProgress' collection must be added in order to fetch downloade dportfolios for Importers that have not
+                finished downloading all of their portfolios yet.
+                'done' collection must be included in case all portfolios are done during the first polling event,
+                in which case portfoliosDone will be empty, since the Importer will be added directly to the done collection.
+            **/
+            importers.setImporters(_.union(inProgress.importers, portfoliosDone.importers, done.importers));
 
             portfoliosDone && $http.post(paths.importer.fetchPortfolios, importers.capitalize()).then(function (response) {
-                console.log(response);
                 importedPortfolios = response;
-                // TODO: send the imported data to the backend
                 deferred.resolve(response);
             }, function (error) {
                 console.log(error);
@@ -255,6 +257,32 @@
          * @function
          *
          * @description
+         * Fetches old imported portfolios.
+         *
+         * @returns Array.<Object>
+         */
+        ImporterSvc.fetchCachedPortfolios = function (guid) {
+//            return $http.post(paths.importer.fetchPortfolios, _.map(providerNames, function (name) {
+//                return {
+//                    Guid: guid,
+//                    Provider: name,
+//                    Url: ''
+//                };
+//            }));
+            // TODO: remove
+            return $http.post(paths.importer.fetchPortfolios, [{
+                Guid: guid,
+                Provider: 'odesk',
+                Url: 'https://www.odesk.com/users/PHP-MySQL-Yii-Wordpress-Jquery-Android-Phonegap-JAVA-HTML5_~01c023a6f344aea116'
+            }]);
+        };
+
+        /**
+         * @ngdoc method
+         * @name fvApp.service:ImporterSvc
+         * @function
+         *
+         * @description
          * Pipes the imported portfolio objects to the backend. The backend processes
          * the imported data into a collection of Showcase objects.
          *
@@ -262,7 +290,14 @@
          */
         ImporterSvc.saveImportedPortfolios = function () {
             // TODO
-        }
+//          var deferred = $q.defer();
+//
+//          $http.post(paths.sellerManagement.importedShowcases + 2, portfolios).then(function (response) {
+//              console.log(response);
+//          }, function (error) {
+//              console.log(error);
+//          });
+        };
 
         ///////////////////////////////////////////////////////////
         /// Watchers
