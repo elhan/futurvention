@@ -9,49 +9,10 @@
      * # OfferSvc
      * Bussiness logic for seller Offers
      */
-    app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', function ($http, $q, $timeout, Enum) {
+    app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', 'PATHS', function ($http, $q, $timeout, Enum, paths) {
         var OfferSvc = {},
             offer = {},
             offers = [];
-
-        ///////////////////////////////////////////////////////////
-        /// Constructors
-        ///////////////////////////////////////////////////////////
-
-        OfferSvc.Offer = function () {
-            return {
-                workSamples: [],
-                status: Enum.OfferStatus.DRAFT,
-                serviceID: '',
-                choices: [],
-                lowestPrice: ''
-            };
-        };
-
-        offer = new OfferSvc.Offer(); // the offer being edited by the user
-
-        ///////////////////////////////////////////////////////////
-        /// Public functions
-        ///////////////////////////////////////////////////////////
-
-        OfferSvc.setOffer = function (offerObj) {
-            offer = offerObj;
-        };
-
-        OfferSvc.updateOffer = function (obj) {
-            angular.extend(offer, obj);
-        };
-
-        /*
-            Syntactic sugar. Allows controllers to make use of a clean API without having to worry about
-            converting their $scope models to ShowcaseItem format.
-        **/
-        OfferSvc.addWorkSamples = function (samples) {
-            samples && _.each(samples, function (sample) {
-                // TODO: convert to ShowcaseItem
-                offer.workSmaples.push(sample);
-            });
-        };
 
         OfferSvc.addOffer = function (obj) {
             var newOffer = obj || offer; // if no args, user the current offer object
@@ -73,37 +34,54 @@
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
-        OfferSvc.fetchOffer = function (serviceId, userId) {
-            serviceId && console.log(serviceId, userId);
-            //            var sid = serviceId || offer.serviceId; //if no serviceId is passed, use the one in the offer obj
-            //            return $http.get('/offer', { serviceId: sid });
+        OfferSvc.fetchOffers = function () {
             var deferred = $q.defer();
-            $timeout(function () {
-                // TODO: remove mock service object
-                deferred.resolve(offer);
+
+            $http.get(paths.offerManagement.ownOffers).then(function (response) {
+                offers = response.data;
+                deferred.resolve(offers);
+            }, function (error) {
+                deferred.reject(error);
             });
+
             return deferred.promise;
         };
 
-        OfferSvc.fetchOffers = function () {
-            // TODO: remove mock service object
-            var offerCount = _.random(3, 20);
-            var newOffer = {};
-
-            for (var i = 0; i < offerCount; i++) {
-                newOffer = new OfferSvc.Offer();
-                angular.extend(newOffer, {
-                    serviceID: 1,
-                    lowestPrice: '$100'
-                });
-                offers.push(newOffer);
-            }
-
+        /**
+         * @ngdoc method
+         * @name fvApp.service:OfferSvc
+         * @function
+         *
+         * @description
+         * Fetches an offer object from the backend. If no offer exists for the given
+         * serviceID, returns a new, empty Offer.
+         *
+         * @param {Integer} serviceID
+         * @returns {Offer}
+         */
+        OfferSvc.fetchOffer = function (serviceID) {
             var deferred = $q.defer();
-            $timeout(function () {
-                deferred.resolve(offers);
+
+            $http.put(paths.offerManagement.ownOffers + '?serviceID=' + serviceID).then(function (response) {
+                offer = response.data;
+                deferred.resolve(offer);
+            }, function (error) {
+                deferred.reject(error);
             });
+
             return deferred.promise;
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Save functions
+        ///////////////////////////////////////////////////////////
+
+        OfferSvc.saveOffer = function (offer) {
+            return $http({
+                method: 'PATCH',
+                url: paths.offerManagement.ownOffers + '/' +offer.ID,
+                data: offer
+            });
         };
 
         return OfferSvc;

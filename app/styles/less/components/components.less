@@ -498,6 +498,15 @@ textarea {
   padding: 30px;
 }
 
+.panel-inner {
+  .container-x;
+  .flex-content-spread;
+  .flex-items-centered;
+  min-height: 35px;
+  background-color: rgba(245, 245, 245, 1); // default panel-heading color
+  margin: 10px;
+  padding: 0 10px;
+}
 // Thumbnails
 // -------------------------
 
@@ -507,8 +516,6 @@ textarea {
 
 .thumbnail {
   cursor: pointer;
-  margin-left: -4px;
-  margin-right: -4px;
 
   .wrapper-img {
     overflow: hidden;
@@ -534,8 +541,6 @@ textarea {
   right: 15px; // thumbnails have padding 15px
   bottom: 90px; //90px = 20px thumbnail margin + 70px caption height
   left: 15px;
-  margin-left: -4px;
-  margin-right: -4px;
   background-color: @blueDefault;
   visibility: hidden;
   border-top-right-radius: 3px;
@@ -563,11 +568,6 @@ textarea {
   position: absolute;
 }
 
-.showcase-msg {
-  .text-p;
-  margin: 0px 0px 10px 10px;
-}
-
 .showcase {
   width: 150px;
   height: 150px;
@@ -587,6 +587,9 @@ textarea {
 .showcase-overlay {
   border-radius: 4px;
   &.selected {
+    // needed to hide the thumbnail hover border
+    margin-top: -1px;
+    margin-left: -1px;
     //fade @green background to .8
     background-color: rgba(2, 196, 102, .8);
     svg {
@@ -608,6 +611,7 @@ textarea {
 .showcase-item {
   border-radius: 4px;
   background-color: white;
+  padding: 0;
 
   &.progress {
     border: 2px dashed @lightGrey;

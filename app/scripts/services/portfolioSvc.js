@@ -28,7 +28,7 @@
             return deferred.promise;
         };
 
-        PortfolioSvc.addShowcaseFromUrl = function (urls, serviceID) {
+        PortfolioSvc.saveUrls = function (urls, serviceID) {
             return $http.put(paths.sellerManagement.showcases + serviceID, urls);
         };
 

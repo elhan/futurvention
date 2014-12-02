@@ -78,16 +78,17 @@
         };
 
         $scope.editOffer = function (serviceName) {
-            OfferSvc.setOffer(_.find($scope.offers, function (offer) {
-                return offer.serviceName === serviceName;
-            }));
-            OfferSvc.fetchOffer(serviceName, $scope.userId).then(function (offer) {
-                OfferSvc.setOffer(offer);
-                $scope.activeStep = $scope.steps[3];
-            }, function (error) {
-                console.log(error);
-            });
-            $scope.editProfileSection('offer_config');
+            // TODO
+//            OfferSvc.setOffer(_.find($scope.offers, function (offer) {
+//                return offer.serviceName === serviceName;
+//            }));
+//            OfferSvc.fetchOffer(serviceName, $scope.userId).then(function (offer) {
+//                OfferSvc.setOffer(offer);
+//                $scope.activeStep = $scope.steps[3];
+//            }, function (error) {
+//                console.log(error);
+//            });
+//            $scope.editProfileSection('offer_config');
         };
 
         ///////////////////////////////////////////////////////////

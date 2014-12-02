@@ -76,14 +76,13 @@
                     </div>
                   </div>
                 </div>
-                <div class="showcase-msg" ng-show="showcaseItems.length > 0">
+                <div class="space-x text-p" ng-show="showcaseItems.length > 0">
                   Click to select samples you want to showcase. You can also reorder them. The first one will be used as cover image.
                 </div>
                 <!-- Showcase -->
                 <div class="flex-wrap">
                   <div class="showcase" ng-repeat="item in showcaseItems">
-                    <div ng-class="{'showcase-item': true, 'progress': item.state === 'loading'}"
-                         ng-click="toggleSelection(item)"
+                    <div class="showcase-item thumbnail" ng-class="{'progress': item.state === 'loading'}"
                          fv-bg-image={{item.link}}
                          fv-data={{item.link}}
                          fv-draggable="item.state !== 'loading'"
@@ -109,16 +108,16 @@
               </div>
               <!-- Imported Showcases -->
               <div ng-if="activeWorkSamples === 'imported'">
-                <div class="container-x">
-                <button class="btn btn-link text-p" ng-click="toggleActiveWorkSamples()">
+                <div class="container-x space-bottom-2x">
+                <button class="btn btn-link text-p" ng-click="saveImportedPortfolios()">
                   <span class="space-after">&lt;&lt;</span>
-                  <span>Back to service catalogue</span>
+                  <span>Back to selected work samples</span>
                 </button>
                 </div>
                 <div class="container-y">
-                  <div class="text-p space-bottom">Click to select imported samples you want to showcase as part of this service</div>
+                  <div class="text-p space-bottom space-x">Click to select imported samples you want to showcase as part of this service</div>
                   <div ng-repeat="importedPortfolio in importedPortfolios">
-                    <div class="space-bottom" ng-switch on="portfolioDone(importedPortfolio.Provider)">
+                    <div class="space-bottom-4x" ng-switch on="portfolioDone(importedPortfolio.Provider)">
                       <div ng-switch-when="true" class="container-x flex-items-centered">
                         <svg  class="icon icon-green text-p space-left">
                           <use xlink:href="#tick"></use>
@@ -142,9 +141,15 @@
                 </div>
                 <!-- Imported Showcase -->
                 <div ng-repeat="portfolio in importedPortfolios">
-                  <div>{{ portfolio.Provider }}</div>
+                  <div class="panel-inner">
+                    <div class="text-p-bold">{{ portfolio.Provider }}</div>
+                    <button class="btn no-padding btn-link text-p" ng-click="toggleExpansion(portfolio)">
+                      <span ng-if="portfoliosExpanded.indexOf(portfolio) === -1">+ Show all</span>
+                      <span ng-if="portfoliosExpanded.indexOf(portfolio) > -1">- Collapse</span>
+                    </button>
+                  </div>
                   <div class="flex-wrap">
-                    <div class="showcase" ng-repeat="item in portfolio.data">
+                    <div class="showcase" ng-repeat="item in portfoliosExpanded.indexOf(portfolio) === -1 ? portfolio.data.slice(0, 10) : portfolio.data">
                       <div class="showcase-item thumbnail"
                            ng-click="togglePortfolioSelection(item)"
                            fv-bg-image={{getImportedLink(item)}}
@@ -213,7 +218,7 @@
               <!-- Service fields -->
               <div ng-repeat="field in service.fields">
                 <p class="text-p-bold">{{ field.sellerLabel }}</p>
-                <textarea placeholder="Type your answers here"></textarea>
+                <textarea placeholder="Type your answers here" ng-model="serviceFields[$index].value"></textarea>
               </div>
             </div>
             <!-- Pricing -->
@@ -310,10 +315,15 @@
           </div>
         </div>
       </div>
-      <div ng-if="panels.activePanel === $index" class="wrapper-btn-done flex-content-end">
+      <div ng-if="panels.activePanel === $index && !($index === 1 && activeWorkSamples === 'imported')" class="wrapper-btn-done flex-content-end">
         <button class="button btn btn-blue" ng-click="closePanel(panel)">
           <span ng-if="panels.activePanel === 0">I got it</span>
           <span ng-if="panels.activePanel > 0">Done</span>
+        </button>
+      </div>
+      <div ng-if="$index === 1 && activeWorkSamples === 'imported'" class="wrapper-btn-done flex-content-end">
+        <button class="button btn btn-blue" ng-click="saveImportedPortfolios()">
+          <span ng-if="panels.activePanel > 0">Back</span>
         </button>
       </div>
     </div>

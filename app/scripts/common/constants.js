@@ -88,6 +88,7 @@
             profileStatus: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
             importedShowcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/ImportedShowcases?serviceID=',
             showcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/SellerProfiles/OwnProfile/SingleItemShowcases?serviceID=',
+            reviews: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/reviews',
             monikerExists: function (moniker) {
                 return [
                     'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
@@ -103,6 +104,9 @@
         file: {
             hosted: 'https://ergmaimages.blob.core.windows.net/userdata/',
             imported: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/'
+        },
+        offerManagement: {
+            ownOffers: 'https://futurvention.azurewebsites.net/api/OffersManagement/OwnOffers'
         }
     });
 
@@ -120,7 +124,8 @@
         error: {
             generic: 'Something went wrong. Please try again later.',
             logoutFailed: 'Something went wrong. Please try logging out again.',
-            profileImportFailed: 'No profiles could be imported'
+            profileImportFailed: 'No profiles could be imported',
+            profileSaveFailed: 'Something went wrong! Please try saving your profiles again.'
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',

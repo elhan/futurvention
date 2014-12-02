@@ -54,12 +54,6 @@
         }, function (error) {
             console.log(error);
         });
-
-        $scope.createOffer = function (serviceID) {
-            OfferSvc.setOffer(new OfferSvc.Offer());
-            OfferSvc.updateOffer({ serviceID: serviceID });
-            $timeout(function () { $scope.goToStep(3); });
-        };
 //
 //        $scope.removeOffer = function (serviceName) {
 //            OfferSvc.removeOffer(serviceName);
@@ -121,13 +115,12 @@
         });
 
         $scope.$watch('selectedService.serviceID', function (newServiceId) {
-            newServiceId && $scope.createOffer(newServiceId);
+            newServiceId && OfferSvc.fetchOffer(newServiceId).then(function (response) {
+                $scope.goToStep(3);
+            }, function (error) {
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
         });
 
-        $scope.try = function () {
-            console.log(ImporterSvc.getImporters('portfoliosDone'));
-            console.log(ImporterSvc.getImporters('profileDone'));
-            console.log(ImporterSvc.getImporters('reviewsDone'));
-        };
     }]);
 }());

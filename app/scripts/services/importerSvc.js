@@ -9,8 +9,9 @@
      * # ImporterSvc
      * CRUD operations for eternal data (importers)
      */
-    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'IMPORT_PROVIDERS', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providerNames, events, msg, utils, odata) {
+    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providersEnum, events, msg, utils, odata) {
         var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
+            providerNames = _.keys(providersEnum),
             importedPortfolios = [],
             ImporterSvc = {};
 
@@ -153,8 +154,12 @@
         };
 
         function filterFetchedImporters (response) {
-            return _.map(response.data, function (fetchedProvider) {
-                return new ImporterSvc.Importer(fetchedProvider);
+            return _.map(response.data, function (importer) {
+                return new ImporterSvc.Importer({
+                    provider: importer.Provider,
+                    url: importer.Url,
+                    guid: importer.Guid
+                });
             });
         }
 
@@ -251,6 +256,10 @@
             return deferred.promise;
         };
 
+        ImporterSvc.fetchReviews = function () {
+            return $http.post(paths.sellerManagement.reviews, reviewsDone.capitalize());
+        };
+
         /**
          * @ngdoc method
          * @name fvApp.service:ImporterSvc
@@ -288,15 +297,8 @@
          *
          * @returns Array.<Showcase>
          */
-        ImporterSvc.saveImportedPortfolios = function () {
-            // TODO
-//          var deferred = $q.defer();
-//
-//          $http.post(paths.sellerManagement.importedShowcases + 2, portfolios).then(function (response) {
-//              console.log(response);
-//          }, function (error) {
-//              console.log(error);
-//          });
+        ImporterSvc.saveImportedPortfolios = function (serviceID, portfolios) {
+          return $http.post(paths.sellerManagement.importedShowcases + serviceID, portfolios);
         };
 
         ///////////////////////////////////////////////////////////
@@ -319,7 +321,7 @@
         portfoliosDone = new ImporterSvc.ImporterCollection(); // all Importers with portfolios complete
 
         _.each(providerNames, function (providerName) {
-            all.importers.push(new ImporterSvc.Importer({ Provider: providerName }));
+            all.importers.push(new ImporterSvc.Importer({ provider: providerName }));
         });
 
         return ImporterSvc;

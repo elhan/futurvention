@@ -386,6 +386,23 @@
             utils.updateProperties(self, options);
         };
 
+        /**
+         * Creates a new SimpleShowcaseItem to be used by templates
+         * @param {Object} options:  overrides the default object properties
+         * @returns {SimpleShowcaseItem}
+         */
+        Odata.OfferField = function (options) {
+            var self = this;
+
+            /** @type Integer */
+            self.ID = 0;
+
+            /** @type Integer */
+            self.OfferID = 0;
+
+            utils.updateProperties(self, options);
+        };
+
         return Odata;
     }]);
 

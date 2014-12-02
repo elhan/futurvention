@@ -30,13 +30,14 @@
          /** @type Array.<Showcase> */
         $scope.showcaseCollection = [];
 
-        $scope.offer = OfferSvc.getOffer();
         $scope.service = {};
         $scope.priceDiscriminators= [];
         $scope.addons = [];
 
         $scope.importedPortfolios = [];
         $scope.selectedPortfolios = [];
+        $scope.portfoliosExpanded = [];
+
         $scope.status = {}; // the current importer status
 
         // can be 'owned' or 'imported'. Controls which work samples section is visible
@@ -76,12 +77,24 @@
         };
 
         $scope.closePanel = function (panel) {
-            $scope.setPanelState(panel, 'done');
-            $scope.panels.activePanel = $scope.panels.indexOf(
-                _.find($scope.panels, function (panel) {
-                    return panel.state === 'default';
-                })
-            );
+            switch (panel.title) {
+            case 'Work Samples':
+                $scope.offer.Showcases = $scope.showcaseCollection;
+                break;
+            }
+
+            OfferSvc.saveOffer($scope.offer).then(function (response) {
+                console.log(response);
+                $scope.setPanelState(panel, 'done');
+                $scope.panels.activePanel = $scope.panels.indexOf(
+                    _.find($scope.panels, function (panel) {
+                        return panel.state === 'default';
+                    })
+                );
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
         };
 
         ////////////////////////////////////////////
@@ -122,60 +135,9 @@
             modalCameraTag.hide();
         };
 
-        $scope.addUrls = function () {
-            var urls = [];
-
-            _.each($scope.urlsToEmbed, function (obj) {
-                urls.push(obj.url);
-            });
-
-            modalEmbedUrl.hide();
-
-            PortfolioSvc.addShowcaseFromUrl(urls, $scope.service.serviceID).then(function (response) {
-                var showcase, showcaseItem;
-                _.each(response.data, function (fetchedShowcase) {
-                    showcase = new odata.Showcase(fetchedShowcase);
-                    showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
-                    $scope.showcaseCollection.push(showcase);
-                    $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
-                });
-            }, function (error) {
-                console.log(error);
-                // user tried to embed a type of file not supported for this service
-                if (error.data.ExceptionType === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
-                    NotificationSvc.show({ content: error.data.ExceptionMessage, type: 'error' });
-                }
-            });
-        };
-
         ////////////////////////////////////////////
         /// Other scope functions
         ////////////////////////////////////////////
-
-        $scope.onFileSelect = function (files) {
-            var fileNames = [];
-
-            _.each(files, function (file) {
-                fileNames.push(file.name);
-            });
-
-            $upload.upload({
-                url: paths.sellerManagement.showcases + $scope.service.serviceID,
-                file: files,
-                fileFormDataName: fileNames
-            }).then(function (response) {
-                var showcase, showcaseItem;
-               _.each(response.data, function (fetchedShowcase) {
-                   showcase = new odata.Showcase(fetchedShowcase);
-                   showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
-                   $scope.showcaseCollection.push(showcase);
-                   $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
-               });
-            }, function (error) {
-                console.log(error);
-                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-            });
-        };
 
         $scope.rearangeShowcaseItems = function (item) {
             // The source (dragged) item link is passed via the fv-data attribute into the drop event
@@ -193,19 +155,6 @@
             $scope.showcaseItems = $scope.showcaseItems.swap(sourceIndex, targetIndex);
         };
 
-        $scope.toggleSelection = function (item) {
-            switch (item.state) {
-            case 'selected':
-                item.state = 'loaded';
-                break;
-            case 'loaded':
-                item.state = 'selected';
-                break;
-            default:
-                return;
-            }
-        };
-
         $scope.togglePortfolioSelection = function (item) {
             var selected  = $scope.selectedPortfolios;
             selected.indexOf(item) === -1 ? selected.push(item) : selected.remove(function (portfolio) {
@@ -219,14 +168,6 @@
                 return;
             }
             panel.textonly = ! panel.textonly;
-        };
-
-        $scope.fetchImportedPortfolios = function () {
-            ImporterSvc.fetchPortfolios().then(function (portfolios) {
-                $scope.importedPortfolios = portfolios.data;
-            }, function (error) {
-                console.log(error);
-            });
         };
 
         // for a given importedPortfolio, and a given status, check the completion status
@@ -277,6 +218,99 @@
             ].join('');
         };
 
+        $scope.toggleExpansion = function (portfolio) {
+            var expanded = $scope.portfoliosExpanded;
+            expanded.indexOf(portfolio) === -1 ? expanded.push(portfolio) : expanded.remove(function (item) {
+                return item === portfolio;
+            });
+        };
+
+        ////////////////////////////////////////////
+        /// Sync with backend
+        ////////////////////////////////////////////
+
+        $scope.updateShowcaseItems = function (data) {
+            var showcase, showcaseItem;
+            _.each(data, function (fetchedShowcase) {
+                showcase = new odata.Showcase(fetchedShowcase);
+                showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
+                $scope.showcaseCollection.push(showcase);
+                $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
+            });
+        };
+
+        $scope.fetchImportedPortfolios = function () {
+            ImporterSvc.fetchPortfolios().then(function (portfolios) {
+                $scope.importedPortfolios = portfolios.data;
+            }, function (error) {
+                console.log(error);
+            });
+        };
+
+        $scope.saveImportedPortfolios = function () {
+            if ($scope.selectedPortfolios.length === 0) {
+                $scope.toggleActiveWorkSamples();
+                return;
+            }
+
+            ImporterSvc.saveImportedPortfolios($scope.service.serviceID, $scope.selectedPortfolios).then(function (response) {
+                $scope.updateShowcaseItems(response.data);
+                $scope.toggleActiveWorkSamples();
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.profileSaveFailed, type: 'error' });
+            });
+        };
+
+        $scope.onFileSelect = function (files) {
+            var fileNames = [];
+
+            _.each(files, function (file) {
+                fileNames.push(file.name);
+            });
+
+            $upload.upload({
+                url: paths.sellerManagement.showcases + $scope.service.serviceID,
+                file: files,
+                fileFormDataName: fileNames
+            }).then(function (response) {
+                $scope.updateShowcaseItems(response.data);
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
+        };
+
+        $scope.saveUrls = function () {
+            var urls = [];
+
+            _.each($scope.urlsToEmbed, function (obj) {
+                urls.push(obj.url);
+            });
+
+            modalEmbedUrl.hide();
+            modalCameraTag.hide();
+
+            PortfolioSvc.saveUrls(urls, $scope.service.serviceID).then(function (response) {
+                $scope.updateShowcaseItems(response.data);
+            }, function (error) {
+                console.log(error);
+                // user tried to embed a type of file not supported for this service
+                if (error.data.ExceptionType === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
+                    NotificationSvc.show({ content: error.data.ExceptionMessage, type: 'error' });
+                }
+            });
+        };
+
+        $scope.fetchOffer = function () {
+            OfferSvc.createEmptyOffer($scope.service.serviceID).then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
+
+        };
+
         ////////////////////////////////////////////
         /// Watchers
         ////////////////////////////////////////////
@@ -301,7 +335,9 @@
             CameraTag.observe('fvcam', 'published', function() {
                 var cam = CameraTag.cameras['fvcam'];
                 var vid = cam.getVideo();
-                console.log(vid);
+                $scope.urlsToEmbed.empty();
+                $scope.urlsToEmbed.push({ url: vid.formats.qvga.video_url });
+                $scope.saveUrls();
 //                var mp4_url = vid.formats.qvga.mp4_url;
 //                var small_thumb_url = vid.formats.qvga.small_thumb_url;
 //                var thumb_url = vid.formats.qvga.thumb_url;
@@ -313,7 +349,7 @@
         /// Init
         ////////////////////////////////////////////
 
-        CatalogueSvc.getService($scope.offer.serviceID).then(function (service) {
+        CatalogueSvc.getService($scope.offer.ServiceID).then(function (service) {
             $scope.service = service;
 
             $scope.priceDiscriminators = _.filter(service.options, function (option) {
@@ -324,6 +360,10 @@
                 return option.isPriceDiscriminator && !option.isMandatory;
             });
 
+//            _.map($scope.service.fields, function (field) {
+//                $scope.serviceFields.push
+//            });
+
         }, function (error) {
             console.log(error);
         });
@@ -331,7 +371,9 @@
         $timeout(function () { $scope.panels.activePanel = 0; }); // update the UI
 
         ImporterSvc.fetchCachedPortfolios($scope.currentUser.Guid).then(function (portfolios) {
-            $scope.importedPortfolios = portfolios.data;
+            $scope.importedPortfolios = _.pick(portfolios.data, function (importer) {
+                return importer.data && importer.data.length > 0;
+            });
         }, function (error) {
             console.log(error);
         });
