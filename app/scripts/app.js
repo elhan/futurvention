@@ -62,7 +62,7 @@
         .when('/apply', {
             templateUrl: 'views/apply.html'
         })
-        .when('/storefront/:moniker', {
+        .when('/:moniker', {
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',
             resolve: {

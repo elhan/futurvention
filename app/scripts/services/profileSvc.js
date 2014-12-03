@@ -106,7 +106,6 @@
             var deferred = $q.defer();
 
             $http.get(paths.sellerManagement.profile + moniker).then(function (response) {
-                console.log(response);
                 utils.updateProperties(profile, response.data);
                 deferred.resolve(profile);
             }, function (error) {

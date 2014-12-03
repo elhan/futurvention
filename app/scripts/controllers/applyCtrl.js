@@ -28,14 +28,14 @@
                 console.log(response);
             }, function (error) {
                 console.log(error);
-            })
+            });
         });
 
         ////////////////////////////////////////////
         /// Initialization
         ////////////////////////////////////////////
 
-        $scope.goToStep(2);
+        $scope.goToStep($scope.steps.indexOf($scope.activeStep));
     }]);
 
 }());

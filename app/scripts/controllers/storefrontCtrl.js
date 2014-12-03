@@ -10,7 +10,7 @@
      * # StorefrontCtrl
      * Controls the storefront page
      */
-    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', 'profile', 'userId', 'EVENTS', function ($scope, $modal, $timeout, $location, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc, profile, userId, events) {
+    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'EVENTS', 'MESSAGES', 'Odata', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', 'profile', function ($scope, $modal, $timeout, $location, events, msg, odata, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc, profile) {
 
         var contactModal = $modal({
             scope: $scope,
@@ -36,13 +36,19 @@
             keyboard: true
         });
 
-        $scope.portfolio = PortfolioSvc.getPortfolio();
+        $scope.showcaseItems = [];
+        $scope.showcaseItems = [];
+
         $scope.profile = profile;
-        $scope.userId = userId;
-        $scope.isCurrentUser = $location.absUrl() === $scope.profile.personalUrl;
+
+        $scope.isCurrentUser = $scope.currentUser.ID === $scope.profile.ID;
+
         $scope.reviews = {};
+
         $scope.offers = [];
+
         $scope.message = '';
+
         $scope.sender = {
             firstName: '',
             lastName: '',
@@ -53,12 +59,10 @@
         $scope.activeStep = $scope.steps[4];
 
         // this is necessary for ng-repeat to iterate over
-        $scope.range = function (rating) {
-            return _.range(0, rating);
-        };
+        $scope.range = function (rating) { return _.range(0, rating); };
 
         $scope.contactUser = function () {
-            MessagingSvc.sendMessage($scope.userId, $scope.currentUser.id, $scope.sender.firstName, $scope.sender.lastName, $scope.message).then(function () {
+            MessagingSvc.sendMessage($scope.profile.ID, $scope.currentUser.id, $scope.sender.firstName, $scope.sender.lastName, $scope.message).then(function () {
                 NotificationSvc.show({ content: 'Your message was successfuly sent!', type: 'success' }).then(function () {
                     $timeout($scope.closeContactModal);
                 });
@@ -77,12 +81,20 @@
             $scope.offers = OfferSvc.offers;
         };
 
-        $scope.editOffer = function (serviceName) {
+        $scope.editOffer = function (offer) {
+
+            // fetch full offer object
+            OfferSvc.fetchOffer(offer.Service.ID).then(function () {
+                $scope.editProfileSection('offer_config');
+            }, function () {
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
+
             // TODO
 //            OfferSvc.setOffer(_.find($scope.offers, function (offer) {
 //                return offer.serviceName === serviceName;
 //            }));
-//            OfferSvc.fetchOffer(serviceName, $scope.userId).then(function (offer) {
+//            OfferSvc.fetchOffer(serviceName, $scope.profile.ID).then(function (offer) {
 //                OfferSvc.setOffer(offer);
 //                $scope.activeStep = $scope.steps[3];
 //            }, function (error) {
@@ -118,22 +130,31 @@
         /// Initialization
         ///////////////////////////////////////////////////////////
 
+        OfferSvc.fetchOffers($scope.profile.ID).then(function (offers) {
+            var showcaseItem;
 
-        OfferSvc.fetchOffers($scope.userId).then(function (offers) {
             $scope.offers = offers;
+
+            _.each(offers, function (offer) {
+                _.each(offer.Showcases, function (showcase) {
+                    showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
+                    $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
+                });
+            });
+
         }, function (error) {
             console.log(error);
         });
 
         //TODO
-//        PortfolioSvc.fetchPortfolio($scope.userId).then(function (portfolio) {
+//        PortfolioSvc.fetchPortfolio($scope.profile.ID).then(function (portfolio) {
 //            PortfolioSvc.updatePortfolio(portfolio);
 //            $scope.portfolio = PortfolioSvc.getPortfolio();
 //        }, function (error) {
 //            console.log(error);
 //        });
 
-        ReviewSvc.fetchReceivedReviews($scope.userId).then(function (reviews) {
+        ReviewSvc.fetchReceivedReviews($scope.profile.ID).then(function (reviews) {
             $scope.reviews = reviews;
         }, function (error) {
             console.log(error);

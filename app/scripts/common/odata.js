@@ -104,8 +104,6 @@
             self.Resume = null;
             self.Status = null;
             self.LocationID = 0;
-            self.UserID = 0;
-//            self.User = null;
 
             /**
              * @ngdoc property

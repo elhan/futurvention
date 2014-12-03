@@ -9,10 +9,17 @@
      * # OfferSvc
      * Bussiness logic for seller Offers
      */
-    app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', 'PATHS', function ($http, $q, $timeout, Enum, paths) {
+    app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', 'PATHS', 'breeze', function ($http, $q, $timeout, Enum, paths, breeze) {
         var OfferSvc = {},
             offer = {},
-            offers = [];
+            offers = [],
+
+            dataService = new breeze.DataService({
+                serviceName: paths.public,
+                hasServerMetadata: false
+            }),
+
+            manager = new breeze.EntityManager({ dataService: dataService });
 
         OfferSvc.addOffer = function (obj) {
             var newOffer = obj || offer; // if no args, user the current offer object
@@ -34,13 +41,26 @@
         /// Fetch functions
         ///////////////////////////////////////////////////////////
 
-        OfferSvc.fetchOffers = function () {
-            var deferred = $q.defer();
+        OfferSvc.fetchOffers = function (userID) {
+            var deferred = $q.defer(),
 
-            $http.get(paths.offerManagement.ownOffers).then(function (response) {
-                offers = response.data;
+            query = new breeze.EntityQuery('Offers')
+                .withParameters({ SellerProfileID: userID })
+                .expand([
+                  'Service',
+                  'Service.ShortTitle.Literals',
+                  'Service.ThumbnailFile',
+                  'Showcases.Items',
+                  'Showcases.Items.Thumbnail',
+                  'Showcases.Items.Thumbnail',
+                  'Showcases.Items.Title.Literals'
+                ].join(','));
+
+            manager.executeQuery(query).then(function (response) {
+                offers = response.results[0] && response.results[0].value;
                 deferred.resolve(offers);
             }, function (error) {
+                console.log(error);
                 deferred.reject(error);
             });
 
