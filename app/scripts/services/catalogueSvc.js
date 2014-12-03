@@ -68,12 +68,14 @@
 
             service.options = obj.Options.map(function (option) {
                 return {
+                    ID: option.ID,
                     isPriceDiscriminator: option.IsPriceDiscriminator,
                     isMandatory: option.IsMandatory,
                     isDaysDiscriminator: option.IsDaysDiscriminator,
                     sellerTitle: option.SellerTitle && option.SellerTitle.Literals[0].Text,
                     choices: option.Choices.map(function (choice) {
                         return {
+                            ID: choice.ID,
                             name: choice.Name && choice.Name.Literals[0].Text,
                             value: choice.value
                         };
@@ -83,6 +85,7 @@
 
             service.fields = obj.Fields.map(function (field) {
                 return {
+                    ID: field.ID,
                     allowedFileTypes:  _.pluck(field.AllowedFileTypes, function (type) {
                         return type.Name && type.Name.Literals[0].Text;
                     }),

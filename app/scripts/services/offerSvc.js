@@ -76,11 +76,38 @@
         /// Save functions
         ///////////////////////////////////////////////////////////
 
+        OfferSvc.saveShowcases = function (offerID, showcases) {
+            return $http({
+                method: 'PUT',
+                url: [
+                    paths.offerManagement.ownOffers,
+                    '/',
+                    offer.ID,
+                    '/Showcases'
+                ].join(''),
+                data: showcases
+            });
+        };
+
         OfferSvc.saveOffer = function (offer) {
             return $http({
                 method: 'PATCH',
-                url: paths.offerManagement.ownOffers + '/' +offer.ID,
+                url: paths.offerManagement.ownOffers + '/' + offer.ID,
                 data: offer
+            });
+        };
+
+        OfferSvc.saveOfferField = function (offerID, fieldID, answer) {
+            return $http({
+                method: 'PUT',
+                url: [
+                    paths.offerManagement.ownOffers,
+                    '/',
+                    offerID,
+                    '/Fields/Inline?ServiceFieldID=',
+                    fieldID
+                ].join(''),
+                data: JSON.stringify(answer)
             });
         };
 

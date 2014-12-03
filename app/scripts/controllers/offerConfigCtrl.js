@@ -34,6 +34,8 @@
         $scope.priceDiscriminators= [];
         $scope.addons = [];
 
+        $scope.serviceFieldDictionary = [];
+
         $scope.importedPortfolios = [];
         $scope.selectedPortfolios = [];
         $scope.portfoliosExpanded = [];
@@ -80,21 +82,30 @@
             switch (panel.title) {
             case 'Work Samples':
                 $scope.offer.Showcases = $scope.showcaseCollection;
+
+                OfferSvc.saveShowcases($scope.offer.ID, _.map($scope.showcaseCollection, function (item) {
+                    return item.ID;
+                })).then(function (response) {
+                    console.log(response);
+                }, function (error) {
+                    console.log(error);
+                });
+
                 break;
             }
 
-            OfferSvc.saveOffer($scope.offer).then(function (response) {
-                console.log(response);
-                $scope.setPanelState(panel, 'done');
-                $scope.panels.activePanel = $scope.panels.indexOf(
-                    _.find($scope.panels, function (panel) {
-                        return panel.state === 'default';
-                    })
-                );
-            }, function (error) {
-                console.log(error);
-                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-            });
+//            OfferSvc.saveOffer($scope.offer).then(function (response) {
+//                console.log(response);
+//                $scope.setPanelState(panel, 'done');
+//                $scope.panels.activePanel = $scope.panels.indexOf(
+//                    _.find($scope.panels, function (panel) {
+//                        return panel.state === 'default';
+//                    })
+//                );
+//            }, function (error) {
+//                console.log(error);
+//                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+//            });
         };
 
         ////////////////////////////////////////////
@@ -309,6 +320,15 @@
                 console.log(error);
             });
 
+        };
+
+        // saves the user's answer to a serviceField
+        $scope.saveOfferField = function (field, answer) {
+            answer && OfferSvc.saveOfferField($scope.offer.ID, field.ID, answer).then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
         };
 
         ////////////////////////////////////////////

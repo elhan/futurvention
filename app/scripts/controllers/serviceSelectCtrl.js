@@ -83,20 +83,6 @@
         /// Event handling
         ///////////////////////////////////////////////////////////
 
-        //TODO
-//        $scope.$on(events.importer.portfoliosReady, function (event, importer) {
-//            console.log(ImporterSvc.getImporters('portfoliosDone'));
-//            ImporterSvc.fetchPortfolio().then(function (response) {
-//                console.log(response);
-//                NotificationSvc.show({
-//                    content: 'Portfolio imported from ' + importer.provider,
-//                    type: 'success'
-//                });
-//            }, function (error) {
-//                console.log(error);
-//            });
-//        });
-
         // update the filtered services when the category changes
         $scope.$watch('categories.activeCategoryIndex', function (newIndex, oldIndex) {
             switch (true) {
@@ -115,9 +101,9 @@
         });
 
         $scope.$watch('selectedService.serviceID', function (newServiceId) {
-            newServiceId && OfferSvc.fetchOffer(newServiceId).then(function (response) {
+            newServiceId && OfferSvc.fetchOffer(newServiceId).then(function () {
                 $scope.goToStep(3);
-            }, function (error) {
+            }, function () {
                 NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
         });
