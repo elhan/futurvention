@@ -2,52 +2,52 @@
     'use strict';
     var app = angular.module('fvApp');
 
-    /**
-     * @ngdoc service
-     * @name fvApp.service: ReviewSvc
-     * @description
-     * # ReviewSvc
-     * Manage Reviews
-     */
-    app.service('ReviewSvc', ['$http', '$q', '$timeout', 'Enum', function ($http, $q, $timeout, Enum) {
-        var ReviewSvc = {};
-
-        ReviewSvc.fetchReceivedReviews = function (userId, index, offset) {
-            console.log(userId, index, offset);
-
-            // TODO: remove mock service object
-            var providers = _.values(Enum.Providers);
-            var randProvider = _.random(0, providers.length);
-
-            var Review = function () {
-                return {
-                    reviewer: {
-                        firstName: 'Mark',
-                        lastName: 'Twain'
-                    },
-                    provider: providers[randProvider],
-                    rating: _.random(1, 5),
-                    timeAgo: '3 days ago',
-                    text: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. '
-                };
-            };
-            var itemCount = _.random(3, 20);
-            var reviews = [];
-
-            for (var i = 0; i < itemCount; i++) {
-                reviews.push(new Review());
-            }
-
-            var deferred = $q.defer();
-            $timeout(function () {
-                deferred.resolve(reviews);
-            });
-            return deferred.promise;
-
-        };
-
-        return ReviewSvc;
-    }]);
+//    /**
+//     * @ngdoc service
+//     * @name fvApp.service: ReviewSvc
+//     * @description
+//     * # ReviewSvc
+//     * Manage Reviews
+//     */
+//    app.service('ReviewSvc', ['$http', '$q', '$timeout', 'Enum', function ($http, $q, $timeout, Enum) {
+//        var ReviewSvc = {};
+//
+//        ReviewSvc.fetchReceivedReviews = function (userId, index, offset) {
+//            console.log(userId, index, offset);
+//
+//            // TODO: remove mock service object
+//            var providers = _.values(Enum.Providers);
+//            var randProvider = _.random(0, providers.length);
+//
+//            var Review = function () {
+//                return {
+//                    reviewer: {
+//                        firstName: 'Mark',
+//                        lastName: 'Twain'
+//                    },
+//                    provider: providers[randProvider],
+//                    rating: _.random(1, 5),
+//                    timeAgo: '3 days ago',
+//                    text: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. '
+//                };
+//            };
+//            var itemCount = _.random(3, 20);
+//            var reviews = [];
+//
+//            for (var i = 0; i < itemCount; i++) {
+//                reviews.push(new Review());
+//            }
+//
+//            var deferred = $q.defer();
+//            $timeout(function () {
+//                deferred.resolve(reviews);
+//            });
+//            return deferred.promise;
+//
+//        };
+//
+//        return ReviewSvc;
+//    }]);
 
     /**
      * @ngdoc service
@@ -90,26 +90,6 @@
         };
 
         return NotificationSvc;
-    }]);
-
-    /**
-     * @ngdoc service
-     * @name fvApp.service: EmbedlySvc
-     * @description
-     * # EmbedlySvc
-     * Integration with EmbedLy API
-     */
-    app.service('EmbedlySvc', ['$http', 'EMBEDLY', function ($http, embedly) {
-        this.oembed = function (links, maxWidth, maxHeight) {
-            return $http.get([
-                embedly.domain, embedly.oembedAPI,
-                '?key=', embedly.key,
-                '&urls=', _.pluck(links, 'url').map(encodeURI).join(','),
-                '&maxwidth=', maxWidth,
-                '&maxheight=', maxHeight,
-                '&format=json'
-            ].join(''));
-        };
     }]);
 
 }());

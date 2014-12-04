@@ -91,6 +91,10 @@
             return /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/im.test(str);
         };
 
+        Utils.removeParenthesis = function (str) {
+            return (str && typeof str === 'string') ? str.replace(/ *\([^)]*\) */g, '') : str;
+        };
+
         return Utils;
     });
 

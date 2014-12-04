@@ -35,7 +35,8 @@
         'angular-carousel',
         'ui.validate',
         'breeze.angular',
-        'angucomplete'
+        'angucomplete',
+        'angularMoment'
     ]);
 
     app.config(['$routeProvider', function ($routeProvider) {

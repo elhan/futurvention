@@ -88,7 +88,7 @@
             profileStatus: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
             importedShowcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/ImportedShowcases?serviceID=',
             showcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/SellerProfiles/OwnProfile/SingleItemShowcases?serviceID=',
-            reviews: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/reviews',
+            ownReviews: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/reviews',
             monikerExists: function (moniker) {
                 return [
                     'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',

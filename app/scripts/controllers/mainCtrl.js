@@ -78,7 +78,7 @@
                 $scope.currentUser = {};
                 break;
             default: // login
-                UserSvc.fetchUser();
+                UserSvc.fetchOwnUser();
             }
         });
 

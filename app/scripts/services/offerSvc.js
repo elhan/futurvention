@@ -131,6 +131,14 @@
             });
         };
 
+        ///////////////////////////////////////////////////////////
+        /// Delete functions
+        ///////////////////////////////////////////////////////////
+
+        OfferSvc.removeOwnOffer = function (offerID) {
+            return $http.delete(paths.offerManagement.ownOffers + '/' + offerID);
+        };
+
         return OfferSvc;
     }]);
 }());

@@ -53,7 +53,7 @@
                 file: $scope.file,
                 fileFormDataName: $scope.file.name,
             }).then(function () {
-                UserSvc.fetchUser().then(function () {
+                UserSvc.fetchOwnUser().then(function () {
                     // fetch user fires an event that will notify MainCtrl to update currentUser
                     $scope.$hide();
                 }, function (error) {

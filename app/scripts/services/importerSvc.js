@@ -10,9 +10,13 @@
      * CRUD operations for eternal data (importers)
      */
     app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providersEnum, events, msg, utils, odata) {
+
         var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
+
             providerNames = _.keys(providersEnum),
+
             importedPortfolios = [],
+
             ImporterSvc = {};
 
         // return an array of completed jobs, depending on status byte flags
@@ -256,8 +260,12 @@
             return deferred.promise;
         };
 
-        ImporterSvc.fetchReviews = function () {
-            return $http.post(paths.sellerManagement.reviews, reviewsDone.capitalize());
+        ImporterSvc.saveReviews = function () {
+            var importers = new ImporterSvc.ImporterCollection();
+
+            importers.setImporters(_.union(reviewsDone.importers, done.importers));
+
+            return $http.post(paths.sellerManagement.ownReviews, importers.capitalize());
         };
 
         /**
@@ -271,19 +279,13 @@
          * @returns Array.<Object>
          */
         ImporterSvc.fetchCachedPortfolios = function (guid) {
-//            return $http.post(paths.importer.fetchPortfolios, _.map(providerNames, function (name) {
-//                return {
-//                    Guid: guid,
-//                    Provider: name,
-//                    Url: ''
-//                };
-//            }));
-            // TODO: remove
-            return $http.post(paths.importer.fetchPortfolios, [{
-                Guid: guid,
-                Provider: 'odesk',
-                Url: 'https://www.odesk.com/users/PHP-MySQL-Yii-Wordpress-Jquery-Android-Phonegap-JAVA-HTML5_~01c023a6f344aea116'
-            }]);
+            return $http.post(paths.importer.fetchPortfolios, _.map(providerNames, function (name) {
+                return {
+                    Guid: guid,
+                    Provider: name,
+                    Url: ''
+                };
+            }));
         };
 
         /**
@@ -298,7 +300,7 @@
          * @returns Array.<Showcase>
          */
         ImporterSvc.saveImportedPortfolios = function (serviceID, portfolios) {
-          return $http.post(paths.sellerManagement.importedShowcases + serviceID, portfolios);
+            return $http.post(paths.sellerManagement.importedShowcases + serviceID, portfolios);
         };
 
         ///////////////////////////////////////////////////////////

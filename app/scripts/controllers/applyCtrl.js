@@ -23,8 +23,8 @@
         /// Watchers
         ////////////////////////////////////////////
 
-        $scope.$on(events.importer.reviewsReady, function (event, importer) {
-            ImporterSvc.fetchReviews().then(function (response) {
+        $scope.$on(events.importer.reviewsReady, function () {
+            ImporterSvc.saveReviews($scope.currentUser.Guid).then(function (response) {
                 console.log(response);
             }, function (error) {
                 console.log(error);

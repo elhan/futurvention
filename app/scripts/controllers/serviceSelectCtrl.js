@@ -10,7 +10,7 @@
      * # ServiceSelectCtrl
      * Controls the apply 'service select' step
      */
-    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'EVENTS', 'MESSAGES', 'CatalogueSvc', 'OfferSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, events, msg, CatalogueSvc, OfferSvc, NotificationSvc, ImporterSvc) {
+    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'EVENTS', 'MESSAGES', 'CatalogueSvc', 'OfferSvc', 'NotificationSvc', function ($scope, $timeout, events, msg, CatalogueSvc, OfferSvc, NotificationSvc) {
         //  Pagination support for available services. Initailized to the default thumbnail batch size.
         $scope.offset = 0;
         $scope.batch = CatalogueSvc.batch;

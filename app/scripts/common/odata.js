@@ -32,6 +32,14 @@
             return self;
         };
 
+        OdataObject.multilingualToString = function (key) {
+            if (!key || _.keys(this, key).indexOf(key) === -1) {
+                return;
+            }
+
+            return this[key].Literals[0].Text;
+        };
+
         ////////////////////////////////////////////////////////////
         /// Literal
         ////////////////////////////////////////////////////////////
@@ -81,8 +89,10 @@
         };
 
         Odata.Location.method('getName', function () {
-            return this.Name && this.Name.Literals[0].Text;
+            return this.multilingualToString('Name');
         });
+
+        Odata.Location.inheritFunctions(OdataObject, ['setMultilingual', 'multilingualToString']);
 
         ////////////////////////////////////////////////////////////
         /// SellerProfile
@@ -103,6 +113,7 @@
             self.Description = null;
             self.Resume = null;
             self.Status = null;
+            self.Location = null;
             self.LocationID = 0;
 
             /**
@@ -149,7 +160,11 @@
             return self;
         };
 
-        Odata.SellerProfile.inheritFunctions(OdataObject, ['setMultilingual']);
+        Odata.SellerProfile.prototype.getCity = function () {
+            return utils.removeParenthesis(new Odata.Location(this.Location).multilingualToString('Name'));
+        };
+
+        Odata.SellerProfile.inheritFunctions(OdataObject, ['setMultilingual', 'multilingualToString']);
 
         ////////////////////////////////////////////////////////////
         /// user

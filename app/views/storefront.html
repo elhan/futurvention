@@ -5,7 +5,7 @@
     <!-- Profile picture -->
     <div class="wrapper-pic">
       <div class="wrapper-pic-inner" ng-class="{'clickable': isCurrentUser}" ng-click="showImageCropModal()">
-        <div ng-if="profile.image" class="image-profile profile-picture-m" fv-bg-image={{profile.image}}>
+        <div class="image-profile profile-picture-m" fv-bg-image={{avatar}}>
           <div ng-if="isCurrentUser" class="flex-content-centered">
             <svg class="icon icon-lightGrey icon-camera">
               <use xlink:href="#camera"></use>
@@ -21,14 +21,14 @@
       <!-- Profile details -->
       <div class="container-y wrapper-details">
         <div class="container-x text-h2">
-          <div class="wrapper-name">{{ profile.firstName }}</div>
-          <div class="wrapper-name">{{ profile.lastName }}</div>
+          <div class="wrapper-name">{{ user.FirstName }}</div>
+          <div class="wrapper-name">{{ user.LastName }}</div>
         </div>
         <div class="container-x text-p">
-          <div>{{profile.title}}</div>
+          <div>{{profile.Title}}</div>
         </div>
         <div class="container-x text-p">
-          <div>{{profile.city}}</div>
+          <div>{{profile.getCity()}}</div>
         </div>
       </div>
     </div>
@@ -93,7 +93,7 @@
             </div>
             <div class="caption">
               <div class="container-x flex-content-spread">
-                <div class="text-p-bold">{{ offer.Service.Literals[0].Text }}</div>
+                <div class="text-p-bold">{{ offer.Service.ShortTitle.Literals[0].Text }}</div>
                 <div class="text-p-bold">{{ offer.lowestPrice }}</div>
               </div>
             </div>
@@ -143,20 +143,22 @@
             <div class="reviewer-img">D</div>
           </div>
           <div class="container-y flex-1 flex-content-spread">
-            <div class="container-x review-text">{{ review.text }}</div>
+            <div class="container-x review-text">{{ review.Text.Literals[0].Text }}</div>
             <div class="container-x flex-content-spread">
               <div class="container-x">
                 <div class="icon-provider-xs"></div>
-                <div class="text-i text-lightGrey space-after">{{ review.reviewer.firstName }},</div>
-                <div class="text-i text-lightGrey">{{ review.timeAgo }}</div>
+                <div class="text-i text-lightGrey space-after">{{ review.Moniker }},</div>
+                <div class="text-i text-lightGrey">
+                  <span am-time-ago="review.Date"></span>
+                </div>
               </div>
               <div class="container-x text-p">
                 <!-- full stars -->
-                <div class="text-yellow" ng-repeat="star in range(review.rating)">
+                <div class="text-yellow" ng-repeat="star in range(review.Rating)">
                   <span class="glyphicon glyphicon-star"></span>
                 </div>
                 <!-- empty stars -->
-                <div class="text-yellow" ng-repeat="star in range(5 - review.rating)">
+                <div class="text-yellow" ng-repeat="star in range(5 - review.Rating)">
                   <span class="glyphicon glyphicon-star-empty"></span>
                 </div>
               </div>
@@ -165,7 +167,7 @@
         </div>
       </div>
     </div>
-    <!-- Reviews -->
+    <!-- About -->
     <div ng-if="profile.bio.length > 0">
       <!-- Divider -->
       <div class="container-x flex-content-centered">

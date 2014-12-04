@@ -105,7 +105,7 @@
         ProfileSvc.fetchProfile = function (moniker) {
             var deferred = $q.defer();
 
-            $http.get(paths.sellerManagement.profile + moniker).then(function (response) {
+            $http.get(paths.sellerManagement.profile + moniker + '?expand=Location/Name/Literals').then(function (response) {
                 utils.updateProperties(profile, response.data);
                 deferred.resolve(profile);
             }, function (error) {

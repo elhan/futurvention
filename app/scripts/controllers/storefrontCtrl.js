@@ -10,7 +10,7 @@
      * # StorefrontCtrl
      * Controls the storefront page
      */
-    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'EVENTS', 'MESSAGES', 'Odata', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'ReviewSvc', 'MessagingSvc', 'NotificationSvc', 'profile', function ($scope, $modal, $timeout, $location, events, msg, odata, ProfileSvc, PortfolioSvc, OfferSvc, ReviewSvc, MessagingSvc, NotificationSvc, profile) {
+    app.controller('StorefrontCtrl', ['$scope', '$modal', '$timeout', '$location', 'EVENTS', 'MESSAGES', 'Odata', 'ProfileSvc', 'PortfolioSvc', 'OfferSvc', 'MessagingSvc', 'NotificationSvc', 'ReviewSvc', 'UserSvc', 'profile', function ($scope, $modal, $timeout, $location, events, msg, odata, ProfileSvc, PortfolioSvc, OfferSvc, MessagingSvc, NotificationSvc, ReviewSvc, UserSvc, profile) {
 
         var contactModal = $modal({
             scope: $scope,
@@ -36,12 +36,13 @@
             keyboard: true
         });
 
-        $scope.showcaseItems = [];
+        $scope.user = {};
+
         $scope.showcaseItems = [];
 
         $scope.profile = profile;
 
-        $scope.isCurrentUser = $scope.currentUser.ID === $scope.profile.ID;
+        $scope.isCurrentUser = $scope.currentUser.ID !== $scope.profile.ID;
 
         $scope.reviews = {};
 
@@ -76,31 +77,24 @@
             $scope.go('/apply');
         };
 
-        $scope.removeOffer = function (serviceName) {
-            OfferSvc.removeOffer(serviceName);
-            $scope.offers = OfferSvc.offers;
+        $scope.removeOffer = function (offer) {
+            OfferSvc.removeOwnOffer(offer.ID).then(function () {
+                _.remove($scope.offers, function (obj) {
+                    return obj === offer;
+                });
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
         };
 
         $scope.editOffer = function (offer) {
-
-            // fetch full offer object
-            OfferSvc.fetchOffer(offer.Service.ID).then(function () {
+            OfferSvc.fetchOffer(offer.Service.ID).then(function () { // fetch full offer object
                 $scope.editProfileSection('offer_config');
-            }, function () {
+            }, function (error) {
+                console.log(error);
                 NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
-
-            // TODO
-//            OfferSvc.setOffer(_.find($scope.offers, function (offer) {
-//                return offer.serviceName === serviceName;
-//            }));
-//            OfferSvc.fetchOffer(serviceName, $scope.profile.ID).then(function (offer) {
-//                OfferSvc.setOffer(offer);
-//                $scope.activeStep = $scope.steps[3];
-//            }, function (error) {
-//                console.log(error);
-//            });
-//            $scope.editProfileSection('offer_config');
         };
 
         ///////////////////////////////////////////////////////////
@@ -127,9 +121,19 @@
         };
 
         ///////////////////////////////////////////////////////////
+        /// Watchers
+        ///////////////////////////////////////////////////////////
+
+        // listen for image update events emmited by the imga ecrop modal
+        $scope.$on(events.profile.profileUpdated, function () {
+            $scope.profile.image = ProfileSvc.getProfile().image;
+        });
+
+        ///////////////////////////////////////////////////////////
         /// Initialization
         ///////////////////////////////////////////////////////////
 
+        // offers
         OfferSvc.fetchOffers($scope.profile.ID).then(function (offers) {
             var showcaseItem;
 
@@ -146,24 +150,24 @@
             console.log(error);
         });
 
-        //TODO
-//        PortfolioSvc.fetchPortfolio($scope.profile.ID).then(function (portfolio) {
-//            PortfolioSvc.updatePortfolio(portfolio);
-//            $scope.portfolio = PortfolioSvc.getPortfolio();
-//        }, function (error) {
-//            console.log(error);
-//        });
+        // user
+        if (!$scope.isCurrentUser) {
+            UserSvc.fetchUser($scope.profile.ID).then(function (response) {
+                $scope.user = response;
+            }, function (error) {
+                console.log(error);
+            });
+        } else {
+             $scope.user = $scope.currentUser;
+        }
 
-        ReviewSvc.fetchReceivedReviews($scope.profile.ID).then(function (reviews) {
+        // reviews
+        ReviewSvc.fetchReviews($scope.profile.ID).then(function (reviews) {
             $scope.reviews = reviews;
         }, function (error) {
             console.log(error);
         });
 
-        // listen for image update events emmited by the imga ecrop modal
-        $scope.$on(events.profile.profileUpdated, function () {
-            $scope.profile.image = ProfileSvc.getProfile().image;
-        });
     }]);
 
 }());

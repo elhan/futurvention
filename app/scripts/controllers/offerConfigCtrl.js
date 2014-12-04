@@ -13,7 +13,7 @@
      * # OfferConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'EmbedlySvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, events, providers, paths, msg, utils, odata, CatalogueSvc, EmbedlySvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
+    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, events, providers, paths, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
         var modalEmbedUrl, modalCameraTag;
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
@@ -379,10 +379,6 @@
             $scope.addons = _.filter(service.options, function (option) {
                 return option.isPriceDiscriminator && !option.isMandatory;
             });
-
-//            _.map($scope.service.fields, function (field) {
-//                $scope.serviceFields.push
-//            });
 
         }, function (error) {
             console.log(error);
