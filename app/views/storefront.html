@@ -78,6 +78,10 @@
               <img ng-if="!offer.Service.ThumbnailFile.Url" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
               <img ng-if="offer.Service.ThumbnailFile.Url" ng-src="{{offer.Service.ThumbnailFile.Url}}" class="img-responsive">
             </div>
+            <div class="thumb-overlay" ng-click="showPortfolioViewerModal()">
+              <div class="text-white text-h3">View in detail</div>
+            </div>
+<!--
             <div class="thumb-overlay" ng-if="isCurrentUser">
               <div class="thumb-overlay-inner" ng-click="editOffer(offer)">
                 <svg class="icon icon-light">
@@ -91,6 +95,7 @@
                 </svg>
               </div>
             </div>
+-->
             <div class="caption">
               <div class="container-x flex-content-spread">
                 <div class="text-p-bold">{{ offer.Service.ShortTitle.Literals[0].Text }}</div>
@@ -146,9 +151,10 @@
             <div class="container-x review-text">{{ review.Text.Literals[0].Text }}</div>
             <div class="container-x flex-content-spread">
               <div class="container-x">
+                <fv-dynamic-icon class="space-right container-icon-light import-link-min wrapper-darkGrey bg-lightgrey" provider={{review.Provider}}></fv-dynamic-icon>
                 <div class="icon-provider-xs"></div>
-                <div class="text-i text-lightGrey space-after">{{ review.Moniker }},</div>
-                <div class="text-i text-lightGrey">
+                <div class="text-i text-silver space-after">{{ review.Moniker }},</div>
+                <div class="text-i text-silver">
                   <span am-time-ago="review.Date"></span>
                 </div>
               </div>

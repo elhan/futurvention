@@ -1,0 +1,31 @@
+<!-- Linked File -->
+<div ng-if="item.File.EmbedCode" ng-bind-html="item.File.EmbedCode"></div>
+<!-- Hosted File -->
+<div ng-if="item.File.RelativeUrl">
+  <div ng-switch on="type">
+    <!-- Prizma Viewer -->
+    <div ng-switch-when="Prizma" class="embed-responsive embed-responsive-4by3">
+      <iframe class="viewer embed-responsive-item"
+              allowfullscreen="true"
+              ng-src="{{ link | prizmUrl | trusted }}"
+              allowtransparency="true">
+      </iframe>
+    </div>
+    <!-- Video -->
+    <div ng-switch-when="Html5 video">
+      <video ng-src={{link}} controls></video>
+    </div>
+    <!-- Audio -->
+    <div ng-switch-when="Html5 audio">
+      <audio ng-src={{link}} controls></audio>
+    </div>
+    <!-- Image -->
+    <div ng-switch-when="Html5 image">
+      <img ng-src={{link}} class="img-responsive">
+    </div>
+    <!-- Other files -->
+    <div ng-switch-default>
+      <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
+    </div>
+  </div>
+</div>

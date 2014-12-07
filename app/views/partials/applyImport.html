@@ -11,7 +11,7 @@
          ng-click="toggleSelection(importer)">
       <div class="col-xs-1 import-link wrapper-lightgrey">
         <div class="icon-thirdparty flex-content-centered">
-          <div class="container-icon-lightGrey" ng-include="'views/partials/dynamicIcon.html'"></div>
+          <fv-dynamic-icon class="container-icon-lightGrey" provider={{importer.provider}}></fv-dynamic-icon>
         </div>
         <div class="icon-plus">+</div>
       </div>
@@ -30,7 +30,7 @@
                 <div class="container-x flex-content-centered">
                   <!-- Provider icon -->
                   <div class="flex-1 flex-content-end">
-                    <div class="container-icon-light import-link-s wrapper-darkGrey wrapper-round bg-darkgrey" ng-include="'views/partials/dynamicIcon.html'"></div>
+                    <fv-dynamic-icon class="container-icon-light import-link-s wrapper-darkGrey wrapper-round bg-darkgrey" provider={{importer.provider}}></fv-dynamic-icon>
                   </div>
                   <!-- Provider input -->
                   <div class="flex-2">

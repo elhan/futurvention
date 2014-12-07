@@ -22,7 +22,7 @@
             templateUrl: 'views/directives/fv-portfolio-viewer.html',
             link: function (scope) {
                 // make sure this has been fetched from the server before compiling the directive
-                scope.portfolio = PortfolioSvc.getPortfolio();
+                scope.showcases = PortfolioSvc.getPortfolio();
 
                 scope.showcasePrev = function () {
                     if (scope.showcaseIndex > 0) {
@@ -31,7 +31,7 @@
                 };
 
                 scope.showcaseNext = function () {
-                    if (scope.showcaseIndex < scope.portfolio.items.length - 1) {
+                    if (scope.showcaseIndex < scope.showcases.length - 1) {
                         scope.showcaseIndex += 1;
                     }
                 };

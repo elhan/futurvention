@@ -42,7 +42,7 @@
 
         $scope.profile = profile;
 
-        $scope.isCurrentUser = $scope.currentUser.ID !== $scope.profile.ID;
+        $scope.isCurrentUser = $scope.currentUser.ID === $scope.profile.ID;
 
         $scope.reviews = {};
 
@@ -135,7 +135,7 @@
 
         // offers
         OfferSvc.fetchOffers($scope.profile.ID).then(function (offers) {
-            var showcaseItem;
+            var showcaseItem, showcases = [];
 
             $scope.offers = offers;
 
@@ -143,8 +143,11 @@
                 _.each(offer.Showcases, function (showcase) {
                     showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
                     $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
+                    showcases.push(showcase);
                 });
             });
+
+            PortfolioSvc.setPortfolio(showcases); // caches this as it is needed by portfolioViewer
 
         }, function (error) {
             console.log(error);

@@ -17,6 +17,10 @@
             angular.extend(portfolio, obj);
         };
 
+        PortfolioSvc.setPortfolio = function (port) {
+            portfolio = port;
+        };
+
         PortfolioSvc.getPortfolio = function () {
             return portfolio;
         };

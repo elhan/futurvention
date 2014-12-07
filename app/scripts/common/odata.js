@@ -373,7 +373,15 @@
         };
 
         Odata.ShowcaseItem.prototype.getThumbnail = function () {
+            // TODO: proper handling
+            if (!this.Thumbnail) {
+                return 'images/thumb.png';
+            }
             return this.Thumbnail.hasOwnProperty('Url') ? this.Thumbnail.Url : paths.file.hosted + this.Thumbnail.RelativeUrl;
+        };
+
+        Odata.ShowcaseItem.prototype.getFileLink = function () {
+            return this.File.hasOwnProperty('Url') ? this.File.Url : paths.file.hosted + this.File.RelativeUrl;
         };
 
         /**

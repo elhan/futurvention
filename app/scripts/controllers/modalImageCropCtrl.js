@@ -30,16 +30,20 @@
 
         $scope.onFileSelect =  function ($files) {
             var reader = new FileReader();
+
             reader.onloadstart = function () {
                 $scope.setProgress(true);
             };
+
             reader.onload = function (e) {
                 $timeout(function () {
                     $scope.uncroppedImage = e.target.result;
                     $scope.setProgress(false);
                 });
             };
+
             reader.readAsDataURL($files[0]); // Read in the image file as a data URL.
+
             $scope.file = $files[0];
         };
 

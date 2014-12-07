@@ -51,7 +51,7 @@
                   'Service.ShortTitle.Literals',
                   'Service.ThumbnailFile',
                   'Showcases.Items',
-                  'Showcases.Items.Thumbnail',
+                  'Showcases.Items.File',
                   'Showcases.Items.Thumbnail',
                   'Showcases.Items.Title.Literals'
                 ].join(','));
