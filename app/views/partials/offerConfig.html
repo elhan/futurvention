@@ -245,11 +245,21 @@
                               <div class="flex-1">
                                 <div class="separator-text">$</div>
                                 <div class="wrapper-price">
-                                  <input type="number" fv-dynamic-name=$index class="form-control input-s" ng-model="option.price" placeholder="0" ng-required="true"></input>
+                                  <input type="number" fv-dynamic-name=$index class="form-control input-s"
+                                         min="0"
+                                         ng-model="choice.price"
+                                         placeholder="0"
+                                         ng-blur="saveOfferedChoice(choice)"
+                                         ng-required="true"></input>
                                 </div>
                                 <div class="separator-text text-grey">in</div>
                                 <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
-                                        ng-model="option.value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select>
+                                        ng-model="choice.days"
+                                        data-html="1"
+                                        ng-options="deadline for deadline in deadlines"
+                                        placeholder="1 day"
+                                        ng-change="saveOfferedChoice(choice)"
+                                        bs-select>
                                 </button>
                               </div>
                             </div>
@@ -263,10 +273,19 @@
                       <div class="container-x wrapper-half">
                         <div class="flex-1">
                           <div class="text-m text-light flex-content-centered separator-text-l">$</div>
-                          <input type="number" name="inputPrice" class="form-control input-s input-price" ng-model="offer.choices[0].price" placeholder="0" ng-required="true"></input>
+                          <input type="number" name="inputPrice" class="form-control input-s input-price"
+                                 ng-model="option.choices[0].price"
+                                 placeholder="0"
+                                 ng-blur="saveOfferedChoice(option.choices[0])" ng-required="true"></input>
+                          <!-- Price discriminators are always days discriminators too -->
                           <div class="separator-text text-grey">to be delivered in</div>
                           <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
-                                  ng-model="offer.choices[0].value" data-html="1" ng-options="deadline for deadline in deadlines" placeholder="1 day" bs-select>
+                                  ng-model="option.choices[0].days"
+                                  data-html="1"
+                                  ng-options="deadline for deadline in deadlines"
+                                  placeholder="1 day"
+                                  ng-change="saveOfferedChoice(option.choices[0])"
+                                  bs-select>
                           </button>
                         </div>
                       </div>
@@ -295,11 +314,21 @@
                                   <div class="separator-text">$</div>
                                 </div>
                                 <div class="wrapper-price">
-                                  <input type="number" fv-dynamic-name=$index class="form-control input-s input-price" ng-model="choice.price" placeholder="0" ng-required="true"></input>
+                                    <!-- Addons always have just one choice -->
+                                  <input type="number" fv-dynamic-name=$index class="form-control input-s input-price"
+                                         ng-model="option.choices[0].price"
+                                         placeholder="0"
+                                         ng-required="true"
+                                         ng-blur="saveOfferedChoice(option.choices[0])"
+                                         >
+                                  </input>
                                 </div>
                                 <div class="separator-text text-grey">in</div>
                                 <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
-                                        ng-model="choice.value" data-html="1" ng-options="deadline for deadline in extraDeadlines" placeholder="1 extra day" bs-select>
+                                        ng-model="option.choices[0].days" data-html="1" ng-options="deadline for deadline in extraDeadlines"
+                                        placeholder="1 extra day"
+                                        ng-change="saveOfferedChoice(option.choices[0])"
+                                        bs-select>
                                 </button>
                               </div>
                             </div>

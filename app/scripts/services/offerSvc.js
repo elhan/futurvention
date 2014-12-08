@@ -154,6 +154,23 @@
             });
         };
 
+        OfferSvc.saveOfferChoice = function (choiceData) {
+            return $http({
+                method: 'PUT',
+                url: [
+                    paths.offerManagement.ownOffers,
+                    '/',
+                    choiceData.offerID,
+                    '/Choices?serviceChoiceID=',
+                    choiceData.serviceChoiceID,
+                    '&price=',
+                    choiceData.price,
+                    '&days=',
+                    choiceData.days
+                ].join('')
+            });
+        };
+
         ///////////////////////////////////////////////////////////
         /// Delete functions
         ///////////////////////////////////////////////////////////

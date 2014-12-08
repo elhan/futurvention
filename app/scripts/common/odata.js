@@ -424,6 +424,34 @@
             utils.updateProperties(self, options);
         };
 
+        /**
+         * Creates a new OfferedChoice
+         * @param {Object} options:  overrides the default object properties
+         * @returns {OfferedChoice}
+         */
+        Odata.OfferedChoice = function (options) {
+            var self = this;
+
+            /** @type Integer */
+            self.ID = 0;
+
+            /** @type Integer */
+            self.OfferID = 0;
+
+            /** @type Integer */
+            self.Days = 0;
+
+            /** @type Integer */
+            self.Price = 0;
+
+            /** @type Integer */
+            self.ServiceChoiceID = 0;
+
+            self.ServiceChoice = {};
+
+            utils.updateProperties(self, options);
+        };
+
         return Odata;
     }]);
 

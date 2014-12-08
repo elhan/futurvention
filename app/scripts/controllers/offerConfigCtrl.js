@@ -34,7 +34,7 @@
         $scope.priceDiscriminators= [];
         $scope.addons = [];
 
-        $scope.serviceFieldDictionary = [];
+        $scope.fieldDictionary = [];
 
         $scope.importedPortfolios = [];
         $scope.selectedPortfolios = [];
@@ -319,9 +319,21 @@
             });
         };
 
+        $scope.saveOfferedChoice = function (choice) {
+            choice.price > 0 && OfferSvc.saveOfferChoice({
+                offerID: $scope.offer.ID,
+                serviceChoiceID: choice.ID,
+                price: choice.price,
+                days: parseInt(choice.days)
+            }).then(function (response) {
+                console.log(response);
+            });
+        };
+
         ////////////////////////////////////////////
         /// Watchers
         ////////////////////////////////////////////
+
 
         $scope.$watch('panels.activePanel', function () {
             var inProgress = _.find($scope.panels, function (panel) {
@@ -358,14 +370,29 @@
         ////////////////////////////////////////////
 
         CatalogueSvc.getService($scope.offer.ServiceID).then(function (service) {
+            var offeredChoice;
+
             $scope.service = service;
 
-            $scope.priceDiscriminators = _.filter(service.options, function (option) {
-                return option.isPriceDiscriminator && option.isMandatory;
-            });
+            _.each(service.options, function (option) {
+                _.each(option.choices, function (serviceChoice) {
 
-            $scope.addons = _.filter(service.options, function (option) {
-                return option.isPriceDiscriminator && !option.isMandatory;
+                    offeredChoice = _.find($scope.offer.OfferedChoices, function (offeredChoice) {
+                        return offeredChoice.ServiceChoiceID === serviceChoice.ID;
+                    });
+
+                    if (option.isPriceDiscriminator) {
+                        serviceChoice.price = offeredChoice ? offeredChoice.Price : 0;
+                    }
+
+                    if (option.isDaysDiscriminator) {
+                        serviceChoice.days = offeredChoice ? offeredChoice.Days : 1;
+                    }
+
+                });
+
+                 option.isPriceDiscriminator && option.isMandatory && $scope.priceDiscriminators.push(option);
+                 option.isPriceDiscriminator && !option.isMandatory && $scope.addons.push(option);
             });
 
         }, function (error) {

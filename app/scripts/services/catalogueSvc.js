@@ -77,7 +77,8 @@
                         return {
                             ID: choice.ID,
                             name: choice.Name && choice.Name.Literals[0].Text,
-                            value: choice.value
+                            price: 0,
+                            days: 1
                         };
                     })
                 };
