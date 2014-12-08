@@ -20,6 +20,7 @@
         $scope.categories = [];
         $scope.allServices = [];
         $scope.selectedService = {};
+        $scope.offeredServices = [];
 
         $scope.getServices = function () {
             CatalogueSvc.getServices($scope.offset).then(function (services) {
@@ -54,30 +55,29 @@
         }, function (error) {
             console.log(error);
         });
-//
-//        $scope.removeOffer = function (serviceName) {
-//            OfferSvc.removeOffer(serviceName);
-//            $scope.offers = OfferSvc.offers;
-//        };
-//
-//        $scope.editOffer = function (serviceName) {
-//            OfferSvc.fetchOffer(serviceName, $scope.currentUser.userId).then(function (offer) {
-//                OfferSvc.setOffer(offer);
-//                $scope.goToStep(3);
+
+        $scope.removeOffer = function (offer) {
+            OfferSvc.removeOwnOffer(offer.ID).then(function () {
+                _.remove($scope.offers, function (obj) { return obj === offer; });
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
+        };
+
+        $scope.editOffer = function (serviceID) {
+//            OfferSvc.fetchOffer(offer.Service.ID).then(function () { // fetch full offer object
+//                $scope.selectedService = offer.Service;
 //            }, function (error) {
 //                console.log(error);
+//                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
 //            });
-//        };
-//
-
-//
-//        OfferSvc.fetchOffers().then(function (offers) {
-//            $scope.offers = offers;
-//            OfferSvc.offers = offers;
-//        }, function (error) {
-//            console.log(error);
-//        });
-//
+            OfferSvc.fetchOffer(serviceID).then(function () {
+                $scope.goToStep(3);
+            }, function () {
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
+        };
 
         ///////////////////////////////////////////////////////////
         /// Event handling
@@ -106,6 +106,10 @@
             }, function () {
                 NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
+        });
+
+        OfferSvc.fetchOfferedServices($scope.currentUser.ID).then(function (offers) {
+            $scope.offers = offers;
         });
 
     }]);

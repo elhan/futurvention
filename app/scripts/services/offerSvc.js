@@ -92,6 +92,29 @@
             return deferred.promise;
         };
 
+        /**
+         * @ngdoc method
+         * @name fvApp.service:OfferSvc
+         * @function
+         *
+         * @description
+         * Fetches a collection of offered services for the given user
+         *
+         * @param {Integer} userID
+         * @returns Array.<Service>
+         */
+        OfferSvc.fetchOfferedServices = function () {
+            var deferred = $q.defer();
+
+            $http.get(paths.offerManagement.offeredServices).then(function (response) {
+                deferred.resolve(response.data);
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
         ///////////////////////////////////////////////////////////
         /// Save functions
         ///////////////////////////////////////////////////////////

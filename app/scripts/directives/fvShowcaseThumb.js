@@ -14,8 +14,8 @@
      * @example
      * <fv-showcase-thumb></fv-showcase-thumb>
      */
-    app.directive('fvShowcaseThumb', function (PortfolioSvc) {
-        var gallerySize = 7; // the max number of gallery items in view
+    app.directive('fvShowcaseThumb', function () {
+//        var gallerySize = 7; // the max number of gallery items in view
         return {
             restrict: 'E',
             scope: true,

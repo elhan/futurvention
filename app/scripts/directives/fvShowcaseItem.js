@@ -19,7 +19,7 @@
             restrict: 'E',
             scope: true,
             templateUrl: 'views/directives/fv-showcase-item.html',
-            link: function (scope, elem, attrs) {
+            link: function (scope) {
 
                 if (!scope.showcase) {
                     return;

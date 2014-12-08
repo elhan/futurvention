@@ -14,7 +14,7 @@
      * @example
      * <fv-portfolio-viewer></fv-portfolio-viewer>
      */
-    app.directive('fvDynamicIcon', function (PortfolioSvc) {
+    app.directive('fvDynamicIcon', function () {
         return {
             restrict: 'E',
             scope: true,

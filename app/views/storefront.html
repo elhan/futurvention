@@ -174,7 +174,7 @@
       </div>
     </div>
     <!-- About -->
-    <div ng-if="profile.bio.length > 0">
+    <div ng-if="profile.Description.length > 0">
       <!-- Divider -->
       <div class="container-x flex-content-centered">
         <div class="col-md-2 divider"></div>
@@ -184,7 +184,7 @@
           <div id="bio-header" class="text-h3" ng-if="isCurrentUser">About me</div>
           <div id="bio-header" class="text-h3" ng-if="!isCurrentUser">
             <span class="space-after">About</span>
-            <span>{{ profile.firstName }}</span>
+            <span>{{ profile.FirstName }}</span>
           </div>
           <div class="text-blue text-p clickable" ng-click="editProfileSection('info')" ng-if="isCurrentUser">
             <svg class="icon icon-light">

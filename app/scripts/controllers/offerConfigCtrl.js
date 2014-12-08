@@ -92,20 +92,17 @@
                 });
 
                 break;
+            case 'Personalize your offering':
+                // TODO: save choices properly
             }
 
-//            OfferSvc.saveOffer($scope.offer).then(function (response) {
-//                console.log(response);
-//                $scope.setPanelState(panel, 'done');
-//                $scope.panels.activePanel = $scope.panels.indexOf(
-//                    _.find($scope.panels, function (panel) {
-//                        return panel.state === 'default';
-//                    })
-//                );
-//            }, function (error) {
-//                console.log(error);
-//                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-//            });
+            $scope.setPanelState(panel, 'done');
+
+            $scope.panels.activePanel = $scope.panels.indexOf(
+                _.find($scope.panels, function (panel) {
+                    return panel.state === 'default';
+                })
+            );
         };
 
         ////////////////////////////////////////////
@@ -313,15 +310,6 @@
             });
         };
 
-        $scope.fetchOffer = function () {
-            OfferSvc.createEmptyOffer($scope.service.serviceID).then(function (response) {
-                console.log(response);
-            }, function (error) {
-                console.log(error);
-            });
-
-        };
-
         // saves the user's answer to a serviceField
         $scope.saveOfferField = function (field, answer) {
             answer && OfferSvc.saveOfferField($scope.offer.ID, field.ID, answer).then(function (response) {
@@ -393,6 +381,8 @@
         }, function (error) {
             console.log(error);
         });
+
+        $scope.updateShowcaseItems($scope.offer.Showcases);
 
     }]);
 }());
