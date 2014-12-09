@@ -4,22 +4,26 @@
     <div ng-repeat="priceDiscriminator in priceDiscriminators">
       <div ng-form class="form-group order-box-row" name="innerForm">
         <div class="flex-2 text-t">
-          <input type="radio" fv-dynamic-name=$index ng-model="$parent.priceDiscriminatorChoice" value={{priceDiscriminator}}>
+<!--          <input type="radio" fv-dynamic-name=$index ng-model="$parent.priceDiscriminatorChoice" value={{priceDiscriminator}}>-->
           <span>{{ priceDiscriminator.text }}</span>
         </div>
         <div class="text-p-bold">$ {{ priceDiscriminator.value }}</div>
       </div>
     </div>
     <!-- Divider -->
-    <div class="divider"></div>
-    <!-- Section: price discriminators -->
-    <div ng-repeat="addon in addons">
-      <div ng-form class="form-group order-box-row" name="innerForm">
-        <div class="flex-2 text-t">
-          <input type="checkbox" fv-dynamic-name=$index ng-model="$parent.chosenAddons[$index]" ng-true-value={{addon}}>
-          <span>{{ addon.text }}</span>
+    <div ng-if="addons.length > 0">
+      <div class="divider"></div>
+      <!-- Section: addons -->
+      <div ng-repeat="addon in addons">
+        <div ng-repeat="choice in addon.Choices">
+          <div ng-form class="form-group order-box-row" name="innerForm">
+            <div class="flex-2 text-t">
+  <!--            <input type="checkbox" fv-dynamic-name=$index ng-model="$parent.chosenAddons[$index]" ng-true-value={{addon}}>-->
+              <span>{{ choice.SellerTitle.Literals[0].Text }}</span>
+            </div>
+            <span class="text-p-bold">{{ addon.value }}</span>
+          </div>
         </div>
-        <span class="text-p-bold">{{ addon.value }}</span>
       </div>
     </div>
   </form>

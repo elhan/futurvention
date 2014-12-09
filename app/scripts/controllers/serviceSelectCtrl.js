@@ -66,13 +66,7 @@
         };
 
         $scope.editOffer = function (serviceID) {
-//            OfferSvc.fetchOffer(offer.Service.ID).then(function () { // fetch full offer object
-//                $scope.selectedService = offer.Service;
-//            }, function (error) {
-//                console.log(error);
-//                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-//            });
-            OfferSvc.fetchOffer(serviceID).then(function () {
+            OfferSvc.fetchOwnOffer(serviceID).then(function () {
                 $scope.goToStep(3);
             }, function () {
                 NotificationSvc.show({ content: msg.error.generic, type: 'error' });
@@ -101,7 +95,7 @@
         });
 
         $scope.$watch('selectedService.serviceID', function (newServiceId) {
-            newServiceId && OfferSvc.fetchOffer(newServiceId).then(function () {
+            newServiceId && OfferSvc.fetchOwnOffer(newServiceId).then(function () {
                 $scope.goToStep(3);
             }, function () {
                 NotificationSvc.show({ content: msg.error.generic, type: 'error' });

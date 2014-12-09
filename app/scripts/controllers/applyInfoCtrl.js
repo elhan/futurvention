@@ -31,9 +31,6 @@
 
         $scope.monikerIsValid = false; // true if the user has set a url that already exists. Used to display error label
 
-        $scope.title = '';
-        $scope.bio = '';
-
         $scope.city = {};
         $scope.cities = [];
         $scope.cityName = '';
@@ -53,19 +50,25 @@
 
         // on continue, save the rest of the user's info
         $scope.continue = function () {
-            if ($scope.profileExists) { // update existing profile
+            switch (true) {
+            case $scope.profileInfoForm.$pristine:
+                break;
+            case $scope.profileExists:
                 ProfileSvc.patchProfile(utils.removeEmptyProperties($scope.profile), $scope.profile.ID).then(function (response) {
                     console.log(response);
                 }, function (error) {
                     console.log(error);
                 });
-            } else { // create a new profile
+                break;
+            default:
                 ProfileSvc.createProfile(utils.removeEmptyProperties($scope.profile)).then(function (response) {
                     console.log(response);
                 }, function (error) {
                     console.log(error);
                 });
             }
+
+            $scope.goToStep(2);
         };
 
         $scope.searchCity = _.throttle(function (prefix) {
@@ -76,6 +79,7 @@
                         return city.getName();
                     });
                 });
+
             }, function (error) {
                 console.log(error);
             });
@@ -90,6 +94,7 @@
             if (!newValue || newValue === oldValue) {
                 return;
             }
+
             $scope.countryName = _.find($scope.countries, function (country) {
                 return country.ID === $scope.profile.LocationID;
             }).getName();
@@ -100,9 +105,11 @@
             if (!newValue || newValue === oldValue) {
                 return;
             }
+
             $scope.city = _.find($scope.cities, function (city) {
                 return city.getName() === $scope.cityName;
             });
+
             $scope.profile.LocationID = $scope.city && $scope.city.ID;
         });
 
@@ -111,6 +118,7 @@
             if (!newValue || newValue === oldValue) {
                 return;
             }
+
             $scope.country = _.find($scope.countries, function (country) {
                 return country.getName() === $scope.countryName;
             });
@@ -119,20 +127,6 @@
         $scope.$watch('profile.Moniker', function (newValue, oldValue) {
             // TODO: add client validation and handle server validation messages
             newValue && newValue !== oldValue && $scope.validateMoniker();
-        });
-
-        $scope.$watch('bio', function (newValue, oldValue) {
-            if (!newValue || newValue === oldValue) {
-                return;
-            }
-            $scope.profile.setMultilingual('Description', newValue);
-        });
-
-        $scope.$watch('title', function (newValue, oldValue) {
-            if (!newValue || newValue === oldValue) {
-                return;
-            }
-            $scope.profile.setMultilingual('Title', newValue);
         });
 
         $scope.$on(events.importer.reviewsReady, function (event, importer) {
@@ -154,21 +148,28 @@
 
         LocationSvc.getCountries().then(function (countries) {
             $scope.countries = countries;
+
             $scope.countryNames = _.map(countries, function (country) {
                 return country.getName();
             });
+
         }, function (error) {
             console.log(error);
         });
 
+        // must always be called after fetching countries, otherwise city & country will not update properly
         ProfileSvc.fetchProfileStatus().then(function () {
             $scope.profileExists = true;
 
             // populate from existing profile
             ProfileSvc.fetchOwnProfile().then(function () {
-                $timeout(function () {
-                    $scope.profile = ProfileSvc.getProfile();
+                $scope.profile = ProfileSvc.getProfile();
+
+                LocationSvc.fetchLocationNames($scope.profile.LocationID).then(function (response) {
+                    $scope.cityName = response.results[0].value[0].Name.Literals[0].Text;
+                    $scope.countryName = response.results[0].value[0].Parent.Name.Literals[0].Text;
                 });
+
             }, function (error) {
                 console.log(error);
             });

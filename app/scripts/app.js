@@ -42,7 +42,8 @@
     app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider
         .when('/', {
-            templateUrl: 'views/main.html'
+            templateUrl: 'views/landing.html',
+            controller: 'LandingCtrl'
         })
         .when('/register', {
             templateUrl: 'views/register.html',
@@ -78,7 +79,7 @@
                 }]
             }
         })
-        .when('/offer/:offerId', {
+        .when('/offers/:offerId', {
             templateUrl: 'views/offer.html',
             controller: 'OfferCtrl',
             resolve: {

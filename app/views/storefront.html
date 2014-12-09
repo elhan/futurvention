@@ -25,7 +25,7 @@
           <div class="wrapper-name">{{ user.LastName }}</div>
         </div>
         <div class="container-x text-p">
-          <div>{{profile.Title}}</div>
+          <div>{{profile.Title.Literals[0].Text}}</div>
         </div>
         <div class="container-x text-p">
           <div>{{profile.getCity()}}</div>
@@ -78,9 +78,9 @@
               <img ng-if="!offer.Service.ThumbnailFile.Url" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
               <img ng-if="offer.Service.ThumbnailFile.Url" ng-src="{{offer.Service.ThumbnailFile.Url}}" class="img-responsive">
             </div>
-            <div class="thumb-overlay" ng-click="showPortfolioViewerModal()">
-              <div class="text-white text-h3">View in detail</div>
-            </div>
+            <a class="thumb-overlay" href="http://client.futurvention.com:9000/#/offers/{{offer.ID}}">
+              <span class="text-white text-h3">View in detail</span>
+            </a>
 <!--
             <div class="thumb-overlay" ng-if="isCurrentUser">
               <div class="thumb-overlay-inner" ng-click="editOffer(offer)">
@@ -120,7 +120,7 @@
         <div id="portfolio-header" class="text-h3 flex-content-centered flex-1">Portfolio</div>
       </div>
       <div class="portfolio-items flex-wrap">
-        <div class="showcase" ng-repeat="item in showcaseItems">
+        <div class="showcase" ng-repeat="item in showcaseItems" ng-click="showPortfolioViewerModal($index)">
           <div class="showcase-item thumbnail" fv-bg-image={{item.link}} fv-data={{item.link}}></div>
           <div class="caption">{{ item.name }}</div>
         </div>
@@ -174,7 +174,7 @@
       </div>
     </div>
     <!-- About -->
-    <div ng-if="profile.Description.length > 0">
+    <div ng-if="profile.Description">
       <!-- Divider -->
       <div class="container-x flex-content-centered">
         <div class="col-md-2 divider"></div>
@@ -184,7 +184,7 @@
           <div id="bio-header" class="text-h3" ng-if="isCurrentUser">About me</div>
           <div id="bio-header" class="text-h3" ng-if="!isCurrentUser">
             <span class="space-after">About</span>
-            <span>{{ profile.FirstName }}</span>
+            <span>{{ user.FirstName }}</span>
           </div>
           <div class="text-blue text-p clickable" ng-click="editProfileSection('info')" ng-if="isCurrentUser">
             <svg class="icon icon-light">
@@ -194,7 +194,7 @@
           </div>
         </div>
       </div>
-      <div class="bio">{{ profile.bio }}</div>
+      <div class="bio">{{ profile.Description.Literals[0].Text }}</div>
     </div>
   </div>
 </div>

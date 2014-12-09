@@ -68,7 +68,7 @@
         Odata.Multilingual = function (options) {
             var self = this;
             self.ID = 0;
-            self.Literals =  [];
+            self.Literals =  [ new Odata.Literal() ];
             utils.updateProperties(self, options);
         };
 
@@ -109,8 +109,8 @@
             self.Moniker = null;
             self.FirstName = null;
             self.LastName = null;
-            self.Title = null;
-            self.Description = null;
+            self.Title = new Odata.Multilingual();
+            self.Description = new Odata.Multilingual();
             self.Resume = null;
             self.Status = null;
             self.Location = null;

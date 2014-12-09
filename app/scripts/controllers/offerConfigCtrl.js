@@ -369,7 +369,7 @@
         /// Init
         ////////////////////////////////////////////
 
-        CatalogueSvc.getService($scope.offer.ServiceID).then(function (service) {
+        CatalogueSvc.getService($scope.offer.ServiceID, true).then(function (service) {
             var offeredChoice;
 
             $scope.service = service;

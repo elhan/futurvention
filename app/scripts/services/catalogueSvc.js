@@ -147,7 +147,7 @@
          *
          * @returns {Object} a Service object
          */
-        CatalogueSvc.getService = function (serviceID) {
+        CatalogueSvc.getService = function (serviceID, filter) {
             var deferred = $q.defer(),
                 query = new breeze.EntityQuery('Services')
                     .where('ID', 'eq', serviceID)
@@ -171,8 +171,7 @@
                     ].join(', '));
 
             manager.executeQuery(query).then(function (response) {
-                console.log(response);
-                deferred.resolve(filterFullService(response));
+                filter ? deferred.resolve(filterFullService(response)) : deferred.resolve(response.results[0].value[0]);
             }, function (error) {
                 deferred.reject(error);
             });

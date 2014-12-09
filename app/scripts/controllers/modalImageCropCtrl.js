@@ -52,9 +52,12 @@
         };
 
         $scope.saveAvatar = function () {
+            var data = window.atob($scope.croppedImage.split(',').pop());
             $upload.upload({
                 url: paths.user.ownAvatar,
-                file: $scope.file,
+//                headers: { 'Content-Transfer-Encoding': 'base64' },
+//                file: $scope.croppedImage.split(',').pop(),
+                file: new Blob([data], {type: 'image/png'}),
                 fileFormDataName: $scope.file.name,
             }).then(function () {
                 UserSvc.fetchOwnUser().then(function () {

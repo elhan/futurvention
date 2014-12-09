@@ -66,6 +66,24 @@
             return deferred.promise;
         };
 
+        //https://futurvention.azurewebsites.net/public.svc/Locations?$filter=ID%20eq%20277&$expand=Name/Literals,Parent/Name/Literals&$format=json
+
+        /**
+         * Given a cityID, returns the names of the city and country it belongs in
+         * @public
+         *
+         * @param {String} cityID
+         *
+         * returns Array.<Location>
+         */
+        LocationSvc.fetchLocationNames = function (cityID) {
+            var query = new breeze.EntityQuery('Locations')
+                    .where('ID', 'eq', cityID)
+                    .expand('Name.Literals,Parent.Name.Literals')
+
+            return manager.executeQuery(query);
+        };
+
         /**
          * Returns a collection of city objects
          * @public

@@ -9,12 +9,19 @@
      * # ProfileSvc
      * CRUD operations for Seller profiles
      */
-    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', 'PATHS', 'Utils', 'Odata', function ($http, $q, $upload, $timeout, importProviders, paths, utils, odata) {
+    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', 'PATHS', 'breeze', 'Utils', 'Odata', function ($http, $q, $upload, $timeout, importProviders, paths, breeze, utils, odata) {
         var ProfileSvc = {},
             providerNames = importProviders,
             steps = ['import', 'info', 'service_selection', 'offer_config', 'storefront'], // profile completion steps
             activeStep = 'import',
-            profile = new odata.SellerProfile();
+            profile = new odata.SellerProfile(),
+
+            dataService = new breeze.DataService({
+                serviceName: paths.public,
+                hasServerMetadata: false
+            }),
+
+            manager = new breeze.EntityManager({ dataService: dataService });
 
         // Provider object constructor
         ProfileSvc.Provider = function (name, url) {
@@ -55,10 +62,6 @@
             activeStep = step;
         };
 
-        ////////////////////////////////////////////
-        /// Update methods update Service objects
-        ////////////////////////////////////////////
-
         ProfileSvc.updateProfile = function (obj) {
             utils.updateProperties(profile, obj);
         };
@@ -68,7 +71,6 @@
         ////////////////////////////////////////////
 
         ProfileSvc.createProfile = function (profile) {
-            console.log(JSON.stringify(profile));
             return $http.post(paths.sellerManagement.ownProfile, profile);
         };
 
@@ -103,12 +105,44 @@
         };
 
         ProfileSvc.fetchProfile = function (moniker) {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
 
-            $http.get(paths.sellerManagement.profile + moniker + '?expand=Location/Name/Literals').then(function (response) {
+                url = [
+                    paths.sellerManagement.profile,
+                    moniker,
+                    '?expand=Location/Name/Literals,',
+                    'Title/Literals,',
+                    'Description/Literals'
+                ].join('');
+
+            $http.get(url).then(function (response) {
                 utils.updateProperties(profile, response.data);
                 deferred.resolve(profile);
             }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
+        ProfileSvc.fetchProfileById = function (userID) {
+             var deferred = $q.defer(),
+
+                 query = new breeze.EntityQuery('SellerProfiles')
+                    .where('ID', 'eq', userID)
+                    .expand([
+                        'User',
+                        'User.Avatar',
+                        'Location.Name.Literals',
+                        'Title.Literals',
+                        'Description.Literals'
+                    ].join(','));
+
+            manager.executeQuery(query).then(function (response) {
+                console.log(response);
+                deferred.resolve(response.results[0].value);
+            }, function (error) {
+                console.log(error);
                 deferred.reject(error);
             });
 

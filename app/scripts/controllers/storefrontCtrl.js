@@ -89,7 +89,7 @@
         };
 
         $scope.editOffer = function (offer) {
-            OfferSvc.fetchOffer(offer.Service.ID).then(function () { // fetch full offer object
+            OfferSvc.fetchOwnOffer(offer.Service.ID).then(function () { // fetch full offer object
                 $scope.editProfileSection('offer_config');
             }, function (error) {
                 console.log(error);
@@ -109,7 +109,8 @@
             contactModal.$promise.then(contactModal.hide);
         };
 
-        $scope.showPortfolioViewerModal = function () {
+        $scope.showPortfolioViewerModal = function (index) {
+            $scope.showcaseIndex = index; // needed by portfolio viewer dirtective
             portfolioViewerModal.$promise.then(portfolioViewerModal.show);
         };
 

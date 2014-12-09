@@ -1,4 +1,4 @@
-(function () {
+  (function () {
     'use strict';
 
     var app = angular.module('fvApp');
@@ -18,41 +18,37 @@
         return {
             restrict: 'E',
             scope: {
-                offer: '@',
+                offer: '=',
             },
+            replace: true,
             templateUrl: 'views/directives/fv-order-box.html',
             link: function (scope) {
-                //TODO: remove mock data
-                scope.priceDiscriminators = [
-                    {
-                        text: '500 words',
-                        value: 10
-                    },
-                    {
-                        text: '700 words',
-                        value: 12
-                    },
-                    {
-                        text: '1000 words',
-                        value: 15
-                    }
-                ];
+
+                var service = scope.offer.Service;
+
+                scope.priceDiscriminators = _.pick(service.Options, function (option) {
+                    return option.IsPriceDiscriminator && option.IsMandatory;
+                });
+
+                scope.addons = _.pick(service.Options, function (option) {
+                    return option.IsPriceDiscriminator && !option.IsMandatory;
+                });
 
                 //TODO: remove mock data
-                scope.addons = [
-                    {
-                        text: 'Unlimited revisions',
-                        value: 20
-                    },
-                    {
-                        text: '3 initial concepts',
-                        value: 30
-                    },
-                    {
-                        text: '1 day delivery',
-                        value: 30
-                    }
-                ];
+//                scope.addons = [
+//                    {
+//                        text: 'Unlimited revisions',
+//                        value: 20
+//                    },
+//                    {
+//                        text: '3 initial concepts',
+//                        value: 30
+//                    },
+//                    {
+//                        text: '1 day delivery',
+//                        value: 30
+//                    }
+//                ];
 
             }
         };

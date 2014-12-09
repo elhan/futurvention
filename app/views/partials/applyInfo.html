@@ -49,10 +49,10 @@
       <div class="form-group container-x">
         <div class="label-l">Headline / Title</div>
         <div class="flex-2">
-          <input type="text" class="form-control input-s" name="infoTitle" ng-model="title" placeholder="eg. UX Designer">
+          <input type="text" class="form-control input-s" name="infoTitle" ng-model="profile.Title.Literals[0].Text" placeholder="eg. UX Designer">
         </div>
         <div class="flex-1 flex-items-centered">
-          <svg ng-if="title" class="icon icon-green text-p space-left">
+          <svg ng-if="profile.Title.Literals[0].Text" class="icon icon-green text-p space-left">
             <use xlink:href="#tick"></use>
           </svg>
         </div>
@@ -61,10 +61,10 @@
       <div class="form-group container-x">
         <div class="label-l label-bio">Bio</div>
         <div class="flex-2 textarea-wrapper">
-          <textarea class="textarea-info" name="infoBio" placeholder="Try to be as detailed and personal as possible" ng-model="bio"></textarea>
+          <textarea class="textarea-info" name="infoBio" placeholder="Try to be as detailed and personal as possible" ng-model="profile.Description.Literals[0].Text"></textarea>
         </div>
         <div class="flex-1 flex-items-centered ">
-          <svg ng-if="bio" class="icon icon-green text-p space-left">
+          <svg ng-if="profile.Description.Literals[0].Text" class="icon icon-green text-p space-left">
             <use xlink:href="#tick"></use>
           </svg>
         </div>
@@ -95,15 +95,14 @@
           </svg>
         </div>
       </div>
-    </form>
-    <!-- Continue button -->
-    <div class="container-x flex-content-centered">
-      <div class="flex-1"></div>
-      <div class="wrapper-continue-2">
-<!--        <button type="submit" class="btn btn-continue" ng-disabled="!(city && country && profile.Description && profile.Moniker)" ng-click="continue()">Continue</button>-->
-        <button type="submit" class="btn btn-continue"  ng-click="continue()">Continue</button>
+      <!-- Continue button -->
+      <div class="container-x flex-content-centered">
+        <div class="flex-1"></div>
+        <div class="wrapper-continue-2">
+          <button type="submit" class="btn btn-continue" ng-disabled="!(profile.Moniker && profile.Title && profile.Description && cityName && currentUser.Avatar)" ng-click="continue()">Continue</button>
+        </div>
+        <div class="flex-1"></div>
       </div>
-      <div class="flex-1"></div>
-    </div>
+    </form>
   </div>
 </div>

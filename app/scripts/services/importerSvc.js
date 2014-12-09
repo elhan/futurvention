@@ -214,9 +214,9 @@
         ImporterSvc.fetchProfile = function () {
             var deferred = $q.defer();
 
-            profileDone.length === 0 && deferred.reject(msg.error.profileImportFailed);
+            profileDone.importers.length === 0 && deferred.reject(msg.error.profileImportFailed);
 
-            profileDone.length > 0 && $http.post(paths.importer.fetchProfile, profileDone.capitalize()).then(function (response) {
+            profileDone.importers.length > 0 && $http.post(paths.importer.fetchProfile, profileDone.capitalize()).then(function (response) {
                 deferred.resolve(new odata.SellerProfile(response.data[0].data.response.data.PersonalInfo));
             }, function (error) {
                 console.log(error);
