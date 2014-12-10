@@ -18,5 +18,11 @@
         };
     });
 
+    app.filter('initial', function () {
+        return function (str) {
+            return str.charAt(0).concat('.');
+        };
+    });
+
 
 }());

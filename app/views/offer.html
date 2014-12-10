@@ -110,7 +110,19 @@
     </div>
     <div class="container-right">
       <fv-order-box class="wrapper-order-box" offer="offer"></fv-order-box>
-      <div></div>
+      <div class="order-box container-y space-top-2x">
+        <div class="container-x">
+          <div class="profile-picture-m space-right" fv-bg-image={{avatarUrl}}></div>
+          <div class="flex-1 container-y space-left-05" ng-if="profile">
+            <div class="container-x">
+              <div class="text-h3 text-gotham-bold space-after">{{profile.User.FirstName}}</div>
+              <div class="text-h3 text-gotham-bold">{{profile.User.LastName | initial}}</div>
+            </div>
+            <div class="text-t text-silver space-bottom">{{ profile.Title.Literals[0].Text }}</div>
+            <div class="text-i">{{ profile.countryName }}</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

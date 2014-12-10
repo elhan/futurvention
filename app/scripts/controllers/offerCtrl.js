@@ -10,7 +10,7 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', function ($scope, $modal, paths, events, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc) {
+  app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', 'LocationSvc', function ($scope, $modal, paths, events, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc, LocationSvc) {
         $scope.reviews = [];
         $scope.portfolio = {};
         $scope.service = {};
@@ -50,6 +50,15 @@
             $scope.isCurrentUser = $scope.profile.ID === $scope.currentUser.ID;
 
             $scope.$broadcast(events.profile.fetchProfileSuccess, $scope.isCurrentUser);
+
+            LocationSvc.fetchLocationNames($scope.profile.LocationID).then(function (response) {
+                $scope.profile.countryName = response.results[0].value[0].Parent.Name.Literals[0].Text;
+            }, function (error) {
+                console.log(error);
+            });
+
+        }, function (error) {
+            console.log(error);
         });
 
         ReviewSvc.fetchReviews($scope.offer.SellerProfileID).then(function (reviews) {
