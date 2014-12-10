@@ -13,6 +13,7 @@
     app.constant('EVENTS', {
         profile: {
             fetchProfileFailed: 'fetch-profile-failed',
+            fetchProfileSuccess: 'fetch-profile-success',
             profileUpdated: 'profile-updated'
         },
         user: {

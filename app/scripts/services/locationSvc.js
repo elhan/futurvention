@@ -79,7 +79,7 @@
         LocationSvc.fetchLocationNames = function (cityID) {
             var query = new breeze.EntityQuery('Locations')
                     .where('ID', 'eq', cityID)
-                    .expand('Name.Literals,Parent.Name.Literals')
+                    .expand('Name.Literals,Parent.Name.Literals');
 
             return manager.executeQuery(query);
         };

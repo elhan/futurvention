@@ -10,11 +10,14 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('OfferCtrl', ['$scope', '$modal', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', function ($scope, $modal, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc) {
+    app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', function ($scope, $modal, paths, events, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc) {
         $scope.reviews = [];
         $scope.portfolio = {};
         $scope.service = {};
-        $scope.offer = offer; // fetchOffer returns a collection
+
+        $scope.offer = offer;
+
+        $scope.isCurrentUser = false;
 
         $scope.expandServiceDescription = false;
 
@@ -41,6 +44,12 @@
 
         ProfileSvc.fetchProfileById($scope.offer.SellerProfileID).then(function (profile) {
             $scope.profile = profile[0];
+
+            $scope.avatarUrl = $scope.profile.User && $scope.profile.User.Avatar ? encodeURI(paths.file.hosted + $scope.profile.User.Avatar.RelativeUrl) : null;
+
+            $scope.isCurrentUser = $scope.profile.ID === $scope.currentUser.ID;
+
+            $scope.$broadcast(events.profile.fetchProfileSuccess, $scope.isCurrentUser);
         });
 
         ReviewSvc.fetchReviews($scope.offer.SellerProfileID).then(function (reviews) {

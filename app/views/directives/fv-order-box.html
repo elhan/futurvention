@@ -1,31 +1,59 @@
-<div class="order-box">
-  <form name="orderForm">
+<div class="order-box container-y">
+  <button class="btn btn-blue space-bottom" ng-if="isCurrentUser" ng-click="editOffer()">Edit</button>
+  <form name="orderForm flex-1 container-y">
     <!-- Main price discriminator -->
-      <div class="form-group order-box-row">
-        <div class="flex-2 text-t">
-<!--          <input type="radio" fv-dynamic-name=$index ng-model="$parent.priceDiscriminatorChoice" value={{priceDiscriminator}}>-->
-          <span>{{ priceDiscriminator.text }}</span>
+    <p class="text-p-bold">Service options</p>
+    <!-- One choice -->
+    <div ng-if="mainPriceDiscriminator.Choices.length === 1" class="form-group">
+      <div class="container-y">
+        <!--          <input type="radio" fv-dynamic-name=$index ng-model="$parent.priceDiscriminatorChoice" value={{priceDiscriminator}}>-->
+        <div class="container-x">
+          <div class="space-after text-p">{{ mainPriceDiscriminator.SellerTitle.Literals[0].Text }}:</div>
+          <div class="text-p-bold">${{ mainPriceDiscriminator.Choices[0].price }}</div>
         </div>
-        <div class="text-p-bold">$ {{ priceDiscriminator.value }}</div>
+        <div class="container-x text-p">
+          <div class="space-after">Delivers in</div>
+          <div class="space-after">{{ mainPriceDiscriminator.Choices[0].days }}</div>
+          <div ng-if="mainPriceDiscriminator.Choices[0].days === 1">day</div>
+          <div ng-if="mainPriceDiscriminator.Choices[0].days > 1">days</div>
+        </div>
       </div>
+    </div>
+    <!-- Many choices -->
+    <div ng-if="mainPriceDiscriminator.Choices.length > 1">
+      <div ng-repeat="choice in mainPriceDiscriminator.Choices">
+        <div ng-form class="form-group order-box-row" name="innerForm">
+          <div class="flex-2 text-t">
+            <span class="space-after">{{ mainPriceDiscriminator.SellerTitle.Literals[0].Text }}</span>
+            <span class="space-after">(in {{ choice.days }}</span>
+            <span ng-if="choice.days > 1">days)</span>
+            <span ng-if="choice.days === 1">day)</span>
+          </div>
+          <span class="text-p-bold">${{ choice.price }}</span>
+        </div>
+      </div>
+    </div>
     <!-- Divider -->
     <div ng-if="addons.length > 0">
       <div class="divider"></div>
       <!-- Section: addons -->
+      <p class="text-p-bold">Add-ons</p>
       <div ng-repeat="addon in addons">
-        <div ng-repeat="choice in addon.Choices">
-          <div ng-form class="form-group order-box-row" name="innerForm">
-            <div class="flex-2 text-t">
-  <!--            <input type="checkbox" fv-dynamic-name=$index ng-model="$parent.chosenAddons[$index]" ng-true-value={{addon}}>-->
-              <span>{{ choice.SellerTitle.Literals[0].Text }}</span>
-            </div>
-            <span class="text-p-bold">{{ addon.value }}</span>
+        <div ng-form class="form-group order-box-row" name="innerForm">
+          <div class="flex-2 text-t">
+<!--            <input type="checkbox" fv-dynamic-name=$index ng-model="$parent.chosenAddons[$index]" ng-true-value={{addon}}>-->
+            <span class="space-after">{{ addon.SellerTitle.Literals[0].Text }}</span>
+            <span class="space-after">(+{{ addon.Choices[0].days }})</span>
+            <span ng-if="addon.Choices[0].days > 1">days</span>
+            <span ng-if="addon.Choices[0].days === 1">day</span>
           </div>
+          <span class="text-p-bold">${{ addon.Choices[0].price }}</span>
         </div>
       </div>
     </div>
   </form>
   <!-- Divider -->
+<!--
   <div class="divider"></div>
   <div class="container-x flex-wrap">
     <div class="flex-content-centered text-t">
@@ -34,4 +62,5 @@
     <div class="space-after text-t">delivers in</div>
     <div class="text-t-bold">5 days</div>
   </div>
+-->
 </div>
