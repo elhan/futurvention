@@ -21,6 +21,9 @@
 
         $scope.urlsToEmbed = [{ url: '' }];
 
+        // before navigating to this step, the respective controller has ensured OffrSvc.offer is suynced
+        $scope.offer =  OfferSvc.getOffer();
+
         /**
          * Items added by embed url modal or file upload
          * @type Array.<SimpleShowcaseItem>
@@ -44,9 +47,6 @@
 
         // can be 'owned' or 'imported'. Controls which work samples section is visible
         $scope.activeWorkSamples = 'owned';
-
-        // before navigating to this step, the respective controller has ensured OffrSvc.offer is suynced
-        $scope.offer =  OfferSvc.getOffer();
 
         ////////////////////////////////////////////
         /// Panels and panel functions
@@ -135,7 +135,7 @@
         };
 
         $scope.closeEmbedUrlModal = function () {
-            $scope.urlsToEmbed.empty();
+            $scope.urlsToEmbed.empty = [''];
             modalEmbedUrl.hide();
         };
 
@@ -289,15 +289,15 @@
             });
         };
 
-        $scope.saveUrls = function () {
+        $scope.saveUrls = function (modalName) {
             var urls = [];
 
             _.each($scope.urlsToEmbed, function (obj) {
                 urls.push(obj.url);
             });
 
-            modalEmbedUrl.hide();
-            modalCameraTag.hide();
+            modalName === 'modalEmbedUrl' && modalEmbedUrl.hide();
+            modalName === 'modalCameraTag' && modalCameraTag.hide();
 
             PortfolioSvc.saveUrls(urls, $scope.service.serviceID).then(function (response) {
                 $scope.updateShowcaseItems(response.data);
@@ -355,9 +355,9 @@
             CameraTag.observe('fvcam', 'published', function() {
                 var cam = CameraTag.cameras['fvcam'];
                 var vid = cam.getVideo();
-                $scope.urlsToEmbed.empty();
+                $scope.urlsToEmbed = ['']; // in order to show at least one, empty input field
                 $scope.urlsToEmbed.push({ url: vid.formats.qvga.video_url });
-                $scope.saveUrls();
+                $scope.saveUrls('modalCameraTag');
 //                var mp4_url = vid.formats.qvga.mp4_url;
 //                var small_thumb_url = vid.formats.qvga.small_thumb_url;
 //                var thumb_url = vid.formats.qvga.thumb_url;
@@ -393,6 +393,15 @@
 
                  option.isPriceDiscriminator && option.isMandatory && $scope.priceDiscriminators.push(option);
                  option.isPriceDiscriminator && !option.isMandatory && $scope.addons.push(option);
+            });
+
+            // update service field answers. This only works due to soft service field constrains
+            _.each($scope.offer.Fields, function (field) {
+                if (field.ServiceFieldID === service.interview.ID) {
+                    $scope.interviewTextAnswer = field.Text.Literals[0].Text;
+                } else {
+                    $scope.fieldTextAnswer = field.Text.Literals[0].Text;
+                }
             });
 
         }, function (error) {

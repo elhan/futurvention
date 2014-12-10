@@ -4,41 +4,11 @@
     Use our comprehensive catalogue to select services you want to offer, then set your price for each
   </div>
   <!-- Thumbnail Grid: Selected Services -->
-<!--
-  <div class="container-x wrapper-search" ng-show="offers.length > 0">
-    <span class="text-h3">Services Offered</span>
-  </div>
-  <div class="thumbnail-grid flex-wrap selected-services">
-    <div ng-repeat="offer in offers" class="col-sm-6 col-md-3 wrapper-thumb">
-      <div class="thumbnail">
-        <div class="wrapper-img flex-content-centered">
-          <img data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
-        </div>
-        <div class="thumb-overlay">
-          <div class="thumb-overlay-inner" ng-click="editOffer(offer.serviceName)">
-            <svg class="icon icon-light">
-              <use xlink:href="#edit"></use>
-            </svg>
-          </div>
-          <div class="divider-thumb-overlay"></div>
-          <div class="thumb-overlay-inner" ng-click="removeOffer(offer.serviceName)">
-            <svg class="icon icon-light">
-              <use xlink:href="#close"></use>
-            </svg>
-          </div>
-        </div>
-        <div class="caption">
-          <div class="text-p-bold">{{ offer.serviceName }}</div>
-        </div>
-      </div>
+  <div  ng-if="offers.length > 0">
+    <div class="container-x wrapper-search">
+      <span class="text-h3">Services Offered</span>
     </div>
-  </div>
--->
-    <div  ng-if="offers.length > 0">
-      <div class="container-x wrapper-search">
-        <span class="text-h3">Services Offered</span>
-      </div>
-      <div class="thumbnail-grid flex-wrap">
+    <div class="thumbnail-grid flex-wrap">
       <div ng-repeat="offer in offers" class="col-sm-6 col-md-3 wrapper-thumb">
         <div class="thumbnail">
           <div class="wrapper-img flex-content-centered">
@@ -107,9 +77,11 @@
     </button>
   </div>
   <!-- Continue button -->
+<!--
   <div class="container-x flex-content-centered">
     <div class="container-x col-sm-6 col-md-3">
       <button type="submit" class="btn btn-continue flex-1" ng-disabled="offers.length === 0" ng-click="go('/storefront/666997733407685')">Continue</button>
     </div>
   </div>
+-->
 </div>

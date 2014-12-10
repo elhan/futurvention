@@ -368,7 +368,8 @@
             return utils.updateProperties(new Odata.SimpleShowcaseItem({
                 ID: self.ID,
                 name: self.Title.Literals[0] && self.Title.Literals[0].Text,
-                link: self.getThumbnail()
+                link: self.getThumbnail(),
+                file: self.File
             }), options);
         };
 
