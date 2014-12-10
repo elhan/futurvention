@@ -18,20 +18,28 @@
         return {
             restrict: 'E',
             scope: {
-                offer: '=',
+                offer: '='
             },
             replace: true,
             templateUrl: 'views/directives/fv-order-box.html',
             link: function (scope) {
 
-                var service = scope.offer.Service;
+                var mainPriceDiscriminator,
+                    service = scope.service,
+                    offer = scope.offer;
 
-                scope.priceDiscriminators = _.pick(service.Options, function (option) {
-                    return option.IsPriceDiscriminator && option.IsMandatory;
-                });
+                scope.addons = [];
 
-                scope.addons = _.pick(service.Options, function (option) {
-                    return option.IsPriceDiscriminator && !option.IsMandatory;
+                _.each(service.Options, function (option) {
+                    switch (true) {
+                    case !option.IsPriceDiscriminator: // ignore filters
+                        break;
+                    case option.IsMandatory:
+                        mainPriceDiscriminator = option;
+                        break;
+                    default:
+                        scope.addons.push(option);
+                    }
                 });
 
                 //TODO: remove mock data

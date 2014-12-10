@@ -1,15 +1,13 @@
 <div class="order-box">
   <form name="orderForm">
-    <!-- Section: price discriminators -->
-    <div ng-repeat="priceDiscriminator in priceDiscriminators">
-      <div ng-form class="form-group order-box-row" name="innerForm">
+    <!-- Main price discriminator -->
+      <div class="form-group order-box-row">
         <div class="flex-2 text-t">
 <!--          <input type="radio" fv-dynamic-name=$index ng-model="$parent.priceDiscriminatorChoice" value={{priceDiscriminator}}>-->
           <span>{{ priceDiscriminator.text }}</span>
         </div>
         <div class="text-p-bold">$ {{ priceDiscriminator.value }}</div>
       </div>
-    </div>
     <!-- Divider -->
     <div ng-if="addons.length > 0">
       <div class="divider"></div>
