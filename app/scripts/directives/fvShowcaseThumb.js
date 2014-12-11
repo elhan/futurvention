@@ -14,16 +14,32 @@
      * @example
      * <fv-showcase-thumb></fv-showcase-thumb>
      */
-    app.directive('fvShowcaseThumb', function () {
-//        var gallerySize = 7; // the max number of gallery items in view
+    app.directive('fvShowcaseThumb', ['Odata', function (odata) {
         return {
             restrict: 'E',
-            scope: true,
+            scope: {
+                showcase: '=',
+                caption: '@'
+            },
             templateUrl: 'views/directives/fv-showcase-thumb.html',
-            link: function (scope, elem, attrs) {
-                scope.showcase = attrs.showcase;
+            link: function (scope) {
+                var item = new odata.ShowcaseItem(scope.showcase.Items[0]);
+
+                scope.thumbnailLink = '';
+
+                switch (true) {
+                case !item.hasOwnProperty('Thumbnail') || item.Thumbnail === null:
+                    scope.thumbnailLink = 'images/thumb.png'; // TODO: add different thumbnails for different file types
+                    break;
+                case item.Thumbnail.hasOwnProperty('Url'):
+                    scope.thumbnailLink = item.Thumbnail.Url;
+                    break;
+                case item.Thumbnail.hasOwnProperty('RelativeUrl'):
+                    scope.thumbnailLink = item.getFileLink();
+                    break;
+                }
             }
         };
-    });
+    }]);
 
 }());

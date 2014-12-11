@@ -10,7 +10,7 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('ModalImageCropCtrl', ['$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'EVENTS', 'MESSAGES', 'UserSvc', 'NotificationSvc', function ($rootScope, $scope, $timeout, $upload, paths, events, msg, UserSvc, NotificationSvc) {
+    app.controller('ModalImageCropCtrl', ['$http', '$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'EVENTS', 'MESSAGES', 'UserSvc', 'NotificationSvc', function ($http, $rootScope, $scope, $timeout, $upload, paths, events, msg, UserSvc, NotificationSvc) {
         $scope.file = {};
         /*
             Expose the init function on the scope, as the fv-on-drop directive needs to call it.
@@ -73,6 +73,22 @@
                 console.log(err);
             });
         };
+
+//        $scope.saveAvatar = function () {
+//            var fd = new FormData();
+//
+//            fd.append($scope.file.name, new Blob(JSON.stringify(window.atob($scope.croppedImage.split(',').pop()))), $scope.file.name);
+//
+//            $http.post(paths.user.ownAvatar, fd, {
+//                withCredentials: true,
+//                headers: {'Content-Type': undefined },
+//                transformRequest: angular.identity
+//            }).then(function (response) {
+//                console.log(response);
+//            }, function (error) {
+//                console.log(error);
+//            });
+//        };
 
         $scope.init();
     }]);
