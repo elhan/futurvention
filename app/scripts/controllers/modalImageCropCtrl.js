@@ -10,7 +10,7 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('ModalImageCropCtrl', ['$http', '$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'EVENTS', 'MESSAGES', 'UserSvc', 'NotificationSvc', function ($http, $rootScope, $scope, $timeout, $upload, paths, events, msg, UserSvc, NotificationSvc) {
+    app.controller('ModalImageCropCtrl', ['$http', '$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'EVENTS', 'MESSAGES', 'Utils', 'UserSvc', 'NotificationSvc', function ($http, $rootScope, $scope, $timeout, $upload, paths, events, msg, utils, UserSvc, NotificationSvc) {
         $scope.file = {};
         /*
             Expose the init function on the scope, as the fv-on-drop directive needs to call it.
@@ -51,18 +51,31 @@
             $scope.inProgress = state;
         };
 
+//        $scope.saveAvatar = function () {
+////            var data = window.atob($scope.croppedImage.split(',').pop());
+//            $upload.upload({
+//                url: paths.user.ownAvatar,
+////                headers: { 'Content-Transfer-Encoding': 'base64' },
+////                file: $scope.croppedImage.split(',').pop(),
+////                file: new Blob([data], {type: 'image/png'}),
+//                file: $scope.file,
+//                fileFormDataName: $scope.file.name,
+//             })
+//        };
+
         $scope.saveAvatar = function () {
-//            var data = window.atob($scope.croppedImage.split(',').pop());
-            $upload.upload({
-                url: paths.user.ownAvatar,
-//                headers: { 'Content-Transfer-Encoding': 'base64' },
-//                file: $scope.croppedImage.split(',').pop(),
-//                file: new Blob([data], {type: 'image/png'}),
-                file: $scope.file,
-                fileFormDataName: $scope.file.name,
+            var fd = new FormData(),
+                base64img = $scope.croppedImage.split(',').pop(),
+                name = $scope.file.name.split('.').slice(0, 1)[0].concat('.png');
+
+            fd.append(name, utils.base64toBlob(base64img, 'image/png'), name);
+
+            $http.post(paths.user.ownAvatar, fd, {
+                withCredentials: true,
+                headers: {'Content-Type': undefined },
+                transformRequest: angular.identity
             }).then(function () {
-                UserSvc.fetchOwnUser().then(function () {
-                    // fetch user fires an event that will notify MainCtrl to update currentUser
+                UserSvc.fetchOwnUser().then(function () { // fetch user fires an event that will notify MainCtrl to update currentUser
                     $scope.$hide();
                 }, function (error) {
                     console.log(error);
@@ -73,22 +86,6 @@
                 console.log(err);
             });
         };
-
-//        $scope.saveAvatar = function () {
-//            var fd = new FormData();
-//
-//            fd.append($scope.file.name, new Blob(JSON.stringify(window.atob($scope.croppedImage.split(',').pop()))), $scope.file.name);
-//
-//            $http.post(paths.user.ownAvatar, fd, {
-//                withCredentials: true,
-//                headers: {'Content-Type': undefined },
-//                transformRequest: angular.identity
-//            }).then(function (response) {
-//                console.log(response);
-//            }, function (error) {
-//                console.log(error);
-//            });
-//        };
 
         $scope.init();
     }]);
