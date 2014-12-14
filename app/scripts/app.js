@@ -111,7 +111,7 @@
                         console.log(error);
                         // exclude user info calls as they are only used to determine auth status
                         if (error.config.url !== paths.account.userInfo) {
-                            $rootScope.$broadcast(events.auth.sessionTimeout, event);
+                            $rootScope.$broadcast(events.auth.sessionTimeout, error);
                             $location.path('/login');
                         }
                         return error;

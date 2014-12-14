@@ -83,7 +83,7 @@
             case 'Work Samples':
                 $scope.offer.Showcases = $scope.showcaseCollection;
 
-                OfferSvc.saveShowcases($scope.offer.ID, _.map($scope.showcaseCollection, function (item) {
+                PortfolioSvc.saveShowcases($scope.offer.ID, _.map($scope.showcaseCollection, function (item) {
                     return item.ID;
                 })).then(function (response) {
                     console.log(response);
@@ -93,7 +93,9 @@
 
                 break;
             case 'Personalize your offering':
-                // TODO: save choices properly
+                $scope.saveOfferField($scope.service.interview, $scope.service.interview.answer);
+                $scope.service.fields.length > 0 && $scope.saveOfferField($scope.service.fields[0], $scope.service.fields[0].answer);
+                break;
             }
 
             $scope.setPanelState(panel, 'done');
@@ -149,7 +151,7 @@
 
         $scope.rearangeShowcaseItems = function (item) {
             // The source (dragged) item link is passed via the fv-data attribute into the drop event
-            var sourceIndex, targetIndex,
+            var sourceIndex, targetIndex, sourceParent, targetParent,
                 source = JSON.parse(this.event.dataTransfer.getData('Text')),
                 target = item.link;
 
@@ -161,6 +163,21 @@
             targetIndex = $scope.showcaseItems.indexOf(_.where($scope.showcaseItems, { link: target })[0]);
 
             $scope.showcaseItems = $scope.showcaseItems.swap(sourceIndex, targetIndex);
+
+            // update the showcase collection - this will be persisted on the backend
+            sourceParent = $scope.showcaseCollection.indexOf(
+                _.find($scope.showcaseCollection, function (showcase) {
+                    return showcase.Items[0].ID === $scope.showcaseItems[sourceIndex].ID;
+                })
+            );
+
+            targetParent = $scope.showcaseCollection.indexOf(
+                _.find($scope.showcaseCollection, function (showcase) {
+                    return showcase.Items[0].ID === $scope.showcaseItems[targetIndex].ID;
+                })
+            );
+
+            $scope.showcaseCollection = $scope.showcaseCollection.swap(sourceParent, targetParent);
         };
 
         $scope.togglePortfolioSelection = function (item) {
@@ -289,15 +306,14 @@
             });
         };
 
-        $scope.saveUrls = function (modalName) {
+        $scope.saveUrls = function () {
             var urls = [];
 
             _.each($scope.urlsToEmbed, function (obj) {
-                urls.push(obj.url);
+                obj.url && urls.push(obj.url);
             });
 
-            modalName === 'modalEmbedUrl' && modalEmbedUrl.hide();
-            modalName === 'modalCameraTag' && modalCameraTag.hide();
+            modalEmbedUrl.hide();
 
             PortfolioSvc.saveUrls(urls, $scope.service.serviceID).then(function (response) {
                 $scope.updateShowcaseItems(response.data);
@@ -312,7 +328,7 @@
 
         // saves the user's answer to a serviceField
         $scope.saveOfferField = function (field, answer) {
-            answer && OfferSvc.saveOfferField($scope.offer.ID, field.ID, answer).then(function (response) {
+            answer && answer.length && OfferSvc.saveOfferField($scope.offer.ID, field.ID, answer).then(function (response) {
                 console.log(response);
             }, function (error) {
                 console.log(error);
@@ -330,16 +346,29 @@
             });
         };
 
+        $scope.fetchShowcases = function () {
+            PortfolioSvc.fetchShowcases($scope.offer.ID).then(function (response) {
+                console.log(response);
+            }, function (error) {
+                console.log(error);
+            });
+        };
+
         ////////////////////////////////////////////
         /// Watchers
         ////////////////////////////////////////////
 
+        $scope.$watch('panels.activePanel', function (newValue, oldValue) {
 
-        $scope.$watch('panels.activePanel', function () {
             var inProgress = _.find($scope.panels, function (panel) {
                 return panel.state !== 'done';
             });
+
             !inProgress && $scope.goToStep(2);
+
+            newValue !== oldValue && newValue === 2 && $timeout(function () {
+                CameraTag.setup();
+            });
         });
 
         $scope.$on(events.importer.status, function (event, status) {
@@ -350,18 +379,21 @@
             $scope.fetchImportedPortfolios();
         });
 
-        $scope.$on('modal.show', function () { // initialize CameraTag when the camera modal loads
+        $scope.$on('modal.show', function () {
             CameraTag.setup();
             CameraTag.observe('fvcam', 'published', function() {
                 var cam = CameraTag.cameras['fvcam'];
                 var vid = cam.getVideo();
-                $scope.urlsToEmbed = ['']; // in order to show at least one, empty input field
-                $scope.urlsToEmbed.push({ url: vid.formats.qvga.video_url });
-                $scope.saveUrls('modalCameraTag');
-//                var mp4_url = vid.formats.qvga.mp4_url;
-//                var small_thumb_url = vid.formats.qvga.small_thumb_url;
-//                var thumb_url = vid.formats.qvga.thumb_url;
-//                var video_url = vid.formats.qvga.video_url;
+                var url = 'http:' + vid.formats.qvga.mp4_url;
+                var thumbnailUrl = 'http:' + vid.formats.qvga.thumb_url;
+
+                OfferSvc.saveInterviewVideo($scope.offer.ID, $scope.service.interview.ID, url, thumbnailUrl).then(function (response) {
+                    console.log(response);
+                }, function (error) {
+                    console.log(error);
+                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                });
+
             });
         });
 
@@ -398,9 +430,9 @@
             // update service field answers. This only works due to soft service field constrains
             _.each($scope.offer.Fields, function (field) {
                 if (field.ServiceFieldID === service.interview.ID) {
-                    $scope.interviewTextAnswer = field.Text.Literals[0].Text;
+                    $scope.service.interview.answer = field.Text.Literals[0].Text;
                 } else {
-                    $scope.fieldTextAnswer = field.Text.Literals[0].Text;
+                    $scope.service.fields[0].answer = field.Text.Literals[0].Text;
                 }
             });
 
@@ -418,7 +450,11 @@
             console.log(error);
         });
 
-        $scope.updateShowcaseItems($scope.offer.Showcases);
+        PortfolioSvc.fetchShowcases($scope.offer.ID).then(function (showcases) {
+            // TODO: temporary convention. No need to attach to offer
+            $scope.offer.Showcases = showcases;
+            $scope.updateShowcaseItems($scope.offer.Showcases);
+        });
 
     }]);
 }());

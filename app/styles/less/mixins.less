@@ -18,33 +18,8 @@
   background-color: @blueDefault;
 }
 
-// Various
+// Margins
 // -------------------------
-
-.no-padding {
-  padding: 0 !important;
-}
-
-.space-after:after {
-  content: '\00a0';
-}
-
-.clickable {
-  cursor: pointer;
-}
-
-.fv-page-header {
-  .text-centered;
-  max-width: 989px;
-  margin: 0 auto;
-  .text-h1;
-  @media screen and (max-width: 1600px) {
-    .text-h2;
-  }
-  @media screen and (min-width: 1600px) {
-    font-size: 34px;
-  }
-}
 
 .space-left {
   margin-left: 10px;
@@ -81,4 +56,39 @@
 
 .space-top-2x {
   margin-top: 20px;
+}
+
+// Paddings
+// -------------------------
+
+.space-inner-bottom {
+  padding-bottom: 10px;
+}
+
+// Various
+// -------------------------
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.space-after:after {
+  content: '\00a0';
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.fv-page-header {
+  .text-centered;
+  max-width: 989px;
+  margin: 0 auto;
+  .text-h1;
+  @media screen and (max-width: 1600px) {
+    .text-h2;
+  }
+  @media screen and (min-width: 1600px) {
+    font-size: 34px;
+  }
 }

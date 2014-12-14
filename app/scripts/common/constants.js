@@ -66,6 +66,7 @@
      */
     app.constant('PATHS', {
         root: 'https://futurvention.azurewebsites.net',
+//        root: 'https://futurventionstage.azurewebsites.net',
         public: 'https://futurvention.azurewebsites.net/public.svc/',
         cached: 'https://futurvention.azurewebsites.net/CachedPublic.svc/',
         account: {

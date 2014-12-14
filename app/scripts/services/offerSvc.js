@@ -49,11 +49,7 @@
                 .expand([
                   'Service',
                   'Service.ShortTitle.Literals',
-                  'Service.ThumbnailFile',
-                  'Showcases.Items',
-                  'Showcases.Items.File',
-                  'Showcases.Items.Thumbnail',
-                  'Showcases.Items.Title.Literals'
+                  'Service.ThumbnailFile'
                 ].join(','));
 
             manager.executeQuery(query).then(function (response) {
@@ -119,11 +115,7 @@
                     'OfferedChoices.ServiceChoice.Option',
                     'Fields.File',
                     'Fields.Text.Literals',
-                    'Fields.ServiceField.SellerLabel.Literals',
-                    'Showcases.Items',
-                    'Showcases.Items.File',
-                    'Showcases.Items.Thumbnail',
-                    'Showcases.Items.Title.Literals'
+                    'Fields.ServiceField.SellerLabel.Literals'
                 ].join(','));
 
             manager.executeQuery(query).then(function (response) {
@@ -171,19 +163,6 @@
         /// Save functions
         ///////////////////////////////////////////////////////////
 
-        OfferSvc.saveShowcases = function (offerID, showcases) {
-            return $http({
-                method: 'PUT',
-                url: [
-                    paths.offerManagement.ownOffers,
-                    '/',
-                    offer.ID,
-                    '/Showcases'
-                ].join(''),
-                data: showcases
-            });
-        };
-
         OfferSvc.saveOffer = function (offer) {
             return $http({
                 method: 'PATCH',
@@ -203,6 +182,41 @@
                     fieldID
                 ].join(''),
                 data: JSON.stringify(answer)
+            });
+        };
+
+        OfferSvc.saveInterviewVideo = function (offerID, serviceFieldID, url, thumbnailUrl) {
+            var encodedUrl = encodeURIComponent(url),
+
+                encodedUrlThumbnail = encodeURIComponent(thumbnailUrl),
+
+            requestUrl = [
+                    paths.offerManagement.ownOffers,
+                    '/',
+                    offerID,
+                    '/Fields',
+                    '?serviceFieldID=',
+                    serviceFieldID,
+                    '&useDirectLinks=true'
+                ].join('');
+
+            return $http({
+                method: 'PUT',
+                url: requestUrl,
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                transformRequest: function(obj) {
+                    var str = [];
+                    for(var p in obj) {
+                        if (obj.hasOwnProperty(p)) {
+                            str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
+                        }
+                    }
+                    return str.join('&');
+                },
+                data: {
+                    url: url,
+                    thumbnailUrl: thumbnailUrl
+                }
             });
         };
 

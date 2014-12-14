@@ -36,6 +36,9 @@
                     href: '#resetPassword'
                 },
                 {
+                    divider: true
+                },
+                {
                     text: 'Signout',
                     click: $scope.logout
                 }

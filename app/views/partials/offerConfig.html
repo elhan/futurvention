@@ -190,7 +190,7 @@
               </div>
               <!-- Service interview -->
               <p class="text-p italic" ng-if="service.interview" ng-bind-html="service.interview.sellerLabel"></p>
-              <textarea ng-if="panels[2].textonly" placeholder="Type your answers here" ng-model="interviewTextAnswer" ng-blur="saveOfferField(service.interview, interviewTextAnswer)"></textarea>
+              <textarea ng-if="panels[2].textonly" placeholder="Type your answers here" ng-model="service.interview.answer"></textarea>
               <!-- Switch textonly state -->
               <button class="btn no-padding btn-link text-p" ng-click="toggleTextOnly()">
                 <span ng-show="!panels[2].textonly">Switch to text instead</span>
@@ -216,9 +216,9 @@
                 </div>
               </div>
               <!-- Service fields -->
-              <div ng-repeat="field in service.fields">
+              <div ng-if="service.fields.length > 0">
                 <p class="text-p-bold">{{ field.sellerLabel }}</p>
-                <textarea placeholder="Type your answers here" ng-model="serviceFieldAnswers[$index]" ng-blur="saveOfferField(field, serviceFieldAnswers[$index])"></textarea>
+                <textarea placeholder="Type your answers here" ng-model="service.fields[0].answer"></textarea>
               </div>
             </div>
             <!-- Pricing -->

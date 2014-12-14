@@ -10,10 +10,7 @@
         <button ng-if="!session.hasRegistered && !locationAt('/register')" class="btn btn-link nav-link" ng-click="go('/register')">Sign up</button>
         <button ng-if="!session.hasRegistered && !locationAt('/login')" class="btn btn-link nav-link" ng-click="go('/login')">Login</button>
         <div ng-if="session.hasRegistered" class="container-x">
-          <button class="btn btn-link nav-link" ng-click="logout()">
-            <span>Logout</span>
-          </button>
-          <button type="button" class="btn btn-header-dropdown" data-animation="am-flip-x" bs-dropdown="dropdown">
+          <button type="button" class="btn btn-header-dropdown" placement="bottom-right" data-animation="am-slide" bs-dropdown="dropdown">
             <span>{{ currentUser.FirstName || session.email }}</span>
             <span class="glyphicon glyphicon-chevron-down"></span>
           </button>
