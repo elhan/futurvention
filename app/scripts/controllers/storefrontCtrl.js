@@ -136,20 +136,7 @@
 
         // offers
         OfferSvc.fetchOffers($scope.profile.ID).then(function (offers) {
-            var showcaseItem, showcases = [];
-
             $scope.offers = offers;
-
-//            _.each(offers, function (offer) {
-//                _.each(offer.Showcases, function (showcase) {
-//                    showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
-//                    $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
-//                    showcases.push(showcase);
-//                });
-//            });
-//
-//            PortfolioSvc.setPortfolio(showcases); // caches this as it is needed by portfolioViewer
-
         }, function (error) {
             console.log(error);
         });
@@ -172,8 +159,16 @@
             console.log(error);
         });
 
+        // showcase items
         PortfolioSvc.fetchPortfolio($scope.profile.ID).then(function (showcases) {
-            console.log(showcases);
+            var showcaseItem;
+
+            _.each(showcases, function (showcase) {
+                showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
+                $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
+            });
+
+            PortfolioSvc.setPortfolio(showcases); // caches this as it is needed by portfolioViewer
         });
 
     }]);

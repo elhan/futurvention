@@ -47,9 +47,9 @@
                     );
 
             manager.executeQuery(query).then(function (response) {
-                console.log(response);
+                deferred.resolve(_.uniq(response.results[0].value));
             }, function (error) {
-                console.log(error);
+                deferred.reject(error);
             });
 
             return deferred.promise;

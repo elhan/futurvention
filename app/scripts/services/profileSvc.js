@@ -94,7 +94,6 @@
             var deferred = $q.defer();
 
             $http.get(paths.sellerManagement.ownProfile + '?expand=User, Title/Literals, Description/Literals').then(function (response) {
-                console.log(response);
                 utils.updateProperties(profile, response.data);
                 deferred.resolve(profile);
             }, function (error) {

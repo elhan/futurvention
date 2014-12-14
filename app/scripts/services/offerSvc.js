@@ -171,6 +171,13 @@
             });
         };
 
+        /**
+         * Saves an offer field
+         *
+         * @param {Integer} offerID: the id of the Offer to which the field belongs
+         * @param {Integer} fieldID: the id of the OfferField to be updated
+         * @param {String} answer: the value of the OfferField to be updated
+         */
         OfferSvc.saveOfferField = function (offerID, fieldID, answer) {
             return $http({
                 method: 'PUT',
@@ -185,12 +192,19 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name fvApp.service:OfferSvc
+         * @function
+         *
+         * @description
+         * Fetches a collection of offered services for the given user
+         *
+         * @param {Integer} userID
+         * @returns Array.<Service>
+         */
         OfferSvc.saveInterviewVideo = function (offerID, serviceFieldID, url, thumbnailUrl) {
-            var encodedUrl = encodeURIComponent(url),
-
-                encodedUrlThumbnail = encodeURIComponent(thumbnailUrl),
-
-            requestUrl = [
+            var requestUrl = [
                     paths.offerManagement.ownOffers,
                     '/',
                     offerID,
@@ -220,6 +234,17 @@
             });
         };
 
+        /**
+         * @ngdoc method
+         * @name fvApp.service:OfferSvc
+         * @function
+         *
+         * @description
+         * Fetches a collection of offered services for the given user
+         *
+         * @param {Integer} userID
+         * @returns Array.<Service>
+         */
         OfferSvc.saveOfferChoice = function (choiceData) {
             return $http({
                 method: 'PUT',

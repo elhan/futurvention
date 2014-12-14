@@ -10,7 +10,7 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-  app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', 'LocationSvc', function ($scope, $modal, paths, events, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc, LocationSvc) {
+    app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', 'LocationSvc', function ($scope, $modal, paths, events, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc, LocationSvc) {
         $scope.reviews = [];
         $scope.portfolio = {};
         $scope.service = {};
@@ -69,6 +69,13 @@
 
         CatalogueSvc.getService($scope.offer.ServiceID).then(function (service) {
             $scope.service = service;
+        }, function (error) {
+            console.log(error);
+        });
+
+        PortfolioSvc.fetchShowcases($scope.offer.ID).then(function (showcases) {
+            $scope.offer.Showcases = showcases;
+            PortfolioSvc.setPortfolio(showcases); // caches this as it is needed by portfolioViewer
         }, function (error) {
             console.log(error);
         });
