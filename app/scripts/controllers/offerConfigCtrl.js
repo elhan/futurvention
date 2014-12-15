@@ -13,7 +13,7 @@
      * # OfferConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, events, providers, paths, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
+    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, events, providers, paths, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
         var modalEmbedUrl, modalCameraTag;
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
@@ -142,7 +142,12 @@
         };
 
         $scope.closeCameraTagModal = function () {
-            modalCameraTag.hide();
+            var deferred = $q.defer();
+            modalCameraTag.$promise.then(function () {
+                modalCameraTag.hide();
+                deferred.resolve();
+            });
+            return deferred.promise;
         };
 
         ////////////////////////////////////////////
@@ -358,17 +363,13 @@
         /// Watchers
         ////////////////////////////////////////////
 
-        $scope.$watch('panels.activePanel', function (newValue, oldValue) {
+        $scope.$watch('panels.activePanel', function () {
 
             var inProgress = _.find($scope.panels, function (panel) {
                 return panel.state !== 'done';
             });
 
             !inProgress && $scope.goToStep(2);
-
-            newValue !== oldValue && newValue === 2 && $timeout(function () {
-                CameraTag.setup();
-            });
         });
 
         $scope.$on(events.importer.status, function (event, status) {
@@ -381,17 +382,19 @@
 
         $scope.$on('modal.show', function () {
             CameraTag.setup();
-            CameraTag.observe('fvcam', 'published', function() {
+            CameraTag.observe('fvcam', 'processed', function() {
                 var cam = CameraTag.cameras['fvcam'];
                 var vid = cam.getVideo();
                 var url = 'http:' + vid.formats.qvga.mp4_url;
                 var thumbnailUrl = 'http:' + vid.formats.qvga.thumb_url;
 
-                OfferSvc.saveInterviewVideo($scope.offer.ID, $scope.service.interview.ID, url, thumbnailUrl).then(function (response) {
-                    console.log(response);
-                }, function (error) {
-                    console.log(error);
-                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                $scope.closeCameraTagModal().then(function () {
+                    OfferSvc.saveInterviewVideo($scope.offer.ID, $scope.service.interview.ID, url, thumbnailUrl).then(function (response) {
+                        console.log(response);
+                    }, function (error) {
+                        console.log(error);
+                        NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                    });
                 });
 
             });

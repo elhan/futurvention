@@ -390,7 +390,7 @@
      * @example
      * <div fv-toggle-class fv-on="mousedown" fv-class="someClass"
      */
-    app.directive('fvToggleClass', function() {
+    app.directive('fvToggleClass', function () {
         return function (scope, element, attrs) {
             attrs.fvOn && attrs.fvClass && element[0].addEventListener(attrs.fvOn, function () {
                 this.classList.toggle(attrs.fvClass);
@@ -409,7 +409,7 @@
      * @example
      * <div fv-tabs...><div fv-pane...></div><div fv-pane...></div></div>
      */
-    app.directive('fvTabs', function() {
+    app.directive('fvTabs', function () {
         return function (scope, element) {
             var tabs = _.filter(element.children(), function (el) {
                 return el.hasAttribute('fv-pane');
@@ -428,4 +428,26 @@
             });
         };
     });
+
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvCameraTag
+     * @restrict A
+     *
+     * @description
+     * Emmits a camera tag event when the element has rendered
+     *
+     */
+    app.directive('fvCameraTag', ['EVENTS', function (events) {
+        return {
+            scope: {
+                fvCameraTag: '@'
+            },
+            link: function (scope) {
+                scope.$emit(events.ui.cameraReady);
+            }
+        };
+
+    }]);
+
 }());

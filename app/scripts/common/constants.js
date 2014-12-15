@@ -39,7 +39,8 @@
             status: 'imp-status'
         },
         ui: {
-            providerSelected: 'ui-provider-selected'
+            providerSelected: 'ui-provider-selected',
+            cameraReady: 'ui-camera-ready'
         }
     });
 

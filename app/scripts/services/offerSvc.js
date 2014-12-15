@@ -76,9 +76,17 @@
          * @returns {Offer}
          */
         OfferSvc.fetchOwnOffer = function (serviceID) {
-            var deferred = $q.defer();
+            var deferred = $q.defer(),
 
-            $http.put(paths.offerManagement.ownOffers + '?serviceID=' + serviceID).then(function (response) {
+                url = [
+                    paths.offerManagement.ownOffers,
+                    '?serviceID=',
+                    serviceID,
+                    '&expand=Fields/File,',
+                    'Fields/Thumbnail'
+                ].join('');
+
+            $http.put(url).then(function (response) {
                 offer = response.data;
                 deferred.resolve(offer);
             }, function (error) {
