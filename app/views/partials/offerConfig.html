@@ -177,7 +177,7 @@
               </p>
               <!-- !textonly -->
               <div ng-show="!panels[2].textonly">
-                <div class="wrapper-icons">
+                <div class="wrapper-icons" ng-if="!service.interview.videoUrl">
                   <div class="container-y flex-content-centered" ng-click="showCameraTagModal()">
                     <div class="import-link bg-grey-dark text-white clickable">
                       <span class="glyphicon glyphicon-facetime-video"></span>
@@ -187,15 +187,26 @@
                 </div>
                 <!-- interview video -->
 <!--                <video id='interviewPlayer' data-uuid={{service.interview.videoUuid}} data-options='{"aspectratio": "4:3"}'></video>-->
-                <div class="flex-content-centered flex-1">
-                  <video ng-if="service.interview.videoUrl" ng-src="{{service.interview.videoUrl | trusted}}" controls></video>
+                <div class="container-y flex-content-centered flex-1" ng-if="service.interview.videoUrl">
+                  <div class="space-top-2x">
+                    <video ng-src="{{service.interview.videoUrl | trusted}}" controls></video>
+                  </div>
+                  <div class="container-x flex-items-centered flex-wrap space-top space-bottom-2x">
+                    <span class="space-after text-p">Your video is ready and will be shown on your profile. If you are not happy with the result you can</span>
+                    <span class="btn no-padding btn-link text-p space-after" ng-click="showCameraTagModal()">
+                      re-record
+                    </span>
+                    <span class="text-p">it.</span>
+                  </div>
                 </div>
 
-                <div class="text-p">A picture is 1000 words and a video is 1000 pictures. In a minute, video tells Buyers why they should buy from you.</div>
-                <p class="text-p">In your recording, try to give short sharp answers within 1 minute to the following (You will be able to view the video at the end of the recoring if you want):</p>
+                <div ng-hide="service.interview.videoUrl">
+                  <div class="text-p">A picture is 1000 words and a video is 1000 pictures. In a minute, video tells Buyers why they should buy from you.</div>
+                  <p class="text-p">In your recording, try to give short sharp answers within 1 minute to the following (You will be able to view the video at the end of the recoring if you want):</p>
+                </div>
               </div>
               <!-- Service interview -->
-              <p class="text-p italic" ng-if="service.interview" ng-bind-html="service.interview.sellerLabel"></p>
+              <p class="text-p italic" ng-if="service.interview && !service.interview.videoUrl" ng-bind-html="service.interview.sellerLabel"></p>
               <textarea ng-if="panels[2].textonly" placeholder="Type your answers here" ng-model="service.interview.answer"></textarea>
               <!-- Switch textonly state -->
               <button class="btn no-padding btn-link text-p" ng-click="toggleTextOnly()">

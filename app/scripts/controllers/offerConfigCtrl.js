@@ -359,6 +359,16 @@
             });
         };
 
+        $scope.saveInterviewVideo = function (url, thumbnailUrl) {
+            OfferSvc.saveInterviewVideo($scope.offer.ID, $scope.service.interview.ID, url, thumbnailUrl).then(function () {
+              $scope.service.interview.videoUuid = utils.getCameraTagUuid(url);
+              $scope.service.interview.videoUrl = url;
+            }, function (error) {
+              console.log(error);
+              NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
+        };
+
         ////////////////////////////////////////////
         /// Watchers
         ////////////////////////////////////////////
@@ -394,13 +404,7 @@
                 var thumbnailUrl = 'http:' + vid.formats.qvga.thumb_url;
 
                 $scope.closeCameraTagModal().then(function () {
-                    OfferSvc.saveInterviewVideo($scope.offer.ID, $scope.service.interview.ID, url, thumbnailUrl).then(function () {
-                        $scope.service.interview.videoUuid = utils.getCameraTagUuid(url);
-                        $scope.service.interview.videoUrl = url;
-                    }, function (error) {
-                        console.log(error);
-                        NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-                    });
+                    _.throttle(function () { $scope.saveInterviewVideo(url, thumbnailUrl); }, 3000);
                 });
 
             });
