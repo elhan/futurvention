@@ -381,7 +381,12 @@
         });
 
         $scope.$on('modal.show', function () {
+            if (!CameraTag) {
+                return;
+            }
+
             CameraTag.setup();
+
             CameraTag.observe('fvcam', 'processed', function() {
                 var cam = CameraTag.cameras['fvcam'];
                 var vid = cam.getVideo();
@@ -389,8 +394,9 @@
                 var thumbnailUrl = 'http:' + vid.formats.qvga.thumb_url;
 
                 $scope.closeCameraTagModal().then(function () {
-                    OfferSvc.saveInterviewVideo($scope.offer.ID, $scope.service.interview.ID, url, thumbnailUrl).then(function (response) {
-                        console.log(response);
+                    OfferSvc.saveInterviewVideo($scope.offer.ID, $scope.service.interview.ID, url, thumbnailUrl).then(function () {
+                        $scope.service.interview.videoUuid = utils.getCameraTagUuid(url);
+                        $scope.service.interview.videoUrl = url;
                     }, function (error) {
                         console.log(error);
                         NotificationSvc.show({ content: msg.error.generic, type: 'error' });
@@ -436,6 +442,20 @@
                     $scope.service.interview.answer = field.Text.Literals[0].Text;
                 } else {
                     $scope.service.fields[0].answer = field.Text.Literals[0].Text;
+                }
+            });
+
+            /*
+                The offer object passed in the route resolve is created by OfferSvc.fetchOwnOffer, which
+                does not allow expand operations. Thus, to get the full offer interview object a new call
+                must be made.
+            **/
+            OfferSvc.fetchOffer($scope.offer.ID).then(function (offer) {
+                $scope.offer.Fields = offer.Fields;
+                if (offer.Fields[0] && offer.Fields[0].File && offer.Fields[0].File.Url) {
+                    $scope.service.interview.videoUuid = utils.getCameraTagUuid(offer.Fields[0].File.Url);
+                    $scope.service.interview.videoUrl = offer.Fields[0].File.Url;
+                    CameraTag.setup();
                 }
             });
 

@@ -24,6 +24,10 @@
             });
         };
 
+        Utils.getCameraTagUuid =  function (url) {
+            return url.replace('http://cameratag.com/videos/', '').replace('/qvga/mp4.mp4', '');
+        };
+
         ///////////////////////////////////////////////////////////
         /// String Case functions
         ///////////////////////////////////////////////////////////

@@ -39,6 +39,26 @@ input[type="checkbox"] {
   margin: 0;
 }
 
+.input-borderless-wrapper {
+  .border-radius-standard;
+  border: 1px solid @grey80;
+}
+
+.input-borderless {
+  .flex-shrink-10;
+  border: 0;
+  box-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-left: 6px;
+}
+
+.input-borderless-placeholder {
+  .flex-shrink-0;
+  .flex-items-centered;
+  padding-left: 12px;
+}
+
 .form-control::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
   .text-lightGrey;
 }

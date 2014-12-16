@@ -30,6 +30,17 @@
             return route === $location.path();
         };
 
+        $scope.handleSignIn = function () {
+            AccountSvc.getUserInfo().then(function (session) {
+                $scope.session = session;
+                // TODO redirect user depending on profile completetion state
+                $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
+        };
+
         ////////////////////////////////////////////
         /// Event handling
         ////////////////////////////////////////////
@@ -45,14 +56,11 @@
         });
 
         $scope.$on(events.auth.loginSuccess, function () {
-            AccountSvc.getUserInfo().then(function (session) {
-                $scope.session = session;
-                // TODO redirect user depending on profile completetion state
-                $scope.locationAt('/register') ? $scope.go('/apply') : $scope.go('/');
-            }, function (error) {
-                console.log(error);
-                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-            });
+            $scope.handleSignIn();
+        });
+
+        $scope.$on(events.auth.registrationSuccess, function () {
+            $scope.handleSignIn();
         });
 
         $scope.$on(events.auth.logoutSuccess, function () {

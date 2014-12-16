@@ -213,7 +213,7 @@ module.exports = function (grunt) {
           //CUSTOM CODE: include .less
           '<%= yeoman.dist %>/styles/{,*/}*.less',
 //          CUSTOM CODE: prevent image & font renaming & concatenation
-          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
           '<%= yeoman.dist %>/styles/fonts/*'
         ]
       }
@@ -278,7 +278,7 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/images',
-          src: '{,*/}*.{png,jpg,jpeg,gif,svg}',
+          src: '{,*/}*.{png,jpg,jpeg,gif}',
           dest: '<%= yeoman.dist %>/images'
         }]
       }

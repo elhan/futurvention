@@ -20,6 +20,22 @@
             });
         };
 
+        // allow users to logout even if they do not yet have a seller profile
+        $scope.dropdown = [
+            {
+                text: 'Change Password',
+                href: '#resetPassword'
+            },
+            {
+                divider: true
+            },
+            {
+                text: 'Signout',
+                click: $scope.logout
+            }
+        ];
+
+        // allow users to navigate to their seller profile if they have one
         $scope.$on(events.profile.fetchProfileSuccess, function () {
 
             if (!($scope.currentUser && $scope.currentUser.Profile)) {

@@ -1,6 +1,7 @@
 {
     "jscodehints.detectedExclusions": [
         "/home/kosmas/projects/futurvention/bower_components/angular-strap/src/typeahead/typeahead.js",
-        "/home/kosmas/projects/futurvention/bower_components/angular-strap/dist/angular-strap.tpl.js"
+        "/home/kosmas/projects/futurvention/bower_components/angular-strap/dist/angular-strap.tpl.js",
+        "/home/elhan/projects/futurvention/bower_components/less/dist/lessc-rhino-1.6.3.js"
     ]
 }

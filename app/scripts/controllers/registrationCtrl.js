@@ -32,11 +32,7 @@
                 return;
             }
             AccountSvc.register($scope.newUser).then(function () {
-                AccountSvc.getUserInfo().then(function (response) {
-                    console.log(response);
-                }, function (error) {
-                    console.log(error);
-                });
+                $rootScope.$broadcast(events.auth.registrationSuccess);
             }, function (error) {
                 // TODO: error handling
                 console.log(error);
