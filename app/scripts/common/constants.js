@@ -88,6 +88,7 @@
         sellerManagement: {
             profile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
             ownProfile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile',
+            ownShowcase: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Showcases',
             profileStatus: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
             importedShowcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/ImportedShowcases?serviceID=',
             showcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/SellerProfiles/OwnProfile/SingleItemShowcases?serviceID=',
@@ -134,19 +135,20 @@
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',
             resetPassword: 'Your password has been reset!',
-            profileImported: 'Your profile has been imported from '
+            profileImported: 'Your profile has been imported from ',
+            showcaseDeleteSuccess: 'Successfully deleted '
         }
     });
 
     // thirdparty profile & portfolio providers
-    app.constant('IMPORT_PROVIDERS', ['linkedin', 'odesk', 'elance', 'pph', 'freelancer', 'behance', 'dribbble', 'github']);
+    app.constant('IMPORT_PROVIDERS', ['linkedin', 'odesk', 'elance', 'pph', 'behance', 'dribbble', 'github']);
 
     // Used to determine imported file paths
     app.constant('PROVIDERS_ENUM', {
         behance: 1,
         dribbble: 2,
         elance: 3,
-        freelancer: 4,
+//        freelancer: 4,
         github: 5,
         odesk: 6,
         peopleperhour: 7

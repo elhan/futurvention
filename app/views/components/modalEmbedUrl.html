@@ -17,13 +17,17 @@
               <div ng-repeat="link in urlsToEmbed">
                 <div ng-form class="form-group" name="innerForm">
                   <div class="container-x">
-                    <input type="url" fv-dynamic-name=$index class="form-control input-s" ng-model="urlsToEmbed[$index].url" placeholder="Enter a url" ng-required="true">
+                    <input type="url" fv-dynamic-name=$index class="form-control input-s"
+                           ui-validate="{urlPattern: 'matchUrlPattern($value)'}"
+                           ng-model="urlsToEmbed[$index].url"
+                           placeholder="Enter a url"
+                           ng-required="true">
                     <div class="wrapper-btn-remove">
                       <button type="button" class="close" ng-click="urlsToEmbed.splice($index, 1)">&times;</button>
                     </div>
                   </div>
-                  <label ng-show="innerForm.$error.url" class="label-warn label-s">
-                    Please provide a valid url: 'http://...'
+                  <label ng-show="innerForm.$error.urlPattern" class="label-warn label-s">
+                    Please provide a valid url
                   </label>
                 </div>
               </div>

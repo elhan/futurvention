@@ -22,6 +22,12 @@
         $scope.selectedService = {};
         $scope.offeredServices = [];
 
+        $scope.isOffered = function (serviceID) {
+            return _.find($scope.offeredServices, function (service) {
+                return service && service.serviceID === serviceID;
+            });
+        };
+
         $scope.getServices = function () {
             CatalogueSvc.getServices($scope.offset).then(function (services) {
                 $scope.services.merge(services);
@@ -104,6 +110,17 @@
 
         OfferSvc.fetchOfferedServices($scope.currentUser.ID).then(function (offers) {
             $scope.offers = offers;
+
+            // avoid showing the same service in both collections
+            // TODO: use a filter instead
+            _.each(offers, function (offer) {
+                $scope.offeredServices.push(
+                    _.find($scope.services, function (service) {
+                        console.log(service.serviceID, offer.ServiceID);
+                        return service.serviceID === offer.ServiceID;
+                    })
+                );
+            });
         });
 
     }]);

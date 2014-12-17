@@ -33,6 +33,10 @@
             return portfolio;
         };
 
+        ///////////////////////////////////////////////////////////
+        /// Fetch operations
+        ///////////////////////////////////////////////////////////
+
         PortfolioSvc.fetchPortfolio = function (userID) {
             var deferred = $q.defer(),
 
@@ -55,23 +59,6 @@
             return deferred.promise;
         };
 
-        PortfolioSvc.saveUrls = function (urls, serviceID) {
-            return $http.put(paths.sellerManagement.showcases + serviceID, urls);
-        };
-
-        PortfolioSvc.saveShowcases = function (offerID, showcases) {
-            return $http({
-                method: 'PUT',
-                url: [
-                    paths.offerManagement.ownOffers,
-                    '/',
-                    offerID,
-                    '/Showcases'
-                ].join(''),
-                data: showcases
-            });
-        };
-
         PortfolioSvc.fetchShowcases = function (offerID) {
             var deferred = $q.defer(),
 
@@ -89,6 +76,35 @@
             });
 
             return deferred.promise;
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Save operations
+        ///////////////////////////////////////////////////////////
+
+        PortfolioSvc.saveUrls = function (urls, serviceID) {
+            return $http.put(paths.sellerManagement.showcases + serviceID, urls);
+        };
+
+        PortfolioSvc.saveShowcases = function (offerID, showcases) {
+            return $http({
+                method: 'PUT',
+                url: [
+                    paths.offerManagement.ownOffers,
+                    '/',
+                    offerID,
+                    '/Showcases'
+                ].join(''),
+                data: showcases
+            });
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Delete operations
+        ///////////////////////////////////////////////////////////
+
+        PortfolioSvc.deleteShowcase = function (showcaseID) {
+            return $http.delete(paths.sellerManagement.ownShowcase + '/' + showcaseID);
         };
 
         return PortfolioSvc;

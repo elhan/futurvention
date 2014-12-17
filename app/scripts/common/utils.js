@@ -120,6 +120,10 @@
             return (str && typeof str === 'string') ? str.replace(/ *\([^)]*\) */g, '') : str;
         };
 
+        Utils.matchUrlPattern =  function (str) {
+            return str.match(Utils.URL_PATTERN) || str.match(Utils.PSEUDO_URL_PATTERN);
+        };
+
         return Utils;
     });
 

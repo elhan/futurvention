@@ -402,6 +402,9 @@
             /** @type {String} */
             self.link = '';
 
+            /** @type {File} */
+            self.file = {};
+
             /** @type {String} loading | loaded | selected */
             self.state = 'loading';
 

@@ -57,7 +57,7 @@
   </div>
   <!-- Thumbnail Grid: Services By Category -->
   <div class="thumbnail-grid flex-wrap">
-    <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb">
+    <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb" ng-if="!isOffered(service.serviceID)">
       <div class="thumbnail" ng-click="editOffer(service.serviceID)">
         <div class="wrapper-img flex-content-centered">
           <img ng-if="!service.thumbnail.link" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">

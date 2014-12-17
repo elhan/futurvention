@@ -43,7 +43,7 @@
                 <div class="text-p" ng-bind-html="service.provision"></div>
               </div>
               <div ng-if="service.excluded">
-                <div class="text-p-bold">What you are expected to deliver</div>
+                <div class="text-p-bold">Services that are not part of the offer</div>
                 <div class="text-p" ng-bind-html="service.excluded"></div>
               </div>
             </div>
@@ -77,7 +77,7 @@
                   </div>
                 </div>
                 <div class="space-x text-p" ng-show="showcaseItems.length > 0">
-                  Click to select samples you want to showcase. You can also reorder them. The first one will be used as cover image.
+                  Click to select samples you want to showcase for this service. You may add a title to each sample (recommended). Remember to reorder them as only the first three will be displayed as cover images
                 </div>
                 <!-- Showcase -->
                 <div class="flex-wrap">
@@ -92,6 +92,14 @@
                       <!-- Spinner -->
                       <div class="wrapper-loader" ng-show="item.state === 'loading'">
                         <div class="loader"></div>
+                      </div>
+                      <!-- Remove button -->
+                      <div class="container-x flex-content-end">
+                        <div class="wrapper-showcase-action" ng-click="removeShowcase(item)">
+                          <svg class="icon icon-light">
+                            <use xlink:href="#close"></use>
+                          </svg>
+                        </div>
                       </div>
                       <!-- Overlay: selected -->
                       <div class="showcase-overlay selected" ng-show="item.state === 'selected'">
@@ -173,7 +181,7 @@
             <div ng-switch-when="2">
               <p class="container-x text-p">
                 Introduce yourself to potential Buyers
-                <span class="optional-header-part text-grey" ng-if="!service.interview.isMandatory">(strongly reccomended)</span>
+                <span class="optional-header-part text-grey" ng-if="service.interview.isMandatory">(strongly reccomended)</span>
               </p>
               <!-- !textonly -->
               <div ng-show="!panels[2].textonly">
@@ -293,6 +301,7 @@
                           <input type="number" name="inputPrice" class="form-control input-s input-price"
                                  ng-model="option.choices[0].price"
                                  placeholder="0"
+                                 min="0"
                                  ng-blur="saveOfferedChoice(option.choices[0])" ng-required="true"></input>
                           <!-- Price discriminators are always days discriminators too -->
                           <div class="separator-text text-grey">to be delivered in</div>
@@ -336,6 +345,7 @@
                                          ng-model="option.choices[0].price"
                                          placeholder="0"
                                          ng-required="true"
+                                         min="0"
                                          ng-blur="saveOfferedChoice(option.choices[0])"
                                          >
                                   </input>

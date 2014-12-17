@@ -150,9 +150,36 @@
             return deferred.promise;
         };
 
+        $scope.matchUrlPattern = function (value) {
+            return utils.matchUrlPattern(value);
+        };
+
         ////////////////////////////////////////////
         /// Other scope functions
         ////////////////////////////////////////////
+
+        $scope.removeShowcase = function (item) {
+            var showcase = _.find($scope.showcaseCollection, function (sc) {
+                return sc.Items[0].ID === item.ID;
+            });
+
+            PortfolioSvc.deleteShowcase(showcase.ID).then(function () {
+
+                NotificationSvc.show({ content: msg.success.showcaseDeleteSuccess, type: 'success' });
+
+                _.remove($scope.showcaseItems, function (sc) {
+                    return sc.ID === item.ID;
+                });
+
+                _.remove($scope.showcaseCollection, function (sc) {
+                    return sc.Items[0].ID === item.ID;
+                });
+
+            }, function (error) {
+                console.log(error);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            });
+        };
 
         $scope.rearangeShowcaseItems = function (item) {
             // The source (dragged) item link is passed via the fv-data attribute into the drop event
