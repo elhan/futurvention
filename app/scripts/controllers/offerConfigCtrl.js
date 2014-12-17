@@ -14,7 +14,8 @@
      * Controls the apply 'service config' step
      */
     app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, events, providers, paths, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
-        var modalEmbedUrl, modalCameraTag;
+
+        var modalEmbedUrl, modalCameraTag, modalPortfolioViewer;
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
@@ -128,6 +129,14 @@
             animation: 'am-slide-top'
         });
 
+        modalPortfolioViewer = $modal({
+            scope: $scope,
+            template: 'views/components/modalPortfolioViewer.html',
+            show: false,
+            animation: 'am-slide-top',
+            keyboard: false
+        });
+
         $scope.showEmbedUrlModal = _.throttle(function () {
             modalEmbedUrl.$promise.then(function () { modalEmbedUrl.show(); });
         }, 700);
@@ -157,6 +166,18 @@
         ////////////////////////////////////////////
         /// Other scope functions
         ////////////////////////////////////////////
+
+        $scope.displayInDetail = function (showcaseitemID) {
+            var showcase;
+
+            showcase = _.find($scope.showcaseCollection, function (sc) {
+                return sc.Items[0].ID === showcaseitemID;
+            });
+
+            PortfolioSvc.setPortfolio(showcase);
+
+            modalPortfolioViewer.$promise.then(function () { modalPortfolioViewer.show(); });
+        };
 
         $scope.removeShowcase = function (item) {
             var showcase = _.find($scope.showcaseCollection, function (sc) {

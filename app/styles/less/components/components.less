@@ -11,6 +11,12 @@
     outline: 0;
     box-shadow: none;
   }
+  &.disabled-unstyled {
+    &:disabled {
+      background-color: white;
+      border-radius: 4px;
+    }
+  }
 }
 
 .has-error .form-control {
@@ -32,6 +38,12 @@ input {
     height: 38px;
     .text-p;
     .text-grey-dark;
+  }
+  &.disabled-unstyled {
+    &:disabled {
+      background-color: white;
+      border-radius: 4px;
+    }
   }
 }
 

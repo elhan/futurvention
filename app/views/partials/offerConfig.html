@@ -77,12 +77,13 @@
                   </div>
                 </div>
                 <div class="space-x text-p" ng-show="showcaseItems.length > 0">
-                  Click to select samples you want to showcase for this service. You may add a title to each sample (recommended). Remember to reorder them as only the first three will be displayed as cover images
+                  Click to select samples you want to showcase for this service. You may add a title to each sample (recommended). Remember to reorder them as only the first three will be displayed as cover images in search results.
                 </div>
                 <!-- Showcase -->
                 <div class="flex-wrap">
                   <div class="showcase" ng-repeat="item in showcaseItems">
                     <div class="showcase-item thumbnail" ng-class="{'progress': item.state === 'loading'}"
+                         ng-click="displayInDetail(item.ID)"
                          fv-bg-image={{item.link}}
                          fv-data={{item.link}}
                          fv-draggable="item.state !== 'loading'"
@@ -207,7 +208,6 @@
                     <span class="text-p">it.</span>
                   </div>
                 </div>
-
                 <div ng-hide="service.interview.videoUrl">
                   <div class="text-p">A picture is 1000 words and a video is 1000 pictures. In a minute, video tells Buyers why they should buy from you.</div>
                   <p class="text-p">In your recording, try to give short sharp answers within 1 minute to the following (You will be able to view the video at the end of the recoring if you want):</p>
