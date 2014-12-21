@@ -24,4 +24,22 @@
         };
     });
 
+//    app.filter('isOfferedService', function () {
+//        return function (services, offers) {
+//            console.log(services, offers);
+//
+//            var service, offer, filtered = [];
+//
+//            for (var i = 0; i < services.length; i++) {
+//                service = services[i];
+//
+//                for (var j = 0; j < offers.length; j++) {
+//                    offer = offers[j];
+//                    service.serviceID === offer.ServiceID && filtered.indexOf(service) === -1 && filtered.push(service);
+//                }
+//            }
+//
+//            return filtered;
+//        };
+//    });
 }());

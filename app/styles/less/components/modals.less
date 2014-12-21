@@ -136,3 +136,32 @@
     padding: 20px;
   }
 }
+
+.modal-loader {
+  button {
+    .text-h3;
+    .space-top-2x;
+    .bg-white;
+    .text-blue;
+    border: 1px solid @lightGrey;
+    box-shadow: 0 1.5px @lightGrey;
+    -moz-box-shadow: 0 1.5px @lightGrey;
+    -webkit-box-shadow: 0 1.5px @lightGrey;
+    padding: 10px 35px;
+
+    &:hover {
+      background-color: @greyDark;
+      color: white;
+      box-shadow: none;
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+    }
+  }
+}
+
+.modal-backdrop {
+  &.am-fade {
+    background-color: white;
+    opacity: .9;
+  }
+}

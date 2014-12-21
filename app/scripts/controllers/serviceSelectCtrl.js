@@ -109,17 +109,18 @@
         });
 
         OfferSvc.fetchOfferedServices($scope.currentUser.ID).then(function (offers) {
+            var service;
+
             $scope.offers = offers;
 
             // avoid showing the same service in both collections
-            // TODO: use a filter instead
             _.each(offers, function (offer) {
-                $scope.offeredServices.push(
-                    _.find($scope.services, function (service) {
-                        console.log(service.serviceID, offer.ServiceID);
-                        return service.serviceID === offer.ServiceID;
-                    })
-                );
+                service = _.find($scope.services, function (svc) {
+                    console.log(svc.serviceID, offer.ServiceID);
+                    return svc.serviceID === offer.ServiceID;
+                });
+                $scope.offeredServices.push(service);
+                console.log(service);
             });
         });
 

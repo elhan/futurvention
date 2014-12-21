@@ -139,21 +139,21 @@
          * @constructor
          * @param {Object} importedProfile: imported profile object
          */
-        Odata.SellerProfile.prototype.fromImported = function (imp) {
-            if (!imp) {
+        Odata.SellerProfile.prototype.fromImported = function (importedProfile) {
+            if (!importedProfile) {
                 return;
             }
 
             var self = this;
 
             utils.updateProperties(self, {
-                FirstName: imp.FirstName,
-                LastName: imp.LastName,
+                FirstName: importedProfile.FirstName,
+                LastName: importedProfile.LastName,
                 Description: new Odata.Multilingual({
-                    Literals: [new Odata.Literal({ Text: imp.Bio })]
+                    Literals: [new Odata.Literal({ Text: importedProfile.Bio })]
                 }),
                 Title: new Odata.Multilingual({
-                    Literals: [new Odata.Literal({ Text: imp.Headline })]
+                    Literals: [new Odata.Literal({ Text: importedProfile.Headline })]
                 })
             });
 

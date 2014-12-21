@@ -31,7 +31,16 @@
         };
 
         AccountSvc.logout = function () {
-            return $http.post(paths.account.logout, {});
+            var deferred = $q.defer();
+
+            $http.post(paths.account.logout, {}).then(function () {
+                localStorage.removeItem('importers');
+                deferred.resolve();
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
         };
 
         AccountSvc.forgotPassword = function (email) {

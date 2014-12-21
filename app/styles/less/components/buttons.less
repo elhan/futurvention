@@ -224,3 +224,30 @@
     }
   }
 }
+
+.btn-remove-small {
+  .round;
+  .flex-content-centered;
+  width: 22px;
+  height: 22px;
+  cursor: pointer;
+
+  &.light {
+    border: 2px solid @greyDark;
+    svg {
+      .icon-dark;
+    }
+  }
+
+  &.error {
+    border: 2px solid white;
+    background: @redError;
+    svg {
+      .icon-light;
+    }
+  }
+
+  svg {
+    width: 10px;
+  }
+}

@@ -57,7 +57,6 @@
                 ].join('');
 
             $http.get(url).then(function (response) {
-                console.log(response);
                 deferred.resolve(filterLocationCollection(response.data.value));
             }, function (error) {
                 deferred.reject(error);

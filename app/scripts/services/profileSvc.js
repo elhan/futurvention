@@ -67,16 +67,12 @@
         };
 
         ////////////////////////////////////////////
-        /// Create methods persist data on the server
+        /// Save operations
         ////////////////////////////////////////////
 
         ProfileSvc.createProfile = function (profile) {
             return $http.post(paths.sellerManagement.ownProfile, profile);
         };
-
-        ///////////////////////////////////////////////////////////
-        /// Patch methods update objects on the backend
-        ///////////////////////////////////////////////////////////
 
         ProfileSvc.patchProfile = function (profile) {
             return $http({
@@ -86,9 +82,17 @@
             });
         };
 
-        ///////////////////////////////////////////////////////////
-        /// Fetch methods fetch data from the server
-        ///////////////////////////////////////////////////////////
+        ProfileSvc.saveProfileStatus = function (status) {
+            return $http({
+                method: 'POST',
+                url: paths.sellerManagement.profileStatus,
+                data: status
+            });
+        };
+
+        /////////////////////////////////////////////
+        /// Fetch operations
+        /////////////////////////////////////////////
 
         ProfileSvc.fetchOwnProfile = function () {
             var deferred = $q.defer();
@@ -152,7 +156,7 @@
             var deferred = $q.defer();
 
             $http.get(paths.sellerManagement.profileStatus).then(function (response) {
-                response && response.data !== 'null' ? deferred.resolve() : deferred.reject();
+                deferred.resolve(response);
             }, function (error) {
                 console.log(error);
             });

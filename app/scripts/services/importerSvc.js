@@ -11,189 +11,200 @@
      */
     app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providersEnum, events, msg, utils, odata) {
 
-        var all, done, profileDone, reviewsDone, portfoliosDone, inProgress, polling, stopPolling, startPolling,
+        var polling,
 
             providerNames = _.keys(providersEnum),
 
             importedPortfolios = [],
 
+            importers = [],
+
             ImporterSvc = {};
 
-        // return an array of completed jobs, depending on status byte flags
-        function getComplete (status) {
-            if (!status) {
-                return;
-            }
+        ////////////////////////////////////////////////////////////////////////////
+        /// Importer status private functions
+        ///
+        /// When checking the importers' completion status, there are three possible
+        /// status values for Profile, Portfolios and Reviews:
+        ///
+        /// null: the requested resource does not exist
+        /// 0   : resource exists, but has not started importing yet
+        /// 1   : import in progress
+        /// 2   : import completed
+        ///
+        ////////////////////////////////////////////////////////////////////////////
 
-            var complete = [];
-
-            // 0 = importing, 1 = downloading, 2 = completed, null = does not exist
-            status.Profile !== null && status.Profile === 2 && complete.push('profile');
-            status.Reviews !== null && status.Reviews === 2 && complete.push('reviews');
-            status.Portfolio !== null && status.Portfolio.CurrentStatus === 2 && complete.push('portfolio');
-
-            switch (complete.length) {
-            case 0:
-                return ['none'];
-            case 3:
-                return ['all'];
-            default:
-                return complete;
-            }
+        /**
+         * Used to determine whether there are any imported profiles.
+         *
+         * @param {CheckStatusResponse} checkStatusResponse a collection of importers' status
+         * @return {Boolean} true if there are any profiles that have finisshed importing
+         */
+        function profileImported (checkStatusResponse) {
+            return typeof _.find(checkStatusResponse, function (imp) {
+                return imp.Profile === 2;
+            }) !== 'undefined';
         }
 
-        function broadcastImporterEvent(type, importer) {
-            var event;
-            switch (type) {
-            case 'profile':
-                event = events.importer.profileReady;
-                break;
-            case 'portfolios':
-                event = events.importer.portfoliosReady;
-                break;
-            case 'reviews':
-                event = events.importer.reviewsReady;
-                break;
-            }
-            $timeout(function () { $rootScope.$broadcast(event, importer); });
-        }
 
-        // callback for status polling
-        function checkStatus () {
-            $http.post(paths.importer.checkProgress, inProgress.capitalize()).then(function (response) {
-                var idx, importer;
+        /**
+         * Used to determine if all importers have finished
+         *
+         * @param {CheckStatusResponse} checkStatusResponse a collection of importers' status
+         * @returns {Boolean} true if all importers have finished downloading their available data
+         */
+        function importingDone (checkStatusResponse) {
+            var done = false,
+                profileReady = false,
+                portfolioReady = false,
+                reviewsReady = true;
 
-                $rootScope.$broadcast(events.importer.status, response); // a generic status event
+            _.each(checkStatusResponse, function (importer) {
+                profileReady = importer.Profile === null || importer.Profile === 2;
+                portfolioReady = importer.Portfolio === null || importer.Portfolio.CurrentStatus === 2;
+                reviewsReady = importer.Reviews === null || importer.Reviews === 2;
 
-                _.each(response.data, function (obj) {
-                    idx = _.pluck(inProgress.importers, 'guid').indexOf(obj.Guid); // find the index of the corresponding importer in progress
-                    importer = idx > -1 ? inProgress.importers[idx] : null;
+                done = profileReady && portfolioReady && reviewsReady;
 
-                    if (!importer || getComplete(obj).indexOf('none') !== -1) {
-                        return;
-                    }
-
-                    if (getComplete(obj).indexOf('all') > -1 && (done.importers.length === 0 || done.importers.indexOf(importer) === -1)) {
-                        done.importers.indexOf(importer) === -1 && done.importers.push(importer);
-                        inProgress.importers.splice(idx, 1);
-                        broadcastImporterEvent('profile', importer);
-                        broadcastImporterEvent('portfolios', importer);
-                        broadcastImporterEvent('reviews', importer);
-                        return;
-                    }
-
-                    if (getComplete(obj).indexOf('profile') > -1 && (profileDone.importers.length === 0 || profileDone.importers.indexOf(importer) === -1)) {
-                        profileDone.importers.push(importer);
-                        broadcastImporterEvent('profile', importer);
-                    }
-
-                    if (getComplete(obj).indexOf('portfolio') > -1 && (portfoliosDone.importers.length === 0 || portfoliosDone.importers.indexOf(importer) === -1)) {
-                        portfoliosDone.importers.push(importer);
-                        broadcastImporterEvent('portfolios', importer);
-                    }
-
-                    if (getComplete(obj).indexOf('reviews') > -1 && (reviewsDone.importers.length === 0 || reviewsDone.importers.indexOf(importer) === -1)) {
-                        reviewsDone.importers.push(importer);
-                        broadcastImporterEvent('reviews', importer);
-                    }
-
-                });
-            }, function (error) {
-                console.log(error);
+                if (!done) { // if at least one of the condition is not met, break the loop
+                    return false;
+                }
             });
+
+            return done;
         }
-
-        stopPolling = function () {
-            $interval.cancel(polling);
-        };
-
-        startPolling = function () {
-            checkStatus(); // execute immediately
-            polling = $interval(function () {
-                inProgress.getImporters().length > 0 ? checkStatus() : stopPolling();
-            }, 6000, 100, false);
-        };
 
         ///////////////////////////////////////////////////////////
-        /// Public API
+        /// Importers
         ///////////////////////////////////////////////////////////
 
         ImporterSvc.Importer = function (options) {
             var self = this;
-            self.provider = '';
-            self.url = '';
-            self.guid = '';
+            self.Provider = '';
+            self.Url = '';
+            self.Guid = '';
             utils.updateProperties(self, options);
         };
 
-        ImporterSvc.Importer.prototype.capitalize = function () {
-            return {
-                Provider: this.provider,
-                Url: this.url,
-                Guid: this.guid
-            };
+        ImporterSvc.getImporters = function () {
+            return importers;
         };
 
-        ImporterSvc.ImporterCollection = function () {
-            this.importers = [];
+        ImporterSvc.setImporters = function (imp) {
+            importers = imp;
         };
 
-        ImporterSvc.ImporterCollection.prototype.getImporters = function () {
-            return this.importers;
-        };
+        /**
+         * Whenever a user initiates an import, the respective importer is stored in the localStorage.
+         * getStoredImporters attempts to retrieve and deserialize the stored importers, then convert them to
+         * Importer objects.
+         *
+         * @public
+         *
+         * @returns Array.<Importer> a collection of Importer objects
+         */
+        ImporterSvc.getStoredImporters = function () {
+            var stored,
+                importerCollection = [],
+                deferred = $q.defer();
 
-        ImporterSvc.ImporterCollection.prototype.setImporters = function (importers) {
-            this.importers = importers;
-        };
+            try {
+                stored = JSON.parse(localStorage.getItem('importers'));
 
-        ImporterSvc.ImporterCollection.prototype.addImporters = function (importers) {
-            this.importers = _.union(this.importers, importers);
-            return this;
-        };
-
-        ImporterSvc.ImporterCollection.prototype.capitalize = function () {
-            return _.map(this.importers, function (importer) {
-                return importer.capitalize();
-            });
-        };
-
-        function filterFetchedImporters (response) {
-            return _.map(response.data, function (importer) {
-                return new ImporterSvc.Importer({
-                    provider: importer.Provider,
-                    url: importer.Url,
-                    guid: importer.Guid
+                _.each(stored, function (importer) {
+                    importerCollection.push(new ImporterSvc.Importer(importer));
                 });
-            });
-        }
 
-        ImporterSvc.getImporters = function (type) {
-            switch(type) {
-            case 'inProgress':
-                return inProgress.getImporters();
-            case 'done':
-                return done.getImporters() ;
-            case 'profileDone':
-                return profileDone.getImporters();
-            case 'portfoliosDone':
-                return portfoliosDone.getImporters();
-            default:
-                return all.getImporters();
+                deferred.resolve(importerCollection);
+
+            } catch (error) {
+                deferred.reject(error);
             }
+
+            return deferred.promise;
         };
 
-        ///////////////////////////////////////////////////////////
-        /// Sync with backend
-        ///////////////////////////////////////////////////////////
-
-        ImporterSvc.import = function (selected) {
+        /**
+         * Updates the importers stored in the localStorage
+         *
+         * @public
+         *
+         * @param Array.<Importer> importers: the importers to be stored
+         * @returns {Promise.<Boolean>}
+         */
+        ImporterSvc.storeImporters = function (importers) {
             var deferred = $q.defer();
 
-            $http.post(paths.importer.import, selected.capitalize()).then(function (response) {
-                inProgress.addImporters(filterFetchedImporters(response));
-                !angular.isDefined(polling) && startPolling(); // if polling is not in progress, start it
+            try {
+                localStorage.setItem('importers', JSON.stringify(importers));
+                deferred.resolve();
+            } catch (error) {
+                deferred.reject(error);
+            }
+
+            return deferred.promise;
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Polling
+        ///////////////////////////////////////////////////////////
+
+        ImporterSvc.stopPolling = function () {
+            $interval.cancel(polling);
+            $rootScope.$broadcast(events.importer.polling.end);
+            polling =  null;
+        };
+
+        ImporterSvc.startPolling = function (options) {
+            var importers, interval, repetitions;
+
+            $rootScope.$broadcast(events.importer.polling.start);
+
+            importers = options.hasOwnProperty('importers') ? options.importers : ImporterSvc.getImporters();
+
+            interval = options.hasOwnProperty('interval') ? options.interval : 6000; // tick every 6s by default
+
+            repetitions = options.hasOwnProperty('repetitions') ? options.repetitions : 30; // 30 ticks by default
+
+            ImporterSvc.checkStatus(importers, true); // execute immediately
+
+            polling = $interval(function () {
+                ImporterSvc.checkStatus(importers, true);
+            }, interval, repetitions, false);
+
+        };
+
+        ImporterSvc.checkStatus = function (importerCollection, emitEvents) {
+            var imp = importerCollection ? importerCollection : importers, // if no collection is passed check the status for all importers
+
+                deferred = $q.defer(); // promises are supported for cases where a single call is required instead of polling
+
+            $http.post(paths.importer.checkProgress, imp).then(function (response) {
+                importingDone(response.data) && ImporterSvc.stopPolling();
+
+                profileImported(response.data) && emitEvents && $rootScope.$broadcast(events.importer.polling.profileImported, response);
+
+                deferred.resolve(response.data);
+
             }, function (error) {
-                console.log(error);
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Fetch operations
+        ///////////////////////////////////////////////////////////
+
+        ImporterSvc.import = function (importers) {
+            var deferred = $q.defer();
+
+            $http.post(paths.importer.import, importers).then(function (response) {
+                ImporterSvc.storeImporters(importers);
+                deferred.resolve(response);
+            }, function (error) {
+                deferred.reject(error);
             });
 
             return deferred.promise;
@@ -212,14 +223,70 @@
          * @returns {UserProfile}
          */
         ImporterSvc.fetchProfile = function () {
-            var deferred = $q.defer();
+            var fetchedProfile, photo, country, city,
+                importerData = [],
+                convertedProfiles = [],
+                sellerProfile = new odata.SellerProfile(),
+                fetchedProfiles = [],
+                deferred = $q.defer();
 
-            profileDone.importers.length === 0 && deferred.reject(msg.error.profileImportFailed);
+            $http.post(paths.importer.fetchProfile, importers).then(function (response) {
 
-            profileDone.importers.length > 0 && $http.post(paths.importer.fetchProfile, profileDone.capitalize()).then(function (response) {
-                deferred.resolve(new odata.SellerProfile(response.data[0].data.response.data.PersonalInfo));
+                _.each(response.data, function (obj) { // data === importers that have data
+                    obj.data !== null && importerData.push(obj);
+                });
+
+                if (!importerData || importerData.length === 0) { // no importers with data
+                    deferred.reject();
+                    return;
+                }
+
+                _.each(importerData, function (imp) {
+                    if (imp.data.response.data && imp.data.response.error.errno === '0') { // TODO: handle  error codes
+                        convertedProfiles.push(new odata.SellerProfile().fromImported(imp.data.response.data.PersonalInfo));
+                        fetchedProfiles.push(imp.data.response.data.PersonalInfo);
+                    }
+                });
+
+                // Iterate over the fetched profiles, and update the sellerProfile object with non-empty values only
+                _.each(convertedProfiles, function (profile) {
+                    utils.updateProperties(sellerProfile, profile, false);
+                });
+
+                /*
+                    Country and city are fetched as strings, so they need to be passed to the controllers separately, not
+                    as a Profile property. The controller will then match these strings to collections of real Location objects and update the profile.
+                **/
+                fetchedProfile = _.find(fetchedProfiles, function (prof) {
+                    return prof.hasOwnProperty('Country') && prof.Country !== '';
+                });
+
+                country = fetchedProfile ? fetchedProfile.Country : '';
+
+                fetchedProfile = _.find(fetchedProfiles, function (prof) {
+                    return prof.hasOwnProperty('City') && prof.City !== '';
+                });
+
+                city = fetchedProfile ? fetchedProfile.City : '';
+
+                /*
+                    Odata.Profile does not cointain Avatars objects, but imported profiles contain a link to the user's Avatar.
+                    Pick an avatar from the imported profiles.
+                **/
+                fetchedProfile = _.find(fetchedProfiles, function (prof) {
+                    return prof.hasOwnProperty('Photo') && prof.Photo !== '';
+                });
+
+                photo = fetchedProfile ? fetchedProfile.Photo : '';
+
+                deferred.resolve({
+                    profile: sellerProfile,
+                    avatar: photo,
+                    country: country,
+                    city: city
+                });
+
             }, function (error) {
-                console.log(error);
                 deferred.reject(error);
             });
 
@@ -237,35 +304,17 @@
          *
          * @returns Array.<Object>
          */
-        ImporterSvc.fetchPortfolios = function () {
-            var deferred = $q.defer(),
-                importers = new ImporterSvc.ImporterCollection();
+        ImporterSvc.fetchPortfolios = function (importers) {
+            var deferred = $q.defer();
 
-            /*
-                'inProgress' collection must be added in order to fetch downloade dportfolios for Importers that have not
-                finished downloading all of their portfolios yet.
-                'done' collection must be included in case all portfolios are done during the first polling event,
-                in which case portfoliosDone will be empty, since the Importer will be added directly to the done collection.
-            **/
-            importers.setImporters(_.union(inProgress.importers, portfoliosDone.importers, done.importers));
-
-            portfoliosDone && $http.post(paths.importer.fetchPortfolios, importers.capitalize()).then(function (response) {
+            $http.post(paths.importer.fetchPortfolios, importers).then(function (response) {
                 importedPortfolios = response;
                 deferred.resolve(response);
             }, function (error) {
-                console.log(error);
                 deferred.reject(error);
             });
 
             return deferred.promise;
-        };
-
-        ImporterSvc.saveReviews = function () {
-            var importers = new ImporterSvc.ImporterCollection();
-
-            importers.setImporters(_.union(reviewsDone.importers, done.importers));
-
-            return $http.post(paths.sellerManagement.ownReviews, importers.capitalize());
         };
 
         /**
@@ -280,13 +329,17 @@
          */
         ImporterSvc.fetchCachedPortfolios = function (guid) {
             return $http.post(paths.importer.fetchPortfolios, _.map(providerNames, function (name) {
-                return {
+                return new ImporterSvc.Importer({
                     Guid: guid,
                     Provider: name,
                     Url: ''
-                };
+                });
             }));
         };
+
+        ///////////////////////////////////////////////////////////
+        /// Save operations
+        ///////////////////////////////////////////////////////////
 
         /**
          * @ngdoc method
@@ -303,27 +356,25 @@
             return $http.post(paths.sellerManagement.importedShowcases + serviceID, portfolios);
         };
 
-        ///////////////////////////////////////////////////////////
-        /// Watchers
-        ///////////////////////////////////////////////////////////
-
-        $rootScope.$on(events.auth.sessionTimeout, function () {
-            stopPolling();
-        });
+        /**
+         * @ngdoc method
+         * @name fvApp.service:ImporterSvc
+         * @function
+         *
+         * @description
+         * Persists scrapped reviews
+         *
+         */
+        ImporterSvc.saveReviews = function (importers) {
+            return $http.post(paths.sellerManagement.ownReviews, importers);
+        };
 
         ///////////////////////////////////////////////////////////
         /// Initialization
         ///////////////////////////////////////////////////////////
 
-        all = new ImporterSvc.ImporterCollection();
-        done = new ImporterSvc.ImporterCollection(); // Importers that have finished profile, reviews & portfolios
-        inProgress = new ImporterSvc.ImporterCollection(); // all Importers currently in progress
-        profileDone = new ImporterSvc.ImporterCollection(); // all Importers with profile complete
-        reviewsDone = new ImporterSvc.ImporterCollection(); // all Importers with reviews status complete
-        portfoliosDone = new ImporterSvc.ImporterCollection(); // all Importers with portfolios complete
-
-        _.each(providerNames, function (providerName) {
-            all.importers.push(new ImporterSvc.Importer({ provider: providerName }));
+        _.each(providerNames, function (name) {
+            importers.push(new ImporterSvc.Importer({ Provider: name }));
         });
 
         return ImporterSvc;

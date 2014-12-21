@@ -125,7 +125,7 @@
         /// Watchers
         ///////////////////////////////////////////////////////////
 
-        // listen for image update events emmited by the imga ecrop modal
+        // listen for image update events emmited by the image crop modal
         $scope.$on(events.profile.profileUpdated, function () {
             $scope.profile.image = ProfileSvc.getProfile().image;
         });

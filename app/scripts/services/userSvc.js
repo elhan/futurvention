@@ -70,6 +70,27 @@
             return deferred.promise;
         };
 
+        UserSvc.saveExternalAvatar = function (avatarLink) {
+            var deferred = $q.defer();
+
+            $http({
+                method: 'PUT',
+                url: paths.user.ownAvatar,
+                params: {
+                    url: avatarLink
+                }
+            }).then(function () {
+                UserSvc.fetchOwnUser().then(function (response) {
+                    deferred.resolve(response);
+                }, function (error) {
+                    deferred.reject(error);
+                });
+            }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
         return UserSvc;
     }]);
 }());

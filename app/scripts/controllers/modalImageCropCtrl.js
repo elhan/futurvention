@@ -51,18 +51,6 @@
             $scope.inProgress = state;
         };
 
-//        $scope.saveAvatar = function () {
-////            var data = window.atob($scope.croppedImage.split(',').pop());
-//            $upload.upload({
-//                url: paths.user.ownAvatar,
-////                headers: { 'Content-Transfer-Encoding': 'base64' },
-////                file: $scope.croppedImage.split(',').pop(),
-////                file: new Blob([data], {type: 'image/png'}),
-//                file: $scope.file,
-//                fileFormDataName: $scope.file.name,
-//             })
-//        };
-
         $scope.saveAvatar = function () {
             var fd = new FormData(),
                 base64img = $scope.croppedImage.split(',').pop(),

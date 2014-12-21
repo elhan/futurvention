@@ -5,12 +5,18 @@
     app.service('Utils', function () {
         var Utils = {};
 
-        Utils.updateProperties = function (original, extension) {
+        Utils.updateProperties = function (original, extension, preventEmptyOverwrite) {
+
             extension && _.forOwn(original, function (num, key) {
                 if (extension.hasOwnProperty(key)) {
-                    original[key] = extension[key];
+                    if (typeof preventEmptyOverwrite === 'boolean' && preventEmptyOverwrite === false) {
+                        original[key] = extension[key] ? extension[key] : original[key];
+                    } else {
+                        original[key] = extension[key];
+                    }
                 }
             });
+
             return original;
         };
 
