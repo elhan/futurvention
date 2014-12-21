@@ -45,6 +45,12 @@
         };
     });
 
+    app.filter('displayMediaTypes', function () {
+        return function (mediaTypes) {
+            return mediaTypes.join(', ').toLowerCase();
+        };
+    });
+
 //    app.filter('isOfferedService', function () {
 //        return function (services, offers) {
 //            console.log(services, offers);
