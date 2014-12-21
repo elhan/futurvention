@@ -24,6 +24,27 @@
         };
     });
 
+    app.filter('beautifyProviderNames', function () {
+        return function (providerName) {
+            switch (providerName) {
+            case 'elance':
+                return 'Elance';
+            case 'behance':
+                return 'Behance';
+            case 'dribbble':
+                return 'Dribbble';
+            case 'github':
+                return 'Github';
+            case 'odesk':
+                return 'oDesk';
+            case 'peopleperhour':
+                return 'PeoplePerHour';
+            default:
+                return;
+            }
+        };
+    });
+
 //    app.filter('isOfferedService', function () {
 //        return function (services, offers) {
 //            console.log(services, offers);

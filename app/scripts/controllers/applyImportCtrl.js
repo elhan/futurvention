@@ -83,6 +83,14 @@
             return newImporters.length === emptyImporters.length;
         };
 
+        $scope.validateImporterFormat = function (value, importer) {
+            var a = utils.matchProviderUrlPattern(value, importer.Provider);
+            console.log(a);
+            return a;
+
+            //return utils.matchProviderUrlPattern(value, importer.Provider);
+        };
+
         ///////////////////////////////////////////////////////////
         /// Initialization
         ///////////////////////////////////////////////////////////
