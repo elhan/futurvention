@@ -23,6 +23,14 @@
 
             manager = new breeze.EntityManager({ dataService: dataService });
 
+        try {
+            activeStep = JSON.parse(localStorage.getItem('activeStep'));
+        } catch (error) {
+            // TODO: log this
+            console.log(error);
+            activeStep = 'import';
+        }
+
         // Provider object constructor
         ProfileSvc.Provider = function (name, url) {
             this.name = name;
@@ -60,6 +68,13 @@
 
         ProfileSvc.setActiveStep = function (step) {
             activeStep = step;
+
+            try {
+                localStorage.setItem('activeStep', JSON.stringify(step));
+            } catch (error) {
+                // TODO: log this
+                console.log(error);
+            }
         };
 
         ProfileSvc.updateProfile = function (obj) {

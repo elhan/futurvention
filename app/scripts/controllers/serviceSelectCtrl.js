@@ -108,19 +108,23 @@
             });
         });
 
-        OfferSvc.fetchOfferedServices($scope.currentUser.ID).then(function (offers) {
-            var service;
+        /*
+            This is necessary to prevent racing issues. On page refresh, fetchOfferedServices may
+            sometimes be called before currentUser has a chance to update.
+        **/
+        $scope.$watch('currentUser', function (newValue) {
+            newValue && OfferSvc.fetchOfferedServices($scope.currentUser.ID).then(function (offers) {
+                var service;
 
-            $scope.offers = offers;
+                $scope.offers = offers;
 
-            // avoid showing the same service in both collections
-            _.each(offers, function (offer) {
-                service = _.find($scope.services, function (svc) {
-                    console.log(svc.serviceID, offer.ServiceID);
-                    return svc.serviceID === offer.ServiceID;
+                // avoid showing the same service in both collections
+                _.each(offers, function (offer) {
+                    service = _.find($scope.services, function (svc) {
+                        return svc.serviceID === offer.ServiceID;
+                    });
+                    $scope.offeredServices.push(service);
                 });
-                $scope.offeredServices.push(service);
-                console.log(service);
             });
         });
 

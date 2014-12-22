@@ -10,13 +10,11 @@
      * # LandingCtrl
      * Controls the landing page
      */
-    app.controller('LandingCtrl', ['$scope', 'ProfileSvc', function ($scope, ProfileSvc) {
+    app.controller('LandingCtrl', ['$scope', function ($scope) {
 
         $scope.continue = function () {
             $scope.session.hasRegistered ? $scope.go('/apply') : $scope.go('/register');
         };
-
-        ProfileSvc.setActiveStep('import'); // reset apply steps
 
     }]);
 

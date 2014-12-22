@@ -69,12 +69,9 @@
             controller: 'StorefrontCtrl',
             resolve: {
                 profile: ['$route', '$location', '$q', 'ProfileSvc', function ($route, $location, $q, ProfileSvc) {
-//                    console.log($route, $location);
                     var deferred = $q.defer();
                     ProfileSvc.fetchProfile($route.current.params.moniker).then(function (profile) {
-//                        console.log($route, $location);
                         deferred.resolve(profile);
-//                        $location.path('/' + moniker);
                     }, function (error) {
                         deferred.reject(error);
                     });
@@ -91,8 +88,9 @@
                 }]
             }
         })
-        .otherwise({
-            redirectTo: '/'
+        .when('/', {
+            templateUrl: 'views/landing.html',
+            controller: 'LandingCtrl'
         });
     }]);
 

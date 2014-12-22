@@ -10,25 +10,23 @@
      * # ApplyCtrl
      * Controls the apply page & seller profile completion
      */
-    app.controller('ApplyCtrl', ['$scope', 'EVENTS', 'ProfileSvc', 'ImporterSvc', function ($scope, events, ProfileSvc, ImporterSvc) {
+    app.controller('ApplyCtrl', ['$scope', 'EVENTS', 'ProfileSvc', function ($scope, events, ProfileSvc) {
         $scope.steps = ProfileSvc.getSteps();
         $scope.activeStep = ProfileSvc.getActiveStep();
 
         $scope.goToStep = function (step) {
             $scope.activeStep = $scope.steps[step];
-            ProfileSvc.setActiveStep($scope.activeStep);
         };
 
         ////////////////////////////////////////////
         /// Watchers
         ////////////////////////////////////////////
 
-        $scope.$on(events.importer.reviewsReady, function () {
-            ImporterSvc.saveReviews($scope.currentUser.Guid).then(function (response) {
-                console.log(response);
-            }, function (error) {
-                console.log(error);
-            });
+        $scope.$watch('activeStep', function (newValue, oldValue) { // keep latest step in local storage
+            if (!newValue || newValue === oldValue) {
+                return;
+            }
+            ProfileSvc.setActiveStep($scope.activeStep);
         });
 
         ////////////////////////////////////////////

@@ -44,10 +44,10 @@
         ////////////////////////////////////////////
         /// Event handling
         ////////////////////////////////////////////
-
-        $scope.$on('$routeChangeStart', function (e, next) {
-            !$scope.session.hasRegistered && routes.public.indexOf(next.originalPath) === -1 && $scope.go('/');
-        });
+//
+//        $scope.$on('$routeChangeStart', function (e, next) {
+//            !$scope.session.hasRegistered && routes.public.indexOf(next.originalPath) === -1 && $scope.go('/');
+//        });
 
         $scope.$on('$routeChangeError', function (e, current, previous, rejection) {
             console.log(rejection);

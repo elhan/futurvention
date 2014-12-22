@@ -347,9 +347,11 @@
     app.directive('fvTimelineH', function () {
         return {
             restrict: 'E',
-            templateUrl: 'views/directives/fv-timeline-h.html',
-            link: function () {
-            }
+            scope: {
+                activeStep: '=',
+                goToStep: '&'
+            },
+            templateUrl: 'views/directives/fv-timeline-h.html'
         };
     });
 
