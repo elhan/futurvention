@@ -38,6 +38,7 @@
             polling: {
                 start: 'imp-polling-start',
                 profileImported: 'imp-profile-imported',
+                statusUpdated: 'imp-status-updated',
                 end: 'imp-polling-end'
             }
         },
@@ -134,6 +135,7 @@
             generic: 'Something went wrong. Please try again later.',
             logoutFailed: 'Something went wrong. Please try logging out again.',
             profileImportFailed: 'No profiles could be imported',
+            portfoliosImportFailed: 'No portfolios could be imported at this time.',
             profileSaveFailed: 'Something went wrong! Please try saving your profiles again.'
         },
         success: {

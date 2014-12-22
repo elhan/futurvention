@@ -24,6 +24,15 @@
         };
     });
 
+    app.filter('getProviderName', [ 'PROVIDERS_ENUM', function (providers) {
+        return function (importer) {
+            return _.findKey(providers, function (provider) {
+                console.log(importer);
+                return parseInt(importer.Provider) === provider;
+            });
+        };
+    }]);
+
 //    app.filter('isOfferedService', function () {
 //        return function (services, offers) {
 //            console.log(services, offers);

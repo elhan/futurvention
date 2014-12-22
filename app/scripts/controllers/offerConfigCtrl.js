@@ -44,6 +44,11 @@
         $scope.selectedPortfolios = [];
         $scope.portfoliosExpanded = [];
 
+        $scope.importersAvailable = [];
+        $scope.importersFailed = [];
+        $scope.importersInProgress = [];
+        $scope.importersFinished = [];
+
         $scope.status = {}; // the current importer status
 
         // can be 'owned' or 'imported'. Controls which work samples section is visible
@@ -164,6 +169,69 @@
         };
 
         ////////////////////////////////////////////
+        /// Imported Work Samples tab
+        ////////////////////////////////////////////
+
+        // for a given importedPortfolio, and a given status, check the completion status
+        $scope.getPortfolioCompletionState = function (portfolioProvider) {
+            return _.find($scope.status, function (provider) {
+                return provider.Provider === providers[portfolioProvider];
+            });
+        };
+
+        $scope.portfolioDone =  function (portfolioProvider) {
+            var state = $scope.getPortfolioCompletionState(portfolioProvider);
+            /*
+                If all portfolios have finished downloading before the controller is initialized,
+                state will be undefined since no status events will be broadcasted.
+            **/
+            return state ? state.Portfolio.Total === state.Portfolio.Count : true;
+        };
+
+        $scope.portfolioImporting =  function (portfolioProvider) {
+            var state = $scope.getPortfolioCompletionState(portfolioProvider);
+            /*
+                If all portfolios have finished downloading before the controller is initialized,
+                state will be undefined since no status events will be broadcasted.
+            **/
+            return state ? state.Portfolio.Total > state.Portfolio.Count : false;
+        };
+
+        $scope.getPortfoliosCount = function (portfolioProvider) {
+            var state, portfolio;
+
+            state = $scope.getPortfolioCompletionState(portfolioProvider);
+
+            portfolio = _.find($scope.importedPortfolios, function (portfolio) {
+                return portfolio.Provider ===  portfolioProvider;
+            });
+
+            return state ? state.Portfolio.Count : portfolio.data.length;
+        };
+
+        $scope.toggleActiveWorkSamples = function () {
+            $scope.activeWorkSamples = $scope.activeWorkSamples === 'owned' ? 'imported' : 'owned';
+        };
+
+        $scope.getImportedLink = function (item) {
+            return [
+                paths.file.imported,
+                $scope.currentUser.Guid, '/',
+                item.Provider, '/',
+                item.FolderName, '/',
+                item.ThumbnailAsset.Folder, '/',
+                item.ThumbnailAsset.Name
+            ].join('');
+        };
+
+        $scope.toggleExpansion = function (portfolio) {
+            var expanded = $scope.portfoliosExpanded;
+            expanded.indexOf(portfolio) === -1 ? expanded.push(portfolio) : expanded.remove(function (item) {
+                return item === portfolio;
+            });
+        };
+
+        ////////////////////////////////////////////
         /// Other scope functions
         ////////////////////////////////////////////
 
@@ -248,61 +316,6 @@
             panel.textonly = ! panel.textonly;
         };
 
-        // for a given importedPortfolio, and a given status, check the completion status
-        $scope.getPortfolioCompletionState = function (portfolioProvider) {
-            return _.find($scope.status, function (provider) {
-                return provider.Provider === providers[portfolioProvider];
-            });
-        };
-
-        $scope.portfolioDone =  function (portfolioProvider) {
-            var state = $scope.getPortfolioCompletionState(portfolioProvider);
-            /*
-                If all portfolios have finished downloading before the controller is initialized,
-                state will be undefined since no status events will be broadcasted.
-            **/
-            return state ? state.Portfolio.Total === state.Portfolio.Count : true;
-        };
-
-        $scope.portfolioImporting =  function (portfolioProvider) {
-            var state = $scope.getPortfolioCompletionState(portfolioProvider);
-            /*
-                If all portfolios have finished downloading before the controller is initialized,
-                state will be undefined since no status events will be broadcasted.
-            **/
-            return state ? state.Portfolio.Total > state.Portfolio.Count : false;
-        };
-
-        $scope.getPortfoliosCount = function (portfolioProvider) {
-            var state = $scope.getPortfolioCompletionState(portfolioProvider);
-            var portfolio = _.find($scope.importedPortfolios, function (portfolio) {
-                return portfolio.Provider ===  portfolioProvider;
-            });
-            return state ? state.Portfolio.Count : portfolio.data.length;
-        };
-
-        $scope.toggleActiveWorkSamples = function () {
-            $scope.activeWorkSamples = $scope.activeWorkSamples === 'owned' ? 'imported' : 'owned';
-        };
-
-        $scope.getImportedLink = function (item) {
-            return [
-                paths.file.imported,
-                $scope.currentUser.Guid, '/',
-                item.Provider, '/',
-                item.FolderName, '/',
-                item.ThumbnailAsset.Folder, '/',
-                item.ThumbnailAsset.Name
-            ].join('');
-        };
-
-        $scope.toggleExpansion = function (portfolio) {
-            var expanded = $scope.portfoliosExpanded;
-            expanded.indexOf(portfolio) === -1 ? expanded.push(portfolio) : expanded.remove(function (item) {
-                return item === portfolio;
-            });
-        };
-
         ////////////////////////////////////////////
         /// Sync with backend
         ////////////////////////////////////////////
@@ -318,8 +331,26 @@
         };
 
         $scope.fetchImportedPortfolios = function () {
-            ImporterSvc.fetchPortfolios().then(function (portfolios) {
-                $scope.importedPortfolios = portfolios.data;
+            ImporterSvc.fetchPortfolios($scope.importersFinished).then(function (response) {
+                var importedPortfolio, portfolios = response.data;
+
+                _.each(portfolios, function (portfolio) {
+
+                    if ($scope.importedPortfolios.indexOf(portfolio) === -1) {
+                        $scope.importedPortfolios.push(portfolio);
+
+                    } else {
+                        importedPortfolio = _.find($scope.importedPortfolios, function (port) {
+                            return port === portfolio;
+                        });
+
+                        importedPortfolio && _.each(portfolio.data, function (portfolioItem) {
+                            importedPortfolio.indexOf(portfolioItem) === -1 && importedPortfolio.push(portfolioItem);
+                        });
+                    }
+
+                });
+
             }, function (error) {
                 console.log(error);
             });
@@ -430,10 +461,12 @@
             !inProgress && $scope.goToStep(2);
         });
 
-        $scope.$on(events.importer.status, function (event, status) {
+        // listen for ImportSvc polling events
+        $scope.$on(events.importer.polling.statusUpdated, function (event, status) {
             if ($scope.status === status) {
                 return;
             }
+
             $scope.status = status.data;
             $scope.fetchImportedPortfolios();
         });
@@ -517,10 +550,43 @@
 
         $timeout(function () { $scope.panels.activePanel = 0; }); // update the UI
 
-        ImporterSvc.fetchCachedPortfolios($scope.currentUser.Guid).then(function (portfolios) {
-            $scope.importedPortfolios = _.pick(portfolios.data, function (importer) {
-                return importer.data && importer.data.length > 0;
+        ImporterSvc.checkStatus().then(function (status) {
+
+            $scope.importersAvailable = _.filter(status, function (importer) { // check if there are any available importers
+                return importer.Portfolio !== null;
             });
+
+            // check if all importers have finished downloading
+            if ($scope.importersAvailable.length > 0) {
+                $scope.status = status;
+
+                $scope.importersFinished = _.filter($scope.importersAvailable, function (importer) {
+                    return importer.Portfolio.CurrentStatus === 2 && importer.Portfolio.Count > 0;
+                });
+
+                $scope.importersFailed = _.filter($scope.importersAvailable, function (importer) {
+                    return importer.Portfolio.CurrentStatus === 2 && importer.Portfolio.Count === 0;
+                });
+
+                if ($scope.importersAvailable.length === $scope.importersFailed.length) {
+                    NotificationSvc.show({ content: msg.error.portfoliosImportFailed, type: 'error' });
+                    return;
+                }
+
+                // no importers in progress
+                if ($scope.importersFinished.length + $scope.importersFailed.length === $scope.importersAvailable.length) {
+                    $scope.fetchImportedPortfolios();
+
+                } else { //at least some importers in progress
+                    $scope.importersInProgress = _.filter($scope.importersAvailable, function (importer) {
+                        return importer.Portfolio.CurrentStatus === 1;
+                    });
+
+                    // start polling: this will emit events that will be handled by the coresponding watcher
+                    ImporterSvc.startPolling({ importers: $scope.importersAvailable, interval: 5000, repetitions: 6 });
+                }
+            }
+
         }, function (error) {
             console.log(error);
         });

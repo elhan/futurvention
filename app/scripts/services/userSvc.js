@@ -9,7 +9,7 @@
      * # OfferSvc
      * Bussiness logic for seller Offers
      */
-    app.service('UserSvc', ['$rootScope', '$http', '$q', 'PATHS', 'EVENTS', 'Odata', 'breeze', function ($rootScope, $http, $q, paths, events, odata, breeze) {
+    app.service('UserSvc', ['$rootScope', '$http', '$q', 'PATHS', 'EVENTS', 'Odata', 'breeze', 'ImporterSvc', function ($rootScope, $http, $q, paths, events, odata, breeze, ImporterSvc) {
         var UserSvc = {},
 
             dataService = new breeze.DataService({
@@ -34,8 +34,13 @@
 
             $http.get(paths.user.self).then(function (response) {
                 var user = new odata.User(response.data);
+
                 $rootScope.$broadcast(events.user.updateSuccess, user);
+
+                ImporterSvc.updateGuid(user.Guid);
+
                 deferred.resolve(user);
+
             }, function (error) {
                 deferred.reject(error);
             });

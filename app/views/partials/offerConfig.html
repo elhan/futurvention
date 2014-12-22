@@ -125,33 +125,34 @@
                 </div>
                 <div class="container-y">
                   <div class="text-p space-bottom space-x">Click to select imported samples you want to showcase as part of this service</div>
-                  <div ng-repeat="importedPortfolio in importedPortfolios">
-                    <div class="space-bottom-4x" ng-switch on="portfolioDone(importedPortfolio.Provider)">
-                      <div ng-switch-when="true" class="container-x flex-items-centered">
-                        <svg  class="icon icon-green text-p space-left">
-                          <use xlink:href="#tick"></use>
-                        </svg>
-                        <div class="text-p-bold space-left">{{ importedPortfolio.Provider }}</div>
-                        <div class="text-p space-after"> - </div>
-                        <div class="text-p space-after" ng-bind="getPortfoliosCount(importedPortfolio.Provider)"></div>
-                        <div class="text-p space-after">portfolio items imported</div>
-                      </div>
-                      <div ng-switch-when="false" class="container-x flex-items-centered">
-                        <div class="wrapper-loader" ng-show="item.state === 'loading'">
-                          <div class="loader"></div>
-                        </div>
-                        <div class="text-p-bold space-left">{{ importedPortfolio.Provider }}</div>
-                        <div class="text-p space-after"> - </div>
-                        <div class="text-p space-after" ng-bind="getPortfoliosCount(importedPortfolio.Provider)"></div>
-                        <div class="text-p">portfolio items imported</div>
-                      </div>
+                  <!-- finished importers -->
+                  <div ng-repeat="importer in importersFinished" class="space-bottom">
+                    <div class="container-x flex-items-centered">
+                      <svg  class="icon icon-green text-p space-left">
+                        <use xlink:href="#tick"></use>
+                      </svg>
+                      <div class="text-p-bold space-left">{{importer | getProviderName}}</div>
+                      <div class="text-p space-after"> - </div>
+                      <div class="text-p space-after">{{importer.Portfolio.Count}}</div>
+                      <div class="text-p space-after">portfolio items imported</div>
+                    </div>
+                  </div>
+                  <!-- failed importers -->
+                  <div ng-repeat="importer in importersFailed" class="space-bottom">
+                    <div class="container-x flex-items-centered">
+                      <svg class="icon icon-red-error text-i space-left">
+                        <use xlink:href="#close"></use>
+                      </svg>
+                      <div class="text-p-bold space-left">{{importer | getProviderName}}</div>
+                      <div class="text-p space-after"> - </div>
+                      <div class="text-p space-after">No portfolios could be imported presently.</div>
                     </div>
                   </div>
                 </div>
                 <!-- Imported Showcase -->
                 <div ng-repeat="portfolio in importedPortfolios">
                   <div class="panel-inner">
-                    <div class="text-p-bold">{{ portfolio.Provider }}</div>
+                    <div class="text-p-bold">{{ portfolio | getProviderName }}</div>
                     <button class="btn no-padding btn-link text-p" ng-click="toggleExpansion(portfolio)">
                       <span ng-if="portfoliosExpanded.indexOf(portfolio) === -1">+ Show all</span>
                       <span ng-if="portfoliosExpanded.indexOf(portfolio) > -1">- Collapse</span>

@@ -145,6 +145,12 @@
             return deferred.promise;
         };
 
+        ImporterSvc.updateGuid = function (guid) {
+            _.each(importers, function (importer) {
+                utils.updateProperties(importer, { Guid: guid });
+            });
+        };
+
         ///////////////////////////////////////////////////////////
         /// Polling
         ///////////////////////////////////////////////////////////
@@ -304,10 +310,12 @@
          *
          * @returns Array.<Object>
          */
-        ImporterSvc.fetchPortfolios = function (importers) {
-            var deferred = $q.defer();
+        ImporterSvc.fetchPortfolios = function (importerColelction) {
+            var payload, deferred = $q.defer();
 
-            $http.post(paths.importer.fetchPortfolios, importers).then(function (response) {
+            payload = importerColelction ? importerColelction : importers;
+
+            $http.post(paths.importer.fetchPortfolios, payload).then(function (response) {
                 importedPortfolios = response;
                 deferred.resolve(response);
             }, function (error) {
@@ -373,6 +381,7 @@
         /// Initialization
         ///////////////////////////////////////////////////////////
 
+        // by default, the importers variable hold all supported importers
         _.each(providerNames, function (name) {
             importers.push(new ImporterSvc.Importer({ Provider: name }));
         });
