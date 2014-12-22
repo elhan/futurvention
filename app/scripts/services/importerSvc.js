@@ -172,8 +172,6 @@
 
             repetitions = options.hasOwnProperty('repetitions') ? options.repetitions : 30; // 30 ticks by default
 
-            ImporterSvc.checkStatus(importers, true); // execute immediately
-
             polling = $interval(function () {
                 ImporterSvc.checkStatus(importers, true);
             }, interval, repetitions, false);

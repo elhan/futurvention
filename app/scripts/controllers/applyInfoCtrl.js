@@ -79,6 +79,7 @@
                             $scope.country && LocationSvc.searchCity($scope.country.ID, response.city).then(function (res) {
                                 // res is an array of Locations. Pick the first and prefil cityName. This will trigger the cityName watcher.
                                 if (res && res[0]) {
+                                    $scope.cities = res;
                                     $scope.cityName = res[0].getName();
                                 }
 

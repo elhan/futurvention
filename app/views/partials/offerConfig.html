@@ -57,7 +57,7 @@
                 </div>
                 <div class="wrapper-icons">
                   <div class="container-x">
-                    <div class="container-y flex-1 clickable" ng-click="toggleActiveWorkSamples()">
+                    <div class="container-y flex-1 clickable" ng-if="importersAvailable" ng-click="toggleActiveWorkSamples()">
                       <div class="import-link bg-grey-dark text-white">
                         <svg class="icon icon-light nostroke icon-import">
                           <use xlink:href="#import"></use>
@@ -140,8 +140,18 @@
                       <div class="text-p space-after">portfolio items imported</div>
                     </div>
                   </div>
+                  <!-- importers in progress-->
+                  <div ng-repeat="importer in importersInProgress" class="space-bottom progress-row">
+                    <div class="container-x flex-items-centered">
+                      <div class="loader"></div>
+                      <div class="text-p-bold space-left">{{importer | getProviderName}}</div>
+                      <div class="text-p space-after"> - </div>
+                      <div class="text-p space-after">{{importer.Portfolio.Count}}</div>
+                      <div class="text-p space-after">portfolio items imported</div>
+                    </div>
+                  </div>
                   <!-- failed importers -->
-                  <div ng-repeat="importer in importersFailed" class="space-bottom">
+                  <div ng-repeat="importer in importersFailed" class="space-bottom progress-row">
                     <div class="container-x flex-items-centered">
                       <svg class="icon icon-red-error text-i space-left">
                         <use xlink:href="#close"></use>
@@ -165,8 +175,8 @@
                     <div class="showcase" ng-repeat="item in portfoliosExpanded.indexOf(portfolio) === -1 ? portfolio.data.slice(0, 10) : portfolio.data">
                       <div class="showcase-item thumbnail"
                            ng-click="togglePortfolioSelection(item)"
-                           fv-bg-image={{getImportedLink(item)}}
-                           fv-data={{getImportedLink(item)}}>
+                           fv-bg-image={{item|importedLink:item:curentUser.Guid}}
+                           fv-data={{item|importedLink:item:curentUser.Guid}}>
                         <!-- Overlay: selected -->
                         <div class="showcase-overlay selected" ng-show="selectedPortfolios.indexOf(item) > -1">
                           <svg class="icon icon-light">

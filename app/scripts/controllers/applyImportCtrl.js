@@ -84,11 +84,7 @@
         };
 
         $scope.validateImporterFormat = function (value, importer) {
-            var a = utils.matchProviderUrlPattern(value, importer.Provider);
-            console.log(a);
-            return a;
-
-            //return utils.matchProviderUrlPattern(value, importer.Provider);
+            return value ? utils.matchProviderUrlPattern(value, importer.Provider) : [];
         };
 
         ///////////////////////////////////////////////////////////

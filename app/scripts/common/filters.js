@@ -59,6 +59,19 @@
         };
     });
 
+    app.filter('importedLink', ['PATHS', function (paths) {
+        return function (item, guid) {
+            return [
+                paths.file.imported,
+                guid, '/',
+                item.Provider, '/',
+                item.FolderName, '/',
+                item.ThumbnailAsset.Folder, '/',
+                item.ThumbnailAsset.Name
+            ].join('');
+        };
+    }]);
+
 //    app.filter('isOfferedService', function () {
 //        return function (services, offers) {
 //            console.log(services, offers);

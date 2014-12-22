@@ -141,8 +141,6 @@
         };
 
         Utils.matchProviderUrlPattern = function (str, providerName) {
-            console.log('match pattern');
-            console.log('Pro ' + providerName + ' St ' + str);
             if (!str || typeof(str) !== 'string' || !providerName || typeof(providerName) !== 'string') {
                 return;
             }

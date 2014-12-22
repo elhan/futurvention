@@ -213,17 +213,6 @@
             $scope.activeWorkSamples = $scope.activeWorkSamples === 'owned' ? 'imported' : 'owned';
         };
 
-        $scope.getImportedLink = function (item) {
-            return [
-                paths.file.imported,
-                $scope.currentUser.Guid, '/',
-                item.Provider, '/',
-                item.FolderName, '/',
-                item.ThumbnailAsset.Folder, '/',
-                item.ThumbnailAsset.Name
-            ].join('');
-        };
-
         $scope.toggleExpansion = function (portfolio) {
             var expanded = $scope.portfoliosExpanded;
             expanded.indexOf(portfolio) === -1 ? expanded.push(portfolio) : expanded.remove(function (item) {
