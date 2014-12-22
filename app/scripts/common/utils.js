@@ -98,7 +98,17 @@
         // www. sans http:// or https://
         Utils.PSEUDO_URL_PATTERN = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
-        Utils.ELANCE_URL_PATTERN = /^http[s]?:\/\/([^\/]*elance.com)/i;
+        Utils.ELANCE_URL_PATTERN = /^https:\/\/(www\.elance\.com\/s\/.)/i;
+
+        Utils.BEHANCE_URL_PATTERN = /^https:\/\/(www\.behance\.net\/.)/i;
+
+        Utils.DRIBBBLE_URL_PATTERN = /^https:\/\/(dribbble\.com\/.)/i;
+
+        Utils.GITHUB_URL_PATTERN = /^http:\/\/(www\.github\.com\/.)/i;
+
+        Utils.ODESK_URL_PATTERN = /^https:\/\/(www\.odesk\.com\/users\/)(.+)(\_\~)(.+)/i;
+
+        Utils.PEOPLEPERHOUR_URL_PATTERN = /^http:\/\/(www\.peopleperhour\.com\/freelancer\/(.+[\/])(.))/i;
 
         Utils.isVideo = function (mimeType) {
             var exp = new RegExp(/video\/*/g);
@@ -128,6 +138,31 @@
 
         Utils.matchUrlPattern =  function (str) {
             return str.match(Utils.URL_PATTERN) || str.match(Utils.PSEUDO_URL_PATTERN);
+        };
+
+        Utils.matchProviderUrlPattern = function (str, providerName) {
+            console.log('match pattern');
+            console.log('Pro ' + providerName + ' St ' + str);
+            if (!str || typeof(str) !== 'string' || !providerName || typeof(providerName) !== 'string') {
+                return;
+            }
+
+            switch (providerName) {
+            case 'elance':
+                return str.match(Utils.ELANCE_URL_PATTERN);
+            case 'behance':
+                return str.match(Utils.BEHANCE_URL_PATTERN);
+            case 'dribbble':
+                return str.match(Utils.DRIBBBLE_URL_PATTERN);
+            case 'github':
+                return str.match(Utils.GITHUB_URL_PATTERN);
+            case 'odesk':
+                return str.match(Utils.ODESK_URL_PATTERN);
+            case 'peopleperhour':
+                return str.match(Utils.PEOPLEPERHOUR_URL_PATTERN);
+            default:
+                return;
+            }
         };
 
         return Utils;

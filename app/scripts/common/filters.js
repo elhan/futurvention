@@ -27,11 +27,37 @@
     app.filter('getProviderName', [ 'PROVIDERS_ENUM', function (providers) {
         return function (importer) {
             return _.findKey(providers, function (provider) {
-                console.log(importer);
                 return parseInt(importer.Provider) === provider;
             });
         };
     }]);
+
+    app.filter('beautifyProviderNames', function () {
+        return function (providerName) {
+            switch (providerName) {
+            case 'elance':
+                return 'Elance';
+            case 'behance':
+                return 'Behance';
+            case 'dribbble':
+                return 'Dribbble';
+            case 'github':
+                return 'Github';
+            case 'odesk':
+                return 'oDesk';
+            case 'peopleperhour':
+                return 'PeoplePerHour';
+            default:
+                return;
+            }
+        };
+    });
+
+    app.filter('displayMediaTypes', function () {
+        return function (mediaTypes) {
+            return mediaTypes.join(', ').toLowerCase();
+        };
+    });
 
 //    app.filter('isOfferedService', function () {
 //        return function (services, offers) {

@@ -37,6 +37,7 @@
                     <input fv-auto-focus type="url" class="form-control input-s input-provider"
                            fv-dynamic-name=$index
                            ng-model="importer.Url"
+                           ui-validate="{importerFormat: 'validateImporterFormat($value,importer)'}"
                            placeholder="enter your {{importer.Provider}} profile url"
                            ng-disabled="isOld(importer)">
                   </div>
@@ -50,8 +51,8 @@
                 </div>
                 <div class="container-x flex-content-centered">
                   <!-- Error label: invalid url-->
-                  <label ng-show="innerForm.$error.url" class="label-warn label-s col-md-6" for="{{importer.Provider}}">
-                    Please provide a valid url: 'http://...'
+                  <label ng-show="innerForm.$error.importerFormat" class="label-warn label-s col-md-6" for="{{importer.Provider}}">
+                    Please provide a valid {{importer.Provider | beautifyProviderNames}} url
                   </label>
                 </div>
               </div>
