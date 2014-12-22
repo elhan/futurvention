@@ -12,7 +12,8 @@
      */
     app.controller('ApplyCtrl', ['$scope', 'EVENTS', 'ProfileSvc', function ($scope, events, ProfileSvc) {
         $scope.steps = ProfileSvc.getSteps();
-        $scope.activeStep = ProfileSvc.getActiveStep();
+
+        $scope.activeStep = ProfileSvc.getActiveStep() ? ProfileSvc.getActiveStep() : 'import';
 
         $scope.goToStep = function (step) {
             $scope.activeStep = $scope.steps[step];

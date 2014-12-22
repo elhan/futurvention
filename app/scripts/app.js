@@ -62,7 +62,8 @@
             controller: 'ResetPwdCtrl'
         })
         .when('/apply', {
-            templateUrl: 'views/apply.html'
+            templateUrl: 'views/apply.html',
+            controller: 'ApplyCtrl'
         })
         .when('/:moniker', {
             templateUrl: 'views/storefront.html',
@@ -88,7 +89,7 @@
                 }]
             }
         })
-        .when('/', {
+        .otherwise({
             templateUrl: 'views/landing.html',
             controller: 'LandingCtrl'
         });

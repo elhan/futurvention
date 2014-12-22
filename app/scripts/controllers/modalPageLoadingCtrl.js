@@ -10,10 +10,10 @@
      * # ModalPageLoadingCtrl
      * Controls the page loading modal
      */
-    app.controller('ModalPageLoadingCtrl', ['$scope', '$rootScope', 'EVENTS', function ($scope, $rootScope, events) {
+    app.controller('ModalPageLoadingCtrl', ['$scope', '$rootScope', 'EVENTS', 'ImporterSvc', function ($scope, $rootScope, events, ImporterSvc) {
         $scope.closeLoader = function () {
             $scope.$parent.$hide();
-            $rootScope.$broadcast(events.ui.loaderClosed);
+            ImporterSvc.stopPolling();
         };
     }]);
 }());

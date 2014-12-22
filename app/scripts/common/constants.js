@@ -71,52 +71,53 @@
      * Rest paths
      */
     app.constant('PATHS', {
-        root: 'https://futurvention.azurewebsites.net',
-//        root: 'https://futurvention.azurewebsites.net',
-        public: 'https://futurvention.azurewebsites.net/public.svc/',
-        cached: 'https://futurvention.azurewebsites.net/CachedPublic.svc/',
+        root: 'https://futurventionstage.azurewebsites.net',
+//        root: 'https://futurventionstage.azurewebsites.net',
+        //https://futurventionstage.azurewebsites
+        public: 'https://futurventionstage.azurewebsites.net/public.svc/',
+        cached: 'https://futurventionstage.azurewebsites.net/CachedPublic.svc/',
         account: {
-            register: 'https://futurvention.azurewebsites.net/api/Account/Register',
-            login: 'https://futurvention.azurewebsites.net/api/Account/Login',
-            logout: 'https://futurvention.azurewebsites.net/api/Account/Logout',
-            userInfo: 'https://futurvention.azurewebsites.net/api/Account/UserInfo',
-            resetPassword: 'https://futurvention.azurewebsites.net/api/Account/ChangePassword',
-            externalLogins: 'https://futurvention.azurewebsites.net/api/Account/ExternalLogins?returnUrl=http://client.futurvention.com:9000&generateState=true'
+            register: 'https://futurventionstage.azurewebsites.net/api/Account/Register',
+            login: 'https://futurventionstage.azurewebsites.net/api/Account/Login',
+            logout: 'https://futurventionstage.azurewebsites.net/api/Account/Logout',
+            userInfo: 'https://futurventionstage.azurewebsites.net/api/Account/UserInfo',
+            resetPassword: 'https://futurventionstage.azurewebsites.net/api/Account/ChangePassword',
+            externalLogins: 'https://futurventionstage.azurewebsites.net/api/Account/ExternalLogins?returnUrl=http://client.futurvention.com:9000&generateState=true'
         },
         importer: {
             importedData: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/',
-            import: 'https://futurvention.azurewebsites.net/api/ExtService/import',
-            checkProgress: 'https://futurvention.azurewebsites.net/api/ExtService/checkprogress',
-            fetchProfile: 'https://futurvention.azurewebsites.net/api/ExtService/getprofiles',
-            fetchPortfolios: 'https://futurvention.azurewebsites.net/api/ExtService/getportfolios',
+            import: 'https://futurventionstage.azurewebsites.net/api/ExtService/import',
+            checkProgress: 'https://futurventionstage.azurewebsites.net/api/ExtService/checkprogress',
+            fetchProfile: 'https://futurventionstage.azurewebsites.net/api/ExtService/getprofiles',
+            fetchPortfolios: 'https://futurventionstage.azurewebsites.net/api/ExtService/getportfolios',
         },
         sellerManagement: {
-            profile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
-            ownProfile: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile',
-            ownShowcase: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Showcases',
-            profileStatus: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
-            importedShowcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/ImportedShowcases?serviceID=',
-            showcases: 'https://futurvention.azurewebsites.net/api/SellerManagement/SellerProfiles/OwnProfile/SingleItemShowcases?serviceID=',
-            ownReviews: 'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/reviews',
+            profile: 'https://futurventionstage.azurewebsites.net/api/SellerManagement/Profiles/',
+            ownProfile: 'https://futurventionstage.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile',
+            ownShowcase: 'https://futurventionstage.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Showcases',
+            profileStatus: 'https://futurventionstage.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/Status',
+            importedShowcases: 'https://futurventionstage.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/ImportedShowcases?serviceID=',
+            showcases: 'https://futurventionstage.azurewebsites.net/api/SellerManagement/SellerProfiles/OwnProfile/SingleItemShowcases?serviceID=',
+            ownReviews: 'https://futurventionstage.azurewebsites.net/api/SellerManagement/Profiles/OwnProfile/reviews',
             monikerExists: function (moniker) {
                 return [
-                    'https://futurvention.azurewebsites.net/api/SellerManagement/Profiles/',
+                    'https://futurventionstage.azurewebsites.net/api/SellerManagement/Profiles/',
                     moniker,
                     '/exists'
                 ].join('');
             }
         },
         user: {
-            self: 'https://futurvention.azurewebsites.net/api/Self?expand=Avatar',
-            ownAvatar: 'https://futurvention.azurewebsites.net/api/Self/Avatar'
+            self: 'https://futurventionstage.azurewebsites.net/api/Self?expand=Avatar',
+            ownAvatar: 'https://futurventionstage.azurewebsites.net/api/Self/Avatar'
         },
         file: {
             hosted: 'https://ergmaimages.blob.core.windows.net/userdata/',
             imported: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/'
         },
         offerManagement: {
-            ownOffers: 'https://futurvention.azurewebsites.net/api/OffersManagement/OwnOffers',
-            offeredServices: 'https://futurvention.azurewebsites.net/api/OffersManagement/OwnOffers?expand=Service/ShortTitle/Literals,Service/ThumbnailFile'
+            ownOffers: 'https://futurventionstage.azurewebsites.net/api/OffersManagement/OwnOffers',
+            offeredServices: 'https://futurventionstage.azurewebsites.net/api/OffersManagement/OwnOffers?expand=Service/ShortTitle/Literals,Service/ThumbnailFile'
         }
     });
 

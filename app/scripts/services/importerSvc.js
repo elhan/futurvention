@@ -60,9 +60,9 @@
                 reviewsReady = true;
 
             _.each(checkStatusResponse, function (importer) {
-                profileReady = importer.Profile === null || importer.Profile === 2;
-                portfolioReady = importer.Portfolio === null || importer.Portfolio.CurrentStatus === 2;
-                reviewsReady = importer.Reviews === null || importer.Reviews === 2;
+                profileReady = importer.Profile === 2;
+                portfolioReady = importer.Portfolio.CurrentStatus === 2;
+                reviewsReady = importer.Reviews === 2;
 
                 done = profileReady && portfolioReady && reviewsReady;
 
@@ -162,19 +162,19 @@
         };
 
         ImporterSvc.startPolling = function (options) {
-            var importers, interval, repetitions;
+            var importers, delay, count;
 
             $rootScope.$broadcast(events.importer.polling.start);
 
             importers = options.hasOwnProperty('importers') ? options.importers : ImporterSvc.getImporters();
 
-            interval = options.hasOwnProperty('interval') ? options.interval : 6000; // tick every 6s by default
+            delay = options.hasOwnProperty('delay') ? options.interval : 6000; // tick every 6s by default
 
-            repetitions = options.hasOwnProperty('repetitions') ? options.repetitions : 30; // 30 ticks by default
+            count = options.hasOwnProperty('count') ? options.repetitions : 5; // 30s by default
 
             polling = $interval(function () {
                 ImporterSvc.checkStatus(importers, true);
-            }, interval, repetitions, false);
+            }, delay, count, false);
 
         };
 
@@ -237,7 +237,7 @@
             $http.post(paths.importer.fetchProfile, importers).then(function (response) {
 
                 _.each(response.data, function (obj) { // data === importers that have data
-                    obj.data !== null && importerData.push(obj);
+                    obj.hasOwnProperty('data') && obj.data !== null && importerData.push(obj);
                 });
 
                 if (!importerData || importerData.length === 0) { // no importers with data
@@ -246,7 +246,7 @@
                 }
 
                 _.each(importerData, function (imp) {
-                    if (imp.data.response.data && imp.data.response.error.errno === '0') { // TODO: handle  error codes
+                    if (imp.data.response.data && parseInt(imp.data.response.error.errno) < 500) { // TODO: handle  error codes
                         convertedProfiles.push(new odata.SellerProfile().fromImported(imp.data.response.data.PersonalInfo));
                         fetchedProfiles.push(imp.data.response.data.PersonalInfo);
                     }

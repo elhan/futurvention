@@ -68,7 +68,7 @@
                     $scope.profile = response.profile;
 
                     if (response.avatar && $scope.currentUser.AvatarID !== 0) {
-                        UserSvc.saveExternalAvatar(response.avatar); // this will fire an event that will notify MainCtrl to update currentUserd
+                        UserSvc.saveExternalAvatar(response.avatar); // this will fire an event that will notify MainCtrl to update currentUser
                     }
 
                     if (response.country) {
@@ -95,7 +95,7 @@
                     **/
                 }, function () {
                     ImporterSvc.getStoredImporters().then(function (importers) {
-                        ImporterSvc.startPolling({
+                        importers && importers.length > 0 && ImporterSvc.startPolling({
                             importers: importers,
                             interval: 5000, // check every 5s
                             repetitions: 6 // total duration === 30s
@@ -245,11 +245,37 @@
             modalPageLoading.hide();
         });
 
-        $scope.$on(events.ui.loaderClosed, function () {
-            ImporterSvc.stopPolling();
-        });
+        $scope.$on(events.importer.polling.profileImported, function () {
+            //TODO : merge with update function
+            ImporterSvc.fetchProfile().then(function (response) {
+                // check profile validity to determine if we should keep polling
+                $scope.profile = response.profile;
 
-        $scope.$on(events.importer.polling.profileImported, updateProfile);
+                if (response.avatar && ($scope.currentUser.AvatarID === 0 || $scope.currentUser.AvatarID === null )) {
+                    UserSvc.saveExternalAvatar(response.avatar); // this will fire an event that will notify MainCtrl to update currentUser
+                }
+
+                if (response.country) {
+                    $scope.countryName = response.country; // this will trigger a watcher that will update the country object
+
+                    response.city && $timeout(function () { // timeout to ensure $scope.country has updated
+
+                        $scope.country && LocationSvc.searchCity($scope.country.ID, response.city).then(function (res) {
+                            // res is an array of Locations. Pick the first and prefil cityName. This will trigger the cityName watcher.
+                            if (res && res[0]) {
+                                $scope.cities = res;
+                                $scope.cityName = res[0].getName();
+                            }
+
+                        }, function (error) {
+                            console.log(error);
+                        });
+                    });
+                }
+            }, function (error) {
+                console.log(error);
+            });
+        });
 
         ///////////////////////////////////////////////////////////
         /// Initialization

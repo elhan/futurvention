@@ -67,10 +67,10 @@
         ////////////////////////////////////////////
 
         ProfileSvc.setActiveStep = function (step) {
-            activeStep = step;
+            activeStep = step === 'offer_config' ? 'service_selection' : step;
 
             try {
-                localStorage.setItem('activeStep', JSON.stringify(step));
+                localStorage.setItem('activeStep', JSON.stringify(activeStep));
             } catch (error) {
                 // TODO: log this
                 console.log(error);
