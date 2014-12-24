@@ -27,7 +27,7 @@
       <label class="label-title text-grey text-p">Sign in with an email account</label>
       <!-- email input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputEmail.$error.emailPattern && loginForm.inputEmail.$viewValue.length > 0}">
-        <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email"
+        <input type="email" name="inputEmail" class="form-control" ng-model="email"
                ui-validate="{emailPattern: 'isEmail($value)'}"
                ng-change="clearAuthError()"
                placeholder="Enter email"
@@ -40,7 +40,8 @@
       <!-- password input -->
       <div class="form-group" ng-class="{'has-error': loginForm.inputPassword.$error.minlength}">
         <input type="password" name="inputPassword" class="form-control"
-               ng-model="newUser.password"
+               ng-model="password"
+               ng-change="clearAuthError()"
                ng-minlength="6"
                ui-validate="{digits: 'hasDigits($value)', lowercase: 'hasLowercase($value)', uppercase: 'hasUppercase($value)', alphanumeric: 'hasNonAlphanumeric($value)'}"
                placeholder="Password"
@@ -49,30 +50,28 @@
         <label ng-show="loginForm.inputPassword.$error.minlength" class="label-warn" for="inputPassword">
           This field needs to be at least 6 characters long.
         </label>
-        <label ng-show="loginForm.inputPassword.$error.digits && newUser.password.length > 0" class="text-start label-warn" for="inputPassword">
+        <label ng-show="loginForm.inputPassword.$error.digits && password.length > 0" class="text-start label-warn" for="inputPassword">
           The password must contain at least one digit.
         </label>
-        <label ng-show="loginForm.inputPassword.$error.uppercase && newUser.password.length > 0" class="text-start label-warn" for="inputPassword">
+        <label ng-show="loginForm.inputPassword.$error.uppercase && password.length > 0" class="text-start label-warn" for="inputPassword">
           The password must contain at least one upper case character.
         </label>
-        <label ng-show="loginForm.inputPassword.$error.lowercase && newUser.password.length > 0" class="text-start label-warn" for="inputPassword">
+        <label ng-show="loginForm.inputPassword.$error.lowercase && password.length > 0" class="text-start label-warn" for="inputPassword">
           The password must contain at least one lower case character.
         </label>
-        <label ng-show="loginForm.inputPassword.$error.alphanumeric && newUser.password.length > 0" class="text-start label-warn" for="inputPassword">
+        <label ng-show="loginForm.inputPassword.$error.alphanumeric && password.length > 0" class="text-start label-warn" for="inputPassword">
           The password must contain at least one non-alphanumeric character.
         </label>
       </div>
       <!-- Options -->
       <div class="form-group container-x flex-items-centered flex-content-spread">
         <div class="container-x">
-          <input type="checkbox" name="rememberMe" ng-model="newUser.rememberMe">
+          <input type="checkbox" name="rememberMe" ng-model="rememberMe">
           <div class="space-left text-i text-grey">Remember me</div>
         </div>
-        <a href="" ng-click="go('/forgotPassword')" class="text-i">Forgot password?</a>
+        <a ng-click="go('/forgotPassword')" class="text-i">Forgot password?</a>
       </div>
-      <label ng-show="authError.credentials" class="label-warn" for="inputPassword">
-        The email or password you provided are incorrect.
-      </label>
+      <label ng-show="authError" class="label-error text-start label-warn" for="inputPassword">{{authError}}</label>
       <div class="flex">
         <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="loginForm.$invalid || authError.credentials">Submit</button>
       </div>

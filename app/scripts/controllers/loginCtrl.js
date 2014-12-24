@@ -11,40 +11,50 @@
      * Controller of the login form
      */
     app.controller('LoginCtrl', ['$scope', '$rootScope', 'EVENTS', 'MESSAGES', 'Utils', 'AccountSvc', 'NotificationSvc', function ($scope, $rootScope, events, msg, utils, AccountSvc, NotificationSvc) {
-        // the models for the registration form
-        $scope.newUser = {
-            email: '',
-            password: ''
-        };
+
+        $scope.email = '';
+        $scope.password = '';
+        $scope.rememberMe = false;
 
         // initialize errors
-        $scope.authError = {
-            credentials: false
-        };
+        $scope.authError = false;
 
         $scope.clearAuthError =  function () {
-            $scope.authError.credentials = false;
+            $scope.authError = false;
         };
 
         $scope.login = function (provider) {
+
             if (provider) { // Facebook or LinkedIn
                 AccountSvc.externalLogin(provider);
                 return;
             }
-            AccountSvc.login($scope.newUser).then(function () {
-                $rootScope.$broadcast(events.auth.loginSuccess, event);
+
+            AccountSvc.login({ email: $scope.email, password: $scope.password, rememberMe: $scope.rememberMe }).then(function (response) {
+
+                if (response.status === 401) {
+                    $scope.authError = msg.error.wrongCredentials;
+                    $rootScope.$broadcast(events.auth.loginFailed, event);
+                } else {
+                    $rootScope.$broadcast(events.auth.loginSuccess, event);
+                }
+
             }, function (error) {
+                var errorMsg;
+
                 console.log(error);
-                switch (error.status) {
-                case 401: //unauthorized
-                    $scope.authError.credentials = true;
-                    break;
-                default:
-                    console.log(event, error);
-                    NotificationSvc.show({
-                        content: msg.error.generic,
-                        type: 'error'
-                    });
+
+                if (error.status === 400) { // wrong email format
+                    try {
+                        errorMsg = error.data.ModelState['Email'][0]; // loginModel.Email is a key on ModelState
+                        $scope.authError = msg.error.wrongCredentials;
+                    } catch (error) { // server data was not formed correctly
+                        console.log(error);
+                        $scope.authError =  msg.error.generic;
+                    }
+
+                } else {
+                    $scope.authError =  msg.error.generic;
                 }
             });
         };

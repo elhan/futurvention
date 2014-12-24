@@ -41,10 +41,6 @@
 
     app.config(['$routeProvider', function ($routeProvider) {
         $routeProvider
-        .when('/', {
-            templateUrl: 'views/landing.html',
-            controller: 'LandingCtrl'
-        })
         .when('/register', {
             templateUrl: 'views/register.html',
             controller: 'RegistrationCtrl'
@@ -74,6 +70,7 @@
                     ProfileSvc.fetchProfile($route.current.params.moniker).then(function (profile) {
                         deferred.resolve(profile);
                     }, function (error) {
+//                        $location.path('/');
                         deferred.reject(error);
                     });
                     return deferred.promise;

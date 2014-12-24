@@ -104,7 +104,7 @@
 
         Utils.DRIBBBLE_URL_PATTERN = /^https:\/\/(dribbble\.com\/.)/i;
 
-        Utils.GITHUB_URL_PATTERN = /^http:\/\/(www\.github\.com\/.)/i;
+        Utils.GITHUB_URL_PATTERN = /^http:\/\/((www\.)?github\.com\/.)/i;
 
         Utils.ODESK_URL_PATTERN = /^https:\/\/(www\.odesk\.com\/users\/)(.+)(\_\~)(.+)/i;
 

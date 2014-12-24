@@ -22,11 +22,11 @@
             });
         };
 
-        AccountSvc.login = function (user) {
+        AccountSvc.login = function (inputData) {
             return $http.post(paths.account.login, {
-                Email: user.email,
-                Password: user.password,
-                RememberMe: true
+                Email: inputData.email,
+                Password: inputData.password,
+                RememberMe: inputData.rememberMe
             });
         };
 

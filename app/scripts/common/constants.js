@@ -72,8 +72,6 @@
      */
     app.constant('PATHS', {
         root: 'https://futurventionstage.azurewebsites.net',
-//        root: 'https://futurventionstage.azurewebsites.net',
-        //https://futurventionstage.azurewebsites
         public: 'https://futurventionstage.azurewebsites.net/public.svc/',
         cached: 'https://futurventionstage.azurewebsites.net/CachedPublic.svc/',
         account: {
@@ -122,22 +120,19 @@
     });
 
     app.constant('ROUTES', {
-        public: ['/', '/login', '/register']
-    });
-
-    app.constant('EMBEDLY', {
-        key: '05b548d0a515404f8f3da52d93eb402f',
-        domain: 'http://api.embed.ly/1/',
-        oembedAPI: 'oembed'
+        public: ['/', '/login', '/register', '/forgotPassword', '/resetPassword']
     });
 
     app.constant('MESSAGES', {
         error: {
-            generic: 'Something went wrong. Please try again later.',
+            generic: 'An error has occured. Please try again later.',
             logoutFailed: 'Something went wrong. Please try logging out again.',
             profileImportFailed: 'No profiles could be imported',
             portfoliosImportFailed: 'No portfolios could be imported at this time.',
-            profileSaveFailed: 'Something went wrong! Please try saving your profiles again.'
+            profileSaveFailed: 'Something went wrong! Please try saving your profiles again.',
+            wrongCredentials: 'Wrong user name or password',
+            wrongEmailFormat: 'The email you entered is incorrect.',
+            emailTaken: 'The email you entered is already taken'
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',

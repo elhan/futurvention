@@ -134,8 +134,12 @@
                 ].join('');
 
             $http.get(url).then(function (response) {
-                utils.updateProperties(profile, response.data);
-                deferred.resolve(profile);
+                if (response && response.data === null || response.data === 'null') {
+                    deferred.reject();
+                } else {
+                    utils.updateProperties(profile, response.data);
+                    deferred.resolve(profile);
+                }
             }, function (error) {
                 deferred.reject(error);
             });

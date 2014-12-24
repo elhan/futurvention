@@ -248,6 +248,8 @@
         $scope.$on(events.importer.polling.profileImported, function () {
             //TODO : merge with update function
             ImporterSvc.fetchProfile().then(function (response) {
+                ImporterSvc.stopPolling();
+
                 // check profile validity to determine if we should keep polling
                 $scope.profile = response.profile;
 

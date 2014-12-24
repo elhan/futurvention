@@ -61,7 +61,7 @@
 
             _.each(checkStatusResponse, function (importer) {
                 profileReady = importer.Profile === 2;
-                portfolioReady = importer.Portfolio.CurrentStatus === 2;
+                portfolioReady = importer.Portfolio && importer.Portfolio.hasOwnProperty('CurrentStatus') && importer.Portfolio.CurrentStatus === 2;
                 reviewsReady = importer.Reviews === 2;
 
                 done = profileReady && portfolioReady && reviewsReady;
@@ -162,15 +162,21 @@
         };
 
         ImporterSvc.startPolling = function (options) {
-            var importers, delay, count;
+            var importers, delay, count, cancelAfter;
 
             $rootScope.$broadcast(events.importer.polling.start);
 
             importers = options.hasOwnProperty('importers') ? options.importers : ImporterSvc.getImporters();
 
-            delay = options.hasOwnProperty('delay') ? options.interval : 6000; // tick every 6s by default
+            delay = options.hasOwnProperty('delay') ? options.delay : 6000; // tick every 6s by default
 
-            count = options.hasOwnProperty('count') ? options.repetitions : 5; // 30s by default
+            count = options.hasOwnProperty('count') ? options.count : 5; // 30s by default
+
+            cancelAfter = (delay * count) + 1000;
+
+            $timeout(function () {
+                $rootScope.$broadcast(events.importer.polling.end);
+            }, cancelAfter);
 
             polling = $interval(function () {
                 ImporterSvc.checkStatus(importers, true);

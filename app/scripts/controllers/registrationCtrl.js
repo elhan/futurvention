@@ -10,7 +10,7 @@
      * # RegistrationCtrl
      * Controlls of the registration page
      */
-    app.controller('RegistrationCtrl', ['$scope', '$rootScope', 'EVENTS', 'Utils', 'AccountSvc', function ($scope, $rootScope, events, utils, AccountSvc) {
+    app.controller('RegistrationCtrl', ['$scope', '$rootScope', '$timeout', 'EVENTS', 'MESSAGES', 'Utils', 'AccountSvc', function ($scope, $rootScope, $timeout, events, msg, utils, AccountSvc) {
 
         // the models for the registration form
         $scope.newUser = {
@@ -21,23 +21,45 @@
         };
 
         // initialize server-side errors
-        $scope.authError = {
-            email: [],
-            password: []
-        };
+        $scope.authError = false;
 
-        $scope.register = function (provider) {
+        $scope.registrationInProgress = false;
+
+        $scope.register = _.throttle(function (provider) {
+            $scope.registrationInProgress = true;
+
             if (provider) { //facebook or linkedin
                 AccountSvc.externalLogin(provider);
                 return;
             }
-            AccountSvc.register($scope.newUser).then(function () {
+
+            AccountSvc.register($scope.newUser).then(function (response) {
+                $scope.registrationInProgress = false;
                 $rootScope.$broadcast(events.auth.registrationSuccess);
             }, function (error) {
-                // TODO: error handling
-                console.log(error);
+                var messages;
+
+                $scope.registrationInProgress = false;
+
+                $rootScope.$broadcast(events.auth.registrationFailed);
+
+                if (error.status === 400) {
+                    try {
+                        messages = error.data.ModelState['_identity'];
+
+                        _.each(messages, function (message) {
+                            if (message.indexOf('is already taken') !== -1) {
+                                $scope.authError = msg.error.emailTaken;
+                            }
+                        });
+
+                    } catch (error) { // malformed response
+                        console.log(error);
+                        $scope.authError = msg.error.generic;
+                    }
+                }
             });
-        };
+        }, 1000);
 
         ///////////////////////////////////////////////////////////
         /// Custom validation functions
@@ -62,26 +84,6 @@
         $scope.hasUppercase = function (pwd) {
             return /[A-Z]/.test(pwd);
         };
-
-        ///////////////////////////////////////////////////////////
-        /// Event handlers
-        ///////////////////////////////////////////////////////////
-
-        // Registration error handling
-        $scope.$on(events.auth.registrationFailed, function (event, error) {
-            switch (error.status) {
-            case 'EMAIL_TAKEN':
-                // cache last taken email to properly display errors
-                $scope.authError.emailTaken = $scope.newUser.email;
-                break;
-            case 'INVALID_EMAIL':
-                $scope.authError.invalidEmail = $scope.newUser.email;
-                break;
-            default: // the rest of the registration errors should not be displayed to the user, just logged
-                // TODO: add to logger when client logging is implemented
-                console.log(event, error);
-            }
-        });
 
     }]);
 

@@ -11,7 +11,9 @@
      * Controls the Offer page
      */
     app.controller('ModalImageCropCtrl', ['$http', '$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'EVENTS', 'MESSAGES', 'Utils', 'UserSvc', 'NotificationSvc', function ($http, $rootScope, $scope, $timeout, $upload, paths, events, msg, utils, UserSvc, NotificationSvc) {
+
         $scope.file = {};
+
         /*
             Expose the init function on the scope, as the fv-on-drop directive needs to call it.
             progressState is passed as an argument to enable setting the initial progress state to true

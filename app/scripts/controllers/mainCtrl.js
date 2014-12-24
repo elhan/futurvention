@@ -44,14 +44,29 @@
         ////////////////////////////////////////////
         /// Event handling
         ////////////////////////////////////////////
-//
+
 //        $scope.$on('$routeChangeStart', function (e, next) {
 //            !$scope.session.hasRegistered && routes.public.indexOf(next.originalPath) === -1 && $scope.go('/');
 //        });
 
+//        $scope.$on('$locationChangeStart', function (event, next) {
+//            var requiresAuth = true;
+//
+//            if (!$scope.session.hasRegistered) {
+//
+//                _.each(routes.public, function (route) {
+//                    if ($location.path().match(route)) {
+//                        requiresAuth = false;
+//                    }
+//                });
+//
+//                requiresAuth && event.preventDefault();
+//            }
+//        });
+
         $scope.$on('$routeChangeError', function (e, current, previous, rejection) {
             console.log(rejection);
-            NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+            rejection && NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             $scope.go('/');
         });
 

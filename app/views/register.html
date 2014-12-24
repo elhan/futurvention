@@ -35,7 +35,7 @@
         <input type="text" name="inputLastName" class="form-control" ng-model="newUser.lastName" placeholder="Last name" ng-required="true">
       </div>
       <!-- email input -->
-      <div class="form-group" ng-class="{'has-error': registrationForm.inputEmail.$error.email || authError.emailTaken || authError.invalidEmail || registrationForm.inputEmail.$error.emailPattern && registrationForm.inputEmail.$viewValue.length > 0}">
+      <div class="form-group" ng-class="{'has-error': registrationForm.inputEmail.$error.email || authError || registrationForm.inputEmail.$error.emailPattern && registrationForm.inputEmail.$viewValue.length > 0}">
         <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email"
                ui-validate="{emailPattern: 'isEmail($value)'}"
                ng-change="clearAuthError()"
@@ -44,9 +44,7 @@
         <label ng-show="registrationForm.inputEmail.$error.emailPattern && registrationForm.inputEmail.$viewValue.length > 0" class="label-warn" for="inputEmail">
            Please provide a valid email.
         </label>
-        <label ng-show="authError.emailTaken && authError.emailTaken" class="control-label label-s" for="inputEmail">
-          The specified email address is already in use.
-        </label>
+        <label ng-show="authError" class="control-label label-s label-error space-bottom" for="inputEmail">{{authError}}</label>
       </div>
       <!-- password input -->
       <div class="form-group" ng-class="{'has-error': !registrationForm.inputPassword.$valid && registrationForm.inputPassword.$viewValue.length > 0}">
@@ -73,7 +71,9 @@
         </label>
       </div>
       <div class="flex">
-        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="registrationForm.$invalid">Submit</button>
+        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="registrationForm.$invalid || registrationInProgress">
+          <span>Submit</span>
+        </button>
       </div>
       <div class="link-tc text-grey text-i">By clicking SignUp you agree to our
         <span class="text-grey-dark">T&C's</span>
