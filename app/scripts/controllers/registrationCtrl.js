@@ -10,7 +10,7 @@
      * # RegistrationCtrl
      * Controlls of the registration page
      */
-    app.controller('RegistrationCtrl', ['$scope', '$rootScope', '$timeout', 'EVENTS', 'MESSAGES', 'Utils', 'AccountSvc', function ($scope, $rootScope, $timeout, events, msg, utils, AccountSvc) {
+    app.controller('RegistrationCtrl', ['$scope', '$rootScope', '$timeout', '$alert', 'EVENTS', 'MESSAGES', 'Utils', 'AccountSvc', function ($scope, $rootScope, $timeout, $alert, events, msg, utils, AccountSvc) {
 
         // the models for the registration form
         $scope.newUser = {
@@ -20,12 +20,24 @@
             password: ''
         };
 
+        $scope.clearAuthError =  function () {
+            $scope.authError = false;
+        };
+
         // initialize server-side errors
         $scope.authError = false;
 
         $scope.registrationInProgress = false;
 
         $scope.register = _.throttle(function (provider) {
+            var warningAlert, warningTimeout;
+
+            warningAlert = $alert({ content: msg.warning.tooLong, type: 'warning', dismissable: true, show: false, duration: false });
+
+            warningTimeout = $timeout(function() {
+                warningAlert.show();
+            }, 10000, false);
+
             $scope.registrationInProgress = true;
 
             if (provider) { //facebook or linkedin
@@ -34,11 +46,17 @@
             }
 
             AccountSvc.register($scope.newUser).then(function (response) {
+                $timeout.cancel(warningTimeout);
+                warningAlert.hide();
                 $scope.registrationInProgress = false;
+
                 $rootScope.$broadcast(events.auth.registrationSuccess);
+
             }, function (error) {
                 var messages;
 
+                warningAlert.hide();
+                $timeout.cancel(warningTimeout);
                 $scope.registrationInProgress = false;
 
                 $rootScope.$broadcast(events.auth.registrationFailed);
@@ -57,6 +75,8 @@
                         console.log(error);
                         $scope.authError = msg.error.generic;
                     }
+                } else {
+                    $scope.authError = msg.error.generic;
                 }
             });
         }, 1000);

@@ -9,7 +9,7 @@
      * # AccountSvc
      * A service to handle authentication, authorization, and User objects.
      */
-    app.service('AccountSvc', ['$q', '$http', 'PATHS', 'MESSAGES', 'NotificationSvc', function ($q, $http, paths, msg, NotificationSvc) {
+    app.service('AccountSvc', ['$q', '$http', '$timeout', 'PATHS', 'MESSAGES', 'NotificationSvc', function ($q, $http, $timeout, paths, msg, NotificationSvc) {
         var AccountSvc = {};
 
         AccountSvc.register = function (newUser) {
@@ -45,7 +45,6 @@
         };
 
         AccountSvc.forgotPassword = function (email) {
-            //TODO
             var deferred = $q.defer();
             deferred.resolve(email);
             return deferred.promise;

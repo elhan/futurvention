@@ -15,19 +15,23 @@
 
         $scope.forgotPassword = function () {
             AccountSvc.forgotPassword($scope.email).then(function (response) {
-                //TODO
+
                 console.log(response);
+
                 NotificationSvc.show({
                     content: msg.success.createNewPassword,
                     type: 'success'
                 }).then(function () {
                     $scope.go('/login');
                 });
-            }, function () {
+
+            }, function (error) {
+                console.log(error);
                 NotificationSvc.show({
                     content: msg.error.generic,
                     type: 'error'
                 });
+
             });
         };
     }]);

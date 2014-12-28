@@ -80,7 +80,7 @@
             logout: 'https://futurventionstage.azurewebsites.net/api/Account/Logout',
             userInfo: 'https://futurventionstage.azurewebsites.net/api/Account/UserInfo',
             resetPassword: 'https://futurventionstage.azurewebsites.net/api/Account/ChangePassword',
-            externalLogins: 'https://futurventionstage.azurewebsites.net/api/Account/ExternalLogins?returnUrl=http://client.futurvention.com:9000&generateState=true'
+            externalLogins: 'https://futurventionstage.azurewebsites.net/api/Account/ExternalLogins?returnUrl=https://futurventionclient.azurewebsites.net&generateState=true'
         },
         importer: {
             importedData: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/',
@@ -110,7 +110,7 @@
             ownAvatar: 'https://futurventionstage.azurewebsites.net/api/Self/Avatar'
         },
         file: {
-            hosted: 'https://ergmaimages.blob.core.windows.net/userdata/',
+            hosted: 'https://ergmaimages.blob.core.windows.net/stageuserdata/',
             imported: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/'
         },
         offerManagement: {
@@ -132,6 +132,7 @@
             profileSaveFailed: 'Something went wrong! Please try saving your profiles again.',
             wrongCredentials: 'Wrong user name or password',
             wrongEmailFormat: 'The email you entered is incorrect.',
+            wrongPassword: 'The password you entered is incorrect.',
             emailTaken: 'The email you entered is already taken'
         },
         success: {
@@ -139,6 +140,9 @@
             resetPassword: 'Your password has been reset!',
             profileImported: 'Your profile has been imported from ',
             showcaseDeleteSuccess: 'Successfully deleted '
+        },
+        warning: {
+            tooLong: 'This is taking longer than expected...'
         }
     });
 

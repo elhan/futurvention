@@ -71,6 +71,14 @@ input[type="checkbox"] {
   padding-left: 12px;
 }
 
+.input-m {
+  max-width: 313px;
+  &.fixed-width {
+    width: 313px;
+    margin: auto;
+  }
+}
+
 .form-control::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
   .text-lightGrey;
 }
@@ -239,6 +247,12 @@ textarea {
     width: 90%;
 
   }
+}
+
+.navbar-float-bottom {
+  position: fixed;
+  width: 100%;
+  bottom: 0;
 }
 
 // Dividers

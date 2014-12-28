@@ -10,7 +10,7 @@
      * # LoginCtrl
      * Controller of the login form
      */
-    app.controller('LoginCtrl', ['$scope', '$rootScope', 'EVENTS', 'MESSAGES', 'Utils', 'AccountSvc', 'NotificationSvc', function ($scope, $rootScope, events, msg, utils, AccountSvc, NotificationSvc) {
+    app.controller('LoginCtrl', ['$scope', '$rootScope', '$alert', '$timeout', 'EVENTS', 'MESSAGES', 'Utils', 'AccountSvc', function ($scope, $rootScope, $alert, $timeout, events, msg, utils, AccountSvc) {
 
         $scope.email = '';
         $scope.password = '';
@@ -23,7 +23,18 @@
             $scope.authError = false;
         };
 
+        $scope.loginInProgress = false;
+
         $scope.login = function (provider) {
+            var warningAlert, warningTimeout;
+
+            warningAlert = $alert({ content: msg.warning.tooLong, type: 'warning', dismissable: true, show: false, duration: false });
+
+            warningTimeout = $timeout(function() {
+                warningAlert.show();
+            }, 10000, false);
+
+            $scope.loginInProgress = true;
 
             if (provider) { // Facebook or LinkedIn
                 AccountSvc.externalLogin(provider);
@@ -31,6 +42,9 @@
             }
 
             AccountSvc.login({ email: $scope.email, password: $scope.password, rememberMe: $scope.rememberMe }).then(function (response) {
+                $scope.loginInProgress = false;
+                $timeout.cancel(warningTimeout);
+                warningAlert.hide();
 
                 if (response.status === 401) {
                     $scope.authError = msg.error.wrongCredentials;
@@ -41,8 +55,11 @@
 
             }, function (error) {
                 var errorMsg;
-
                 console.log(error);
+
+                $scope.loginInProgress = false;
+                $timeout.cancel(warningTimeout);
+                warningAlert.hide();
 
                 if (error.status === 400) { // wrong email format
                     try {

@@ -35,7 +35,7 @@
         <input type="text" name="inputLastName" class="form-control" ng-model="newUser.lastName" placeholder="Last name" ng-required="true">
       </div>
       <!-- email input -->
-      <div class="form-group" ng-class="{'has-error': registrationForm.inputEmail.$error.email || authError || registrationForm.inputEmail.$error.emailPattern && registrationForm.inputEmail.$viewValue.length > 0}">
+      <div class="form-group" ng-class="{'has-error': registrationForm.inputEmail.$error.email || registrationForm.inputEmail.$error.emailPattern && registrationForm.inputEmail.$viewValue.length > 0}">
         <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email"
                ui-validate="{emailPattern: 'isEmail($value)'}"
                ng-change="clearAuthError()"
@@ -71,8 +71,11 @@
         </label>
       </div>
       <div class="flex">
-        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="registrationForm.$invalid || registrationInProgress">
+        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="registrationForm.$invalid || authEror || registrationInProgress">
           <span>Submit</span>
+          <div class="wrapper-loader space-left" ng-show="registrationInProgress">
+            <div class="loader"></div>
+          </div>
         </button>
       </div>
       <div class="link-tc text-grey text-i">By clicking SignUp you agree to our

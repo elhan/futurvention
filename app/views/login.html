@@ -73,7 +73,12 @@
       </div>
       <label ng-show="authError" class="label-error text-start label-warn" for="inputPassword">{{authError}}</label>
       <div class="flex">
-        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="loginForm.$invalid || authError.credentials">Submit</button>
+        <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="loginForm.$invalid || authError || loginInProgress">
+          <span>Submit</span>
+          <div class="wrapper-loader space-left" ng-show="loginInProgress">
+            <div class="loader"></div>
+          </div>
+        </button>
       </div>
     </form>
     <div class="link-box text-grey text-p">Don't have an account?
