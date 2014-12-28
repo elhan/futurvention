@@ -72,6 +72,7 @@
 
         $scope.$on(events.auth.loginSuccess, function () {
             $scope.handleSignIn();
+            console.log($cookies);
         });
 
         $scope.$on(events.auth.registrationSuccess, function () {
@@ -79,11 +80,16 @@
         });
 
         $scope.$on(events.auth.logoutSuccess, function () {
+            ProfileSvc.setProfile({}); // reset profile in case user signs in with different account
             $scope.session = {};
             $scope.go('/');
         });
 
         $scope.$on(events.auth.logoutFailed, function () {
+            $scope.currentUser = {};
+            $scope.avatar = {};
+            $scope.session = {};
+            console.log($cookies);
             NotificationSvc.show({ content: msg.error.logoutFailed, type: 'error' });
         });
 

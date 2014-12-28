@@ -45,7 +45,8 @@
         ui: {
             providerSelected: 'ui-provider-selected',
             cameraReady: 'ui-camera-ready',
-            loaderClosed: 'ui-loader-closed'
+            loaderClosed: 'ui-loader-closed',
+            alertClosed: 'ui-alert-closed'
         }
     });
 
@@ -130,10 +131,11 @@
             profileImportFailed: 'No profiles could be imported',
             portfoliosImportFailed: 'No portfolios could be imported at this time.',
             profileSaveFailed: 'Something went wrong! Please try saving your profiles again.',
-            wrongCredentials: 'Wrong user name or password',
+            wrongCredentials: 'Wrong email or password',
             wrongEmailFormat: 'The email you entered is incorrect.',
             wrongPassword: 'The password you entered is incorrect.',
-            emailTaken: 'The email you entered is already taken'
+            emailTaken: 'The email you entered is already taken',
+            importProfileTimeout: 'There was a problem importing your profile information. You can still create your profile manually.'
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',

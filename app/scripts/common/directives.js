@@ -452,4 +452,25 @@
 
     }]);
 
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvAlert
+     * @restrict A
+     *
+     * @description
+     * Emmits an event when dismissed
+     *
+     */
+    app.directive('fvAlert', ['$rootScope', 'EVENTS', function ($rootScope, events) {
+        return {
+            link: function (scope) {
+                scope.dismissAlert = _.throttle(function () {
+                    scope.$hide();
+                    $rootScope.$broadcast(events.ui.alertClosed);
+                }, 1000);
+            }
+        };
+
+    }]);
+
 }());

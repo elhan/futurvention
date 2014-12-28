@@ -51,9 +51,9 @@
             <div ng-switch-when="1">
               <!-- Owned Showcases -->
               <div ng-if="activeWorkSamples === 'owned'">
-                <div>
+                <div class="container-x">
                   <div class="text-p space-after">{{ service.showcasePrompt }}</div>
-                  <div class="text-p">For this service you can upload the following file types: {{ service.allowedShowcaseFileTypes | displayMediaTypes}}.</div>
+                  <div class="text-p">(allowed file types: {{ service.allowedShowcaseFileTypes | displayMediaTypes}} )</div>
                 </div>
                 <div class="wrapper-icons">
                   <div class="container-x">

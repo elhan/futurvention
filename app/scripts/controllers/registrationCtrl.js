@@ -47,7 +47,14 @@
 
             AccountSvc.register($scope.newUser).then(function (response) {
                 $timeout.cancel(warningTimeout);
-                warningAlert.hide();
+
+                try { // this trhows an error if it is not open
+                    warningAlert.hide();
+                } catch (error) {
+                    // TODO: proper logging
+                    console.log(error);
+                }
+
                 $scope.registrationInProgress = false;
 
                 $rootScope.$broadcast(events.auth.registrationSuccess);
@@ -55,7 +62,13 @@
             }, function (error) {
                 var messages;
 
-                warningAlert.hide();
+                try { // this trhows an error if it is not open
+                    warningAlert.hide();
+                } catch (error) {
+                    // TODO: proper logging
+                    console.log(error);
+                }
+
                 $timeout.cancel(warningTimeout);
                 $scope.registrationInProgress = false;
 

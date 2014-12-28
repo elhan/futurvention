@@ -44,7 +44,14 @@
             AccountSvc.login({ email: $scope.email, password: $scope.password, rememberMe: $scope.rememberMe }).then(function (response) {
                 $scope.loginInProgress = false;
                 $timeout.cancel(warningTimeout);
-                warningAlert.hide();
+
+                try { // this trhows an error if it is not open
+                    warningAlert.hide();
+                } catch (error) {
+                    // TODO: proper logging
+                    console.log(error);
+                }
+
 
                 if (response.status === 401) {
                     $scope.authError = msg.error.wrongCredentials;
@@ -59,7 +66,13 @@
 
                 $scope.loginInProgress = false;
                 $timeout.cancel(warningTimeout);
-                warningAlert.hide();
+
+                try { // this trhows an error if it is not open
+                    warningAlert.hide();
+                } catch (error) {
+                    // TODO: proper logging
+                    console.log(error);
+                }
 
                 if (error.status === 400) { // wrong email format
                     try {

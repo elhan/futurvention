@@ -10,7 +10,7 @@
      * # ApplyInfoCtrl
      * Controls the apply 'info' step
      */
-    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'Utils', 'Odata', 'ProfileSvc', 'LocationSvc', 'ImporterSvc',  'UserSvc', function ($scope, $modal, $timeout, events, utils, odata, ProfileSvc, LocationSvc, ImporterSvc, UserSvc) {
+    app.controller('ApplyInfoCtrl', ['$scope', '$modal', '$timeout', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', 'ProfileSvc', 'LocationSvc', 'ImporterSvc',  'UserSvc', 'NotificationSvc', function ($scope, $modal, $timeout, events, msg, utils, odata, ProfileSvc, LocationSvc, ImporterSvc, UserSvc, NotificationSvc) {
 
         ///////////////////////////////////////////////////////////
         /// Private variables & functions
@@ -48,11 +48,11 @@
         function updateProfile () {
 
             //case 1: the user already has a SellerProfile
-            ProfileSvc.fetchOwnProfile().then(function () {
+            ProfileSvc.fetchOwnProfile().then(function (profile) {
                 $scope.profileExists = true;
 
                 // populate from existing profile
-                $scope.profile = ProfileSvc.getProfile();
+                $scope.profile = profile;
 
                 LocationSvc.fetchLocationNames($scope.profile.LocationID).then(function (response) {
                     $scope.cityName = response.results[0].value[0].Name.Literals[0].Text;
@@ -97,8 +97,8 @@
                     ImporterSvc.getStoredImporters().then(function (importers) {
                         importers && importers.length > 0 && ImporterSvc.startPolling({
                             importers: importers,
-                            interval: 5000, // check every 5s
-                            repetitions: 6 // total duration === 30s
+                            delay: 5000, // check every 5s
+                            count: 6 // total duration === 30s
                         });
                     });
                 });
@@ -230,9 +230,7 @@
 
         // profile avatar is changed by the image crop modal
         $scope.$on(events.profile.profileUpdated, function () {
-            $timeout(function () {
-                $scope.profile = ProfileSvc.getProfile();
-            });
+            $scope.profile = ProfileSvc.getProfile();
         });
 
         $scope.$on(events.importer.polling.start, function () {
@@ -275,7 +273,10 @@
                     });
                 }
             }, function (error) {
+                //TODO: log this
                 console.log(error);
+                ImporterSvc.stopPolling();
+                NotificationSvc.show({ content: msg.error.importProfileTimeout, type: 'error' });
             });
         });
 

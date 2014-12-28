@@ -35,7 +35,6 @@
 
             $http.post(paths.account.logout, {}).then(function () {
                 localStorage.removeItem('importers');
-                localStorage.removeItem('activeStep');
                 deferred.resolve();
             }, function (error) {
                 deferred.reject(error);

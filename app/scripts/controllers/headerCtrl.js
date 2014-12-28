@@ -12,9 +12,27 @@
      */
     app.controller('HeaderCtrl', ['$rootScope', '$scope', 'EVENTS', 'AccountSvc', function ($rootScope, $scope, events, AccountSvc) {
 
+        $scope.dropdown = [];
+
         $scope.logout = function () {
             AccountSvc.logout().then(function () {
                 $rootScope.$broadcast(events.auth.logoutSuccess, event);
+
+                // Reset the dropdown as the enw user might not have a profile yet!
+                $scope.dropdown = [
+                    {
+                        text: 'Change Password',
+                        href: '#resetPassword'
+                    },
+                    {
+                        divider: true
+                    },
+                    {
+                        text: 'Signout',
+                        click: $scope.logout
+                    }
+                ];
+
             }, function (error) {
                 $rootScope.$broadcast(events.auth.logoutFailed, event, error);
             });
@@ -42,23 +60,25 @@
                 return;
             }
 
-            $scope.dropdown = [
-                {
-                    text: 'My Profile',
-                    href: '#' + $scope.currentUser.Profile.Moniker
-                },
-                {
-                    text: 'Change Password',
-                    href: '#resetPassword'
-                },
-                {
-                    divider: true
-                },
-                {
-                    text: 'Signout',
-                    click: $scope.logout
-                }
-            ];
+            if ($scope.currentUser.Profile.Moniker) {
+                $scope.dropdown = [
+                    {
+                        text: 'My Profile',
+                        href: '#' + $scope.currentUser.Profile.Moniker
+                    },
+                    {
+                        text: 'Change Password',
+                        href: '#resetPassword'
+                    },
+                    {
+                        divider: true
+                    },
+                    {
+                        text: 'Signout',
+                        click: $scope.logout
+                    }
+                ];
+            }
         });
 
     }]);

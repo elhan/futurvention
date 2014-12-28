@@ -9,9 +9,11 @@
      * # ImporterSvc
      * CRUD operations for eternal data (importers)
      */
-    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', 'PATHS', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, paths, providersEnum, events, msg, utils, odata) {
+    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', '$alert', 'PATHS', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, $alert, paths, providersEnum, events, msg, utils, odata) {
 
         var polling,
+
+            pollingTimeout,
 
             providerNames = _.keys(providersEnum),
 
@@ -156,6 +158,7 @@
         ///////////////////////////////////////////////////////////
 
         ImporterSvc.stopPolling = function () {
+            $timeout.cancel(pollingTimeout);
             $interval.cancel(polling);
             $rootScope.$broadcast(events.importer.polling.end);
             polling =  null;
@@ -174,7 +177,8 @@
 
             cancelAfter = (delay * count) + 1000;
 
-            $timeout(function () {
+            pollingTimeout = $timeout(function () {
+                $alert({ content: msg.error.importProfileTimeout, type: 'error', show: true });
                 $rootScope.$broadcast(events.importer.polling.end);
             }, cancelAfter);
 

@@ -81,6 +81,11 @@
             utils.updateProperties(profile, obj);
         };
 
+        ProfileSvc.setProfile = function (obj) {
+            // if no param is present, reset the profile. Used after signouts
+            profile = !_.isEmpty(obj) ? obj : new odata.SellerProfile();
+        };
+
         ////////////////////////////////////////////
         /// Save operations
         ////////////////////////////////////////////
