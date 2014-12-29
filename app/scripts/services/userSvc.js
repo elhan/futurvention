@@ -80,10 +80,11 @@
 
             $http({
                 method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 url: env.api.endPoint + paths.user.ownAvatar,
-                params: {
-                    url: avatarLink
-                }
+                data: '"' + avatarLink + '"'
             }).then(function () {
                 UserSvc.fetchOwnUser().then(function (response) {
                     deferred.resolve(response);

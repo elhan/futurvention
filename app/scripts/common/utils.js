@@ -163,6 +163,10 @@
             }
         };
 
+        Utils.matchEngAndNum = function (str) {
+            return /^[a-z]+[a-z0-9]*$/gi.test(str);
+        };
+
         return Utils;
     });
 

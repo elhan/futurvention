@@ -33,6 +33,8 @@
             backdrop: 'static'
         });
 
+        $scope.avatarLoading = false; // determines if a loader is shown on the user avatar while a new avatar is loading.
+
         /**
          * Updates the profile object. If the user already has completed a profile, fetch it. Otherwise try
          * to fetch any imported profiles.
@@ -67,8 +69,16 @@
 
                     $scope.profile = response.profile;
 
-                    if (response.avatar && $scope.currentUser.AvatarID !== 0) {
-                        UserSvc.saveExternalAvatar(response.avatar); // this will fire an event that will notify MainCtrl to update currentUser
+                    // if the fetched profile contains an avatar, and the user does not already have one
+                    if (response.avatar && ($scope.currentUser.AvatarID === 0 || $scope.currentUser.AvatarID === null )) {
+                        $scope.avatarLoading = true;
+
+                        UserSvc.saveExternalAvatar(response.avatar).then(function () { // this will fire an event that will notify MainCtrl to update currentUser
+                            $scope.avatarLoading = false;
+                        }, function () {
+                            NotificationSvc.show({ content: msg.error.saveAvatarFailed, type: 'error' });
+                            $scope.avatarLoading = false;
+                        });
                     }
 
                     if (response.country) {
@@ -175,8 +185,8 @@
             });
         }, 700);
 
-        $scope.hasNonAlphanumeric = function (pwd) {
-            return /\W/g.test(pwd);
+        $scope.engAndNum = function (str) {
+            return utils.matchEngAndNum(str);
         };
 
         ///////////////////////////////////////////////////////////

@@ -12,9 +12,12 @@
       <div class="flex-2">
         <div class="modal-lg profile-picture-m default wrapper-round clickable flex-content-centered" ng-click="showImageCropModal()">
           <div class="flex-content-centered" ng-if="!avatar">
-            <svg class="icon icon-lightGrey icon-camera">
+            <svg class="icon icon-lightGrey icon-camera" ng-if="$parent.avatarLoading === false">
               <use xlink:href="#camera"></use>
             </svg>
+            <div class="wrapper-loader" ng-if="$parent.avatarLoading === true">
+              <div class="loader"></div>
+            </div>
           </div>
           <div ng-if="avatar" fv-bg-image="{{avatar}}" class="image-profile">
             <div class="flex-content-centered">
@@ -36,8 +39,10 @@
           <div class="text-p text-silver input-borderless-placeholder">http://digiserved.com/</div>
           <input type="text" class="form-control input-info-url input-s"
                  name="infoUrl"
+                 ng-minlength="3"
+                 ng-maxlength="20"
                  ng-model="profile.Moniker"
-                 ui-validate="{alphanumeric: 'hasNonAlphanumeric($value)'}"
+                 ui-validate="{englishAndNum: 'engAndNum($value)'}"
                  autocomplete="on">
         </div>
         <div class="flex-1 flex-items-centered">
@@ -45,18 +50,34 @@
             <use xlink:href="#tick"></use>
           </svg>
         </div>
-        <label ng-show="urlExists" class="control-label label-s col-md-6">
+      </div>
+      <div class="container-x space-bottom-2x" ng-show="urlExists">
+        <div class="flex-1"></div>
+        <label class="label-warn flex-2" for="inputPassword">
           This url is already taken. Please provide a new url.
         </label>
-        <label ng-show="profileInfoForm.infoUrl.$error.minlength" class="control-label label-s col-md-6">
+        <div class="flex-1"></div>
+      </div>
+      <div class="container-x space-bottom-2x" ng-show="profileInfoForm.infoUrl.$error.minlength">
+        <div class="flex-1"></div>
+        <label class="label-warn flex-2" for="inputPassword">
           This input must be at least 3 characters long
         </label>
-        <label ng-show="profileInfoForm.infoUrl.$error.maxlength" class="control-label label-s col-md-6">
+        <div class="flex-1"></div>
+      </div>
+      <div class="container-x space-bottom-2x" ng-show="profileInfoForm.infoUrl.$error.maxlength">
+        <div class="flex-1"></div>
+        <label class="label-warn flex-2" for="inputPassword">
           This input must be at most 20 characters long
         </label>
-        <label ng-show="profileInfoForm.infoUrl.$error.alphanumeric && profile.moniker.length > 3" class="text-start label-warn" for="inputPassword">
-          The password must contain at least one non-alphanumeric character.
-        </label>
+        <div class="flex-1"></div>
+      </div>
+      <div class="container-x space-bottom-2x" ng-show="profileInfoForm.infoUrl.$error.englishAndNum && profileInfoForm.infoUrl.$viewValue.length > 3">
+        <div class="flex-1"></div>
+          <label class="label-warn flex-2" for="inputPassword">
+            Your moniker can only contain latin characters and numbers.
+          </label>
+        <div class="flex-1"></div>
       </div>
       <!-- Title -->
       <div class="form-group container-x">

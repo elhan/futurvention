@@ -258,7 +258,15 @@
                 _.each(importerData, function (imp) {
                     if (imp.data.response.data && parseInt(imp.data.response.error.errno) < 500) { // TODO: handle specific error codes
                         convertedProfiles.push(new odata.SellerProfile().fromImported(imp.data.response.data.PersonalInfo));
-                        fetchedProfiles.push(imp.data.response.data.PersonalInfo);
+
+                        /*
+                           Before adding a new fetchedProfile object, we need to extend it to include info on it's provider and user guid.
+                           This will help build the avatar's hosted file link.
+                         **/
+                        fetchedProfiles.push(angular.extend(imp.data.response.data.PersonalInfo, {
+                            provider: providersEnum[imp.Provider],
+                            guid: imp.Guid
+                        }));
                     }
                 });
 
@@ -291,7 +299,17 @@
                     return prof.hasOwnProperty('Photo') && prof.Photo !== '';
                 });
 
-                photo = fetchedProfile ? fetchedProfile.Photo : '';
+                if (fetchedProfile !== null && fetchedProfile.Photo) {
+                    photo = [
+                        paths.importer.importedData,
+                        fetchedProfile.guid,
+                        '/',
+                        fetchedProfile.provider,
+                        '/avatar.jpg'
+                    ].join('');
+                } else {
+                    photo = '';
+                }
 
                 deferred.resolve({
                     profile: sellerProfile,
