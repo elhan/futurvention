@@ -72,7 +72,6 @@
 
         $scope.$on(events.auth.loginSuccess, function () {
             $scope.handleSignIn();
-            console.log($cookies);
         });
 
         $scope.$on(events.auth.registrationSuccess, function () {

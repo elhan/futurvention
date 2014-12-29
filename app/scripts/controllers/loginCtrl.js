@@ -52,17 +52,18 @@
                     console.log(error);
                 }
 
-
                 if (response.status === 401) {
                     $scope.authError = msg.error.wrongCredentials;
-                    $rootScope.$broadcast(events.auth.loginFailed, event);
+                    $rootScope.$broadcast(events.auth.loginFailed);
                 } else {
-                    $rootScope.$broadcast(events.auth.loginSuccess, event);
+                    $rootScope.$broadcast(events.auth.loginSuccess);
                 }
 
             }, function (error) {
                 var errorMsg;
                 console.log(error);
+
+                $rootScope.$broadcast(events.auth.loginFailed);
 
                 $scope.loginInProgress = false;
                 $timeout.cancel(warningTimeout);

@@ -72,9 +72,11 @@
       </div>
       <div class="flex">
         <button type="submit" class="btn btn-blue btn-lg btn-big flex-1 flex-content-centered" ng-disabled="registrationForm.$invalid || authEror || registrationInProgress">
-          <span>Submit</span>
-          <div class="wrapper-loader space-left" ng-show="registrationInProgress">
-            <div class="loader"></div>
+          <div class="container-x flex-content-centered">
+            <div>Submit</div>
+            <div class="wrapper-loader space-left" ng-show="registrationInProgress">
+              <div class="loader"></div>
+            </div>
           </div>
         </button>
       </div>

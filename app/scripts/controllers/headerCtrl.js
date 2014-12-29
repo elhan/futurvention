@@ -16,7 +16,7 @@
 
         $scope.logout = function () {
             AccountSvc.logout().then(function () {
-                $rootScope.$broadcast(events.auth.logoutSuccess, event);
+                $rootScope.$broadcast(events.auth.logoutSuccess);
 
                 // Reset the dropdown as the enw user might not have a profile yet!
                 $scope.dropdown = [
