@@ -9,13 +9,13 @@
      * # OfferSvc
      * Bussiness logic for seller Offers
      */
-    app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', 'PATHS', 'breeze', 'PortfolioSvc', function ($http, $q, $timeout, Enum, paths, breeze, PortfolioSvc) {
+    app.service('OfferSvc', ['$http', '$q', '$timeout', 'Enum', 'PATHS', 'ENV', 'breeze', 'PortfolioSvc', function ($http, $q, $timeout, Enum, paths, env, breeze, PortfolioSvc) {
         var OfferSvc = {},
             offer = {},
             offers = [],
 
             dataService = new breeze.DataService({
-                serviceName: paths.public,
+                serviceName: env.api.endPoint + paths.public,
                 hasServerMetadata: false
             }),
 
@@ -79,7 +79,7 @@
             var deferred = $q.defer(),
 
                 url = [
-                    paths.offerManagement.ownOffers,
+                    env.api.endPoint + paths.offerManagement.ownOffers,
                     '?serviceID=',
                     serviceID,
                     '&expand=Fields/File,',
@@ -158,7 +158,7 @@
         OfferSvc.fetchOfferedServices = function () {
             var deferred = $q.defer();
 
-            $http.get(paths.offerManagement.offeredServices).then(function (response) {
+            $http.get(env.api.endPoint + paths.offerManagement.offeredServices).then(function (response) {
                 deferred.resolve(response.data);
             }, function (error) {
                 deferred.reject(error);
@@ -174,7 +174,7 @@
         OfferSvc.saveOffer = function (offer) {
             return $http({
                 method: 'PATCH',
-                url: paths.offerManagement.ownOffers + '/' + offer.ID,
+                url: env.api.endPoint + paths.offerManagement.ownOffers + '/' + offer.ID,
                 data: offer
             });
         };
@@ -190,7 +190,7 @@
             return $http({
                 method: 'PUT',
                 url: [
-                    paths.offerManagement.ownOffers,
+                    env.api.endPoint + paths.offerManagement.ownOffers,
                     '/',
                     offerID,
                     '/Fields/Inline?ServiceFieldID=',
@@ -213,7 +213,7 @@
          */
         OfferSvc.saveInterviewVideo = function (offerID, serviceFieldID, url, thumbnailUrl) {
             var requestUrl = [
-                    paths.offerManagement.ownOffers,
+                    env.api.endPoint + paths.offerManagement.ownOffers,
                     '/',
                     offerID,
                     '/Fields',
@@ -257,7 +257,7 @@
             return $http({
                 method: 'PUT',
                 url: [
-                    paths.offerManagement.ownOffers,
+                    env.api.endPoint + paths.offerManagement.ownOffers,
                     '/',
                     choiceData.offerID,
                     '/Choices?serviceChoiceID=',
@@ -275,7 +275,7 @@
         ///////////////////////////////////////////////////////////
 
         OfferSvc.removeOwnOffer = function (offerID) {
-            return $http.delete(paths.offerManagement.ownOffers + '/' + offerID);
+            return $http.delete(env.api.endPoint + paths.offerManagement.ownOffers + '/' + offerID);
         };
 
         return OfferSvc;

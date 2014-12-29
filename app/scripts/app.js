@@ -36,7 +36,8 @@
         'ui.validate',
         'breeze.angular',
         'angucomplete',
-        'angularMoment'
+        'angularMoment',
+        'config'
     ]);
 
     app.config(['$routeProvider', function ($routeProvider) {
@@ -101,7 +102,7 @@
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
         // 401 unauthorized interceptor: redirect to login page
-        $httpProvider.responseInterceptors.push(['$rootScope', '$q', '$location', 'PATHS', 'MESSAGES', 'EVENTS', function ($rootScope, $q, $location, paths, msg, events) {
+        $httpProvider.responseInterceptors.push(['$rootScope', '$q', '$location', 'PATHS', 'ENV', 'MESSAGES', 'EVENTS', function ($rootScope, $q, $location, paths, env, msg, events) {
             return function (promise) {
                 return promise.then(function (response) {
                     return response;
@@ -109,7 +110,7 @@
                     if (error.status === 401) {
                         console.log(error);
                         // exclude user info calls as they are only used to determine auth status
-                        if (error.config.url !== paths.account.userInfo) {
+                        if (error.config.url !== env.api.endPoint + paths.account.userInfo) {
                             $rootScope.$broadcast(events.auth.sessionTimeout, error);
                             $location.path('/login');
                         }

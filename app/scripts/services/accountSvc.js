@@ -9,11 +9,11 @@
      * # AccountSvc
      * A service to handle authentication, authorization, and User objects.
      */
-    app.service('AccountSvc', ['$q', '$http', '$timeout', 'PATHS', 'MESSAGES', 'NotificationSvc', function ($q, $http, $timeout, paths, msg, NotificationSvc) {
+    app.service('AccountSvc', ['$q', '$http', '$timeout', 'PATHS', 'MESSAGES', 'ENV', 'NotificationSvc', function ($q, $http, $timeout, paths, msg, env, NotificationSvc) {
         var AccountSvc = {};
 
         AccountSvc.register = function (newUser) {
-            return $http.post(paths.account.register, {
+            return $http.post(env.api.endPoint + paths.account.register, {
                 Email: newUser.email,
                 Password: newUser.password,
                 ConfirmPassword: newUser.password,
@@ -23,7 +23,7 @@
         };
 
         AccountSvc.login = function (inputData) {
-            return $http.post(paths.account.login, {
+            return $http.post(env.api.endPoint + paths.account.login, {
                 Email: inputData.email,
                 Password: inputData.password,
                 RememberMe: inputData.rememberMe
@@ -33,7 +33,7 @@
         AccountSvc.logout = function () {
             var deferred = $q.defer();
 
-            $http.post(paths.account.logout, {}).then(function () {
+            $http.post(env.api.endPoint + paths.account.logout, {}).then(function () {
                 localStorage.removeItem('importers');
                 deferred.resolve();
             }, function (error) {
@@ -50,13 +50,13 @@
         };
 
         AccountSvc.resetPassword = function (credentials) {
-            return $http.post(paths.account.resetPassword, credentials);
+            return $http.post(env.api.endPoint + paths.account.resetPassword, credentials);
         };
 
         AccountSvc.getUserInfo = function () {
             var deferred = $q.defer();
 
-            $http.get(paths.account.userInfo).then(function (response) {
+            $http.get(env.api.endPoint + paths.account.userInfo).then(function (response) {
                 deferred.resolve({
                     email: response.data.UserName,
                     userID: response.data.UserID,
@@ -72,12 +72,12 @@
         };
 
         AccountSvc.externalLogins = function () {
-            return $http.get(paths.account.externalLogins);
+            return $http.get(env.api.externalLogins);
         };
 
         AccountSvc.externalLogin = function (authProvider) {
             AccountSvc.externalLogins().then(function (response) {
-                window.location.replace(paths.root + _.find(response.data, function (provider) {
+                window.location.replace(env.api.endPoint + _.find(response.data, function (provider) {
                     return provider.Name === authProvider;
                 }).Url);
             }, function (error) {

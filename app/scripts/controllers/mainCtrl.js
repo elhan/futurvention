@@ -10,7 +10,7 @@
      * # MainCtrl
      * Controller of the fvApp. Contains global app logic, since we use $rootScope only for event broadcasting.
      */
-    app.controller('MainCtrl', ['$scope', '$location', '$q', '$cookies', '$timeout', 'EVENTS', 'MESSAGES', 'ROUTES', 'PATHS', 'Utils', 'Odata', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', 'UserSvc', function ($scope, $location, $q, $cookies, $timeout, events, msg, routes, paths, utils, odata, AccountSvc, NotificationSvc, ProfileSvc, UserSvc) {
+    app.controller('MainCtrl', ['$scope', '$location', '$q', '$cookies', '$timeout', 'EVENTS', 'MESSAGES', 'ROUTES', 'PATHS', 'ENV', 'Utils', 'Odata', 'AccountSvc', 'NotificationSvc', 'ProfileSvc', 'UserSvc', function ($scope, $location, $q, $cookies, $timeout, events, msg, routes, paths, env, utils, odata, AccountSvc, NotificationSvc, ProfileSvc, UserSvc) {
         $scope.currentUser = {};
         $scope.avatar = {};
         $scope.session = {};
@@ -95,7 +95,7 @@
 
         $scope.$on(events.user.updateSuccess, function (event, user) {
             $scope.currentUser = user;
-            $scope.avatar = user && user.Avatar ? encodeURI(paths.file.hosted + user.Avatar.RelativeUrl) : null;
+            $scope.avatar = user && user.Avatar ? encodeURI(env.api.hostedFiles + user.Avatar.RelativeUrl) : null;
 
             ProfileSvc.fetchOwnProfile().then(function (profile) {
                 $scope.currentUser.Profile = profile;

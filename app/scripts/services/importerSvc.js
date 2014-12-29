@@ -9,7 +9,7 @@
      * # ImporterSvc
      * CRUD operations for eternal data (importers)
      */
-    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', '$alert', 'PATHS', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, $alert, paths, providersEnum, events, msg, utils, odata) {
+    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', '$alert', 'PATHS', 'ENV', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, $alert, paths, env, providersEnum, events, msg, utils, odata) {
 
         var polling,
 
@@ -193,7 +193,7 @@
 
                 deferred = $q.defer(); // promises are supported for cases where a single call is required instead of polling
 
-            $http.post(paths.importer.checkProgress, imp).then(function (response) {
+            $http.post(env.api.endPoint + paths.importer.checkProgress, imp).then(function (response) {
                 importingDone(response.data) && ImporterSvc.stopPolling();
 
                 profileImported(response.data) && emitEvents && $rootScope.$broadcast(events.importer.polling.profileImported, response);
@@ -214,7 +214,7 @@
         ImporterSvc.import = function (importers) {
             var deferred = $q.defer();
 
-            $http.post(paths.importer.import, importers).then(function (response) {
+            $http.post(env.api.endPoint + paths.importer.import, importers).then(function (response) {
                 ImporterSvc.storeImporters(importers);
                 deferred.resolve(response);
             }, function (error) {
@@ -244,7 +244,7 @@
                 fetchedProfiles = [],
                 deferred = $q.defer();
 
-            $http.post(paths.importer.fetchProfile, importers).then(function (response) {
+            $http.post(env.api.endPoint + paths.importer.fetchProfile, importers).then(function (response) {
 
                 _.each(response.data, function (obj) { // data === importers that have data
                     obj.hasOwnProperty('data') && obj.data !== null && importerData.push(obj);
@@ -256,7 +256,7 @@
                 }
 
                 _.each(importerData, function (imp) {
-                    if (imp.data.response.data && parseInt(imp.data.response.error.errno) < 500) { // TODO: handle  error codes
+                    if (imp.data.response.data && parseInt(imp.data.response.error.errno) < 500) { // TODO: handle specific error codes
                         convertedProfiles.push(new odata.SellerProfile().fromImported(imp.data.response.data.PersonalInfo));
                         fetchedProfiles.push(imp.data.response.data.PersonalInfo);
                     }
@@ -323,7 +323,7 @@
 
             payload = importerColelction ? importerColelction : importers;
 
-            $http.post(paths.importer.fetchPortfolios, payload).then(function (response) {
+            $http.post(env.api.endPoint + paths.importer.fetchPortfolios, payload).then(function (response) {
                 importedPortfolios = response;
                 deferred.resolve(response);
             }, function (error) {
@@ -344,7 +344,7 @@
          * @returns Array.<Object>
          */
         ImporterSvc.fetchCachedPortfolios = function (guid) {
-            return $http.post(paths.importer.fetchPortfolios, _.map(providerNames, function (name) {
+            return $http.post(env.api.endPoint + paths.importer.fetchPortfolios, _.map(providerNames, function (name) {
                 return new ImporterSvc.Importer({
                     Guid: guid,
                     Provider: name,
@@ -369,7 +369,7 @@
          * @returns Array.<Showcase>
          */
         ImporterSvc.saveImportedPortfolios = function (serviceID, portfolios) {
-            return $http.post(paths.sellerManagement.importedShowcases + serviceID, portfolios);
+            return $http.post(env.api.endPoint + paths.sellerManagement.importedShowcases + serviceID, portfolios);
         };
 
         /**
@@ -382,7 +382,7 @@
          *
          */
         ImporterSvc.saveReviews = function (importers) {
-            return $http.post(paths.sellerManagement.ownReviews, importers);
+            return $http.post(env.api.endPoint + paths.sellerManagement.ownReviews, importers);
         };
 
         ///////////////////////////////////////////////////////////

@@ -10,7 +10,7 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('ModalImageCropCtrl', ['$http', '$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'EVENTS', 'MESSAGES', 'Utils', 'UserSvc', 'NotificationSvc', function ($http, $rootScope, $scope, $timeout, $upload, paths, events, msg, utils, UserSvc, NotificationSvc) {
+    app.controller('ModalImageCropCtrl', ['$http', '$rootScope', '$scope', '$timeout', '$upload', 'PATHS', 'ENV', 'EVENTS', 'MESSAGES', 'Utils', 'UserSvc', 'NotificationSvc', function ($http, $rootScope, $scope, $timeout, $upload, paths, env, events, msg, utils, UserSvc, NotificationSvc) {
 
         $scope.file = {};
 
@@ -60,7 +60,7 @@
 
             fd.append(name, utils.base64toBlob(base64img, 'image/png'), name);
 
-            $http.post(paths.user.ownAvatar, fd, {
+            $http.post(env.api.endPoint + paths.user.ownAvatar, fd, {
                 withCredentials: true,
                 headers: {'Content-Type': undefined },
                 transformRequest: angular.identity

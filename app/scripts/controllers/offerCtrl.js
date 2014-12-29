@@ -10,7 +10,7 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', 'LocationSvc', function ($scope, $modal, paths, events, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc, LocationSvc) {
+    app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'ENV ', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', 'LocationSvc', function ($scope, $modal, paths, events, offer, env, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc, LocationSvc) {
         $scope.reviews = [];
         $scope.portfolio = {};
         $scope.service = {};
@@ -45,7 +45,7 @@
         ProfileSvc.fetchProfileById($scope.offer.SellerProfileID).then(function (profile) {
             $scope.profile = profile[0];
 
-            $scope.avatarUrl = $scope.profile.User && $scope.profile.User.Avatar ? encodeURI(paths.file.hosted + $scope.profile.User.Avatar.RelativeUrl) : null;
+            $scope.avatarUrl = $scope.profile.User && $scope.profile.User.Avatar ? encodeURI(env.api.hostedFiles + $scope.profile.User.Avatar.RelativeUrl) : null;
 
             $scope.isCurrentUser = $scope.profile.ID === $scope.currentUser.ID;
 

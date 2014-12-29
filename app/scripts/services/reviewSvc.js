@@ -9,11 +9,11 @@
      * # ReviewSvc
      * Provider for Review resources
      */
-    app.service('ReviewSvc', ['$q', '$http', 'breeze', 'PATHS', function ($q, $http, breeze, paths) {
+    app.service('ReviewSvc', ['$q', '$http', 'breeze', 'PATHS', 'ENV', function ($q, $http, breeze, paths, env) {
         var ReviewSvc = {},
 
             dataService = new breeze.DataService({
-                serviceName: paths.public,
+                serviceName: env.api.endPoint + paths.public,
                 hasServerMetadata: false
             }),
 

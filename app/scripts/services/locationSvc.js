@@ -9,11 +9,11 @@
      * # LocationSvc
      * Provider for Location resources
      */
-    app.service('LocationSvc', ['$q', '$http', 'breeze', 'PATHS', 'Odata', function ($q, $http, breeze, paths, odata) {
+    app.service('LocationSvc', ['$q', '$http', 'breeze', 'PATHS', 'ENV', 'Odata', function ($q, $http, breeze, paths, env, odata) {
         var LocationSvc = {},
 
             dataService = new breeze.DataService({
-                serviceName: paths.public,
+                serviceName: env.api.endPoint + paths.public,
                 hasServerMetadata: false
             }),
 
@@ -45,7 +45,7 @@
         LocationSvc.searchCity = function (countryID, prefix) {
             var deferred = $q.defer(),
                 url = [
-                    paths.public,
+                    env.api.endPoint + paths.public,
                     'CitiesByPrefix',
                     '?format=json',
                     '&countryID=',

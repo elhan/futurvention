@@ -9,7 +9,7 @@
      * # ProfileSvc
      * CRUD operations for Seller profiles
      */
-    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', 'PATHS', 'breeze', 'Utils', 'Odata', function ($http, $q, $upload, $timeout, importProviders, paths, breeze, utils, odata) {
+    app.service('ProfileSvc', ['$http', '$q', '$upload', '$timeout', 'IMPORT_PROVIDERS', 'PATHS', 'ENV', 'breeze', 'Utils', 'Odata', function ($http, $q, $upload, $timeout, importProviders, paths, env, breeze, utils, odata) {
         var ProfileSvc = {},
             providerNames = importProviders,
             steps = ['import', 'info', 'service_selection', 'offer_config', 'storefront'], // profile completion steps
@@ -17,7 +17,7 @@
             profile = new odata.SellerProfile(),
 
             dataService = new breeze.DataService({
-                serviceName: paths.public,
+                serviceName: env.api.endPoint + paths.public,
                 hasServerMetadata: false
             }),
 
@@ -91,13 +91,13 @@
         ////////////////////////////////////////////
 
         ProfileSvc.createProfile = function (profile) {
-            return $http.post(paths.sellerManagement.ownProfile, profile);
+            return $http.post(env.api.endPoint + paths.sellerManagement.ownProfile, profile);
         };
 
         ProfileSvc.patchProfile = function (profile) {
             return $http({
                 method: 'PATCH',
-                url: paths.sellerManagement.ownProfile,
+                url: env.api.endPoint + paths.sellerManagement.ownProfile,
                 data: profile
             });
         };
@@ -105,7 +105,7 @@
         ProfileSvc.saveProfileStatus = function (status) {
             return $http({
                 method: 'POST',
-                url: paths.sellerManagement.profileStatus,
+                url: env.api.endPoint + paths.sellerManagement.profileStatus,
                 data: status
             });
         };
@@ -117,7 +117,7 @@
         ProfileSvc.fetchOwnProfile = function () {
             var deferred = $q.defer();
 
-            $http.get(paths.sellerManagement.ownProfile + '?expand=User, Title/Literals, Description/Literals').then(function (response) {
+            $http.get(env.api.endPoint + paths.sellerManagement.ownProfile + '?expand=User, Title/Literals, Description/Literals').then(function (response) {
                 utils.updateProperties(profile, response.data);
                 deferred.resolve(profile);
             }, function (error) {
@@ -131,7 +131,7 @@
             var deferred = $q.defer(),
 
                 url = [
-                    paths.sellerManagement.profile,
+                    env.api.endPoint + paths.sellerManagement.profile,
                     moniker,
                     '?expand=Location/Name/Literals,',
                     'Title/Literals,',
@@ -179,7 +179,7 @@
         ProfileSvc.fetchProfileStatus = function () {
             var deferred = $q.defer();
 
-            $http.get(paths.sellerManagement.profileStatus).then(function (response) {
+            $http.get(env.api.endPoint + paths.sellerManagement.profileStatus).then(function (response) {
                 deferred.resolve(response);
             }, function (error) {
                 console.log(error);
@@ -189,7 +189,7 @@
         };
 
         ProfileSvc.validateMoniker = function (moniker) {
-            return $http.get(paths.sellerManagement.monikerExists(moniker));
+            return $http.get(env.api.endPoint + paths.sellerManagement.monikerExists(moniker));
         };
 
         return ProfileSvc;

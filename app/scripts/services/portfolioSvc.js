@@ -9,13 +9,13 @@
      * # PortfolioSvc
      * Manage Portfolio items
      */
-    app.service('PortfolioSvc', ['$http', '$q', '$timeout', 'breeze', 'PATHS', function ($http, $q, $timeout, breeze, paths) {
+    app.service('PortfolioSvc', ['$http', '$q', '$timeout', 'breeze', 'PATHS', 'ENV', function ($http, $q, $timeout, breeze, paths, env) {
         var PortfolioSvc = {},
 
             portfolio = {},
 
             dataService = new breeze.DataService({
-                serviceName: paths.public,
+                serviceName: env.api.endPoint + paths.public,
                 hasServerMetadata: false
             }),
 
@@ -63,7 +63,7 @@
             var deferred = $q.defer(),
 
                 url = [
-                    paths.offerManagement.ownOffers,
+                    env.api.endPoint + paths.offerManagement.ownOffers,
                     '/',
                     offerID,
                     '/Showcases'
@@ -83,14 +83,14 @@
         ///////////////////////////////////////////////////////////
 
         PortfolioSvc.saveUrls = function (urls, serviceID) {
-            return $http.put(paths.sellerManagement.showcases + serviceID, urls);
+            return $http.put(env.api.endPoint + paths.sellerManagement.showcases + serviceID, urls);
         };
 
         PortfolioSvc.saveShowcases = function (offerID, showcases) {
             return $http({
                 method: 'PUT',
                 url: [
-                    paths.offerManagement.ownOffers,
+                    env.api.endPoint + paths.offerManagement.ownOffers,
                     '/',
                     offerID,
                     '/Showcases'
@@ -104,7 +104,7 @@
         ///////////////////////////////////////////////////////////
 
         PortfolioSvc.deleteShowcase = function (showcaseID) {
-            return $http.delete(paths.sellerManagement.ownShowcase + '/' + showcaseID);
+            return $http.delete(env.api.endPoint + paths.sellerManagement.ownShowcase + '/' + showcaseID);
         };
 
         return PortfolioSvc;

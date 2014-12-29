@@ -9,11 +9,11 @@
      * # CatalogueSvc
      * CRUD operations for Catalogue items (services, categories etc)
      */
-    app.service('CatalogueSvc', ['$http', '$q', '$timeout', 'breeze', 'PATHS', function ($http, $q, $timeout, breeze, paths) {
+    app.service('CatalogueSvc', ['$http', '$q', '$timeout', 'breeze', 'PATHS', 'ENV', function ($http, $q, $timeout, breeze, paths, env) {
         var CatalogueSvc = {},
 
             dataService = new breeze.DataService({
-                serviceName: paths.cached,
+                serviceName: env.api.endPoint + paths.cached,
                 hasServerMetadata: false
             }),
 

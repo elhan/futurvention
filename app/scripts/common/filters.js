@@ -59,10 +59,10 @@
         };
     });
 
-    app.filter('importedLink', ['PATHS', function (paths) {
+    app.filter('importedLink', ['PATHS', 'ENV', function (paths, env) {
         return function (item, guid) {
             return [
-                paths.file.imported,
+                env.api.endPoint + paths.file.imported,
                 guid, '/',
                 item.Provider, '/',
                 item.FolderName, '/',

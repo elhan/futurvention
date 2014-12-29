@@ -2,7 +2,7 @@
     'use strict';
     var app = angular.module('fvApp');
 
-    app.factory('Odata', ['PROVIDERS_ENUM', 'PATHS', 'Utils', function (providers, paths, utils) {
+    app.factory('Odata', ['PROVIDERS_ENUM', 'PATHS', 'ENV', 'Utils', function (providers, paths, env, utils) {
         var Odata = {};
 
         //////////////////////////////////////////////////////////////////
@@ -378,11 +378,11 @@
             if (!this.Thumbnail) {
                 return 'images/thumb.png';
             }
-            return this.Thumbnail.hasOwnProperty('Url') ? this.Thumbnail.Url : paths.file.hosted + this.Thumbnail.RelativeUrl;
+            return this.Thumbnail.hasOwnProperty('Url') ? this.Thumbnail.Url : env.api.hostedFiles + this.Thumbnail.RelativeUrl;
         };
 
         Odata.ShowcaseItem.prototype.getFileLink = function () {
-            return this.File.hasOwnProperty('Url') ? this.File.Url : paths.file.hosted + this.File.RelativeUrl;
+          return this.File.hasOwnProperty('Url') ? this.File.Url : env.api.hostedFiles + this.File.RelativeUrl;
         };
 
         /**
