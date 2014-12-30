@@ -290,6 +290,25 @@
             $scope.showcaseCollection = $scope.showcaseCollection.swap(sourceParent, targetParent);
         };
 
+        $scope.updateShowcaseTitle = function (item) {
+            var showcase = _.find($scope.showcaseCollection, function (sc) {
+                return sc.ID === item.ID;
+            });
+
+            console.log(showcase.Title, showcase.Title instanceof odata.Multilingual);
+
+            if (showcase) {
+                showcase.setMultilingual('Title', item.name);
+
+                PortfolioSvc.updateShowcaseTitle(showcase).then(function (response) {
+                    console.log(response);
+                }, function (error) {
+                    console.log(error);
+                });
+            }
+
+        };
+
         $scope.togglePortfolioSelection = function (item) {
             var selected  = $scope.selectedPortfolios;
             selected.indexOf(item) === -1 ? selected.push(item) : selected.remove(function (portfolio) {
@@ -315,7 +334,7 @@
                 showcase = new odata.Showcase(fetchedShowcase);
                 showcaseItem = new odata.ShowcaseItem(showcase.Items[0]);
                 $scope.showcaseCollection.push(showcase);
-                $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded' }));
+                $scope.showcaseItems.push(showcaseItem.toSimpleShowcaseItem({ state: 'loaded', name: showcase.multilingualToString('Title') })); // simple showcase objects display the Showcase title
             });
         };
 

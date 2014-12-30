@@ -85,7 +85,7 @@
                 <!-- Showcase -->
                 <div class="flex-wrap">
                   <div class="showcase" ng-repeat="item in showcaseItems">
-                    <div class="showcase-item thumbnail" ng-class="{'progress': item.state === 'loading'}"
+                    <div class="showcase-item thumbnail no-margin" ng-class="{'progress': item.state === 'loading'}"
                          ng-click="displayInDetail(item.ID)"
                          fv-bg-image={{item.link}}
                          fv-data={{item.link}}
@@ -114,7 +114,9 @@
                       <!-- Overlay: drag-over -->
                       <div class="showcase-overlay"></div>
                     </div>
-                    <div class="caption">{{ item.name }}</div>
+                    <div class="caption container-x flex-content-centered">
+                      <input class="text-centered input-borderless" ng-model="item.name" ng-blur="updateShowcaseTitle(item)">
+                    </div>
                   </div>
                 </div>
               </div>
@@ -362,7 +364,7 @@
                                          min="0"
                                          ng-blur="saveOfferedChoice(option.choices[0])">
                                 </div>
-                                <div ng-if="option.isDaysDiscriminator">
+                                <div class="container-x" ng-if="!option.overridesDays">
                                   <div class="separator-text text-grey">in</div>
                                   <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
                                           ng-model="option.choices[0].days" data-html="1" ng-options="deadline for deadline in extraDeadlines"

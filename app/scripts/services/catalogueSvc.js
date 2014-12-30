@@ -72,6 +72,7 @@
                     isPriceDiscriminator: option.IsPriceDiscriminator,
                     isMandatory: option.IsMandatory,
                     isDaysDiscriminator: option.IsDaysDiscriminator,
+                    overridesDays: option.OverridesDays,
                     sellerTitle: option.SellerTitle && option.SellerTitle.Literals[0].Text,
                     choices: option.Choices.map(function (choice) {
                         return {

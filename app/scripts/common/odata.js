@@ -25,6 +25,9 @@
             case self[key] instanceof Odata.Multilingual: // default language
                 self[key].Literals[0].Text = value;
                 break;
+            case self[key].hasOwnProperty('Literals') && self[key].Literals[0].hasOwnProperty('Text'):
+                self[key].Literals[0].Text = value;
+                break;
             default:
                 // TODO: update language
             }
@@ -291,6 +294,8 @@
 
             return self;
         };
+
+        Odata.Showcase.inheritFunctions(OdataObject, ['setMultilingual', 'multilingualToString']);
 
         /**
          * @constructor

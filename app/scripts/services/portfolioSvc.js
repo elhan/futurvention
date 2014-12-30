@@ -99,6 +99,21 @@
             });
         };
 
+        PortfolioSvc.updateShowcaseTitle = function (showcase) {
+            return $http({
+                method: 'PATCH',
+                url: [
+                    env.api.endPoint,
+                    paths.sellerManagement.ownShowcase,
+                    '/',
+                    showcase.ID
+                ].join(''),
+                data: {
+                    Title: showcase.Title
+                }
+            });
+        };
+
         ///////////////////////////////////////////////////////////
         /// Delete operations
         ///////////////////////////////////////////////////////////
