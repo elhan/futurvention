@@ -360,10 +360,17 @@
                 scope.navigateTo = function (step) {
                     switch (true) {
                     case step === 3: // go to storefront
-                        $location.path('/' + scope.currentUser.Profile.Moniker);
+                        if (scope.currentUser && scope.currentUser.Profile && scope.currentUser.Profile.Moniker) {
+                            $location.path('/' + scope.currentUser.Profile.Moniker);
+                        }
                         break;
-                    case $location.path() === '/apply': // go to another 'apply' step
+                    case $location.path() === '/apply' && step < 2: // go to another 'apply' step
                         scope.$parent.goToStep(step);
+                        break;
+                    case $location.path() === '/apply' && step === 2: // check if the user has completed his profile
+                        if (scope.currentUser && scope.currentUser.Profile && scope.currentUser.Profile.Moniker) {
+                            scope.$parent.goToStep(step);
+                        }
                         break;
                     default: // from storefront, go to some 'apply' step
                         ProfileSvc.setActiveStep(stepNames[step]);

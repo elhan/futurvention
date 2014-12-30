@@ -15,7 +15,7 @@
      */
     app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'ENV', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, events, providers, paths, env, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
 
-        var modalEmbedUrl, modalCameraTag, modalPortfolioViewer;
+        var modalEmbedUrl, modalCameraTag, modalPortfolioViewer, modalPageLoading;
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
@@ -116,6 +116,16 @@
         ////////////////////////////////////////////
         /// Modals & modal functions
         ////////////////////////////////////////////
+
+        modalPageLoading = $modal({
+            scope: $scope,
+            template: 'views/components/modalPageLoading.html',
+            show: true,
+            animation: 'am-fade-out',
+            backdropAnimation: 'am-fade light',
+            keyboard: false,
+            backdrop: 'static'
+        });
 
         modalEmbedUrl = $modal({
             scope: $scope,
@@ -506,6 +516,8 @@
         CatalogueSvc.getService($scope.offer.ServiceID, true).then(function (service) {
             var offeredChoice;
 
+            modalPageLoading.hide();
+
             $scope.service = service;
 
             _.each(service.options, function (option) {
@@ -551,6 +563,7 @@
             });
 
         }, function (error) {
+            modalPageLoading.hide();
             console.log(error);
         });
 

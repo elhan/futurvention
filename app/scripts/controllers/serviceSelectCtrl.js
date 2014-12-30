@@ -10,7 +10,18 @@
      * # ServiceSelectCtrl
      * Controls the apply 'service select' step
      */
-    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', 'EVENTS', 'MESSAGES', 'CatalogueSvc', 'OfferSvc', 'NotificationSvc', function ($scope, $timeout, events, msg, CatalogueSvc, OfferSvc, NotificationSvc) {
+    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', '$modal', 'EVENTS', 'MESSAGES', 'CatalogueSvc', 'OfferSvc', 'NotificationSvc', function ($scope, $timeout, $modal, events, msg, CatalogueSvc, OfferSvc, NotificationSvc) {
+
+        var modalPageLoading = $modal({
+            scope: $scope,
+            template: 'views/components/modalPageLoading.html',
+            show: true,
+            animation: 'am-fade',
+            backdropAnimation: 'am-fade light',
+            keyboard: false,
+            backdrop: 'static'
+        });
+
         //  Pagination support for available services. Initailized to the default thumbnail batch size.
         $scope.offset = 0;
         $scope.batch = CatalogueSvc.batch;
@@ -30,11 +41,13 @@
 
         $scope.getServices = function () {
             CatalogueSvc.getServices($scope.offset).then(function (services) {
+                modalPageLoading.hide();
                 $scope.services.merge(services);
                 $scope.services.totalCount = services.length;
                 $scope.allServices = CatalogueSvc.services; // make sure the services have ben fetched
             }, function (error) {
                 console.log(error);
+                modalPageLoading.hide();
             });
         };
 

@@ -1,4 +1,4 @@
-<div class="container-y apply-content apply" ng-controller="ServiceSelectCtrl">
+<div ng-cloak class="container-y apply-content apply" ng-controller="ServiceSelectCtrl">
   <div class="fv-page-header">Build your storefront in a snap</div>
   <div class="text-centered text-h3 text-silver">
     Use our comprehensive catalogue to select services you want to offer, then set your price for each
@@ -57,7 +57,7 @@
   </div>
   <!-- Thumbnail Grid: Services By Category -->
   <div class="thumbnail-grid flex-wrap">
-    <div ng-repeat="service in services" class="col-sm-6 col-md-3 wrapper-thumb" ng-if="!isOffered(service.serviceID)">
+    <div ng-repeat="service in services | notOffered:offers" class="col-sm-6 col-md-3 wrapper-thumb" ng-if="!isOffered(service.serviceID)">
       <div class="thumbnail" ng-click="editOffer(service.serviceID)">
         <div class="wrapper-img flex-content-centered">
           <img ng-if="!service.thumbnail.link" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">

@@ -24,9 +24,9 @@
             keyboard: true
         }),
 
-        modalPageLoading = $modal({
+        modalPolling = $modal({
             scope: $scope,
-            template: 'views/components/modalPageLoading.html',
+            template: 'views/components/modalPolling.html',
             show: false,
             animation: 'am-fade',
             keyboard: false,
@@ -259,13 +259,13 @@
         });
 
         $scope.$on(events.importer.polling.start, function () {
-            modalPageLoading.$promise.then(function () {
-                modalPageLoading.show();
+            modalPolling.$promise.then(function () {
+                modalPolling.show();
             });
         });
 
         $scope.$on(events.importer.polling.end, function () {
-            modalPageLoading.hide();
+            modalPolling.hide();
         });
 
         $scope.$on(events.importer.polling.profileImported, function () {

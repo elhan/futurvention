@@ -72,22 +72,22 @@
         };
     }]);
 
-//    app.filter('isOfferedService', function () {
-//        return function (services, offers) {
-//            console.log(services, offers);
-//
-//            var service, offer, filtered = [];
-//
-//            for (var i = 0; i < services.length; i++) {
-//                service = services[i];
-//
-//                for (var j = 0; j < offers.length; j++) {
-//                    offer = offers[j];
-//                    service.serviceID === offer.ServiceID && filtered.indexOf(service) === -1 && filtered.push(service);
-//                }
-//            }
-//
-//            return filtered;
-//        };
-//    });
+    app.filter('notOffered', function () {
+        return function (services, offers) {
+            var offeredServiceIDs = [];
+
+            if (!services || services.length === 0) {
+                return;
+            }
+
+            _.each(offers, function (offer) {
+                offer.hasOwnProperty('ServiceID') && offeredServiceIDs.push(offer.ServiceID);
+            });
+
+            return _.filter(services, function (svc) {
+                return offeredServiceIDs.indexOf(svc.serviceID) === -1;
+            });
+        };
+    });
+
 }());

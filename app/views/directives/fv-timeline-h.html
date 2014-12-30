@@ -9,7 +9,9 @@
     <div class="divider-h">
       <div class="line"></div>
     </div>
-    <span class="circle-timeline clickable" ng-class="{'active': activeStep === 'service_selection' || activeStep === 'offer_config'}" ng-click="navigateTo(2)"></span>
+    <span class="circle-timeline"
+          ng-class="{'active': activeStep === 'service_selection' || activeStep === 'offer_config', 'clickable': currentUser && currentUser.Profile && currentUser.Profile.Moniker}"
+          ng-click="navigateTo(2)"></span>
     <div class="divider-h">
       <div class="line"></div>
     </div>
@@ -20,7 +22,11 @@
   <div class="timeline-label-container">
     <span class="timeline-label text-t clickable" ng-class="{'active': activeStep === 'import'}" ng-click="navigateTo(0)">Import Profiles</span>
     <span class="timeline-label text-t clickable" ng-class="{'active': activeStep === 'info'}" ng-click="navigateTo(1)">Complete Profile</span>
-    <span class="timeline-label text-t clickable" ng-class="{'active': activeStep === 'service_selection' || activeStep === 'offer_config'}" ng-click="navigateTo(2)">Open Storefront</span>
+    <span class="timeline-label text-t"
+          ng-class="{'active': activeStep === 'service_selection' || activeStep === 'offer_config', 'clickable': currentUser && currentUser.Profile && currentUser.Profile.Moniker}"
+          ng-click="navigateTo(2)">
+      Open Storefront
+    </span>
     <a ng-if="currentUser.Profile && currentUser.Profile.Moniker" ng-href="#{{currentUser.Profile && currentUser.Profile.Moniker}}" target="">
       <span class="timeline-label text-t text-lightGrey clickable" ng-class="{'active': activeStep === 'storefront'}">Completed</span>
     </a>
