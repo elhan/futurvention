@@ -1,7 +1,7 @@
 <div class="container-page storefront">
   <div class="container-y container-page-inner">
     <!--Profile completion timeline-->
-    <fv-timeline-h></fv-timeline-h>
+    <fv-timeline-h active-step="activeStep" current-user="currentUser"></fv-timeline-h>
     <!-- Profile picture -->
     <div class="wrapper-pic">
       <div class="wrapper-pic-inner" ng-class="{'clickable': isCurrentUser}" ng-click="showImageCropModal()">

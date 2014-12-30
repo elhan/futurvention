@@ -344,16 +344,36 @@
      * @example
      * <fv-timeline-h></fv-timeline-h>
      */
-    app.directive('fvTimelineH', function () {
+    app.directive('fvTimelineH', ['$location', 'ProfileSvc', function ($location, ProfileSvc) {
         return {
             restrict: 'E',
             scope: {
                 activeStep: '=',
-                goToStep: '&'
+                goToStep: '&',
+                currentUser: '='
             },
-            templateUrl: 'views/directives/fv-timeline-h.html'
+            templateUrl: 'views/directives/fv-timeline-h.html',
+            link: function (scope) {
+
+                var stepNames = ['import', 'info', 'service_selection', 'offer_config', 'storefront'];
+
+                scope.navigateTo = function (step) {
+                    switch (true) {
+                    case step === 3: // go to storefront
+                        $location.path('/' + scope.currentUser.Profile.Moniker);
+                        break;
+                    case $location.path() === '/apply': // go to another 'apply' step
+                        scope.$parent.goToStep(step);
+                        break;
+                    default: // from storefront, go to some 'apply' step
+                        ProfileSvc.setActiveStep(stepNames[step]);
+                        $location.path('/apply');
+                    }
+                };
+
+            }
         };
-    });
+    }]);
 
     /**
      * @ngdoc directive

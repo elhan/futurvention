@@ -289,14 +289,14 @@
                                          ng-model="choice.price"
                                          placeholder="0"
                                          ng-blur="saveOfferedChoice(choice)"
-                                         ng-required="true"></input>
+                                         ng-required="true">
                                 </div>
                                 <div class="separator-text text-grey">in</div>
                                 <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
                                         ng-model="choice.days"
                                         data-html="1"
                                         ng-options="deadline for deadline in deadlines"
-                                        placeholder="1 day"
+                                        placeholder="{{choice.days}} days"
                                         ng-change="saveOfferedChoice(choice)"
                                         bs-select>
                                 </button>
@@ -316,14 +316,14 @@
                                  ng-model="option.choices[0].price"
                                  placeholder="0"
                                  min="0"
-                                 ng-blur="saveOfferedChoice(option.choices[0])" ng-required="true"></input>
+                                 ng-blur="saveOfferedChoice(option.choices[0])" ng-required="true">
                           <!-- Price discriminators are always days discriminators too -->
                           <div class="separator-text text-grey">to be delivered in</div>
                           <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
                                   ng-model="option.choices[0].days"
                                   data-html="1"
                                   ng-options="deadline for deadline in deadlines"
-                                  placeholder="1 day"
+                                  placeholder="{{option.choices[0].days}} days"
                                   ng-change="saveOfferedChoice(option.choices[0])"
                                   bs-select>
                           </button>
@@ -360,17 +360,17 @@
                                          placeholder="0"
                                          ng-required="true"
                                          min="0"
-                                         ng-blur="saveOfferedChoice(option.choices[0])"
-                                         >
-                                  </input>
+                                         ng-blur="saveOfferedChoice(option.choices[0])">
                                 </div>
-                                <div class="separator-text text-grey">in</div>
-                                <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
-                                        ng-model="option.choices[0].days" data-html="1" ng-options="deadline for deadline in extraDeadlines"
-                                        placeholder="1 extra day"
-                                        ng-change="saveOfferedChoice(option.choices[0])"
-                                        bs-select>
-                                </button>
+                                <div ng-if="option.isDaysDiscriminator">
+                                  <div class="separator-text text-grey">in</div>
+                                  <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
+                                          ng-model="option.choices[0].days" data-html="1" ng-options="deadline for deadline in extraDeadlines"
+                                          placeholder="{{option.choices[0].days}} extra days"
+                                          ng-change="saveOfferedChoice(option.choices[0])"
+                                          bs-select>
+                                  </button>
+                                </div>
                               </div>
                             </div>
                             <div class="flex-shrink-10"></div>
