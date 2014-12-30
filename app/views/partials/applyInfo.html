@@ -42,8 +42,7 @@
                  ng-minlength="3"
                  ng-maxlength="20"
                  ng-model="profile.Moniker"
-                 ui-validate="{englishAndNum: 'engAndNum($value)'}"
-                 autocomplete="on">
+                 ui-validate="{englishAndNum: 'engAndNum($value)'}">
         </div>
         <div class="flex-1 flex-items-centered">
           <svg ng-if="profile.Moniker" class="icon icon-green text-p space-left">
@@ -133,7 +132,7 @@
       <div class="container-x flex-content-centered">
         <div class="flex-1"></div>
         <div class="wrapper-continue-2">
-          <button type="submit" class="btn btn-continue" ng-disabled="!(profile.Moniker && profile.Title && profile.Description && cityName && currentUser.Avatar)" ng-click="continue()">Continue</button>
+          <button type="submit" class="btn btn-continue" ng-disabled="!(profile.Moniker && profile.Title && profile.Description && profile.Description.Literals[0].Text && cityName && currentUser.Avatar)" ng-click="continue()">Continue</button>
         </div>
         <div class="flex-1"></div>
       </div>

@@ -100,6 +100,21 @@
                     }
 
                     /*
+                        Try to fill in the user's moniker. Try the client validation it first, then validate it on the server side as well,
+                        in order to make sure the moniker is not already taken.
+                    **/
+                    if (response.userName.length > 3 && response.userName.length < 20 &&  $scope.engAndNum('LukeODwyer')) {
+                        ProfileSvc.validateMoniker(response.userName).then(function (res) {
+                            if (res.data === 'false') { // returns true if moniker exists
+                                $scope.monikerIsValid = true;
+                                $scope.profile.Moniker = response.userName;
+                            }
+                        }, function (err) {
+                            console.log(err);
+                        });
+                    }
+
+                    /*
                         case 3: no SellerProfile, no imported profiles available (yet). Check local storage to see if there are any
                         importers. If so, start polling checkstatus to try and get the user's profile. Polling will emit start, status (update) and end events.
                     **/
@@ -261,8 +276,16 @@
                 // check profile validity to determine if we should keep polling
                 $scope.profile = response.profile;
 
+                // if the fetched profile contains an avatar, and the user does not already have one
                 if (response.avatar && ($scope.currentUser.AvatarID === 0 || $scope.currentUser.AvatarID === null )) {
-                    UserSvc.saveExternalAvatar(response.avatar); // this will fire an event that will notify MainCtrl to update currentUser
+                    $scope.avatarLoading = true;
+
+                    UserSvc.saveExternalAvatar(response.avatar).then(function () { // this will fire an event that will notify MainCtrl to update currentUser
+                        $scope.avatarLoading = false;
+                    }, function () {
+                        NotificationSvc.show({ content: msg.error.saveAvatarFailed, type: 'error' });
+                        $scope.avatarLoading = false;
+                    });
                 }
 
                 if (response.country) {
@@ -282,6 +305,22 @@
                         });
                     });
                 }
+
+                /*
+                        Try to fill in the user's moniker. Try the client validation it first, then validate it on the server side as well,
+                        in order to make sure the moniker is not already taken.
+                    **/
+                if (response.userName.length > 3 && response.userName.length < 20 &&  $scope.engAndNum('LukeODwyer')) {
+                    ProfileSvc.validateMoniker(response.userName).then(function (res) {
+                        if (res.data === 'false') { // returns true if moniker exists
+                            $scope.monikerIsValid = true;
+                            $scope.profile.Moniker = response.userName;
+                        }
+                    }, function (err) {
+                        console.log(err);
+                    });
+                }
+
             }, function (error) {
                 //TODO: log this
                 console.log(error);

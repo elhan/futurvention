@@ -265,7 +265,8 @@
                          **/
                         fetchedProfiles.push(angular.extend(imp.data.response.data.PersonalInfo, {
                             provider: providersEnum[imp.Provider],
-                            guid: imp.Guid
+                            guid: imp.Guid,
+                            userName: imp.data.response.data.Metadata.hasOwnProperty('UserName') ? imp.data.response.data.Metadata.UserName : ''
                         }));
                     }
                 });
@@ -315,7 +316,8 @@
                     profile: sellerProfile,
                     avatar: photo,
                     country: country,
-                    city: city
+                    city: city,
+                    userName: fetchedProfile.userName // this is not immediately passed as profile.Miniker as it requires validation
                 });
 
             }, function (error) {
