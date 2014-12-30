@@ -519,9 +519,7 @@
                         serviceChoice.price = offeredChoice ? offeredChoice.Price : 0;
                     }
 
-                    if (option.isDaysDiscriminator) {
-                        serviceChoice.days = offeredChoice ? offeredChoice.Days : 1;
-                    }
+                    serviceChoice.days = offeredChoice ? offeredChoice.Days : 1;
 
                 });
 
