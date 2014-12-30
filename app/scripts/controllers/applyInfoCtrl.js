@@ -29,6 +29,7 @@
             template: 'views/components/modalPolling.html',
             show: false,
             animation: 'am-fade',
+            backdropAnimation: 'am-fade light',
             keyboard: false,
             backdrop: 'static'
         });
