@@ -640,14 +640,27 @@ textarea {
   height: 150px;
   margin: 10px;
   cursor: pointer;
+
   .caption {
-    .text-i;
-    .flex-content-centered;
-    text-wrap: normal;
-    height: 30px;
-    overflow: hidden;
-    text-overflow: ellipsis;
     margin-top: 4px;
+
+    .textarea-caption {
+      width: 100%;
+      max-height: 40px;
+      overflow: hidden;
+    }
+
+    svg {
+      opacity: 0;
+      margin-top: 8px;
+    }
+
+    &:hover {
+      text-decoration: underline;
+      svg {
+        opacity: 1;
+      }
+    }
   }
 }
 

@@ -500,4 +500,49 @@
 
     }]);
 
+    /**
+     * @ngdoc directive
+     * @name fvApp.directive:fvCaption
+     * @restrict A
+     *
+     * @description
+     * manages event handlers for showcase captions, caption wrapper and caption edit icon
+     *
+     */
+    app.directive('fvCaption', function () {
+        return {
+            link: function (scope, element) {
+                var wrapper, icon;
+
+                wrapper = angular.element(element.parent());
+
+                icon = angular.element(element.parent().find('svg'));
+
+                element.bind('focus', function () {
+                    wrapper.css('border', '1px solid lightgrey');
+                    icon.css('opacity', '0');
+                });
+
+                element.bind('blur', function () {
+                    wrapper.css('border', '0');
+                });
+
+                wrapper.bind('mouseenter', function () {
+                    icon.css('opacity', '1');
+                });
+
+                wrapper.bind('mouseleave', function () {
+                    icon.css('opacity', '0');
+                });
+
+                scope.$on('$destroy', function () {
+                    element.unbind();
+                    wrapper.unbind();
+                    icon.unbind();
+                });
+            }
+        };
+
+    });
+
 }());
