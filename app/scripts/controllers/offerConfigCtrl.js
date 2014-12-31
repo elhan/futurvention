@@ -51,6 +51,8 @@
 
         $scope.status = {}; // the current importer status
 
+        $scope.uploadInProgress = false;
+
         // can be 'owned' or 'imported'. Controls which work samples section is visible
         $scope.activeWorkSamples = 'owned';
 
@@ -389,36 +391,83 @@
             });
         };
 
+        function uploadShowcase (file, placeholderLink) {
+            var currentNotification,
+                deferred = $q.defer();
+
+            $scope.uploadInProgress = true;
+
+            $upload.upload({
+                url: env.api.endPoint + paths.sellerManagement.showcases + $scope.service.serviceID,
+                file: file,
+                fileFormDataName: file.name
+            }).then(function (response) {
+                $scope.uploadInProgress = false;
+                deferred.resolve(response.data); //notify onFileSelect that the upload is done
+            }, function (error) {
+                var unsupportedFileType, invalidFileType;
+                console.log(error);
+
+                $scope.uploadInProgress = false;
+
+                deferred.reject(); //notify onFileSelect that the upload has failed
+
+                if (error.status === 500 && error.data && error.data.hasOwnProperty('ExceptionName')) {
+                    currentNotification && currentNotification.hide();
+                    currentNotification = $alert({ content: msg.error.invalidFileType, type: 'error', show: true });
+                } else {
+                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                }
+
+            });
+
+            return deferred.promise;
+        }
+
         // sequential file upload
         $scope.onFileSelect = function (files) {
-            var currentNotification;
+            var placeholderItem, placeholderLink,
+                currentFileIndex = 0,
+                reader = new FileReader();
+
+            if (files.length === 0) {
+                return;
+            }
 
             _.each(files, function (file) {
-                $upload.upload({
-                    url: env.api.endPoint + paths.sellerManagement.showcases + $scope.service.serviceID,
-                    file: file,
-                    fileFormDataName: file.name
-                }).then(function (response) {
-                    $scope.updateShowcaseItems(response.data);
-                }, function (error) {
-                    var errorMsg, unsupportedFileType, invalidFileType;
-                    console.log(error);
-
-                    if (error.data && error.data.hasOwnProperty('DisplayMessage')) {
-                        errorMsg = error.data.DisplayMessage;
-                        unsupportedFileType = /(.+)?(The file type)(.+)(is not supported by the service)(.+)?/i.test(errorMsg); // files not supported by the service
-                        invalidFileType = errorMsg.indexOf('Unsupported file type') !== -1; // files not supported by the system
-
-                        if (error.status === 500 && (unsupportedFileType || invalidFileType)) {
-                            currentNotification && currentNotification.hide();
-                            currentNotification = $alert({ content: msg.error.invalidFileType, type: 'error', show: true });
-                            return;
-                        }
-                    }
-
-                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
-                });
+                placeholderItem = new odata.SimpleShowcaseItem({ name: file.name });
+                $scope.showcaseItems.push(placeholderItem); // push a placeholder item to show loading state
             });
+
+            reader.onload = function (e) {
+                placeholderLink = e.target.result;
+
+                placeholderItem = _.find($scope.showcaseItems, function (sc) {
+                    return sc.name === files[currentFileIndex].name;
+                });
+
+                // if the file is an image, update link to show background preview
+                if (placeholderItem && placeholderItem.hasOwnProperty('link')) {
+                    if (files[currentFileIndex].hasOwnProperty('type') && utils.isImage(files[currentFileIndex].type)) {
+                        $scope.$apply(function () {
+                            placeholderItem.link = placeholderLink;
+                        });
+                    }
+                }
+
+//                uploadShowcase(files[currentFileIndex], placeholderLink).then(function (newShowcaseItem) {
+//                    _.remove($scope.showcaseItems, placeholderItem);
+//                    $scope.updateShowcaseItems(newShowcaseItem);
+//
+//                    currentFileIndex < files.length -1 && reader.readAsDataURL(files[currentFileIndex++]);
+//
+//                }, function () {
+//                    _.remove($scope.showcaseItems, placeholderItem);
+//                    currentFileIndex < files.length -1 && reader.readAsDataURL(files[currentFileIndex++]);
+//                });
+            };
+
+            reader.readAsDataURL(files[currentFileIndex]);
         };
 
         $scope.saveUrls = function () {

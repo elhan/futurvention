@@ -115,6 +115,11 @@
             return exp.test(mimeType);
         };
 
+        Utils.isImage = function (mimeType) {
+            var exp = new RegExp(/image\/*/g);
+            return exp.test(mimeType);
+        };
+
         // returns a collection of url params
         Utils.getUrlParams = function (url) {
             var params, tokens;

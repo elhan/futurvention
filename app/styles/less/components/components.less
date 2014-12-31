@@ -666,6 +666,7 @@ textarea {
 
 .showcase-overlay {
   border-radius: 4px;
+
   &.selected {
     // needed to hide the thumbnail hover border
     margin-top: -1px;
@@ -677,6 +678,14 @@ textarea {
       height: calc(100% / 3px);
     }
   }
+
+  &.preview {
+    background-color: white;
+    opacity: .8;
+    width: 148px;
+    height: 110.5px;
+  }
+
   .drag-over & {
     border: 2px dashed white;
     background-color: rgba(0, 0, 0, .7);
@@ -692,9 +701,12 @@ textarea {
   border-radius: 4px;
   background-color: white;
   padding: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
 
   &.progress {
-    border: 2px dashed @lightGrey;
+    border: 1px dashed @lightGrey;
+    box-shadow: none;
   }
 
   .wrapper-loader {

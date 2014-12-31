@@ -94,11 +94,11 @@
                          fv-on-drop="rearangeShowcaseItems"
                          fv-droppable>
                       <!-- Spinner -->
-                      <div class="wrapper-loader" ng-show="item.state === 'loading'">
+                      <div class="showcase-overlay preview" ng-show="item.state === 'loading'">
                         <div class="loader"></div>
                       </div>
                       <!-- Remove button -->
-                      <div class="container-x flex-content-end">
+                      <div class="container-x flex-content-end" ng-show="item.state !== 'loading'">
                         <div class="wrapper-showcase-action" ng-click="removeShowcase(item); $event.stopPropagation();">
                           <svg class="icon icon-light">
                             <use xlink:href="#close"></use>
@@ -385,7 +385,7 @@
       <div ng-if="panels.activePanel === $index && !($index === 1 && activeWorkSamples === 'imported')" class="wrapper-btn-done flex-content-end">
         <button class="button btn btn-blue" ng-click="closePanel(panel)">
           <span ng-if="panels.activePanel === 0">I got it</span>
-          <span ng-if="panels.activePanel > 0">Done</span>
+          <span ng-if="panels.activePanel > 0" ng-disabled="uploadInProgress">Done</span>
         </button>
       </div>
       <div ng-if="$index === 1 && activeWorkSamples === 'imported'" class="wrapper-btn-done flex-content-end">
