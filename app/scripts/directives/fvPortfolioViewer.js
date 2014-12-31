@@ -18,7 +18,9 @@
         var gallerySize = 7; // the max number of gallery items in view
         return {
             restrict: 'E',
-            scope: true,
+            scope: {
+                fvHideGallery: '@'
+            },
             templateUrl: 'views/directives/fv-portfolio-viewer.html',
             link: function (scope) {
                 // make sure this has been fetched from the server before compiling the directive

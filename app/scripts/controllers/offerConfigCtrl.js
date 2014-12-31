@@ -13,7 +13,7 @@
      * # OfferConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'ENV', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, events, providers, paths, env, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
+    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', '$alert', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'ENV', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, $alert, events, providers, paths, env, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
 
         var modalEmbedUrl, modalCameraTag, modalPortfolioViewer, modalPageLoading;
 
@@ -149,7 +149,7 @@
             template: 'views/components/modalPortfolioViewer.html',
             show: false,
             animation: 'am-slide-top',
-            keyboard: false
+            keyboard: true
         });
 
         $scope.showEmbedUrlModal = _.throttle(function () {
@@ -389,22 +389,35 @@
             });
         };
 
+        // sequential file upload
         $scope.onFileSelect = function (files) {
-            var fileNames = [];
+            var currentNotification;
 
             _.each(files, function (file) {
-                fileNames.push(file.name);
-            });
+                $upload.upload({
+                    url: env.api.endPoint + paths.sellerManagement.showcases + $scope.service.serviceID,
+                    file: file,
+                    fileFormDataName: file.name
+                }).then(function (response) {
+                    $scope.updateShowcaseItems(response.data);
+                }, function (error) {
+                    var errorMsg, unsupportedFileType, invalidFileType;
+                    console.log(error);
 
-            $upload.upload({
-                url: env.api.endPoint + paths.sellerManagement.showcases + $scope.service.serviceID,
-                file: files,
-                fileFormDataName: fileNames
-            }).then(function (response) {
-                $scope.updateShowcaseItems(response.data);
-            }, function (error) {
-                console.log(error);
-                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                    if (error.data && error.data.hasOwnProperty('DisplayMessage')) {
+                        errorMsg = error.data.DisplayMessage;
+                        unsupportedFileType = /(.+)?(The file type)(.+)(is not supported by the service)(.+)?/i.test(errorMsg); // files not supported by the service
+                        invalidFileType = errorMsg.indexOf('Unsupported file type') !== -1; // files not supported by the system
+
+                        if (error.status === 500 && (unsupportedFileType || invalidFileType)) {
+                            currentNotification && currentNotification.hide();
+                            currentNotification = $alert({ content: msg.error.invalidFileType, type: 'error', show: true });
+                            return;
+                        }
+                    }
+
+                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                });
             });
         };
 

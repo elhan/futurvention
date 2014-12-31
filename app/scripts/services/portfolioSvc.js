@@ -12,7 +12,7 @@
     app.service('PortfolioSvc', ['$http', '$q', '$timeout', 'breeze', 'PATHS', 'ENV', function ($http, $q, $timeout, breeze, paths, env) {
         var PortfolioSvc = {},
 
-            portfolio = {},
+            portfolio = [],
 
             dataService = new breeze.DataService({
                 serviceName: env.api.endPoint + paths.public,
@@ -21,12 +21,20 @@
 
             manager = new breeze.EntityManager({ dataService: dataService });
 
-        PortfolioSvc.updatePortfolio = function (obj) {
-            angular.extend(portfolio, obj);
-        };
-
         PortfolioSvc.setPortfolio = function (port) {
-            portfolio = port;
+            switch (true) {
+            case _.isArray(port):
+                portfolio = port;
+                break;
+            case _.isUndefined(port):
+            case _.isEmpty(port):
+                portfolio.empty();
+                break;
+            case _.isObject(port):
+                portfolio.empty();
+                portfolio.push(port);
+                break;
+            }
         };
 
         PortfolioSvc.getPortfolio = function () {

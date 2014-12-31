@@ -133,7 +133,8 @@
             wrongPassword: 'The password you entered is incorrect.',
             emailTaken: 'The email you entered is already taken',
             importProfileTimeout: 'There was a problem importing your profile information. You can still create your profile manually.',
-            saveAvatarFailed: 'There was a problem importing your avatar. You can still upload one manually.'
+            saveAvatarFailed: 'There was a problem importing your avatar. You can still upload one manually.',
+            invalidFileType: 'Invalid file type.'
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',

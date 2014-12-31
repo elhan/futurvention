@@ -15,7 +15,7 @@
       </div>
     </ul>
     <!-- Gallery -->
-    <div class="gallery">
+    <div ng-if="!fvHideGallery" class="gallery">
       <ul rn-carousel rn-carousel-index="galleryIndex" class="image">
         <li ng-repeat="showcase in showcases" ng-click="goToShowcaseItem($index)">
           <div class="layer thumbnail thumbnail-s" ng-class="{'active': $index === showcaseIndex}">

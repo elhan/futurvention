@@ -99,20 +99,12 @@
                       </div>
                       <!-- Remove button -->
                       <div class="container-x flex-content-end">
-                        <div class="wrapper-showcase-action" ng-click="removeShowcase(item)">
+                        <div class="wrapper-showcase-action" ng-click="removeShowcase(item); $event.stopPropagation();">
                           <svg class="icon icon-light">
                             <use xlink:href="#close"></use>
                           </svg>
                         </div>
                       </div>
-                      <!-- Overlay: selected -->
-                      <div class="showcase-overlay selected" ng-show="item.state === 'selected'">
-                        <svg class="icon icon-light">
-                          <use xlink:href="#tick"></use>
-                        </svg>
-                      </div>
-                      <!-- Overlay: drag-over -->
-                      <div class="showcase-overlay"></div>
                     </div>
                     <div class="caption editable container-x flex-items-start flex-content-centered">
                       <svg class="icon icon-dark text-i">
