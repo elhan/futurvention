@@ -13,7 +13,7 @@
      * # OfferConfigCtrl
      * Controls the apply 'service config' step
      */
-    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', '$alert', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'ENV', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, $alert, events, providers, paths, env, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
+    app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', '$alert', '$filter', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'ENV', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, $alert, $filter, events, providers, paths, env, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
 
         var modalEmbedUrl, modalCameraTag, modalPortfolioViewer, modalPageLoading;
 
@@ -391,8 +391,8 @@
             });
         };
 
-        function uploadShowcase (file, placeholderLink) {
-            var currentNotification,
+        function uploadShowcase (file) {
+            var currentNotification, errorMsg,
                 deferred = $q.defer();
 
             $scope.uploadInProgress = true;
@@ -405,16 +405,19 @@
                 $scope.uploadInProgress = false;
                 deferred.resolve(response.data); //notify onFileSelect that the upload is done
             }, function (error) {
-                var unsupportedFileType, invalidFileType;
                 console.log(error);
 
                 $scope.uploadInProgress = false;
 
                 deferred.reject(); //notify onFileSelect that the upload has failed
 
-                if (error.status === 500 && error.data && error.data.hasOwnProperty('ExceptionName')) {
+                if (error.status === 500 && error.data && error.data.hasOwnProperty('ExceptionName') && error.data.hasOwnProperty('DisplayMessage') && error.data.ExceptionName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
+
+                    errorMsg = $filter('invalidFileType')(file.name, error.data.DisplayMessage);
+
                     currentNotification && currentNotification.hide();
-                    currentNotification = $alert({ content: msg.error.invalidFileType, type: 'error', show: true });
+                    currentNotification = $alert({ content: errorMsg, type: 'error', show: true });
+
                 } else {
                     NotificationSvc.show({ content: msg.error.generic, type: 'error' });
                 }
@@ -455,39 +458,59 @@
                     }
                 }
 
-//                uploadShowcase(files[currentFileIndex], placeholderLink).then(function (newShowcaseItem) {
-//                    _.remove($scope.showcaseItems, placeholderItem);
-//                    $scope.updateShowcaseItems(newShowcaseItem);
-//
-//                    currentFileIndex < files.length -1 && reader.readAsDataURL(files[currentFileIndex++]);
-//
-//                }, function () {
-//                    _.remove($scope.showcaseItems, placeholderItem);
-//                    currentFileIndex < files.length -1 && reader.readAsDataURL(files[currentFileIndex++]);
-//                });
+                uploadShowcase(files[currentFileIndex], placeholderLink).then(function (newShowcaseItem) {
+                    _.remove($scope.showcaseItems, placeholderItem);
+                    $scope.updateShowcaseItems(newShowcaseItem);
+
+                    currentFileIndex < files.length -1 && reader.readAsDataURL(files[currentFileIndex++]);
+
+                }, function () {
+                    _.remove($scope.showcaseItems, placeholderItem);
+                    currentFileIndex < files.length -1 && reader.readAsDataURL(files[currentFileIndex++]);
+                });
             };
 
             reader.readAsDataURL(files[currentFileIndex]);
         };
 
+        function uploadExternalLink (url, placeholderItem) {
+            var currentNotification, errorMsg;
+
+            PortfolioSvc.saveUrls(url, $scope.service.serviceID).then(function (response) {
+                _.remove($scope.showcaseItems, placeholderItem);
+                $scope.updateShowcaseItems(response.data);
+
+            }, function (error) {
+                _.remove($scope.showcaseItems, placeholderItem);
+
+                if (error.status === 500 && error.data && error.data.hasOwnProperty('ExceptionName') && error.data.hasOwnProperty('DisplayMessage') && error.data.ExceptionName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
+
+                    errorMsg = $filter('invalidFileType')(url, error.data.DisplayMessage);
+                    currentNotification && currentNotification.hide();
+                    currentNotification = $alert({ content: errorMsg, type: 'error', show: true });
+
+                } else {
+                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                }
+            });
+        }
+
         $scope.saveUrls = function () {
-            var urls = [];
+            var  placeholderItem;
 
             _.each($scope.urlsToEmbed, function (obj) {
-                obj.url && urls.push(obj.url);
+
+                if (!obj || !obj.hasOwnProperty('url')) {
+                    return false;
+                }
+
+                placeholderItem = new odata.SimpleShowcaseItem({ name: obj.url }); // a placeholder item to show loading state
+                $scope.showcaseItems.push(placeholderItem);
+                uploadExternalLink(obj.url, placeholderItem);
+
             });
 
             modalEmbedUrl.hide();
-
-            PortfolioSvc.saveUrls(urls, $scope.service.serviceID).then(function (response) {
-                $scope.updateShowcaseItems(response.data);
-            }, function (error) {
-                console.log(error);
-                // user tried to embed a type of file not supported for this service
-                if (error.data.ExceptionType === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
-                    NotificationSvc.show({ content: error.data.ExceptionMessage, type: 'error' });
-                }
-            });
         };
 
         // saves the user's answer to a serviceField

@@ -142,7 +142,7 @@
         };
 
         Utils.matchUrlPattern =  function (str) {
-            return str.match(Utils.URL_PATTERN) || str.match(Utils.PSEUDO_URL_PATTERN);
+            return str ? str.match(Utils.URL_PATTERN) || str.match(Utils.PSEUDO_URL_PATTERN) : false;
         };
 
         Utils.matchProviderUrlPattern = function (str, providerName) {

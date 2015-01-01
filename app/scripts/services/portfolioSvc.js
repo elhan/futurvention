@@ -91,7 +91,8 @@
         ///////////////////////////////////////////////////////////
 
         PortfolioSvc.saveUrls = function (urls, serviceID) {
-            return $http.put(env.api.endPoint + paths.sellerManagement.showcases + serviceID, urls);
+            var payload = urls instanceof Array ? urls : new Array(urls);
+            return $http.put(env.api.endPoint + paths.sellerManagement.showcases + serviceID, payload);
         };
 
         PortfolioSvc.saveShowcases = function (offerID, showcases) {

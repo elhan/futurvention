@@ -90,4 +90,15 @@
         };
     });
 
+    app.filter('invalidFileType', function () {
+        return function (fileName, serverErrorMsg) {
+            return [
+                fileName,
+                'could not be uploaded. File type',
+                serverErrorMsg.split('\'')[1],
+                'is not supported by the service.'
+            ].join(' ');
+        };
+    });
+
 }());

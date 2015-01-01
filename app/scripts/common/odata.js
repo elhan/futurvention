@@ -402,7 +402,7 @@
             self.ID = 0;
 
             /** @type {String} */
-            self.name = '';
+            self.name = 'Add a description';
 
             /** @type {String} */
             self.link = '';
