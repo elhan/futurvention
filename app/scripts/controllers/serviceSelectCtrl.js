@@ -10,7 +10,7 @@
      * # ServiceSelectCtrl
      * Controls the apply 'service select' step
      */
-    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', '$modal', 'EVENTS', 'MESSAGES', 'CatalogueSvc', 'OfferSvc', 'NotificationSvc', function ($scope, $timeout, $modal, events, msg, CatalogueSvc, OfferSvc, NotificationSvc) {
+    app.controller('ServiceSelectCtrl', ['$scope', '$timeout', '$modal', '$location', 'EVENTS', 'MESSAGES', 'CatalogueSvc', 'OfferSvc', 'NotificationSvc', 'ProfileSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $location, events, msg, CatalogueSvc, OfferSvc, NotificationSvc, ProfileSvc, ImporterSvc) {
 
         var modalPageLoading = $modal({
             scope: $scope,
@@ -38,6 +38,27 @@
                 return service && service.serviceID === serviceID;
             });
         };
+
+        $scope.continue = function () {
+            $location.path('/' + $scope.currentUser.Profile.Moniker);
+
+            ImporterSvc.getStoredImporters().then(function (storedImporters) {
+                if (storedImporters && storedImporters instanceof Array && storedImporters.length > 0) {
+                    ProfileSvc.saveStatistics(storedImporters);
+                }
+            }, function (error) {
+                // TODO: proper logging
+                console.log(error);
+            });
+
+            if ($scope.currentUser.hasOwnProperty('Profile') && $scope.currentUser.Profile.Status < 4) {
+                ProfileSvc.saveProfileStatus(4); // let the backend know the user has finished the wizard
+            }
+        };
+
+        ///////////////////////////////////////////////////////////
+        /// Sync with backend
+        ///////////////////////////////////////////////////////////
 
         $scope.getServices = function () {
             CatalogueSvc.getServices($scope.offset).then(function (services) {

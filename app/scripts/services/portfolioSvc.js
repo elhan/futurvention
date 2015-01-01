@@ -67,7 +67,7 @@
             return deferred.promise;
         };
 
-        PortfolioSvc.fetchShowcases = function (offerID) {
+        PortfolioSvc.fetchOwnOfferShowcases = function (offerID) {
             var deferred = $q.defer(),
 
                 url = [
@@ -80,6 +80,43 @@
             $http.get(url).then(function (response) {
                 deferred.resolve(response.data);
             }, function (error) {
+                deferred.reject(error);
+            });
+
+            return deferred.promise;
+        };
+
+        /**
+         * Fetch a collection of shopwcases for a given offerID
+         * @param {Int} offerID The offer's ID
+         * @return Array.<Showcase>
+         */
+        PortfolioSvc.fetchOfferShowcases = function (offerID) {
+            var deferred = $q.defer(),
+                query = new breeze.EntityQuery('Offers')
+                .where('ID', 'eq', parseInt(offerID))
+                .expand([
+                    'OfferShowcases.Showcase.Items.File',
+                    'OfferShowcases.Showcase.Items.Thumbnail',
+                    'OfferShowcases.Showcase.Items.Title.Literals'
+                ].join(','));
+
+            manager.executeQuery(query).then(function (response) {
+                var showcases = [],
+                    offer = response.results[0] && response.results[0].value[0];
+
+                if (offer && offer.OfferShowcases && offer.OfferShowcases instanceof Array && offer.OfferShowcases.length > 0) {
+                    _.each(offer.OfferShowcases, function (offeredSc) {
+                        showcases.push(offeredSc.Showcase);
+                    });
+                    PortfolioSvc.setPortfolio(showcases);
+                    deferred.resolve(showcases);
+                } else {
+                    deferred.reject();
+                }
+
+            }, function (error) {
+                console.log(error);
                 deferred.reject(error);
             });
 

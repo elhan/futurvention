@@ -42,7 +42,7 @@
 
         $scope.profile = profile;
 
-        $scope.isCurrentUser = $scope.currentUser.ID === $scope.profile.ID;
+        $scope.isCurrentUser = false;
 
         $scope.reviews = {};
 
@@ -134,6 +134,20 @@
         /// Initialization
         ///////////////////////////////////////////////////////////
 
+        function updateCurrentUserStatus () {
+            $scope.isCurrentUser = $scope.currentUser.ID === $scope.profile.ID;
+
+            if (!$scope.isCurrentUser) {
+                UserSvc.fetchUser($scope.profile.ID).then(function (response) {
+                    $scope.user = response;
+                }, function (error) {
+                    console.log(error);
+                });
+            } else {
+                $scope.user = $scope.currentUser;
+            }
+        }
+
         // offers
         OfferSvc.fetchOffers($scope.profile.ID).then(function (offers) {
             $scope.offers = offers;
@@ -142,14 +156,12 @@
         });
 
         // user
-        if (!$scope.isCurrentUser) {
-            UserSvc.fetchUser($scope.profile.ID).then(function (response) {
-                $scope.user = response;
-            }, function (error) {
-                console.log(error);
+        if (!$scope.currentUser || _.isEmpty($scope.currentUser)) { // mainCtrl has not fetched current user yet
+            $scope.$on(events.user.updateSuccess, function () {
+                $timeout(updateCurrentUserStatus);
             });
         } else {
-             $scope.user = $scope.currentUser;
+            updateCurrentUserStatus();
         }
 
         // reviews

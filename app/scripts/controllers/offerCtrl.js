@@ -10,10 +10,11 @@
      * # OfferCtrl
      * Controls the Offer page
      */
-    app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'ENV ', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', 'LocationSvc', function ($scope, $modal, paths, events, offer, env, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc, LocationSvc) {
+    app.controller('OfferCtrl', ['$scope', '$modal', 'PATHS', 'EVENTS', 'ENV', 'offer', 'ReviewSvc', 'UserSvc', 'PortfolioSvc', 'CatalogueSvc', 'ProfileSvc', 'LocationSvc', function ($scope, $modal, paths, events, env, offer, ReviewSvc, UserSvc, PortfolioSvc, CatalogueSvc, ProfileSvc, LocationSvc) {
         $scope.reviews = [];
         $scope.portfolio = {};
         $scope.service = {};
+        $scope.showcases = [];
 
         $scope.offer = offer;
 
@@ -41,6 +42,16 @@
         $scope.closeContactModal = function () {
             contactModal.$promise.then(contactModal.hide);
         };
+
+        ////////////////////////////////////////////
+        /// Init
+        ////////////////////////////////////////////
+
+        if (offer.OfferShowcases && offer.OfferShowcases.hasOwnProperty('length') && offer.OfferShowcases.length > 0) {
+            _.each(offer.OfferShowcases, function (offeredSc) {
+                $scope.showcases.push(offeredSc.Showcase);
+            });
+        }
 
         ProfileSvc.fetchProfileById($scope.offer.SellerProfileID).then(function (profile) {
             $scope.profile = profile[0];
@@ -73,12 +84,11 @@
             console.log(error);
         });
 
-        PortfolioSvc.fetchShowcases($scope.offer.ID).then(function (showcases) {
-            $scope.offer.Showcases = showcases;
-            PortfolioSvc.setPortfolio(showcases); // caches this as it is needed by portfolioViewer
+        PortfolioSvc.fetchOfferShowcases($scope.offer.ID).then(function (showcases) {
+            $scope.showcases = showcases;
         }, function (error) {
+            //TODO: proper logging
             console.log(error);
         });
-
     }]);
 }());

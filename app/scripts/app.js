@@ -82,8 +82,14 @@
             templateUrl: 'views/offer.html',
             controller: 'OfferCtrl',
             resolve: {
-                offer: ['$route', 'OfferSvc', function ($route, OfferSvc) {
-                    return OfferSvc.fetchOffer($route.current.params.offerId);
+                offer: ['$route', '$q', 'OfferSvc', function ($route, $q, OfferSvc) {
+                    var deferred = $q.defer();
+                    OfferSvc.fetchOffer($route.current.params.offerId).then(function (repsonse) {
+                        deferred.resolve(repsonse);
+                    }, function (error) {
+                        deferred.reject(error);
+                    });
+                    return deferred.promise;
                 }]
             }
         })

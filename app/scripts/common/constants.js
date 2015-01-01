@@ -96,6 +96,7 @@
             importedShowcases: '/api/SellerManagement/Profiles/OwnProfile/ImportedShowcases?serviceID=',
             showcases: '/api/SellerManagement/SellerProfiles/OwnProfile/SingleItemShowcases?serviceID=',
             ownReviews: '/api/SellerManagement/Profiles/OwnProfile/reviews',
+            statistics: '/api/SellerManagement/Profiles/OwnProfile/statistics',
             monikerExists: function (moniker) {
                 return [
                     '/api/SellerManagement/Profiles/',

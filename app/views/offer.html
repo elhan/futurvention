@@ -10,7 +10,7 @@
         <a class="fv-tab" href="#reviews-header" offset="80" du-smooth-scroll fv-pane>Reviews</a>
       </div>
       <!-- Portfolio voiewer - ensure portfolio items have been fetched form the server before compilation -->
-      <div ng-if="offer.Showcases.length > 0">
+      <div ng-if="showcases.length > 0">
         <fv-portfolio-viewer></fv-portfolio-viewer>
       </div>
       <!-- User Info -->
@@ -66,45 +66,47 @@
         <span ng-if="expandServiceDescription">Collapse</span>
       </button>
       <!-- Reviews -->
-      <div class="container-x">
-        <div id="reviews-header" class="text-gotham text-h3">Reviews</div>
-      </div>
-      <div class="review fullscreen-x" ng-repeat="review in reviews" ng-class="{'last': $index === reviews.length - 1}">
-        <div class="content container-x">
-          <div class="wrapper-reviewer-img">
-            <div class="reviewer-img">D</div>
-          </div>
-          <div class="container-y flex-1 flex-content-spread">
-            <div class="container-x review-text">{{ review.Text.Literals[0].Text }}</div>
-            <div class="container-x flex-content-spread">
-              <div class="container-x">
-                <fv-dynamic-icon class="space-right container-icon-light import-link-min wrapper-darkGrey bg-lightgrey" provider={{review.Provider}}></fv-dynamic-icon>
-                <div class="icon-provider-xs"></div>
-                <div class="text-i text-silver space-after">{{ review.Moniker }},</div>
-                <div class="text-i text-silver">
-                  <span am-time-ago="review.Date"></span>
+      <div ng-if="reviews && reviews.length > 0">
+        <div class="container-x">
+          <div id="reviews-header" class="text-gotham text-h3">Reviews</div>
+        </div>
+        <div class="review fullscreen-x" ng-repeat="review in reviews" ng-class="{'last': $index === reviews.length - 1}">
+          <div class="content container-x">
+            <div class="wrapper-reviewer-img">
+              <div class="reviewer-img">D</div>
+            </div>
+            <div class="container-y flex-1 flex-content-spread">
+              <div class="container-x review-text">{{ review.Text.Literals[0].Text }}</div>
+              <div class="container-x flex-content-spread">
+                <div class="container-x">
+                  <fv-dynamic-icon class="space-right container-icon-light import-link-min wrapper-darkGrey bg-lightgrey" provider={{review.Provider}}></fv-dynamic-icon>
+                  <div class="icon-provider-xs"></div>
+                  <div class="text-i text-silver space-after">{{ review.Moniker }},</div>
+                  <div class="text-i text-silver">
+                    <span am-time-ago="review.Date"></span>
+                  </div>
                 </div>
-              </div>
-              <div class="container-x text-p">
-                <!-- full stars -->
-                <div class="text-yellow" ng-repeat="star in range(review.Rating)">
-                  <span class="glyphicon glyphicon-star"></span>
-                </div>
-                <!-- empty stars -->
-                <div class="text-yellow" ng-repeat="star in range(5 - review.Rating)">
-                  <span class="glyphicon glyphicon-star-empty"></span>
+                <div class="container-x text-p">
+                  <!-- full stars -->
+                  <div class="text-yellow" ng-repeat="star in range(review.Rating)">
+                    <span class="glyphicon glyphicon-star"></span>
+                  </div>
+                  <!-- empty stars -->
+                  <div class="text-yellow" ng-repeat="star in range(5 - review.Rating)">
+                    <span class="glyphicon glyphicon-star-empty"></span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Show More -->
-      <div class="container-x flex-content-centered">
-        <div class="wrapper-showmore">
-          <button class="btn btn-link text-p" >
-            <span>Show more reviews</span>
-          </button>
+        <!-- Show More -->
+        <div class="container-x flex-content-centered">
+          <div class="wrapper-showmore">
+            <button class="btn btn-link text-p" >
+              <span>Show more reviews</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@
                 return;
             }
 
-            AccountSvc.register($scope.newUser).then(function (response) {
+            AccountSvc.register($scope.newUser).then(function () {
                 $timeout.cancel(warningTimeout);
 
                 try { // this trhows an error if it is not open

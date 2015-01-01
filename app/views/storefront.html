@@ -78,7 +78,7 @@
               <img ng-if="!offer.Service.ThumbnailFile.Url" data-src="holder.js/100%x180" alt="100%x180" src="images/thumb.png" class="img-responsive">
               <img ng-if="offer.Service.ThumbnailFile.Url" ng-src="{{offer.Service.ThumbnailFile.Url}}" class="img-responsive">
             </div>
-            <a class="thumb-overlay" href="https://futurventionclient.azurewebsites.net/#/offers/{{offer.ID}}">
+            <a class="thumb-overlay" ng-href="#/offers/{{offer.ID}}">
               <span class="text-white text-h3">View in detail</span>
             </a>
 <!--
@@ -122,7 +122,7 @@
       <div class="portfolio-items flex-wrap">
         <div class="showcase" ng-repeat="item in showcaseItems" ng-click="showPortfolioViewerModal($index)">
           <div class="showcase-item thumbnail" fv-bg-image={{item.link}} fv-data={{item.link}}></div>
-          <div class="caption">{{ item.name }}</div>
+          <div class="text-i caption">{{ item.name }}</div>
         </div>
       </div>
       <div class="portfolio-footer" ng-if="isCurrentUser">

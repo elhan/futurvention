@@ -15,7 +15,7 @@
      */
     app.controller('OfferConfigCtrl', ['$scope', '$timeout', '$modal', '$upload', '$location', '$q', '$alert', '$filter', 'EVENTS', 'PROVIDERS_ENUM', 'PATHS', 'ENV', 'MESSAGES', 'Utils', 'Odata', 'CatalogueSvc', 'ProfileSvc', 'OfferSvc', 'PortfolioSvc', 'NotificationSvc', 'ImporterSvc', function ($scope, $timeout, $modal, $upload, $location, $q, $alert, $filter, events, providers, paths, env, msg, utils, odata, CatalogueSvc, ProfileSvc, OfferSvc, PortfolioSvc, NotificationSvc, ImporterSvc) {
 
-        var modalEmbedUrl, modalCameraTag, modalPortfolioViewer, modalPageLoading;
+        var modalEmbedUrl, modalCameraTag, modalShowcaseViewer, modalPageLoading;
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
         $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
@@ -146,9 +146,9 @@
             animation: 'am-slide-top'
         });
 
-        modalPortfolioViewer = $modal({
+        modalShowcaseViewer = $modal({
             scope: $scope,
-            template: 'views/components/modalPortfolioViewer.html',
+            template: 'views/components/modalShowcaseViewer.html',
             show: false,
             animation: 'am-slide-top',
             keyboard: true
@@ -245,7 +245,7 @@
 
             PortfolioSvc.setPortfolio(showcase);
 
-            modalPortfolioViewer.$promise.then(function () { modalPortfolioViewer.show(); });
+            modalShowcaseViewer.$promise.then(function () { modalShowcaseViewer.show(); });
         };
 
         $scope.removeShowcase = function (item) {
@@ -534,7 +534,7 @@
         };
 
         $scope.fetchShowcases = function () {
-            PortfolioSvc.fetchShowcases($scope.offer.ID).then(function (response) {
+            PortfolioSvc.fetchOwnOfferShowcases($scope.offer.ID).then(function (response) {
                 console.log(response);
             }, function (error) {
                 console.log(error);
@@ -695,7 +695,7 @@
             console.log(error);
         });
 
-        PortfolioSvc.fetchShowcases($scope.offer.ID).then(function (showcases) {
+        PortfolioSvc.fetchOwnOfferShowcases($scope.offer.ID).then(function (showcases) {
             // TODO: temporary convention. No need to attach to offer
             $scope.offer.Showcases = showcases;
             $scope.updateShowcaseItems($scope.offer.Showcases);

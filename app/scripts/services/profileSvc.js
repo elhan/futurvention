@@ -110,6 +110,14 @@
             });
         };
 
+        ProfileSvc.saveStatistics = function (storedImporters) {
+            return $http({
+                method: 'POST',
+                URL: env.api.endPoint + paths.sellerManagement.statistics,
+                data: storedImporters
+            });
+        };
+
         /////////////////////////////////////////////
         /// Fetch operations
         /////////////////////////////////////////////
