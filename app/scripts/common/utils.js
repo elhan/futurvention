@@ -98,17 +98,17 @@
         // www. sans http:// or https://
         Utils.PSEUDO_URL_PATTERN = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
-        Utils.ELANCE_URL_PATTERN = /^https:\/\/(www\.elance\.com\/s\/.)/i;
+        Utils.ELANCE_URL_PATTERN = /^((https:\/\/(www\.)?)|(http:\/\/(www\.)?)|(www\.))?elance\.com\/s\/./i;
 
-        Utils.BEHANCE_URL_PATTERN = /^https:\/\/(www\.behance\.net\/.)/i;
+        Utils.BEHANCE_URL_PATTERN = /^((https:\/\/(www\.)?)|(http:\/\/(www\.)?)|(www\.))?behance\.net\/./i;
 
-        Utils.DRIBBBLE_URL_PATTERN = /^https:\/\/(dribbble\.com\/.)/i;
+        Utils.DRIBBBLE_URL_PATTERN = /^((https:\/\/(www\.)?)|(http:\/\/(www\.)?)|(www\.)?)?dribbble\.com\/./i;
 
-        Utils.GITHUB_URL_PATTERN = /^http:\/\/((www\.)?github\.com\/.)/i;
+        Utils.GITHUB_URL_PATTERN = /^(http:\/\/(www\.)?|(https:\/\/(www\.)?)|(www\.)?)?github\.com\/./i;
 
-        Utils.ODESK_URL_PATTERN = /^https:\/\/(www\.odesk\.com\/users\/)(.+)(\_\~)(.+)/i;
+        Utils.ODESK_URL_PATTERN = /^((https:\/\/(www\.)?)|(http:\/\/(www\.)?)|(www\.)?)?odesk\.com\/users\/(.+)(\_\~)(.+)/i;
 
-        Utils.PEOPLEPERHOUR_URL_PATTERN = /^http:\/\/(www\.peopleperhour\.com\/freelancer\/(.+[\/])(.))/i;
+        Utils.PEOPLEPERHOUR_URL_PATTERN = /^((http:\/\/(www\.)?)|(www\.)?|(https:\/\/(www\.)?))?peopleperhour\.com\/freelancer\/(.+[\/])(.)/i;
 
         Utils.isVideo = function (mimeType) {
             var exp = new RegExp(/video\/*/g);
