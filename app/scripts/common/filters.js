@@ -60,10 +60,10 @@
     });
 
     app.filter('importedLink', ['PATHS', 'ENV', function (paths, env) {
-        return function (item, guid) {
+        return function (item) {
             return [
-                env.api.endPoint + paths.file.imported,
-                guid, '/',
+                paths.importer.importedData,
+                item.Guid, '/',
                 item.Provider, '/',
                 item.FolderName, '/',
                 item.ThumbnailAsset.Folder, '/',

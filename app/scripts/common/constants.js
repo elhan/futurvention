@@ -109,9 +109,6 @@
             self: '/api/Self?expand=Avatar',
             ownAvatar: '/api/Self/Avatar'
         },
-        file: {
-            imported: 'https://extservicesdata.blob.core.windows.net:443/crawleddata/'
-        },
         offerManagement: {
             ownOffers: '/api/OffersManagement/OwnOffers',
             offeredServices: '/api/OffersManagement/OwnOffers?expand=Service/ShortTitle/Literals,Service/ThumbnailFile'

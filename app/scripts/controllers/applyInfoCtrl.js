@@ -167,7 +167,7 @@
         // on continue, save the rest of the user's info
         $scope.continue = function () {
             switch (true) {
-            case $scope.profileInfoForm.$pristine:
+                case !($scope.profile.Moniker && $scope.profile.Title && $scope.profile.Description && $scope.profile.Description.Literals[0].Text && $scope.cityName && $scope.currentUser.Avatar):
                 break;
             case $scope.profileExists:
                 ProfileSvc.patchProfile(utils.removeEmptyProperties($scope.profile), $scope.profile.ID).then(function (response) {

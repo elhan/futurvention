@@ -172,8 +172,8 @@
                     <div class="showcase" ng-repeat="item in portfoliosExpanded.indexOf(portfolio) === -1 ? portfolio.data.slice(0, 10) : portfolio.data">
                       <div class="showcase-item thumbnail"
                            ng-click="togglePortfolioSelection(item)"
-                           fv-bg-image={{item|importedLink:item:curentUser.Guid}}
-                           fv-data={{item|importedLink:item:curentUser.Guid}}>
+                           fv-bg-image={{item|importedLink:item}}
+                           fv-data={{item|importedLink:item}}>
                         <!-- Overlay: selected -->
                         <div class="showcase-overlay selected" ng-show="selectedPortfolios.indexOf(item) > -1">
                           <svg class="icon icon-light">
