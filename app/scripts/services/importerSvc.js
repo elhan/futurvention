@@ -178,8 +178,7 @@
             cancelAfter = (delay * count) + 1000;
 
             pollingTimeout = $timeout(function () {
-                $alert({ content: msg.error.importProfileTimeout, type: 'error', show: true });
-                $rootScope.$broadcast(events.importer.polling.end);
+                $rootScope.$broadcast(events.importer.polling.timeout);
             }, cancelAfter);
 
             polling = $interval(function () {
@@ -197,6 +196,7 @@
                 importingDone(response.data) && ImporterSvc.stopPolling();
 
                 profileImported(response.data) && emitEvents && $rootScope.$broadcast(events.importer.polling.profileImported, response);
+                emitEvents && $rootScope.$broadcast(events.importer.polling.statusUpdated, response.data);
 
                 deferred.resolve(response.data);
 

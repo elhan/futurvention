@@ -39,7 +39,8 @@
                 start: 'imp-polling-start',
                 profileImported: 'imp-profile-imported',
                 statusUpdated: 'imp-status-updated',
-                end: 'imp-polling-end'
+                end: 'imp-polling-end',
+                timeout: 'imp-polling-timeout'
             }
         },
         ui: {
@@ -132,7 +133,9 @@
             emailTaken: 'The email you entered is already taken',
             importProfileTimeout: 'There was a problem importing your profile information. You can still create your profile manually.',
             saveAvatarFailed: 'There was a problem importing your avatar. You can still upload one manually.',
-            invalidFileType: 'Invalid file type.'
+            invalidFileType: 'Invalid file type.',
+            createProfileFailed: 'There was a problem creating your profile. Please try again.',
+            updateProfileFailed: 'There was a problem updating your profile. Please try again.'
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',

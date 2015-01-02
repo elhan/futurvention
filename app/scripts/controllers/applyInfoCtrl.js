@@ -35,6 +35,7 @@
         });
 
         $scope.avatarLoading = false; // determines if a loader is shown on the user avatar while a new avatar is loading.
+        $scope.saveProfileInProgress = false;
 
         /**
          * Updates the profile object. If the user already has completed a profile, fetch it. Otherwise try
@@ -166,25 +167,33 @@
 
         // on continue, save the rest of the user's info
         $scope.continue = function () {
+            $scope.saveProfileInProgress =  true;
+
             switch (true) {
                 case !($scope.profile.Moniker && $scope.profile.Title && $scope.profile.Description && $scope.profile.Description.Literals[0].Text && $scope.cityName && $scope.currentUser.Avatar):
+                $scope.saveProfileInProgress = false;
                 break;
             case $scope.profileExists:
-                ProfileSvc.patchProfile(utils.removeEmptyProperties($scope.profile), $scope.profile.ID).then(function (response) {
-                    console.log(response);
+                 // let the user navigate to next step regardless of patchProfile resolution
+                ProfileSvc.patchProfile(utils.removeEmptyProperties($scope.profile), $scope.profile.ID).then(function () {
+                    $scope.saveProfileInProgress = false;
+                    $scope.goToStep(2);
                 }, function (error) {
                     console.log(error);
+                    $scope.saveProfileInProgress = false;
+                    NotificationSvc.show({ content: msg.error.updateProfileFailed, type: 'error' });
                 });
                 break;
             default:
-                ProfileSvc.createProfile(utils.removeEmptyProperties($scope.profile)).then(function (response) {
-                    console.log(response);
+                ProfileSvc.createProfile(utils.removeEmptyProperties($scope.profile)).then(function () {
+                    $scope.saveProfileInProgress = false;
+                    $scope.goToStep(2);
                 }, function (error) {
                     console.log(error);
+                    $scope.saveProfileInProgress = false;
+                    NotificationSvc.show({ content: msg.error.createProfileFailed, type: 'error' });
                 });
             }
-
-            $scope.goToStep(2);
         };
 
         $scope.searchCity = _.throttle(function (prefix) {
@@ -269,6 +278,11 @@
             modalPolling.hide();
         });
 
+        $scope.$on(events.importer.polling.timeout, function () {
+            NotificationSvc.show({ content: msg.error.importProfileTimeout, type: 'error' });
+            modalPolling.hide();
+        });
+
         $scope.$on(events.importer.polling.profileImported, function () {
             //TODO : merge with update function
             ImporterSvc.fetchProfile().then(function (response) {
@@ -328,6 +342,10 @@
                 ImporterSvc.stopPolling();
                 NotificationSvc.show({ content: msg.error.importProfileTimeout, type: 'error' });
             });
+        });
+
+        $scope.$on('$destroy', function () {
+            ImporterSvc.stopPolling();
         });
 
         ///////////////////////////////////////////////////////////

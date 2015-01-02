@@ -59,7 +59,7 @@
         };
     });
 
-    app.filter('importedLink', ['PATHS', 'ENV', function (paths, env) {
+    app.filter('importedLink', ['PATHS', function (paths) {
         return function (item) {
             return [
                 paths.importer.importedData,
@@ -101,4 +101,11 @@
         };
     });
 
+    app.filter('hasShowcaseItems', function () {
+        return function (importedPortfolios) {
+            return _.filter(importedPortfolios, function (portfolio) {
+                return portfolio.hasOwnProperty('data') && portfolio.data instanceof Array && portfolio.data.length > 0;
+            });
+        };
+    });
 }());

@@ -160,10 +160,10 @@
                   </div>
                 </div>
                 <!-- Imported Showcase -->
-                <div ng-repeat="portfolio in importedPortfolios">
+                <div ng-repeat="portfolio in importedPortfolios | hasShowcaseItems">
                   <div class="panel-inner">
-                    <div class="text-p-bold">{{ portfolio | getProviderName }}</div>
-                    <button class="btn no-padding btn-link text-p" ng-click="toggleExpansion(portfolio)">
+                    <div class="text-p-bold">{{ portfolio.Provider }}</div>
+                    <button class="btn no-padding btn-link text-p" ng-click="toggleExpansion(portfolio)" ng-if="portfolio.data.length > 10">
                       <span ng-if="portfoliosExpanded.indexOf(portfolio) === -1">+ Show all</span>
                       <span ng-if="portfoliosExpanded.indexOf(portfolio) > -1">- Collapse</span>
                     </button>

@@ -44,6 +44,7 @@
         $scope.selectedPortfolios = [];
         $scope.portfoliosExpanded = [];
 
+        // these are extended importer objects, containing information on current status (==checkstatus response)
         $scope.importersAvailable = [];
         $scope.importersFailed = [];
         $scope.importersInProgress = [];
@@ -351,22 +352,46 @@
         };
 
         $scope.fetchImportedPortfolios = function () {
-            ImporterSvc.fetchPortfolios($scope.importersFinished).then(function (response) {
-                var importedPortfolio, portfolios = response.data;
+            var simpleImporters = [];
+
+            /*
+                For each (expanded) importer in importersAvailable, create a simple importer object needed by fetchPortfolios,
+                and fetched the portfolios that have finished
+            **/
+            simpleImporters = _.map($scope.importersAvailable, function (extendedImporter) {
+                return {
+                    Provider: $filter('getProviderName')(extendedImporter),
+                    Url: '', // this does not need to be specified
+                    Guid: extendedImporter.Guid
+                };
+            });
+
+            ImporterSvc.fetchPortfolios(simpleImporters).then(function (response) {
+                var importedPortfolio,
+                    importedPortfolioItem,
+                    portfolios = response.data;
 
                 _.each(portfolios, function (portfolio) {
+                    importedPortfolio = _.find($scope.importedPortfolios, function (port) {
+                        return port.Provider === portfolio.Provider;
+                    });
 
-                    if ($scope.importedPortfolios.indexOf(portfolio) === -1) {
-                        $scope.importedPortfolios.push(portfolio);
+                    // If the portfolio has already been added to the importedPortfolios collection, update it's showcase collection
+                    if (importedPortfolio) {
+                        _.each(portfolio.data, function (showcase) {
+                            importedPortfolioItem = _.find(importedPortfolio.data, function (sc) {
+                                // try to match items by asset name, if one exists, as it is the safest way to do so
+                                if (showcase.hasOwnProperty('ProcessedAsset') && showcase.ProcessedAsset.hasOwnProperty('Name') && showcase.ProcessedAsset.Name) {
+                                    return showcase.ProcessedAsset.Name === sc.ProcessedAsset.Name;
+                                } else {
+                                    return showcase.Title === sc.Title; // this will cover most, but not all cases.
+                                }
+                            });
 
+                            !importedPortfolioItem && importedPortfolio.data.push(showcase);
+                        });
                     } else {
-                        importedPortfolio = _.find($scope.importedPortfolios, function (port) {
-                            return port === portfolio;
-                        });
-
-                        importedPortfolio && _.each(portfolio.data, function (portfolioItem) {
-                            importedPortfolio.indexOf(portfolioItem) === -1 && importedPortfolio.push(portfolioItem);
-                        });
+                        $scope.importedPortfolios.push(portfolio);
                     }
 
                 });
@@ -566,12 +591,51 @@
 
         // listen for ImportSvc polling events
         $scope.$on(events.importer.polling.statusUpdated, function (event, status) {
+            event.preventDefault();
+
             if ($scope.status === status) {
                 return;
             }
 
             $scope.status = status.data;
+
+            // update importer collections
+            $scope.importersFinished = _.filter($scope.importersAvailable, function (importer) {
+                return importer.Portfolio.CurrentStatus === 2 && importer.Portfolio.Count > 0;
+            });
+
+            $scope.importersFailed = _.filter($scope.importersAvailable, function (importer) {
+                return importer.Portfolio.CurrentStatus === 2 && importer.Portfolio.Count === 0;
+            });
+
+            $scope.importersInProgress = _.filter($scope.importersAvailable, function (importer) {
+                return $scope.importersFailed.indexOf(importer) === -1 && $scope.importersFinished.indexOf(importer) === -1;
+            });
+
+            // update portfolios
             $scope.fetchImportedPortfolios();
+        });
+
+        // when the importer polling times out, handle the remaining inProgress importers.
+        $scope.$on(events.importer.polling.timeout, function () {
+            var port, importerName;
+
+            _.each($scope.importersInProgress, function (importer) {
+                importerName = $filter('getProviderName')(importer);
+
+                // check if there are at least some showcases that have been downloaded
+                port = _.find($scope.importedPortfolios, function (impPortfolio) {
+                    return impPortfolio.Provider === importerName;
+                });
+
+                if (port && port.hasOwnProperty('data') && port.data instanceof Array && port.data.length > 0) {
+                    $scope.importersFinished.push(importer);
+                } else {
+                    $scope.importersFailed.push(importer);
+                }
+
+                $scope.importersInProgress.empty();
+            });
         });
 
         $scope.$on('modal.show', function () {
@@ -592,6 +656,10 @@
                 });
 
             });
+        });
+
+        $scope.$on('$destroy', function () {
+            ImporterSvc.stopPolling();
         });
 
         ////////////////////////////////////////////
@@ -660,7 +728,6 @@
                 return importer.Portfolio !== null;
             });
 
-            // check if all importers have finished downloading
             if ($scope.importersAvailable.length > 0) {
                 $scope.status = status;
 
@@ -677,17 +744,17 @@
                     return;
                 }
 
-                // no importers in progress
+                // all portfolios have finished
                 if ($scope.importersFinished.length + $scope.importersFailed.length === $scope.importersAvailable.length) {
                     $scope.fetchImportedPortfolios();
 
                 } else { //at least some importers in progress
                     $scope.importersInProgress = _.filter($scope.importersAvailable, function (importer) {
-                        return importer.Portfolio.CurrentStatus === 1;
+                        return $scope.importersFailed.indexOf(importer) === -1 && $scope.importersFinished.indexOf(importer) === -1;
                     });
 
                     // start polling: this will emit events that will be handled by the coresponding watcher
-                    ImporterSvc.startPolling({ importers: $scope.importersAvailable, interval: 5000, repetitions: 6 });
+                    ImporterSvc.startPolling({ importers: $scope.importersAvailable, delay: 5000, count: 24 }); // 2', once every 5"
                 }
             }
 

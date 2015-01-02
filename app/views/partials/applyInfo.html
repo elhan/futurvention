@@ -137,7 +137,16 @@
       <div class="container-x flex-content-centered">
         <div class="flex-1"></div>
         <div class="wrapper-continue-2">
-          <button type="submit" class="btn btn-continue" ng-disabled="!(profile.Moniker && profile.Title && profile.Description && profile.Description.Literals[0].Text && cityName && currentUser.Avatar)" ng-click="continue()">Continue</button>
+          <button type="submit" class="btn btn-continue"
+                  ng-disabled="!(profile.Moniker && profile.Title && profile.Description && profile.Description.Literals[0].Text && cityName && currentUser.Avatar) || saveProfileInProgress"
+                  ng-click="continue()">
+            <div class="container-x flex-content-centered">
+              <div>Continue</div>
+              <div class="wrapper-loader space-left" ng-show="saveProfileInProgress">
+                <div class="loader"></div>
+              </div>
+            </div>
+          </button>
         </div>
         <div class="flex-1"></div>
       </div>
