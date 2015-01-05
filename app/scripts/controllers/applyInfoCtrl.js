@@ -181,7 +181,7 @@
                 }, function (error) {
                     console.log(error);
                     $scope.saveProfileInProgress = false;
-                    NotificationSvc.show({ content: msg.error.updateProfileFailed, type: 'error' });
+                    $scope.activeStep === 'info' && NotificationSvc.show({ content: msg.error.updateProfileFailed, type: 'error' });
                 });
                 break;
             default:
@@ -191,7 +191,7 @@
                 }, function (error) {
                     console.log(error);
                     $scope.saveProfileInProgress = false;
-                    NotificationSvc.show({ content: msg.error.createProfileFailed, type: 'error' });
+                    $scope.activeStep === 'info' && NotificationSvc.show({ content: msg.error.createProfileFailed, type: 'error' });
                 });
             }
         };
