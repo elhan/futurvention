@@ -36,7 +36,7 @@
         };
 
         OdataObject.multilingualToString = function (key) {
-            if (!key || _.keys(this, key).indexOf(key) === -1) {
+            if (!key || _.keys(this, key).indexOf(key) === -1 || !this[key] ) {
                 return;
             }
 
