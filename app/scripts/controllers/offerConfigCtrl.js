@@ -53,6 +53,7 @@
         $scope.status = {}; // the current importer status
 
         $scope.uploadInProgress = false;
+        $scope.saveImportedDataInProgress = false;
 
         // can be 'owned' or 'imported'. Controls which work samples section is visible
         $scope.activeWorkSamples = 'owned';
@@ -401,18 +402,29 @@
             });
         };
 
+        /**
+         * Handles saving imported items that have been selected by the user to Showcases, and toggles the imported pane
+         */
         $scope.saveImportedPortfolios = function () {
+            if ($scope.saveImportedDataInProgress) {
+                return;
+            }
+
             if ($scope.selectedPortfolios.length === 0) {
                 $scope.toggleActiveWorkSamples();
                 return;
             }
 
+            $scope.saveImportedDataInProgress = true;
+
             ImporterSvc.saveImportedPortfolios($scope.service.serviceID, $scope.selectedPortfolios).then(function (response) {
                 $scope.updateShowcaseItems(response.data);
                 $scope.toggleActiveWorkSamples();
+                $scope.saveImportedDataInProgress = false;
             }, function (error) {
                 console.log(error);
                 NotificationSvc.show({ content: msg.error.profileSaveFailed, type: 'error' });
+                $scope.saveImportedDataInProgress = false;
             });
         };
 

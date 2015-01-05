@@ -108,4 +108,21 @@
             });
         };
     });
+
+    app.filter('fetchedPortfoliosCount', ['$filter', function ($filter) {
+        return function (importer, importedPortfolios) {
+            var importedPortfolio, count = 0;
+
+            importedPortfolio = _.find(importedPortfolios, function (port) {
+                return port.Provider === $filter('getProviderName')(importer);
+            });
+
+            if (importedPortfolio && importedPortfolio.hasOwnProperty('data') && importedPortfolio.data instanceof Array && importedPortfolio.data.length > 0) {
+                count = importedPortfolio.data.length;
+            }
+
+            return count;
+        };
+    }]);
+
 }());
