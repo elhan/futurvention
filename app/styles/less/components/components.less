@@ -15,6 +15,7 @@
     &:disabled {
       background-color: white;
       border-radius: 4px;
+      cursor: auto;
     }
   }
 }
@@ -680,6 +681,9 @@ textarea {
     svg {
       width: calc(100% / 3px);
       height: calc(100% / 3px);
+    }
+    &.disabled {
+      background-color: @lightGrey;
     }
   }
 

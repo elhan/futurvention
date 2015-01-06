@@ -42,6 +42,7 @@
 
         $scope.importedPortfolios = [];
         $scope.selectedPortfolios = [];
+        $scope.addedPortfolios = []; // portfolios that have been added to the showcaseItems collection
         $scope.portfoliosExpanded = [];
 
         // these are extended importer objects, containing information on current status (==checkstatus response)
@@ -234,6 +235,19 @@
             });
         };
 
+
+        /**
+         * Checks if imported item has been added to the showcaseItems collection. Neccessary to determin
+         * the item's 'selected disabled' status (grey overlay).
+         * @param {importedItem} an imported showcase item
+         * @returns {Boolean} True if the imported item has been added to the showcaseItems collection.
+         */
+        $scope.getImportedItemAddedStatus = function (importedItem) {
+            return angular.isDefined(_.find($scope.showcaseItems, function (item) {
+                return item.file.Name.indexOf(importedItem.ProcessedAsset.Name) !== -1;
+            }));
+        };
+
         ////////////////////////////////////////////
         /// Other scope functions
         ////////////////////////////////////////////
@@ -394,9 +408,7 @@
                     } else {
                         $scope.importedPortfolios.push(portfolio);
                     }
-
                 });
-
             }, function (error) {
                 console.log(error);
             });
@@ -674,6 +686,19 @@
             ImporterSvc.stopPolling();
         });
 
+        $scope.$watch('activeWorkSamples', function (newValue, oldValue) {
+            switch (true) {
+            case !newValue || newValue === oldValue:
+                return;
+            case newValue === 'owned' && oldValue === 'imported':
+                ImporterSvc.stopPolling();
+                break;
+            case newValue === 'imported' && oldValue === 'owned':
+                $scope.selectedPortfolios.empty();
+                break;
+            }
+        });
+
         ////////////////////////////////////////////
         /// Init
         ////////////////////////////////////////////
@@ -737,7 +762,7 @@
         ImporterSvc.checkStatus().then(function (status) {
 
             $scope.importersAvailable = _.filter(status, function (importer) { // check if there are any available importers
-                return importer.Portfolio !== null;
+                return importer.Portfolio !== null && importer.Provider !== 5; // ignore github - no portfolios
             });
 
             if ($scope.importersAvailable.length > 0) {
