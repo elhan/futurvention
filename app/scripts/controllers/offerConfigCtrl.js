@@ -687,16 +687,10 @@
         });
 
         $scope.$watch('activeWorkSamples', function (newValue, oldValue) {
-            switch (true) {
-            case !newValue || newValue === oldValue:
+            if (!newValue || newValue === oldValue) {
                 return;
-            case newValue === 'owned' && oldValue === 'imported':
-                ImporterSvc.stopPolling();
-                break;
-            case newValue === 'imported' && oldValue === 'owned':
-                $scope.selectedPortfolios.empty();
-                break;
             }
+            newValue === 'imported' && oldValue === 'owned' && $scope.selectedPortfolios.empty();
         });
 
         ////////////////////////////////////////////
