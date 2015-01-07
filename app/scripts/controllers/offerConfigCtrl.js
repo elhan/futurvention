@@ -657,9 +657,9 @@
                 } else {
                     $scope.importersFailed.push(importer);
                 }
-
-                $scope.importersInProgress.empty();
             });
+
+            $scope.importersInProgress.empty();
         });
 
         $scope.$on('modal.show', function () {

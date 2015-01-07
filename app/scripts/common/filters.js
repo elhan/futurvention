@@ -125,4 +125,20 @@
         };
     }]);
 
+    app.filter('getThumbnailType', ['$filter', 'FILE_TYPE_CONFIG', function ($filter, fileTypeConfig) {
+        return function (file) {
+            var typeConfiguration;
+
+            if (!file || !file.hasOwnProperty('FileTypeID')) {
+                return;
+            }
+
+            typeConfiguration = _.find(fileTypeConfig, function (conf) {
+                return file.FileTypeID === conf.ID;
+            });
+
+            return typeConfiguration ? typeConfiguration.Thumbnail : null;
+        };
+    }]);
+
 }());

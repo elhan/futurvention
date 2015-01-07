@@ -379,11 +379,16 @@
         };
 
         Odata.ShowcaseItem.prototype.getThumbnail = function () {
-            // TODO: proper handling
-            if (!this.Thumbnail) {
-                return 'images/thumb.png';
+            var self = this;
+
+            switch (true) {
+            case !self.Thumbnail:
+                return '/images/file-types.png';
+            case self.Thumbnail.hasOwnProperty('Url'):
+                return self.Thumbnail.Url;
+            default:
+                return  env.api.hostedFiles + self.Thumbnail.RelativeUrl;
             }
-            return this.Thumbnail.hasOwnProperty('Url') ? this.Thumbnail.Url : env.api.hostedFiles + this.Thumbnail.RelativeUrl;
         };
 
         Odata.ShowcaseItem.prototype.getFileLink = function () {

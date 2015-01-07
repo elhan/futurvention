@@ -93,6 +93,11 @@
                          fv-drop-class="drag-over"
                          fv-on-drop="rearangeShowcaseItems"
                          fv-droppable>
+<!--
+                      <div ng-if="!item.link">
+                        <fv-showcase-placeholder class="flex-content-centered flex-items-centered" item="item"></fv-showcase-placeholder>
+                      </div>
+-->
                       <!-- Spinner -->
                       <div class="showcase-overlay preview" ng-show="item.state === 'loading'">
                         <div class="loader"></div>

@@ -5,20 +5,20 @@
 
     /**
      * @ngdoc directive
-     * @name fvApp.directive: fv-showcase-item
+     * @name fvApp.directive: fv-portfolio-viewer-item
      * @restrict E
      *
      * @description
      * Creates a custom showcase item element.
      *
      * @example
-     * <fv-showcase-item></fv-showcase-item>
+     * <fv-portfolio-viewer-item></fv-portfolio-viewer-item>
      */
-    app.directive('fvShowcaseItem', ['$sce', 'FILE_TYPE_CONFIG', 'PATHS', 'Odata', function ($sce, fileTypeConfig, paths, odata) {
+    app.directive('fvPortfolioViewerItem', ['$sce', 'FILE_TYPE_CONFIG', 'PATHS', 'Odata', function ($sce, fileTypeConfig, paths, odata) {
         return {
             restrict: 'E',
             scope: true,
-            templateUrl: 'views/directives/fv-showcase-item.html',
+            templateUrl: 'views/directives/fv-portfolio-viewer-item.html',
             link: function (scope) {
 
                 if (!scope.showcase) {

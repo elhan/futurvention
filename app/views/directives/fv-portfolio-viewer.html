@@ -4,7 +4,7 @@
     <!-- Slides -->
     <ul rn-carousel rn-carousel-index="showcaseIndex" class="viewer-top image">
       <li ng-repeat="showcase in showcases">
-        <fv-showcase-item class="layer"></fv-showcase-item>
+        <fv-portfolio-viewer-item class="layer"></fv-portfolio-viewer-item>
       </li>
       <!-- Navigation buttons -->
       <div class="btn-viewer-nav btn-l" ng-class="{'invisible': showcaseIndex === 0}" ng-click="showcasePrev()">
@@ -19,7 +19,7 @@
       <ul rn-carousel rn-carousel-index="galleryIndex" class="image">
         <li ng-repeat="showcase in showcases" ng-click="goToShowcaseItem($index)">
           <div class="layer thumbnail thumbnail-s" ng-class="{'active': $index === showcaseIndex}">
-            <fv-showcase-thumb showcase="showcase" caption="false"></fv-showcase-thumb>
+            <fv-portfolio-viewer-thumb showcase="showcase" caption="false"></fv-portfolio-viewer-thumb>
           </div>
         </li>
       </ul>

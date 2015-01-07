@@ -1,0 +1,32 @@
+<div ng-switch on="item.file | getThumbnailType">
+  <div ng-switch-when="General">
+    <svg class="icon icon-file-default">
+      <use xlink:href="#file-default"></use>
+    </svg>
+  </div>
+  <div ng-switch-when="Excel">
+    <svg class="icon icon-file-excel">
+      <use xlink:href="#icon-file-excel"></use>
+    </svg>
+  </div>
+  <div ng-switch-when="Word">
+    <svg class="icon icon-file-doc">
+      <use xlink:href="#file-doc"></use>
+    </svg>
+  </div>
+  <div ng-switch-when="Txt">
+    <svg class="icon icon-file-rtf">
+      <use xlink:href="#file-rtf"></use>
+    </svg>
+  </div>
+  <div ng-switch-when="PDF">
+    <svg class="icon icon-file-pdf">
+      <use xlink:href="#file-pdf"></use>
+    </svg>
+  </div>
+  <div ng-switch-when="PowerPoint">
+    <svg class="icon icon-file-ppt">
+      <use xlink:href="#file-ppt"></use>
+    </svg>
+  </div>
+</div>

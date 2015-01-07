@@ -301,9 +301,9 @@ module.exports = function (grunt) {
       dist: {
         files: [{
           expand: true,
-          cwd: '<%= yeoman.app %>/fonts',
+          cwd: '<%= yeoman.app %>/images/svg',
           src: '{,*/}*.svg',
-          dest: '<%= yeoman.app %>/fonts'
+          dest: '<%= yeoman.app %>/images/svg'
         }]
       }
     },
@@ -492,7 +492,7 @@ module.exports = function (grunt) {
   grunt.registerTask('build', [
     'clean:dist',
     'ngconstant:production',
-//    'svgstore',
+    'svgstore',
 //    'wiredep',
     'less',
     'useminPrepare',
