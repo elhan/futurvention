@@ -2,23 +2,23 @@
   <!-- main carousel -->
   <div class="wrapper-showcase container-y">
     <!-- Slides -->
-    <ul rn-carousel rn-carousel-index="showcaseIndex" class="viewer-top image">
+    <ul rn-carousel rn-carousel-index="viewerIndex" class="viewer-top image">
       <li ng-repeat="showcase in showcases">
         <fv-portfolio-viewer-item class="layer"></fv-portfolio-viewer-item>
       </li>
       <!-- Navigation buttons -->
-      <div class="btn-viewer-nav btn-l" ng-class="{'invisible': showcaseIndex === 0}" ng-click="showcasePrev()">
+      <div class="btn-viewer-nav btn-l" ng-class="{'invisible': viewerIndex === 0}" ng-click="showcasePrev()">
         <span class="glyphicon glyphicon-chevron-left"></span>
       </div>
-      <div class="btn-viewer-nav btn-r" ng-class="{'invisible': showcaseIndex === showcases.length - 1}" ng-click="showcaseNext()">
+      <div class="btn-viewer-nav btn-r" ng-class="{'invisible': viewerIndex === showcases.length - 1}" ng-click="showcaseNext()">
         <span class="glyphicon glyphicon-chevron-right"></span>
       </div>
     </ul>
     <!-- Gallery -->
     <div ng-if="fvHideGallery !== 'true'" class="gallery">
-      <ul rn-carousel rn-carousel-index="galleryIndex" class="image">
+      <ul rn-carousel rn-carousel-index="$parent.galleryIndex" class="image">
         <li ng-repeat="showcase in showcases" ng-click="goToShowcaseItem($index)">
-          <div class="layer thumbnail thumbnail-s" ng-class="{'active': $index === showcaseIndex}">
+          <div class="layer thumbnail thumbnail-s" ng-class="{'active': $index === viewerIndex}">
             <fv-portfolio-viewer-thumb showcase="showcase" caption="false"></fv-portfolio-viewer-thumb>
           </div>
         </li>

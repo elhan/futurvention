@@ -24,20 +24,7 @@
             templateUrl: 'views/directives/fv-portfolio-viewer-thumb.html',
             link: function (scope) {
                 var item = new odata.ShowcaseItem(scope.showcase.Items[0]);
-
-                scope.thumbnailLink = '';
-
-                switch (true) {
-                case !item.hasOwnProperty('Thumbnail') || item.Thumbnail === null:
-                    scope.thumbnailLink = 'images/thumb.png'; // TODO: add different thumbnails for different file types
-                    break;
-                case item.Thumbnail.hasOwnProperty('Url'):
-                    scope.thumbnailLink = item.Thumbnail.Url;
-                    break;
-                case item.Thumbnail.hasOwnProperty('RelativeUrl'):
-                    scope.thumbnailLink = item.getFileLink();
-                    break;
-                }
+                scope.thumbnailLink = item.getThumbnail();
             }
         };
     }]);

@@ -129,12 +129,12 @@
         return function (file) {
             var typeConfiguration;
 
-            if (!file || !file.hasOwnProperty('FileTypeID')) {
+            if (!file || !file.hasOwnProperty('MimeTypeID')) {
                 return;
             }
 
             typeConfiguration = _.find(fileTypeConfig, function (conf) {
-                return file.FileTypeID === conf.ID;
+                return file.MimeTypeID === conf.ID;
             });
 
             return typeConfiguration ? typeConfiguration.Thumbnail : null;

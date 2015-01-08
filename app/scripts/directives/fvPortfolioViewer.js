@@ -19,29 +19,34 @@
         return {
             restrict: 'E',
             scope: {
-                fvHideGallery: '@'
+                fvHideGallery: '@',
+                showcaseIndex: '='
             },
             templateUrl: 'views/directives/fv-portfolio-viewer.html',
             link: function (scope) {
+
+                scope.viewerIndex = parseInt(scope.showcaseIndex);
+                scope.galleryIndex = parseInt(scope.showcaseIndex);
+
                 // make sure this has been fetched from the server before compiling the directive
                 scope.showcases = PortfolioSvc.getPortfolio();
 
                 scope.showcaseItems = [];
 
                 scope.showcasePrev = function () {
-                    if (scope.showcaseIndex > 0) {
-                        scope.showcaseIndex -= 1;
+                    if (scope.viewerIndex > 0) {
+                        scope.viewerIndex -= 1;
                     }
                 };
 
                 scope.showcaseNext = function () {
-                    if (scope.showcaseIndex < scope.showcases.length - 1) {
-                        scope.showcaseIndex += 1;
+                    if (scope.viewerIndex < scope.showcases.length - 1) {
+                        scope.viewerIndex += 1;
                     }
                 };
 
                 scope.goToShowcaseItem = function (index) {
-                    scope.showcaseIndex = index;
+                    scope.viewerIndex = index;
                 };
 
                 _.each(scope.showcases, function (sc) {
@@ -49,10 +54,11 @@
                 });
 
                 // update gallery index if needed
-                scope.$watch('showcaseIndex', function (newValue, oldValue) {
+                scope.$watch('viewerIndex', function (newValue, oldValue) {
                     if (newValue >= gallerySize && newValue > oldValue) {
                         scope.galleryIndex += 1;
                     }
+
                     if (newValue > 0 && newValue < oldValue) {
                         scope.galleryIndex -= 1;
                     }

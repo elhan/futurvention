@@ -406,6 +406,10 @@
                             !importedPortfolioItem && importedPortfolio.data.push(showcase);
                         });
                     } else {
+                        // TODO: this should be on server. Make sure only valid files get through. The server sometimes sends unproccessed Items.
+                        portfolio && portfolio.hasOwnProperty('data') && _.remove(portfolio.data, function (showcase) {
+                            return !showcase.ProcessedAsset;
+                        });
                         $scope.importedPortfolios.push(portfolio);
                     }
                 });

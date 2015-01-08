@@ -22,6 +22,8 @@
 
         $scope.expandServiceDescription = false;
 
+        $scope.showcaseIndex = 0;
+
         var contactModal = $modal({
             scope: $scope,
             template: 'views/components/modalContactUser.html',

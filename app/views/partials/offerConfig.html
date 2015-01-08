@@ -85,7 +85,7 @@
                 <!-- Showcase -->
                 <div class="flex-wrap">
                   <div class="showcase" ng-repeat="item in showcaseItems">
-                    <div class="showcase-item thumbnail no-margin" ng-class="{'progress': item.state === 'loading'}"
+                    <div class="showcase-item thumbnail no-margin" ng-class="{'progress': item.state === 'loading', 'bg-img-small-centered': !item.isImage}"
                          ng-click="displayInDetail(item.ID)"
                          fv-bg-image={{item.link}}
                          fv-data={{item.link}}
@@ -93,15 +93,6 @@
                          fv-drop-class="drag-over"
                          fv-on-drop="rearangeShowcaseItems"
                          fv-droppable>
-<!--
-                      <div ng-if="!item.link">
-                        <fv-showcase-placeholder class="flex-content-centered flex-items-centered" item="item"></fv-showcase-placeholder>
-                      </div>
--->
-                      <!-- Spinner -->
-                      <div class="showcase-overlay preview" ng-show="item.state === 'loading'">
-                        <div class="loader"></div>
-                      </div>
                       <!-- Remove button -->
                       <div class="container-x flex-content-end" ng-show="item.state !== 'loading'">
                         <div class="wrapper-showcase-action" ng-click="removeShowcase(item); $event.stopPropagation();">
@@ -109,6 +100,14 @@
                             <use xlink:href="#close"></use>
                           </svg>
                         </div>
+                      </div>
+                      <!-- Spinner -->
+                      <div class="showcase-overlay preview" ng-show="item.state === 'loading'">
+                        <div class="loader"></div>
+                      </div>
+                      <!-- file type placeholder -->
+                      <div ng-if="!item.link" class="fullscreen-y container-y flex-1 flex-content-centered flex-items-centered">
+                        <fv-showcase-placeholder class="space-bottom" item="item"></fv-showcase-placeholder>
                       </div>
                     </div>
                     <div class="caption editable container-x flex-items-start flex-content-centered">
@@ -188,7 +187,9 @@
                       <div class="showcase-item thumbnail"
                            ng-click="togglePortfolioSelection(item)"
                            fv-bg-image={{item|importedLink:item}}
-                           fv-data={{item|importedLink:item}}>
+                           fv-data={{item|importedLink:item}}
+                           ng-class="{'bg-img-small-centered': !item.isImage}"
+                           >
                         <!-- Overlay: selected -->
                         <div class="showcase-overlay selected" ng-show="selectedPortfolios.indexOf(item) > -1">
                           <svg class="icon icon-light">

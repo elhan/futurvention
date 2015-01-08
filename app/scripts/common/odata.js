@@ -2,7 +2,7 @@
     'use strict';
     var app = angular.module('fvApp');
 
-    app.factory('Odata', ['PROVIDERS_ENUM', 'PATHS', 'ENV', 'Utils', function (providers, paths, env, utils) {
+    app.factory('Odata', ['$filter', 'PROVIDERS_ENUM', 'PATHS', 'ENV', 'Utils', function ($filter, providers, paths, env, utils) {
         var Odata = {};
 
         //////////////////////////////////////////////////////////////////
@@ -374,19 +374,44 @@
                 ID: self.ID,
                 name: self.Title && self.Title.Literals[0].Text,
                 link: self.getThumbnail(),
-                file: self.File
+                file: self.File,
+                isImage: self.hasOwnProperty('Thumbnail') && self.Thumbnail !== null
             }), options);
         };
 
         Odata.ShowcaseItem.prototype.getThumbnail = function () {
-            var self = this;
+            var thumbnailType, thumbnailLink, self = this;
+
+            // thumbnail types: General, Excel, Word, Txt, PDF, PowerPoint
+            thumbnailType = $filter('getThumbnailType')(self.File);
+
+            switch (thumbnailType) {
+            case 'Excel':
+                thumbnailLink = '/images/file-excel.png';
+                break;
+            case 'Word':
+                thumbnailLink = '/images/file-doc.png';
+                break;
+            case 'Txt':
+                thumbnailLink = '/images/file-rtf.png';
+                break;
+            case 'PDF':
+                thumbnailLink = '/images/file-pdf.png';
+                break;
+            case 'PowerPoint':
+                thumbnailLink = '/images/file-ppt.png';
+                break;
+            default:
+                thumbnailLink = '/images/file-default.png';
+                break;
+            }
 
             switch (true) {
-            case !self.Thumbnail:
-                return '/images/file-types.png';
-            case self.Thumbnail.hasOwnProperty('Url'):
+            case ! (self.hasOwnProperty('Thumbnail') && self.Thumbnail !== null): // not an image
+                return thumbnailLink;
+            case self.Thumbnail.hasOwnProperty('Url'): // hosted file
                 return self.Thumbnail.Url;
-            default:
+            default: // linked file
                 return  env.api.hostedFiles + self.Thumbnail.RelativeUrl;
             }
         };
@@ -417,6 +442,9 @@
 
             /** @type {String} loading | loaded | selected */
             self.state = 'loading';
+
+            /** @type Boolean */
+            self.isImage = true;
 
             utils.updateProperties(self, options);
         };
