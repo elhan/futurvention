@@ -59,16 +59,30 @@
         };
     });
 
-    app.filter('importedLink', ['PATHS', function (paths) {
+    app.filter('importedLink', ['$filter', 'PATHS', function ($filter, paths) {
         return function (item) {
-            return [
-                paths.importer.importedData,
-                item.Guid, '/',
-                item.Provider, '/',
-                item.FolderName, '/',
-                item.ThumbnailAsset.Folder, '/',
-                item.ThumbnailAsset.Name
-            ].join('');
+            var thumbnailLink, thumbnailType;
+
+            switch (true) {
+            case !item:
+                break;
+            case item.hasOwnProperty('ThumbnailAsset') && item.ThumbnailAsset !== null:
+                thumbnailLink = [
+                    paths.importer.importedData,
+                    item.Guid, '/',
+                    item.Provider, '/',
+                    item.FolderName, '/',
+                    item.ThumbnailAsset.Folder, '/',
+                    item.ThumbnailAsset.Name
+                ].join('');
+                break;
+            default:
+                thumbnailType = $filter('getThumbnailType')({ type: item.MainAsset.ContentType });
+                thumbnailLink = $filter('getThumbnailLink')(thumbnailType);
+                break;
+            }
+
+            return thumbnailLink;
         };
     }]);
 
@@ -126,19 +140,49 @@
     }]);
 
     app.filter('getThumbnailType', ['$filter', 'FILE_TYPE_CONFIG', function ($filter, fileTypeConfig) {
-        return function (file) {
+        // mimeTypeObject can be either { ID: Number } or {type: String }
+        return function (mimeTypeObj) {
             var typeConfiguration;
 
-            if (!file || !file.hasOwnProperty('MimeTypeID')) {
+            if (!mimeTypeObj) {
                 return;
             }
 
             typeConfiguration = _.find(fileTypeConfig, function (conf) {
-                return file.MimeTypeID === conf.ID;
+                return mimeTypeObj.hasOwnProperty('ID') ? mimeTypeObj.ID === conf.ID : mimeTypeObj.type === conf.ContentCode;
             });
 
             return typeConfiguration ? typeConfiguration.Thumbnail : null;
         };
     }]);
+
+    app.filter('getThumbnailLink', function () {
+        return function (thumbnailType) {
+            var thumbnailLink;
+
+            switch (thumbnailType) {
+            case 'Excel':
+                thumbnailLink = '/images/file-excel.png';
+                break;
+            case 'Word':
+                thumbnailLink = '/images/file-doc.png';
+                break;
+            case 'Txt':
+                thumbnailLink = '/images/file-rtf.png';
+                break;
+            case 'PDF':
+                thumbnailLink = '/images/file-pdf.png';
+                break;
+            case 'PowerPoint':
+                thumbnailLink = '/images/file-ppt.png';
+                break;
+            default:
+                thumbnailLink = '/images/file-default.png';
+                break;
+            }
+
+            return thumbnailLink;
+        };
+    });
 
 }());

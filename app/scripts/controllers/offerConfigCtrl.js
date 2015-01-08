@@ -244,7 +244,7 @@
          */
         $scope.getImportedItemAddedStatus = function (importedItem) {
             return angular.isDefined(_.find($scope.showcaseItems, function (item) {
-                return item.file.Name.indexOf(importedItem.ProcessedAsset.Name) !== -1;
+                return item.file.Name.indexOf(importedItem.MainAsset.Name) !== -1;
             }));
         };
 
@@ -318,6 +318,36 @@
             $scope.showcaseCollection = $scope.showcaseCollection.swap(sourceParent, targetParent);
         };
 
+        /**
+         * Toggles the selected state for a given importedPortfolioItem
+         * @param {importedPortfolioItem} item
+         */
+        $scope.togglePortfolioSelection = function (item) {
+            var selected;
+
+            if ($scope.getImportedItemAddedStatus(item)) {
+                return;
+            }
+
+            selected  = $scope.selectedPortfolios;
+
+            selected.indexOf(item) === -1 ? selected.push(item) : selected.remove(function (portfolio) {
+                return portfolio === item;
+            });
+        };
+
+        $scope.toggleTextOnly = function () {
+            var panel = $scope.panels[$scope.panels.activePanel];
+            if (!panel.hasOwnProperty('textonly')) {
+                return;
+            }
+            panel.textonly = ! panel.textonly;
+        };
+
+        ////////////////////////////////////////////
+        /// Sync with backend
+        ////////////////////////////////////////////
+
         $scope.updateShowcaseTitle = function (item) {
             var showcase = _.find($scope.showcaseCollection, function (sc) {
                 return sc.ID === item.ID;
@@ -336,25 +366,6 @@
             }
 
         };
-
-        $scope.togglePortfolioSelection = function (item) {
-            var selected  = $scope.selectedPortfolios;
-            selected.indexOf(item) === -1 ? selected.push(item) : selected.remove(function (portfolio) {
-                return portfolio === item;
-            });
-        };
-
-        $scope.toggleTextOnly = function () {
-            var panel = $scope.panels[$scope.panels.activePanel];
-            if (!panel.hasOwnProperty('textonly')) {
-                return;
-            }
-            panel.textonly = ! panel.textonly;
-        };
-
-        ////////////////////////////////////////////
-        /// Sync with backend
-        ////////////////////////////////////////////
 
         $scope.updateShowcaseItems = function (data) {
             var showcase, showcaseItem;
@@ -396,8 +407,8 @@
                         _.each(portfolio.data, function (showcase) {
                             importedPortfolioItem = _.find(importedPortfolio.data, function (sc) {
                                 // try to match items by asset name, if one exists, as it is the safest way to do so
-                                if (showcase.hasOwnProperty('ProcessedAsset') && showcase.ProcessedAsset.hasOwnProperty('Name') && showcase.ProcessedAsset.Name) {
-                                    return showcase.ProcessedAsset.Name === sc.ProcessedAsset.Name;
+                                if (showcase.hasOwnProperty('MainAsset') && showcase.MainAsset.hasOwnProperty('Name') && showcase.MainAsset.Name) {
+                                    return showcase.MainAsset.Name === sc.MainAsset.Name;
                                 } else {
                                     return showcase.Title === sc.Title; // this will cover most, but not all cases.
                                 }
@@ -406,9 +417,9 @@
                             !importedPortfolioItem && importedPortfolio.data.push(showcase);
                         });
                     } else {
-                        // TODO: this should be on server. Make sure only valid files get through. The server sometimes sends unproccessed Items.
+                        // TODO: this should be on server. Make sure only valid files get through.
                         portfolio && portfolio.hasOwnProperty('data') && _.remove(portfolio.data, function (showcase) {
-                            return !showcase.ProcessedAsset;
+                            return !showcase.MainAsset;
                         });
                         $scope.importedPortfolios.push(portfolio);
                     }

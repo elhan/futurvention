@@ -103,19 +103,11 @@
         };
 
         ProfileSvc.saveProfileStatus = function (status) {
-            return $http({
-                method: 'POST',
-                url: env.api.endPoint + paths.sellerManagement.profileStatus,
-                data: status
-            });
+            return $http.post(env.api.endPoint + paths.sellerManagement.profileStatus, status);
         };
 
         ProfileSvc.saveStatistics = function (storedImporters) {
-            return $http({
-                method: 'POST',
-                URL: env.api.endPoint + paths.sellerManagement.statistics,
-                data: storedImporters
-            });
+            return $http.post(env.api.endPoint + paths.sellerManagement.statistics, storedImporters);
         };
 
         /////////////////////////////////////////////

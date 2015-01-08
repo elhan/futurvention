@@ -161,6 +161,7 @@
                         'BuyerProvision.Literals',
                         'ExcludedServices.Literals',
                         'AllowedShowcaseFileTypes.Name.Literals',
+                        'AllowedShowcaseFileTypes.MimeTypes',
                         'ShowcasePrompt.Literals',
                         'Fields',
                         'Fields.AllowedFileTypes.Name.Literals',

@@ -382,29 +382,13 @@
         Odata.ShowcaseItem.prototype.getThumbnail = function () {
             var thumbnailType, thumbnailLink, self = this;
 
-            // thumbnail types: General, Excel, Word, Txt, PDF, PowerPoint
-            thumbnailType = $filter('getThumbnailType')(self.File);
-
-            switch (thumbnailType) {
-            case 'Excel':
-                thumbnailLink = '/images/file-excel.png';
-                break;
-            case 'Word':
-                thumbnailLink = '/images/file-doc.png';
-                break;
-            case 'Txt':
-                thumbnailLink = '/images/file-rtf.png';
-                break;
-            case 'PDF':
-                thumbnailLink = '/images/file-pdf.png';
-                break;
-            case 'PowerPoint':
-                thumbnailLink = '/images/file-ppt.png';
-                break;
-            default:
-                thumbnailLink = '/images/file-default.png';
-                break;
+            if (! (self.hasOwnProperty('File') && self.File.hasOwnProperty('MimeTypeID'))) {
+                return;
             }
+
+            // thumbnail types: General, Excel, Word, Txt, PDF, PowerPoint
+            thumbnailType = $filter('getThumbnailType')({ ID: self.File.MimeTypeID });
+            thumbnailLink = $filter('getThumbnailLink')(thumbnailType);
 
             switch (true) {
             case ! (self.hasOwnProperty('Thumbnail') && self.Thumbnail !== null): // not an image

@@ -105,10 +105,6 @@
                       <div class="showcase-overlay preview" ng-show="item.state === 'loading'">
                         <div class="loader"></div>
                       </div>
-                      <!-- file type placeholder -->
-                      <div ng-if="!item.link" class="fullscreen-y container-y flex-1 flex-content-centered flex-items-centered">
-                        <fv-showcase-placeholder class="space-bottom" item="item"></fv-showcase-placeholder>
-                      </div>
                     </div>
                     <div class="caption editable container-x flex-items-start flex-content-centered">
                       <svg class="icon icon-dark text-i">
@@ -197,10 +193,14 @@
                           </svg>
                         </div>
                         <!-- Overlay: selected disabled -->
-                        <div class="showcase-overlay selected disabled" ng-show="getImportedItemAddedStatus(item)" ng-click="event.preventDefault();">
+                        <div class="showcase-overlay selected disabled" ng-show="getImportedItemAddedStatus(item)">
                           <svg class="icon icon-light">
                             <use xlink:href="#tick"></use>
                           </svg>
+                        </div>
+                        <!-- Overlay: selected disabled -->
+                        <div class="showcase-overlay disabled" ng-show="getImportedItemUnavailableStatus(item)">
+                          Unavailable for this service
                         </div>
                         <!-- Overlay: drag-over -->
                         <div class="showcase-overlay"></div>
