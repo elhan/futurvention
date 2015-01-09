@@ -90,30 +90,6 @@
             });
         };
 
-        ///////////////////////////////////////////////////////////
-        /// Custom validation functions
-        ///////////////////////////////////////////////////////////
-
-        $scope.isEmail = function (email) {
-            return utils.testEmailPattern(email);
-        };
-
-        $scope.hasDigits = function (pwd) {
-            return /\d+/g.test(pwd);
-        };
-
-        $scope.hasNonAlphanumeric = function (pwd) {
-            return /\W/g.test(pwd);
-        };
-
-        $scope.hasLowercase = function (pwd) {
-            return /[a-z]/.test(pwd);
-        };
-
-        $scope.hasUppercase = function (pwd) {
-            return /[A-Z]/.test(pwd);
-        };
-
     }]);
 
 }());

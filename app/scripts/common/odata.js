@@ -375,14 +375,14 @@
                 name: self.Title && self.Title.Literals[0].Text,
                 link: self.getThumbnail(),
                 file: self.File,
-                isImage: self.hasOwnProperty('Thumbnail') && self.Thumbnail !== null
+                hasOwnThumbnail: self.hasOwnProperty('Thumbnail') && self.Thumbnail !== null
             }), options);
         };
 
         Odata.ShowcaseItem.prototype.getThumbnail = function () {
             var thumbnailType, thumbnailLink, self = this;
 
-            if (! (self.hasOwnProperty('File') && self.File.hasOwnProperty('MimeTypeID'))) {
+            if (! (self.hasOwnProperty('File') && (self.File.hasOwnProperty('MimeTypeID') || self.File.hasOwnProperty('EmbedCode')))) {
                 return;
             }
 
@@ -428,7 +428,7 @@
             self.state = 'loading';
 
             /** @type Boolean */
-            self.isImage = true;
+            self.hasOwnThumbnail = true;
 
             utils.updateProperties(self, options);
         };

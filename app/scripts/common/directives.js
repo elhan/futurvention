@@ -542,7 +542,25 @@
                 });
             }
         };
-
     });
+
+    app.directive('fvPositiveNumValidation', ['Utils', function (utils) {
+        return {
+            require: 'ngModel',
+            link: function(scope, element, attrs, modelCtrl) {
+
+                modelCtrl.$parsers.push(function (inputValue) {
+                    var transformedInput  = utils.matchNum(inputValue) ? Math.abs(inputValue) : 0;
+
+                    if (transformedInput !== inputValue) {
+                        modelCtrl.$setViewValue(transformedInput);
+                        modelCtrl.$render();
+                    }
+
+                    return transformedInput;
+                });
+            }
+        };
+    }]);
 
 }());

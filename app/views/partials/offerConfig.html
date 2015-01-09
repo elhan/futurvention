@@ -85,7 +85,7 @@
                 <!-- Showcase -->
                 <div class="flex-wrap">
                   <div class="showcase" ng-repeat="item in showcaseItems">
-                    <div class="showcase-item thumbnail no-margin" ng-class="{'progress': item.state === 'loading', 'bg-img-small-centered': !item.isImage}"
+                    <div class="showcase-item thumbnail no-margin" ng-class="{'progress': item.state === 'loading', 'bg-img-small-centered': !item.hasOwnThumbnail}"
                          ng-click="displayInDetail(item.ID)"
                          fv-bg-image={{item.link}}
                          fv-data={{item.link}}
@@ -105,7 +105,17 @@
                       <div class="showcase-overlay preview" ng-show="item.state === 'loading'">
                         <div class="loader"></div>
                       </div>
+                      <!-- Video thumbnail play icon-->
+                      <div class="container-y flex-content-centered fullscreen"
+                           ng-if="item.hasOwnThumbnail && item.hasOwnProperty('file') && item.file.hasOwnProperty('FileTypeID') && item.file.FileTypeID === 5">
+                        <div class="icon-play-wrapper">
+                          <svg class="icon icon-light">
+                            <use xlink:href="#play"></use>
+                          </svg>
+                        </div>
+                      </div>
                     </div>
+                    <!-- Caption -->
                     <div class="caption editable container-x flex-items-start flex-content-centered">
                       <svg class="icon icon-dark text-i">
                         <use xlink:href="#edit"></use>
@@ -184,7 +194,7 @@
                            ng-click="togglePortfolioSelection(item)"
                            fv-bg-image={{item|importedLink:item}}
                            fv-data={{item|importedLink:item}}
-                           ng-class="{'bg-img-small-centered': !item.isImage}"
+                           ng-class="{'bg-img-small-centered': !item.hasOwnThumbnail}"
                            >
                         <!-- Overlay: selected -->
                         <div class="showcase-overlay selected" ng-show="selectedPortfolios.indexOf(item) > -1">
@@ -308,7 +318,8 @@
                                          ng-model="choice.price"
                                          placeholder="0"
                                          ng-blur="saveOfferedChoice(choice)"
-                                         ng-required="true">
+                                         ng-required="true"
+                                         fv-positive-num-validation>
                                 </div>
                                 <div class="separator-text text-grey">in</div>
                                 <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
@@ -335,7 +346,9 @@
                                  ng-model="option.choices[0].price"
                                  placeholder="0"
                                  min="0"
-                                 ng-blur="saveOfferedChoice(option.choices[0])" ng-required="true">
+                                 ng-blur="saveOfferedChoice(option.choices[0])"
+                                 ng-required="true"
+                                 fv-positive-num-validation>
                           <!-- Price discriminators are always days discriminators too -->
                           <div class="separator-text text-grey">to be delivered in</div>
                           <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
@@ -379,7 +392,8 @@
                                          placeholder="0"
                                          ng-required="true"
                                          min="0"
-                                         ng-blur="saveOfferedChoice(option.choices[0])">
+                                         ng-blur="saveOfferedChoice(option.choices[0])"
+                                         fv-positive-num-validation>
                                 </div>
                                 <div class="container-x" ng-if="!option.overridesDays">
                                   <div class="separator-text text-grey">in</div>

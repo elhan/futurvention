@@ -171,6 +171,45 @@
         inactive: 5
     });
 
+    app.constant('FILE_TYPE_IDS', [
+        {
+            ID: 1,
+            name: 'Image'
+        },
+        {
+            ID: 2,
+            name: 'Spreadsheet'
+        },
+        {
+            ID: 3,
+            name: 'Document'
+        },
+        {
+            ID: 4,
+            name: 'Audio'
+        },
+        {
+            ID: 5,
+            name: 'Video'
+        },
+        {
+            ID: 6,
+            name: 'Presentation'
+        },
+        {
+            ID: 7,
+            name: 'Rich media'
+        },
+        {
+            ID: 8,
+            name: 'Link'
+        },
+        {
+            ID: 9,
+            name: 'Inline text'
+        },
+    ]);
+
     app.constant('FILE_TYPE_CONFIG', [
         {
             'ID': 1,

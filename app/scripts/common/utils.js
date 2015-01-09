@@ -173,6 +173,10 @@
             return /^[a-z]+[a-z0-9]*$/gi.test(str);
         };
 
+        Utils.matchNum = function (input) {
+            return /^\d+$/.test(input);
+        };
+
         return Utils;
     });
 

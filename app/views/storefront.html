@@ -121,7 +121,7 @@
       </div>
       <div class="portfolio-items flex-wrap">
         <div class="showcase" ng-repeat="item in showcaseItems" ng-click="showPortfolioViewerModal($index)">
-          <div class="showcase-item thumbnail" fv-bg-image={{item.link}} fv-data={{item.link}} ng-class="{'bg-img-small-centered': !item.isImage}"></div>
+          <div class="showcase-item thumbnail" fv-bg-image={{item.link}} fv-data={{item.link}} ng-class="{'bg-img-small-centered': !item.hasOwnThumbnail}"></div>
           <div class="text-i caption">{{ item.name }}</div>
         </div>
       </div>
