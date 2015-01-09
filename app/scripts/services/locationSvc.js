@@ -65,8 +65,6 @@
             return deferred.promise;
         };
 
-        //https://futurvention.azurewebsites.net/public.svc/Locations?$filter=ID%20eq%20277&$expand=Name/Literals,Parent/Name/Literals&$format=json
-
         /**
          * Given a cityID, returns the names of the city and country it belongs in
          * @public
@@ -95,6 +93,25 @@
 
             manager.executeQuery(query).then(function (response) {
                 deferred.resolve(filterLocationCollection(response.results[0].value));
+            }, function (error) {
+                console.log(error);
+            });
+
+            return deferred.promise;
+        };
+
+        /**
+         * Returns a location object
+         * @public
+         *
+         * returns {Location}
+         */
+        LocationSvc.getLocationByID = function (locationID) {
+            var deferred = $q.defer(),
+                query = new breeze.EntityQuery('Locations').where('ID', 'eq', locationID).expand('Name.Literals');
+
+            manager.executeQuery(query).then(function (response) {
+                deferred.resolve(new odata.Location(response.results[0].value));
             }, function (error) {
                 console.log(error);
             });

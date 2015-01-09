@@ -193,19 +193,34 @@
      * @description
      * Focus an input by name, on one or more events. The name of input to focus
      * and the event(s) that trigger the focus action are provided as attributes.
+     * If no name is passed this will attempt to focus the element on which the directive is set.
+     * This directive also take sinto consideration the presence of allowed key codes
      *
      * @example
-     * <div fv-focus-input focusOn="click" focusInput="elance"></div>
+     * <div fv-focus-input="someInput" fv-focus-on="click" focusInput="elance"></div>
      */
     app.directive('fvFocusInput', ['$timeout', function ($timeout) {
         return {
             restrict: 'A',
             link: function (scope, element, attrs) {
-                $timeout(function () {
-                    var input = document.getElementsByName(attrs.focusInput)[0];
-                    input && element.on(attrs.focusOn, function () {
+                var input, range, allowedKeyCodes;
+
+                if (attrs.hasOwnProperty('fvKeyboardAllowRange')) {
+                    range = attrs.fvKeyboardAllowRange.split('-');
+                    allowedKeyCodes = _.range(parseInt(range[0]), parseInt(range[1]));
+                    console.log(allowedKeyCodes);
+                }
+
+                input = attrs.fvFocusImput ? document.getElementsByName(attrs.fvFocusInput)[0] : element;
+
+                input && element.on(attrs.fvFocusOn, function ($event) {
+                    if (attrs.hasOwnProperty('fvKeyboardAllowRange')) {
+                        if  (allowedKeyCodes && allowedKeyCodes.indexOf($event.keyCode) !== -1) {
+                            $timeout(function () { input.focus(); });
+                        }
+                    } else {
                         $timeout(function () { input.focus(); });
-                    });
+                    }
                 });
             }
         };

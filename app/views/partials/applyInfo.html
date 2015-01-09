@@ -120,15 +120,16 @@
           <div class="form-group container-x flex-2 wrapper-drop-city">
             <input type="text" class="form-control input-s disabled-unstyled" name="infoCity" placeholder="City"
                    ng-model="cityName"
-                   ng-options="cityName for cityName in cityNames"
+                   minLength="0"
+                   limit="25"
+                   ng-options="name for name in cityNames"
                    ng-disabled="!countryName"
-                   ng-minlength="3"
-                   ng-keyup="searchCity(profileInfoForm.infoCity.$viewValue)"
+                   ng-change="searchCity(profileInfoForm.infoCity.$viewValue)"
                    bs-typeahead>
           </div>
         </div>
         <div class="flex-1 flex-items-centered space-inner-bottom">
-          <svg ng-if="cityName && countryName" class="icon-tick-location">
+          <svg ng-if="city && countryName" class="icon-tick-location">
             <use xlink:href="#tick"></use>
           </svg>
         </div>
@@ -138,7 +139,7 @@
         <div class="flex-1"></div>
         <div class="wrapper-continue-2">
           <button type="submit" class="btn btn-continue"
-                  ng-disabled="!(profile.Moniker && profile.Title && profile.Description && profile.Description.Literals[0].Text && cityName && currentUser.Avatar) || saveProfileInProgress"
+                  ng-disabled="!(profile.Moniker && profile.Title && profile.Description && profile.Description.Literals[0].Text && city && currentUser.Avatar) || saveProfileInProgress"
                   ng-click="continue()">
             <div class="container-x flex-content-centered">
               <div>Continue</div>

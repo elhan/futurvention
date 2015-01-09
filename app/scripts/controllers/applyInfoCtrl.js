@@ -58,9 +58,14 @@
                 // populate from existing profile
                 $scope.profile = profile;
 
+                // update the ui to display location names
                 LocationSvc.fetchLocationNames($scope.profile.LocationID).then(function (response) {
                     $scope.cityName = response.results[0].value[0].Name.Literals[0].Text;
+                    $scope.cityNames.push(response.results[0].value[0].Name.Literals[0].Text);
                     $scope.countryName = response.results[0].value[0].Parent.Name.Literals[0].Text;
+                    $timeout(function () { // this timeout is necessary otherwise the watched on cityName will fire first and result in city === null
+                        $scope.city = new odata.Location(response.results[0].value[0]);
+                    });
                 });
 
                 // case 2: the user does not have a SellerProfile, but there are imported profiles available
@@ -170,7 +175,7 @@
             $scope.saveProfileInProgress =  true;
 
             switch (true) {
-                case !($scope.profile.Moniker && $scope.profile.Title && $scope.profile.Description && $scope.profile.Description.Literals[0].Text && $scope.cityName && $scope.currentUser.Avatar):
+                case !($scope.profile.Moniker && $scope.profile.Title && $scope.profile.Description && $scope.profile.Description.Literals[0].Text && $scope.city && $scope.currentUser.Avatar):
                 $scope.saveProfileInProgress = false;
                 break;
             case $scope.profileExists:
@@ -196,7 +201,7 @@
             }
         };
 
-        $scope.searchCity = _.throttle(function (prefix) {
+        $scope.searchCity = function (prefix) {
             $scope.country && prefix && LocationSvc.searchCity($scope.country.ID, prefix).then(function (cities) {
                 $timeout(function () {
                     $scope.cities = cities;
@@ -204,11 +209,10 @@
                         return city.getName();
                     });
                 });
-
             }, function (error) {
                 console.log(error);
             });
-        }, 700);
+        };
 
         $scope.engAndNum = function (str) {
             return utils.matchEngAndNum(str);
@@ -256,6 +260,13 @@
             $scope.country = _.find($scope.countries, function (country) {
                 return country.getName() === $scope.countryName;
             });
+
+            // The check is necessary to ensure city will not be reset when country is first initiated, as this could lead to racing issues.
+            if (oldValue) {
+                $scope.cityName = '';
+                $scope.city = null;
+                $scope.cityNames = [];
+            }
         });
 
         $scope.$watch('profile.Moniker', function (newValue, oldValue) {
@@ -322,9 +333,9 @@
                 }
 
                 /*
-                        Try to fill in the user's moniker. Try the client validation it first, then validate it on the server side as well,
-                        in order to make sure the moniker is not already taken.
-                    **/
+                    Try to fill in the user's moniker. Try the client validation it first, then validate it on the server side as well,
+                    in order to make sure the moniker is not already taken.
+                **/
                 if (response.userName.length > 3 && response.userName.length < 20 &&  $scope.engAndNum('LukeODwyer')) {
                     ProfileSvc.validateMoniker(response.userName).then(function (res) {
                         if (res.data === 'false') { // returns true if moniker exists
