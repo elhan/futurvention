@@ -185,4 +185,79 @@
         };
     });
 
+    app.filter('bytesToSize', function() {
+        return function(bytes, precision) {
+            var units, number;
+
+            if (isNaN(parseFloat(bytes)) || !isFinite(bytes)) {
+                return '-';
+            }
+
+            if (typeof precision === 'undefined') {
+                precision = 1;
+            }
+
+            units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
+            number = Math.floor(Math.log(bytes) / Math.log(1024));
+
+            return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) +  ' ' + units[number];
+        };
+    });
+
+    app.filter('ellipsis', function () {
+        return function formatTextEllipsis(text, maxLineLength, totalLines) {
+            var words, lines = [],
+                line = '',
+                ellipsisText = '...',
+                ellipsis = false;
+
+            // check if the maximum input is shorter than the maximum allowed
+            if (! (text && text.length >= (maxLineLength * totalLines) && maxLineLength && totalLines)) {
+                return text;
+            }
+
+            words = text.split(' ');
+
+            for (var i = 0; i < words.length; i++) {
+                // the new word should be pushed in new line
+                if (words[i].length + line.length + 1 > maxLineLength){
+                    lines.push(line);
+                    line = '';
+                }
+
+                // if num of lines exceed requested lines break
+                if (lines.length >= totalLines){
+                    ellipsis = true;
+                    break;
+                }
+
+                // append the word in line with a space
+                line = line + words[i] + ' ';
+
+                // check if this is the last word that is needed to be pushed in lines
+                // i.e. when the total text length fits in total lines needed
+                var lastWordIndex = words.length - 1;
+                lastWordIndex === i && lines.push(line);
+            }
+
+            // if the text does not fit in total lines requested, append ...
+            if (ellipsis) {
+                // remove words until the ... fits in last line
+                while (lines[totalLines - 1].length + ellipsisText.length > maxLineLength){
+                    // trim the last line (for the space after the word)
+                    var lineTrim = lines[totalLines - 1].trim();
+
+                    var lastIndex = lineTrim.lastIndexOf(' ') + 1;
+                    var shorterLine = lineTrim.slice(0, lastIndex);
+                    lines[totalLines - 1] = shorterLine;
+                }
+
+                lines[totalLines - 1] += ellipsisText;
+            }
+
+            console.log(lines.join(' '));
+            return lines.join(' ');
+        };
+    });
+
 }());

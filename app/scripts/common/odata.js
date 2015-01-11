@@ -382,7 +382,7 @@
         Odata.ShowcaseItem.prototype.getThumbnail = function () {
             var thumbnailType, thumbnailLink, self = this;
 
-            if (! (self.hasOwnProperty('File') && (self.File.hasOwnProperty('MimeTypeID') || self.File.hasOwnProperty('EmbedCode')))) {
+            if (! (self.hasOwnProperty('File') && self.File && (self.File.hasOwnProperty('MimeTypeID') || self.File.hasOwnProperty('EmbedCode')))) {
                 return;
             }
 

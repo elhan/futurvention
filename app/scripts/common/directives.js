@@ -524,10 +524,25 @@
      * manages event handlers for showcase captions, caption wrapper and caption edit icon
      *
      */
-    app.directive('fvCaption', function () {
+    app.directive('fvCaption', ['$filter', function ($filter) {
+
         return {
-            link: function (scope, element) {
-                var wrapper, icon;
+            require: 'ngModel',
+            link: function (scope, element, attrs, modelCtrl) {
+                var wrapper, icon, maxCaptionSize, ignoredKeyCodes;
+
+                function truncate (inputValue) {
+                    var transformedInput;
+
+                    transformedInput = $filter('ellipsis')(inputValue, attrs.cols, attrs.rows);
+
+                    if (transformedInput !== inputValue) {
+                        modelCtrl.$setViewValue(transformedInput);
+                        modelCtrl.$render();
+                    }
+
+                    return transformedInput;
+                }
 
                 wrapper = angular.element(element.parent());
 
@@ -540,6 +555,7 @@
 
                 element.bind('blur', function () {
                     wrapper.css('border', '0');
+                    attrs.cols && attrs.rows && modelCtrl.$setViewValue($filter('ellipsis')(modelCtrl.$modelValue, attrs.cols, attrs.rows));
                 });
 
                 wrapper.bind('mouseenter', function () {
@@ -550,6 +566,19 @@
                     icon.css('opacity', '0');
                 });
 
+                if (attrs.cols && attrs.rows) {
+                    maxCaptionSize = attrs.cols * attrs.rows;
+                    element.bind('keyup', function (event) {
+                        ignoredKeyCodes = [8, 27, 46]; // ignore enter, escape and delete key codes
+                        // check that input size exceeds or is equal to the maximum allowed
+                        if (modelCtrl.$modelValue && modelCtrl.$modelValue.length >= maxCaptionSize && ignoredKeyCodes.indexOf(event.keyCode) !== -1) {
+                            event.preventDefault();
+                            event.stopImmediatePropagation();
+                        }
+                    });
+                    modelCtrl.$formatters.push(truncate);
+                }
+
                 scope.$on('$destroy', function () {
                     element.unbind();
                     wrapper.unbind();
@@ -557,7 +586,7 @@
                 });
             }
         };
-    });
+    }]);
 
     app.directive('fvPositiveNumValidation', ['Utils', function (utils) {
         return {

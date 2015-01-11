@@ -55,6 +55,7 @@
 
         $scope.uploadInProgress = false;
         $scope.saveImportedDataInProgress = false;
+        var deleteInProgress = false; // no need to expose this on scope
 
         // can be 'owned' or 'imported'. Controls which work samples section is visible
         $scope.activeWorkSamples = 'owned';
@@ -265,12 +266,20 @@
         };
 
         $scope.removeShowcase = function (item) {
-            var showcase = _.find($scope.showcaseCollection, function (sc) {
+            var showcase;
+
+            if (deleteInProgress) {
+                return;
+            }
+
+            deleteInProgress = true;
+
+            showcase = _.find($scope.showcaseCollection, function (sc) {
                 return sc.Items[0].ID === item.ID;
             });
 
             PortfolioSvc.deleteShowcase(showcase.ID).then(function () {
-
+                deleteInProgress = false;
                 NotificationSvc.show({ content: msg.success.showcaseDeleteSuccess, type: 'success' });
 
                 _.remove($scope.showcaseItems, function (sc) {
@@ -283,6 +292,7 @@
 
             }, function (error) {
                 console.log(error);
+                deleteInProgress = false;
                 NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
         };
@@ -433,6 +443,8 @@
          * Handles saving imported items that have been selected by the user to Showcases, and toggles the imported pane
          */
         $scope.saveImportedPortfolios = function () {
+            var errorMsg, currentNotification, successfulImports = [];
+
             if ($scope.saveImportedDataInProgress) {
                 return;
             }
@@ -445,16 +457,37 @@
             $scope.saveImportedDataInProgress = true;
 
             ImporterSvc.saveImportedPortfolios($scope.service.serviceID, $scope.selectedPortfolios).then(function (response) {
-                $scope.updateShowcaseItems(response.data);
+
+                _.each(response.data, function (resObj) {
+                    if (resObj.Succeeded) {
+                        successfulImports.push(resObj.Output);
+                    } else {
+                        if (resObj.ErrorName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
+                            errorMsg = $filter('invalidFileType')(resObj.Input.Title, resObj.Input.MainAsset.Name);
+                            currentNotification = $alert({ content: errorMsg, type: 'error', show: true, duration: false });
+                        } else {
+                            currentNotification = $alert({ content: resObj.Input.Title + msg.saveImportedPortfolioFailed, type: 'error', show: true, duration: false });
+                        }
+                    }
+                });
+
+                successfulImports && $scope.updateShowcaseItems(successfulImports);
                 $scope.toggleActiveWorkSamples();
                 $scope.saveImportedDataInProgress = false;
+
             }, function (error) {
                 console.log(error);
-                NotificationSvc.show({ content: msg.error.profileSaveFailed, type: 'error' });
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
                 $scope.saveImportedDataInProgress = false;
             });
         };
 
+
+        /**
+         * Uploads a single file and handles file upload errors
+         * @param {File} file: the file to be uploaded
+         * @return {Showcase}
+         */
         function uploadShowcase (file) {
             var currentNotification, errorMsg,
                 deferred = $q.defer();
@@ -467,25 +500,24 @@
                 fileFormDataName: file.name
             }).then(function (response) {
                 $scope.uploadInProgress = false;
-                deferred.resolve(response.data); //notify onFileSelect that the upload is done
-            }, function (error) {
-                console.log(error);
 
-                $scope.uploadInProgress = false;
-
-                deferred.reject(); //notify onFileSelect that the upload has failed
-
-                if (error.status === 500 && error.data && error.data.hasOwnProperty('ExceptionName') && error.data.hasOwnProperty('DisplayMessage') && error.data.ExceptionName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
-
-                    errorMsg = $filter('invalidFileType')(file.name, error.data.DisplayMessage);
-
-                    currentNotification && currentNotification.hide();
-                    currentNotification = $alert({ content: errorMsg, type: 'error', show: true });
-
+                if (response.data[0].Succeeded === true) {
+                    deferred.resolve(response.data[0].Output); // notify onFileSelect that the upload is done
                 } else {
-                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                    deferred.reject();
+                    if (response.data[0].ErrorName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
+                        errorMsg = $filter('invalidFileType')(file.name, response.data[0].ErrorMessage);
+//                        currentNotification && currentNotification.hide();
+                        currentNotification = $alert({ content: errorMsg, type: 'error', show: true, duration: false });
+                    } else {
+                        currentNotification = $alert({ content: file.name + msg.error.fileUploadFailed, type: 'error', show: true, duration: false });
+                    }
                 }
 
+            }, function (error) { // internal server error
+                console.log(error);
+                $scope.uploadInProgress = false;
+                deferred.reject(); //notify onFileSelect that the upload has failed
             });
 
             return deferred.promise;
@@ -502,8 +534,13 @@
             }
 
             _.each(files, function (file) {
-                placeholderItem = new odata.SimpleShowcaseItem({ name: file.name });
-                $scope.showcaseItems.push(placeholderItem); // push a placeholder item to show loading state
+                if (file.size < PortfolioSvc.getMaxFileSize()) {
+                    placeholderItem = new odata.SimpleShowcaseItem({ name: file.name });
+                    $scope.showcaseItems.push(placeholderItem); // push a placeholder item to show loading state
+                } else {
+                    $alert({ content: file.name + msg.error.maxFileSize, type: 'error', show: true });
+                    return;
+                }
             });
 
             reader.onload = function (e) {
@@ -524,7 +561,7 @@
 
                 uploadShowcase(files[currentFileIndex], placeholderLink).then(function (newShowcaseItem) {
                     _.remove($scope.showcaseItems, placeholderItem);
-                    $scope.updateShowcaseItems(newShowcaseItem);
+                    $scope.updateShowcaseItems([newShowcaseItem]);
 
                     currentFileIndex < files.length -1 && reader.readAsDataURL(files[currentFileIndex++]);
 
@@ -542,20 +579,21 @@
 
             PortfolioSvc.saveUrls(url, $scope.service.serviceID).then(function (response) {
                 _.remove($scope.showcaseItems, placeholderItem);
-                $scope.updateShowcaseItems(response.data);
 
-            }, function (error) {
-                _.remove($scope.showcaseItems, placeholderItem);
-
-                if (error.status === 500 && error.data && error.data.hasOwnProperty('ExceptionName') && error.data.hasOwnProperty('DisplayMessage') && error.data.ExceptionName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
-
-                    errorMsg = $filter('invalidFileType')(url, error.data.DisplayMessage);
-                    currentNotification && currentNotification.hide();
-                    currentNotification = $alert({ content: errorMsg, type: 'error', show: true });
-
+                if (response.data[0].Succeeded === true) {
+                    $scope.updateShowcaseItems(response.data[0].Output);
                 } else {
-                    NotificationSvc.show({ content: msg.error.generic, type: 'error' });
+                    if (response.data[0].ErrorName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
+                        errorMsg = $filter('invalidFileType')(response.data[0].Input, response.data[0].ErrorMessage);
+                        //                        currentNotification && currentNotification.hide();
+                        currentNotification = $alert({ content: errorMsg, type: 'error', show: true, duration: false });
+                    } else {
+                        currentNotification = $alert({ content: msg.error.fileUploadFailed, type: 'error', show: true, duration: false });
+                    }
                 }
+            }, function () {
+                _.remove($scope.showcaseItems, placeholderItem);
+                NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
         }
 

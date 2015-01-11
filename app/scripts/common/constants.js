@@ -135,7 +135,10 @@
             saveAvatarFailed: 'There was a problem importing your avatar. You can still upload one manually.',
             invalidFileType: 'Invalid file type.',
             createProfileFailed: 'There was a problem creating your profile. Please try again.',
-            updateProfileFailed: 'There was a problem updating your profile. Please try again.'
+            updateProfileFailed: 'There was a problem updating your profile. Please try again.',
+            maxFileSize: ' exceeds the maximum file size (8 MB)',
+            fileUploadFailed: ' could not be uploaded.',
+            saveImportedPortfolioFailed: ' could not be added to your offer.'
         },
         success: {
             createNewPassword: 'We sent you an email. Follow the instructions to create a new password.',

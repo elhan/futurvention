@@ -11,8 +11,8 @@
      */
     app.service('PortfolioSvc', ['$http', '$q', '$timeout', 'breeze', 'PATHS', 'ENV', function ($http, $q, $timeout, breeze, paths, env) {
         var PortfolioSvc = {},
-
             portfolio = [],
+            maxFileSize = 8*1024*1024, // 8MB
 
             dataService = new breeze.DataService({
                 serviceName: env.api.endPoint + paths.public,
@@ -39,6 +39,10 @@
 
         PortfolioSvc.getPortfolio = function () {
             return portfolio;
+        };
+
+        PortfolioSvc.getMaxFileSize = function () {
+            return maxFileSize;
         };
 
         ///////////////////////////////////////////////////////////
