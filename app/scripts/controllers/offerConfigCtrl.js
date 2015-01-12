@@ -138,7 +138,8 @@
             template: 'views/components/modalEmbedUrl.html',
             show: false,
             keyboard: false,
-            animation: 'am-slide-top'
+            animation: 'am-slide-top',
+            backdrop: 'static'
         });
 
         modalCameraTag = $modal({
@@ -167,7 +168,7 @@
         };
 
         $scope.closeEmbedUrlModal = function () {
-            $scope.urlsToEmbed.empty = [''];
+            $scope.urlsToEmbed = [{ url: '' }];
             modalEmbedUrl.hide();
         };
 

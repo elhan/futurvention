@@ -9,7 +9,7 @@
      * # ImporterSvc
      * CRUD operations for eternal data (importers)
      */
-    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', '$alert', 'PATHS', 'ENV', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, $alert, paths, env, providersEnum, events, msg, utils, odata) {
+    app.service('ImporterSvc', ['$rootScope', '$http', '$q', '$timeout', '$interval', '$alert', '$filter', 'PATHS', 'ENV', 'PROVIDERS_ENUM', 'EVENTS', 'MESSAGES', 'Utils', 'Odata', function ($rootScope, $http, $q, $timeout, $interval, $alert, $filter, paths, env, providersEnum, events, msg, utils, odata) {
 
         var polling,
 
@@ -245,6 +245,7 @@
                 deferred = $q.defer();
 
             $http.post(env.api.endPoint + paths.importer.fetchProfile, importers).then(function (response) {
+                var name = '';
 
                 _.each(response.data, function (obj) { // data === importers that have data
                     obj.hasOwnProperty('data') && obj.data !== null && importerData.push(obj);
@@ -259,14 +260,26 @@
                     if (imp.data.response.data && parseInt(imp.data.response.error.errno) < 500) { // TODO: handle specific error codes
                         convertedProfiles.push(new odata.SellerProfile().fromImported(imp.data.response.data.PersonalInfo));
 
+                        // try to set the moniker as UserName, and if that fails, as UserId
+                        if (imp.data.response.data.Metadata.hasOwnProperty('UserName')) {
+                            name = imp.data.response.data.Metadata.UserName;
+                        } else if (imp.data.response.data.Metadata.hasOwnProperty('UserId')) {
+                            name = imp.data.response.data.Metadata.UserId;
+                        }
+
+                        if (name) { // if a moniker was fetched, trim it
+                            name = $filter('trimMoniker')(name);
+                        }
+
                         /*
-                           Before adding a new fetchedProfile object, we need to extend it to include info on it's provider and user guid.
-                           This will help build the avatar's hosted file link.
+                           Before adding a new fetchedProfile object, we need to extend it to include info on it's provider, user guid
+                           and unique user name. This will help build the avatar's hosted file link.
                          **/
+
                         fetchedProfiles.push(angular.extend(imp.data.response.data.PersonalInfo, {
                             provider: providersEnum[imp.Provider],
                             guid: imp.Guid,
-                            userName: imp.data.response.data.Metadata.hasOwnProperty('UserName') ? imp.data.response.data.Metadata.UserName : ''
+                            userName: name
                         }));
                     }
                 });

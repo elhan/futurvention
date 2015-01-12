@@ -260,4 +260,22 @@
         };
     });
 
+    app.filter('trimMoniker', function () {
+        return function (str) {
+            var restrictedChars = ['-', '_', ' '];
+
+            if (!str) {
+                return;
+            }
+
+            _.each(str.split(''), function (ch) {
+                if (restrictedChars.indexOf(ch) !== -1) {
+                    str = str.replace(ch, '');
+                }
+            });
+
+            return str;
+        };
+    });
+
 }());

@@ -20,8 +20,7 @@
                     <input type="url" fv-dynamic-name=$index class="form-control input-s"
                            ui-validate="{urlPattern: 'matchUrlPattern($value)'}"
                            ng-model="urlsToEmbed[$index].url"
-                           placeholder="Enter a url"
-                           ng-required="true">
+                           placeholder="Enter a url">
                     <div class="wrapper-btn-remove">
                       <button type="button" class="close" ng-click="urlsToEmbed.splice($index, 1)">&times;</button>
                     </div>
