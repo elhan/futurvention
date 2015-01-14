@@ -168,8 +168,21 @@
         };
 
         $scope.closeEmbedUrlModal = function () {
-            $scope.urlsToEmbed = [{ url: '' }];
+            $scope.urlsToEmbed.empty();
+            $scope.urlsToEmbed.push({ url: '' });
             modalEmbedUrl.hide();
+        };
+
+        $scope.addUrlToEmbed = function () {
+            $scope.urlsToEmbed.push({url: ''});
+        };
+
+        $scope.removeUrlToEmbed = function (index) {
+            $scope.urlsToEmbed.splice(index, 1);
+        };
+
+        $scope.matchUrlPattern = function (str) {
+            return utils.GENERAL_URL_PATTERN.test(str);
         };
 
         $scope.closeCameraTagModal = function () {
@@ -179,10 +192,6 @@
                 deferred.resolve();
             });
             return deferred.promise;
-        };
-
-        $scope.matchUrlPattern = function (value) {
-            return utils.matchUrlPattern(value);
         };
 
         ////////////////////////////////////////////
@@ -389,7 +398,8 @@
         };
 
         $scope.fetchImportedPortfolios = function () {
-            var simpleImporters = [];
+            var deferred = $q.defer(), // used by portfoliosReady event handler
+                simpleImporters = [];
 
             /*
                 For each (expanded) importer in importersAvailable, create a simple importer object needed by fetchPortfolios,
@@ -413,7 +423,7 @@
                         return port.Provider === portfolio.Provider;
                     });
 
-                    // If the portfolio has already been added to the importedPortfolios collection, update it's showcase collection
+                    // If the portfolio has already been added to the importedPortfolios collection, update its showcase collection
                     if (importedPortfolio) {
                         _.each(portfolio.data, function (showcase) {
                             importedPortfolioItem = _.find(importedPortfolio.data, function (sc) {
@@ -425,7 +435,13 @@
                                 }
                             });
 
-                            !importedPortfolioItem && importedPortfolio.data.push(showcase);
+                            // if the item exists update its thumbnailAsset and proccesedAsset, else add it to the collection.
+                            if (importedPortfolioItem) {
+                                portfolio.ThumbnailAsset && utils.updateProperties(importedPortfolioItem.ThumbnailAsset, portfolio.ThumbnailAsset);
+                                portfolio.ProcessedAsset && utils.updateProperties(importedPortfolioItem.ProcessedAsset, portfolio.ProcessedAsset);
+                            } else {
+                                importedPortfolio.data.push(showcase);
+                            }
                         });
                     } else {
                         // TODO: this should be on server. Make sure only valid files get through.
@@ -435,9 +451,14 @@
                         $scope.importedPortfolios.push(portfolio);
                     }
                 });
+                deferred.resolve();
+
             }, function (error) {
                 console.log(error);
+                deferred.resolve();
             });
+
+            return deferred.promise;
         };
 
         /**
@@ -582,14 +603,14 @@
                 _.remove($scope.showcaseItems, placeholderItem);
 
                 if (response.data[0].Succeeded === true) {
-                    $scope.updateShowcaseItems(response.data[0].Output);
+                    $scope.updateShowcaseItems([response.data[0].Output]);
                 } else {
                     if (response.data[0].ErrorName === 'Futurvention.Ergma.Business.InvalidFileTypeException') {
                         errorMsg = $filter('invalidFileType')(response.data[0].Input, response.data[0].ErrorMessage);
                         //                        currentNotification && currentNotification.hide();
                         currentNotification = $alert({ content: errorMsg, type: 'error', show: true, duration: false });
                     } else {
-                        currentNotification = $alert({ content: msg.error.fileUploadFailed, type: 'error', show: true, duration: false });
+                        currentNotification = $alert({ content: response.data[0].Input + msg.error.fileUploadFailed, type: 'error', show: true, duration: false });
                     }
                 }
             }, function () {
@@ -613,6 +634,8 @@
 
             });
 
+            $scope.urlsToEmbed.empty();
+            $scope.urlsToEmbed.push({ url: '' });
             modalEmbedUrl.hide();
         };
 
@@ -694,8 +717,11 @@
             $scope.fetchImportedPortfolios();
         });
 
-        // when the importer polling times out, handle the remaining inProgress importers.
-        $scope.$on(events.importer.polling.timeout, function () {
+
+        /**
+         * Handle polling termination events: update portfolio collections (finished, inProgress, failed)
+         */
+        function onPortfoliosFinished () {
             var port, importerName;
 
             _.each($scope.importersInProgress, function (importer) {
@@ -714,6 +740,19 @@
             });
 
             $scope.importersInProgress.empty();
+        }
+
+        // when the importer polling times out, handle the remaining inProgress importers.
+        $scope.$on(events.importer.polling.timeout, function () {
+            onPortfoliosFinished();
+        });
+
+        $scope.$on(events.importer.polling.portfoliosReady, function () {
+            // get portfolios one last time before cancelling polling, to ensure data is latest available
+            $scope.fetchImportedPortfolios().then(function () {
+                onPortfoliosFinished();
+                ImporterSvc.stopPolling();
+            });
         });
 
         $scope.$on('modal.show', function () {
@@ -839,7 +878,7 @@
                     });
 
                     // start polling: this will emit events that will be handled by the coresponding watcher
-                    ImporterSvc.startPolling({ importers: $scope.importersAvailable, delay: 5000, count: 24 }); // 2', once every 5"
+                    ImporterSvc.startPolling({ importers: $scope.importersAvailable, delay: 5000, count: 76 }); // 2', once every 5"
                 }
             }
 

@@ -6,7 +6,7 @@
         var Utils = {};
 
         Utils.updateProperties = function (original, extension, preventEmptyOverwrite) {
-
+            console.log(original);
             extension && _.forOwn(original, function (num, key) {
                 if (extension.hasOwnProperty(key)) {
                     if (typeof preventEmptyOverwrite === 'boolean' && preventEmptyOverwrite === false) {
@@ -16,7 +16,7 @@
                     }
                 }
             });
-
+            console.log(original);
             return original;
         };
 
@@ -98,6 +98,8 @@
         // www. sans http:// or https://
         Utils.PSEUDO_URL_PATTERN = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
 
+        Utils.GENERAL_URL_PATTERN = /^((https:\/\/(www\.)?)|(http:\/\/(www\.)?)|(www\.))[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}/i;
+
 //        Utils.ELANCE_URL_PATTERN = /^((https:\/\/(www\.)?)|(http:\/\/(www\.)?)|(www\.))?elance\.com\/s\/./i;
 //
 //        Utils.BEHANCE_URL_PATTERN = /^((https:\/\/(www\.)?)|(http:\/\/(www\.)?)|(www\.))?behance\.net\/./i;
@@ -142,7 +144,7 @@
         };
 
         Utils.matchUrlPattern =  function (str) {
-            return str ? str.match(Utils.URL_PATTERN) || str.match(Utils.PSEUDO_URL_PATTERN) : false;
+            return str ? Utils.URL_PATTERN.test(str) || Utils.PSEUDO_URL_PATTERN.test(str) : false;
         };
 
         Utils.matchProviderUrlPattern = function (str, providerName) {
@@ -179,6 +181,33 @@
 
         return Utils;
     });
+
+    ///////////////////////////////////////////////////////////
+    /// New String API
+    ///////////////////////////////////////////////////////////
+
+    if (typeof String.prototype.endsWith !== 'function') {
+        String.prototype.endsWith = function (suffix) {
+            return this.indexOf(suffix, this.length - suffix.length) !== -1;
+        };
+    }
+
+    if (typeof String.prototype.removeAfter !== 'function') {
+        String.prototype.removeAfter = function (str) {
+            var self = this;
+            return self.split(self.lastIndexOf(str))[0];
+        };
+    }
+
+    if (typeof String.prototype.removeLast !== 'function') {
+        String.prototype.removeLast = function (str) {
+            var idx = this.lastIndexOf(str);
+            if (!idx) {
+                return this;
+            }
+            return this.slice(0, idx);
+        };
+    }
 
     ///////////////////////////////////////////////////////////
     /// New Array API

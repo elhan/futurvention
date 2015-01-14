@@ -116,11 +116,11 @@
                       </div>
                     </div>
                     <!-- Caption -->
-                    <div class="caption editable container-x flex-items-centered flex-content-centered">
+                    <div class="caption editable container-x flex-items-start flex-content-centered">
                       <svg class="icon icon-dark text-i">
                         <use xlink:href="#edit"></use>
                       </svg>
-                      <textarea fv-caption rows="2" cols="30" class="text-i textarea-caption input-borderless" ng-model="item.name" ng-blur="updateShowcaseTitle(item)"></textarea>
+                      <textarea fv-caption rows="2" cols="25" class="text-i textarea-caption input-borderless" ng-model="item.name" ng-blur="updateShowcaseTitle(item)"></textarea>
                     </div>
                   </div>
                 </div>
@@ -215,7 +215,7 @@
                         <!-- Overlay: drag-over -->
                         <div class="showcase-overlay"></div>
                       </div>
-                      <div class="caption text-i">{{item.Title | ellipsis}}</div>
+                      <div class="caption text-i">{{item.Title}}</div>
                     </div>
                   </div>
                 </div>

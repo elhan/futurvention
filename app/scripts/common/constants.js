@@ -33,11 +33,11 @@
             notAuthorized: 'auth-not-authorized'
         },
         importer: {
-            portfoliosReady: 'imp-portfolios-ready',
             reviewsReady: 'imp-reviews-ready',
             polling: {
                 start: 'imp-polling-start',
                 profileImported: 'imp-profile-imported',
+                portfoliosReady: 'imp-portfolios-ready',
                 statusUpdated: 'imp-status-updated',
                 end: 'imp-polling-end',
                 timeout: 'imp-polling-timeout'

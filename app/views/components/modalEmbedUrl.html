@@ -12,26 +12,26 @@
       </div>
       <div class="fv-modal-body">
         <div class="wrapper-form">
-          <form name="EmbedUrlForm" role="form" ng-submit="embedUrl()">
+          <form name="EmbedUrlForm" role="form">
             <div class="container-y">
               <div ng-repeat="link in urlsToEmbed">
                 <div ng-form class="form-group" name="innerForm">
                   <div class="container-x">
-                    <input type="url" fv-dynamic-name=$index class="form-control input-s"
-                           ui-validate="{urlPattern: 'matchUrlPattern($value)'}"
-                           ng-model="urlsToEmbed[$index].url"
+                    <input ui-validate="{urlPattern: 'matchUrlPattern($value)'}"
+                           fv-dynamic-name=$index class="form-control input-s"
+                           ng-model="link.url"
                            placeholder="Enter a url">
-                    <div class="wrapper-btn-remove">
-                      <button type="button" class="close" ng-click="urlsToEmbed.splice($index, 1)">&times;</button>
+                    <div class="wrapper-btn-remove" ng-class="{'transparent': $index === 0}">
+                      <button type="button" class="close" ng-click="removeUrlToEmbed($index)" ng-class="{'unclickable': $index === 0}" ng-disabled="$index === 0">&times;</button>
                     </div>
                   </div>
-                  <label ng-show="innerForm.$error.urlPattern" class="label-warn label-s">
+                  <label ng-show="innerForm.$error.urlPattern && urlsToEmbed[$index].url.length > 2" class="label-warn label-s">
                     Please provide a valid url
                   </label>
                 </div>
               </div>
             </div>
-            <button class="btn-link text-p" ng-click="urlsToEmbed.push({url: ''})">
+            <button class="btn-link text-p" ng-click="addUrlToEmbed()">
               <span class="text-light">+</span>
               <span>Add more urls</span>
             </button>

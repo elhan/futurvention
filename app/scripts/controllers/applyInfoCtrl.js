@@ -110,7 +110,7 @@
                         Try to fill in the user's moniker. Try the client validation it first, then validate it on the server side as well,
                         in order to make sure the moniker is not already taken.
                     **/
-                    if (response.userName.length > 3 && response.userName.length < 20 &&  $scope.engAndNum('LukeODwyer')) {
+                    if (response.userName.length > 3 && response.userName.length < 20 &&  $scope.engAndNum(response.userName)) {
                         ProfileSvc.validateMoniker(response.userName).then(function (res) {
                             if (res.data === 'false') { // returns true if moniker exists
                                 $scope.monikerIsValid = true;

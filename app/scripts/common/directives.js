@@ -529,7 +529,8 @@
         return {
             require: 'ngModel',
             link: function (scope, element, attrs, modelCtrl) {
-                var wrapper, icon, maxCaptionSize, ignoredKeyCodes;
+                var wrapper, icon, maxCaptionSize, ignoredKeyCodes,
+                    ellipsis = '...';
 
                 function truncate (inputValue) {
                     var transformedInput;
@@ -551,11 +552,16 @@
                 element.bind('focus', function () {
                     wrapper.css('border', '1px solid lightgrey');
                     icon.css('opacity', '0');
+
+                    if (modelCtrl.$modelValue.endsWith(ellipsis)) {
+                        modelCtrl.$setViewValue(modelCtrl.$modelValue.removeLast(ellipsis));
+                        modelCtrl.$render();
+                    }
                 });
 
                 element.bind('blur', function () {
                     wrapper.css('border', '0');
-                    attrs.cols && attrs.rows && modelCtrl.$setViewValue($filter('ellipsis')(modelCtrl.$modelValue, attrs.cols, attrs.rows));
+                    attrs.cols && attrs.rows && truncate(modelCtrl.$modelValue);
                 });
 
                 wrapper.bind('mouseenter', function () {
@@ -568,15 +574,22 @@
 
                 if (attrs.cols && attrs.rows) {
                     maxCaptionSize = attrs.cols * attrs.rows;
+
+                    modelCtrl.$formatters.push(truncate);
+
                     element.bind('keyup', function (event) {
                         ignoredKeyCodes = [8, 27, 46]; // ignore enter, escape and delete key codes
+
+                        if (modelCtrl.$modelValue.endsWith(ellipsis)) {
+                            modelCtrl.$modelValue.removeAfter(ellipsis);
+                        }
+
                         // check that input size exceeds or is equal to the maximum allowed
                         if (modelCtrl.$modelValue && modelCtrl.$modelValue.length >= maxCaptionSize && ignoredKeyCodes.indexOf(event.keyCode) !== -1) {
                             event.preventDefault();
                             event.stopImmediatePropagation();
                         }
                     });
-                    modelCtrl.$formatters.push(truncate);
                 }
 
                 scope.$on('$destroy', function () {

@@ -105,13 +105,13 @@
             });
         };
 
-        $scope.editOffer = function (serviceID) {
+        $scope.editOffer = _.throttle(function (serviceID) {
             OfferSvc.fetchOwnOffer(serviceID).then(function () {
                 $scope.goToStep(3);
             }, function () {
                 NotificationSvc.show({ content: msg.error.generic, type: 'error' });
             });
-        };
+        }, 1000);
 
         ///////////////////////////////////////////////////////////
         /// Event handling

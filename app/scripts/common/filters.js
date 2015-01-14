@@ -205,17 +205,34 @@
     });
 
     app.filter('ellipsis', function () {
-        return function formatTextEllipsis(text, maxLineLength, totalLines) {
-            var words, lines = [],
+        return function formatTextEllipsis(text, lineLength, lineCount) {
+            var words, totalLines, maxLineLength, lines = [],
                 line = '',
                 ellipsisText = '...',
                 ellipsis = false;
 
+            if (!text) {
+                return;
+            }
+
+            // defaults
+            totalLines = angular.isDefined(lineCount) ? parseInt(lineCount) : 2;
+            maxLineLength = angular.isDefined(lineLength) ? parseInt(lineLength) : 20;
+
+            text = text.replace( /  +/g, ' ' );
+
+            console.log({
+                text: text,
+                max: maxLineLength,
+                check: text.length < maxLineLength * totalLines,
+            });
+
             // check if the maximum input is shorter than the maximum allowed
-            if (! (text && text.length >= (maxLineLength * totalLines) && maxLineLength && totalLines)) {
+            if (text.length < maxLineLength * totalLines) {
                 return text;
             }
 
+            // replace multiple whitespace with a single one, then tokenize
             words = text.split(' ');
 
             for (var i = 0; i < words.length; i++) {

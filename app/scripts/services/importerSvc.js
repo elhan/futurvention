@@ -48,6 +48,24 @@
             }) !== 'undefined';
         }
 
+        /**
+         * Used to determine whether all portfolios have been imported.
+         *
+         * @param {CheckStatusResponse} checkStatusResponse a collection of importers' status
+         * @return {Boolean} true if there are any profiles that have finisshed importing
+         */
+        function portfoliosFinished (checkStatusResponse) {
+            var importersFinishedCount = 0;
+
+            _.each(checkStatusResponse, function (imp) {
+                if (!imp.Portfolio || _.isEmpty(imp.Portfolio) || (imp.Portfolio && imp.Portfolio.CurrentStatus === 2)) {
+                    importersFinishedCount += 1;
+                }
+            });
+
+            return checkStatusResponse.length === importersFinishedCount;
+        }
+
 
         /**
          * Used to determine if all importers have finished
@@ -197,6 +215,7 @@
 
                 profileImported(response.data) && emitEvents && $rootScope.$broadcast(events.importer.polling.profileImported, response);
                 emitEvents && $rootScope.$broadcast(events.importer.polling.statusUpdated, response.data);
+                portfoliosFinished(response.data) && emitEvents && $rootScope.$broadcast(events.importer.polling.portfoliosReady, response.data);
 
                 deferred.resolve(response.data);
 
