@@ -13,6 +13,10 @@
   background-color: @greyDark;
 }
 
+.bg-greyMed {
+  background-color: @greyMed;
+}
+
 .bg-blue-default {
   color: white;
   background-color: @blueDefault;
@@ -22,56 +26,88 @@
 // -------------------------
 
 .space-left {
-  margin-left: 10px;
+  margin-left: 10px !important;
 }
 
-.space-right {
-  margin-right: 10px;
+.space-left-2x {
+  margin-left: 20px !important;
 }
 
 .space-left-05 {
-  margin-left: 5px;
+  margin-left: 5px !important;
+}
+
+.space-right {
+  margin-right: 10px !important;
+}
+
+.space-right-2x {
+  margin-right: 20px !important;
+}
+
+.space-right-4x {
+  margin-right: 40px !important;
+}
+
+.space-right-05 {
+  margin-right: 5px !important;
 }
 
 .space-x {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+}
+
+.space-y {
+  margin: 10px 0 !important;
 }
 
 .space-bottom {
-  margin-bottom: 10px;
+  margin-bottom: 10px !important;
+}
+
+.space-bottom-0 {
+  margin-bottom: 0 !important;
+}
+
+.space-bottom-05 {
+  margin-bottom: 5px !important;
 }
 
 .space-bottom-2x {
-  margin-bottom: 20px;
+  margin-bottom: 20px !important;
+}
+
+.space-top-bottom {
+  margin: 10px 0 !important;
 }
 
 .space-top-bottom-2x {
-  margin: 20px 0;
+  margin: 20px 0 !important;
 }
 
 .space-bottom-4x {
-  margin-bottom: 40px;
+  margin-bottom: 40px !important;
 }
 
 .space-top {
-  margin-top: 10px;
+  margin-top: 10px !important;
 }
 
 .space-top-05 {
-  margin-top: 5px;
+  margin-top: 5px !important;
 }
 
 .space-top-2x {
-  margin-top: 20px;
+  margin-top: 20px !important;
 }
 
 .space-top-4x {
-  margin-top: 40px;
+  margin-top: 40px !important;
 }
 
 .no-margin {
-  margin: 0;
+  margin: 0 !important;
 }
 
 // Paddings
@@ -91,6 +127,11 @@
 .round {
   border-radius: 50%;
 }
+
+.border-lightGrey {
+  border-color: @lightGrey;
+}
+
 // Various
 // -------------------------
 
@@ -126,4 +167,10 @@
 .transparent {
   opacity: 0;
   cursor: default;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

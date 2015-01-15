@@ -1,0 +1,111 @@
+<div class="container-y workflow-message">
+  <div class="container-x">
+    <!-- Avatar column -->
+    <div class="container-y">
+      <img class="avatar space-top space-right" src="images/seller0.png">
+    </div>
+    <!-- Arrow head -->
+    <div class="arrow-left"></div>
+    <!-- Message panel -->
+    <div class="flex-1 panel container-y">
+      <!-- Message title -->
+      <div class="message-title container-x space-bottom-0">
+        <span class="space-after">Send</span>
+        <!-- Bind: recipient name -->
+        <span class="space-after text-blue">Stelios</span>
+        <span class="space-after">a message</span>
+      </div>
+      <!-- Message body -->
+      <!-- Post message form -->
+      <form class="space-top-bottom">
+        <textarea class="bg-grey95" rows="5" placeholder="Type your message here"></textarea>
+        <!-- Attachments -->
+        <div class="attachments container-y text-i">
+          <!-- Repeat 0-5 times -->
+          <!-- attachment: doc file -->
+          <div class="container-x flex-content-spread flex-items-centered">
+            <div class="container-x">
+              <div class="wrapper-file-img">
+                <img class="img-responsive" src="images/file-doc.png">
+              </div>
+              <!-- Bind: file name -->
+              <div class="container-x flex-items-centered">Documentation.doc</div>
+            </div>
+            <!-- Bind: file size -->
+            <div class="container-x">
+              <div class="space-right-05">
+                <span>150</span>
+                <span>KB</span>
+              </div>
+              <div class="wrapper-remove-icon dark space-left-2x space-right-4x">
+                <svg class="icon icon-light">
+                  <use xlink:href="#close"></use>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <!-- attachment: pdf file -->
+          <div class="container-x flex-content-spread flex-items-centered">
+            <div class="container-x">
+              <div class="wrapper-file-img">
+                <img class="img-responsive" src="images/file-pdf.png">
+              </div>
+              <!-- Bind: file name -->
+              <div class="container-x flex-items-centered">Documentation.pdf</div>
+            </div>
+            <!-- Bind: file size -->
+            <div class="container-x">
+              <div class="space-right-05">
+                <span>150</span>
+                <span>KB</span>
+              </div>
+              <div class="wrapper-remove-icon dark space-left-2x space-right-4x">
+                <svg class="icon icon-light">
+                  <use xlink:href="#close"></use>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <!-- attachment: xls file -->
+          <div class="container-x flex-content-spread flex-items-centered">
+            <div class="container-x">
+              <div class="wrapper-file-img">
+                <img class="img-responsive" src="images/file-excel.png">
+              </div>
+              <!-- Bind: file name -->
+              <div class="container-x flex-items-centered">Timesheet.xsl</div>
+            </div>
+            <!-- Bind: file size -->
+            <div class="container-x">
+              <div class="space-right-05">
+                <span>150</span>
+                <span>KB</span>
+              </div>
+              <div class="wrapper-remove-icon dark space-left-2x space-right-4x">
+                <svg class="icon icon-light">
+                  <use xlink:href="#close"></use>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <!-- Conditional class: last. Add on the last visible divider -->
+          <div class="divider last"></div>
+        </div>
+        <!-- Action buttons -->
+        <div class="container-x flex-content-spread">
+          <!-- File input: the accept attribute is bound to the digiserved supported file list -->
+          <div class="container-x flex-content-centered">
+            <button class="btn btn-white btn-m text-i space-right-05">Attach files</button>
+            <div class="container-y space-left">
+              <div class="text-i italic text-grey">Max 5 attachments</div>
+              <div class="text-i italic text-grey">Max 5 MB/ attachment</div>
+            </div>
+          </div>
+          <input class="btn btn-blue btn-m text-i" type="submit">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

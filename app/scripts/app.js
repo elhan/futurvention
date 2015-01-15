@@ -62,6 +62,10 @@
             templateUrl: 'views/apply.html',
             controller: 'ApplyCtrl'
         })
+        .when('/workstream', {
+            templateUrl: 'views/workstream.html',
+            controller: 'WorkflowCtrl'
+        })
         .when('/:moniker', {
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',

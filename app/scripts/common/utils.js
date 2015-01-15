@@ -6,7 +6,6 @@
         var Utils = {};
 
         Utils.updateProperties = function (original, extension, preventEmptyOverwrite) {
-            console.log(original);
             extension && _.forOwn(original, function (num, key) {
                 if (extension.hasOwnProperty(key)) {
                     if (typeof preventEmptyOverwrite === 'boolean' && preventEmptyOverwrite === false) {
@@ -16,7 +15,6 @@
                     }
                 }
             });
-            console.log(original);
             return original;
         };
 

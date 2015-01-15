@@ -75,6 +75,10 @@
   font-size: calc(14 / 48em);
 }
 
+.btn-m {
+  padding: 10px 35px;
+}
+
 .btn-small {
   height: 38px;
   border-radius: 4px;
@@ -252,5 +256,22 @@
 
   svg {
     width: 10px;
+  }
+}
+
+.btn-white {
+  .bg-white;
+  .text-blue;
+  border: 1px solid @lightGrey;
+  box-shadow: 0 1.5px @lightGrey;
+  -moz-box-shadow: 0 1.5px @lightGrey;
+  -webkit-box-shadow: 0 1.5px @lightGrey;
+
+  &:hover {
+    background-color: @greyDark;
+    color: white;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
   }
 }

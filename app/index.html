@@ -23,8 +23,11 @@
     <div class="hidden" ng-include="'images/icons.svg'"></div>
 
     <div ng-controller="MainCtrl" class="fullscreen">
+<!--
       <div ng-include="'views/partials/header.html'"></div>
       <div ng-view class="fullscreen"></div>
+-->
+      <div ng-view></div>
     </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -106,6 +109,7 @@
     <script src="scripts/controllers/resetPwdCtrl.js"></script>
     <script src="scripts/controllers/headerCtrl.js"></script>
     <script src="scripts/controllers/landingCtrl.js"></script>
+    <script src="scripts/controllers/workflowCtrl.js"></script>
     <script src="scripts/controllers/modalPollingCtrl.js"></script>
 
     <!-- Directives -->
