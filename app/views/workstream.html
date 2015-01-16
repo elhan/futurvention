@@ -1,68 +1,4 @@
 <div class="fullscreen workstream">
-  <!-- Main navbar -->
-  <nav class="navbar navbar-default navbar-dark navbar-fixed-top navbar-main">
-    <div class="navbar-inner">
-      <div class="navbar-wrapper">
-        <div class="container-y flex-content-centered">
-          <a href="/" class="wrapper-logo container-y flex-content-centered">
-            <img src="/images/logo_01.png" class="img-responsive">
-          </a>
-      </div>
-      <!-- Search -->
-      <form class="navbar-search container-y flex-content-centered" role="search">
-        <div class="search-box">
-          <div class="inner-addon left-addon">
-            <svg class="icon">
-              <use xlink:href="#search-dark"></use>
-            </svg>
-            <input type="text" class="form-control text-p">
-          </div>
-        </div>
-      </form>
-      <!-- If user is not signed in -->
-      <!--
-<div class="container-x flex-1 flex-content-end flex-items-centered">
-<button class="btn btn-link nav-link">Sign up</button>
-<button class="btn btn-link nav-link">Login</button>
-<button class="btn btn-blue nav-link space-left">Start selling</button>
-</div>
--->
-      <!-- If user is signed in -->
-      <div class="container-x flex-1 flex-content-end">
-        <!-- User avatar -->
-        <div class="wrapper-avatar">
-          <img src="images/seller0.png">
-        </div>
-        <!-- User & name dropdown -->
-        <div class="container-x">
-          <div class="dropdown flex-content-centered">
-            <!-- Dropdown -->
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Doug<span class="caret"></span></a>
-            <ul class="dropdown-menu" role="menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  </nav>
-  <!-- Secondary navbar -->
-  <nav class="navbar navbar-fixed-top secondary flex-content-centered">
-    <div class="navbar-inner">
-      <div class="navbar-wrapper flex-items-centered">
-        <a href="#" class="navbar-link">Graphics & Design</a>
-        <a href="#" class="navbar-link">Web Development</a>
-        <a href="#" class="navbar-link">Writing & Translation</a>
-        <a href="#" class="navbar-link">Online Marketing</a>
-        <a href="#" class="navbar-link">Business & Admin</a>
-      </div>
-    </div>
-  </nav>
   <!-- Page content -->
   <div class="container-page">
     <div class="container-y container-page-inner">
@@ -213,37 +149,5 @@
       </div>
     </div>
   </div>
-  <!-- Footer -->
-  <nav class="navbar navbar-default navbar-footer">
-    <div class="navbar-inner">
-      <div class="navbar-wrapper">
-        <div class="container-x flex-1">
-          <div class="link-footer">
-            <a href="#">About us</a>
-          </div>
-          <div class="link-footer">
-            <a href="#">Terms</a>
-          </div>
-          <div class="link-footer">
-            <a href="#">Privacy</a>
-          </div>
-          <div class="link-footer">
-            <a href="#">Contact us</a>
-          </div>
-        </div>
-        <div class="container-x flex-content-centered">
-          <div class="wrapper-social-icon space-right-2x">
-            <svg class="icon icon-dark">
-              <use xlink:href="#facebook"></use>
-            </svg>
-          </div>
-          <div class="wrapper-social-icon">
-            <svg class="icon icon-dark">
-              <use xlink:href="#twitter"></use>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <div ng-include="'views/partials/footer.html'"></div>
 </div>

@@ -66,6 +66,9 @@
             templateUrl: 'views/workstream.html',
             controller: 'WorkflowCtrl'
         })
+        .when('/myOrders', {
+            templateUrl: 'views/myOrders.html'
+        })
         .when('/:moniker', {
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',
