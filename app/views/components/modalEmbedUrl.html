@@ -25,7 +25,7 @@
                       <button type="button" class="close" ng-click="removeUrlToEmbed($index)" ng-class="{'unclickable': $index === 0}" ng-disabled="$index === 0">&times;</button>
                     </div>
                   </div>
-                  <label ng-show="innerForm.$error.urlPattern && urlsToEmbed[$index].url.length > 2" class="label-warn label-s">
+                  <label ng-show="innerForm.$error.urlPattern && urlsToEmbed[$index].url.length > 2" class="label-s text-grey label-s">
                     Please provide a valid url
                   </label>
                 </div>

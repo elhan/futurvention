@@ -57,28 +57,28 @@
       </div>
       <div class="container-x space-bottom-2x" ng-show="urlExists">
         <div class="flex-1"></div>
-        <label class="label-warn flex-2" for="inputPassword">
+        <label class="label-s text-grey flex-2" for="inputPassword">
           This url is already taken. Please provide a new url.
         </label>
         <div class="flex-1"></div>
       </div>
       <div class="container-x space-bottom-2x" ng-show="profileInfoForm.infoUrl.$error.minlength">
         <div class="flex-1"></div>
-        <label class="label-warn flex-2" for="inputPassword">
+        <label class="label-s text-grey flex-2" for="inputPassword">
           This input must be at least 3 characters long
         </label>
         <div class="flex-1"></div>
       </div>
       <div class="container-x space-bottom-2x" ng-show="profileInfoForm.infoUrl.$error.maxlength">
         <div class="flex-1"></div>
-        <label class="label-warn flex-2" for="inputPassword">
+        <label class="label-s text-grey flex-2" for="inputPassword">
           This input must be at most 20 characters long
         </label>
         <div class="flex-1"></div>
       </div>
       <div class="container-x space-bottom-2x" ng-show="profileInfoForm.infoUrl.$error.englishAndNum && profileInfoForm.infoUrl.$viewValue.length > 3">
         <div class="flex-1"></div>
-          <label class="label-warn flex-2" for="inputPassword">
+        <label class="label-s text-grey flex-2" for="inputPassword">
             Your moniker can only contain latin characters and numbers.
           </label>
         <div class="flex-1"></div>

@@ -13,7 +13,7 @@
           <!-- email input -->
           <div class="form-group" ng-class="{'has-error': contactForm.inputEmail.$error.email}">
             <input type="email" name="inputEmail" class="form-control input-l" ng-model="sender.email" placeholder="Your email" ng-required="true" autocomplete="on">
-            <label ng-show="contactForm.inputEmail.$error.email" class="label-warn" for="inputEmail">
+            <label ng-show="contactForm.inputEmail.$error.email" class="label-s text-grey" for="inputEmail">
               Please include a '@' in the email address.
             </label>
           </div>

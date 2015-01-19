@@ -1,0 +1,168 @@
+// Form
+// -------------------------
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-control {
+  &:focus {
+    border-color: @blueDefault;
+    outline: 0;
+    box-shadow: none;
+  }
+  &.disabled-unstyled {
+    &:disabled {
+      background-color: white;
+      border-radius: 4px;
+      cursor: auto;
+    }
+  }
+}
+
+.has-error .form-control {
+  border-color: @redError;
+  &:focus {
+    border-color: @redError;
+    outline: 0;
+    box-shadow: none;
+  }
+}
+
+input {
+  &.input-l {
+    .text-p;
+    .text-grey-dark;
+    border-color: @lightGrey;
+    height: 48px;
+  }
+  &.input-s {
+    height: 38px;
+    .text-p;
+    .text-grey-dark;
+  }
+  &.disabled-unstyled {
+    &:disabled {
+      background-color: white;
+      border-radius: 4px;
+    }
+  }
+}
+
+input[type="checkbox"] {
+  margin: 0;
+}
+
+.input-borderless-wrapper {
+  .border-radius-standard;
+  border: 1px solid @grey80;
+}
+
+.input-borderless {
+  .flex-shrink-10;
+  border: 0;
+  box-shadow: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-left: 6px;
+  &:focus {
+    outline: 0;
+  }
+}
+
+.input-borderless-placeholder {
+  .flex-shrink-0;
+  .flex-items-centered;
+  padding-left: 12px;
+}
+
+.input-m {
+  max-width: 313px;
+  &.fixed-width {
+    width: 313px;
+    margin: auto;
+  }
+}
+
+.form-control::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+  .text-lightGrey;
+}
+
+textarea {
+  border-radius: 4px;
+  border-color: @lightGrey;
+  padding: 6px 12px;
+  border-style: solid;
+  .text-p;
+  .text-grey-dark;
+  &:focus {
+    border-color: @blueDefault;
+    outline: 0;
+    box-shadow: none;
+  }
+}
+
+.navbar-search {
+  margin-left: 26px;
+  .form-control {
+    .text-p;
+    height: 30px;
+    border: 0;
+  }
+}
+
+.search-box {
+  .inner-addon {
+    position: relative;
+  }
+
+  .inner-addon .icon {
+    position: absolute;
+    pointer-events: none;
+    width: 14px;
+    left: 10px;
+    top: 7px;
+  }
+
+  .left-addon .glyphicon  {
+    left:  0px;
+  }
+
+  .left-addon input  {
+    padding-left:  30px;
+    border-radius: 30px;
+  }
+
+  .dropdown-menu > .active > a, .dropdown-menu > .active > a:hover {
+    background-color: @blueDefault;
+  }
+}
+
+.contact-modal {
+  .modal-dialog {
+    max-width: 480px;
+  }
+
+  .fv-modal-body {
+    padding-bottom: 40px;
+  }
+
+  .fv-modal-header {
+    padding: 45px 0 30px;
+  }
+}
+
+.contact-form {
+  min-width: 400px;
+
+  textarea {
+    width: 100%;
+    min-height: 144px;
+  }
+
+  .btn {
+    .flex-1;
+    .flex-content-centered;
+    height: 45px;
+  }
+}

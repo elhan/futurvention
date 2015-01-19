@@ -1,5 +1,5 @@
 <nav class="navbar navbar-default navbar-fixed-top navbar-main container-y"
-     ng-class="locationAt('/') ? 'navbar-transparent' : 'navbar-dark'">
+     ng-class="locationAt('/') ||  locationAt('')? 'navbar-transparent' : 'navbar-dark'">
   <div class="navbar-inner main flex">
     <div class="navbar-wrapper">
       <div class="container-y flex-content-centered">
@@ -8,7 +8,8 @@
         </a>
       </div>
       <!-- Search -->
-      <form class="navbar-search container-y flex-content-centered" role="search" ng-if="locationAt('workstream') || locationAt('myOrders')">
+      <form class="navbar-search container-y flex-content-centered" role="search"
+            ng-if="locationAt('workstream') || locationAt('myOrders')">
         <div class="search-box">
           <div class="inner-addon left-addon">
             <svg class="icon">
@@ -34,7 +35,7 @@
         </div>
         <!-- User & name dropdown -->
         <div class="container-x">
-          <div class="dropdown flex-content-centered">
+          <div class="dropdown flex-content-centered clickable">
             <!-- Dropdown -->
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Doug<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
@@ -49,8 +50,8 @@
       </div>
     </div>
   </div>
-  <!-- Optional: not visible on all pages -->
-  <div class="fullscreen-x secondary" ng-if="locationAt('/myOrders')">
+  <!-- Secondary navbar: not visible on all pages -->
+  <div class="fullscreen-x secondary" ng-if="locationAt('/myOrders') || locationAt('/workstream') || locationAt('/resetPassword')">
     <div class="navbar-wrapper flex-items-centered">
       <a href="#" class="navbar-link">Graphics & Design</a>
       <a href="#" class="navbar-link">Web Development</a>
