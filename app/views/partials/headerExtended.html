@@ -1,7 +1,6 @@
 <nav class="navbar navbar-default navbar-fixed-top navbar-main container-y"
      ng-class="locationAt('/') ||  locationAt('')? 'navbar-transparent' : 'navbar-dark'">
-  <div class="navbar-inner main flex">
-    <div class="navbar-wrapper">
+  <div class="navbar-inner main flex" ng-class="{'wide': locationAt('/workstream') || locationAt('/myOrders')}">
       <div class="container-y flex-content-centered">
         <a href="/" class="wrapper-logo container-y flex-content-centered">
           <img src="/images/logo_01.png" class="img-responsive">
@@ -48,7 +47,6 @@
           </div>
         </div>
       </div>
-    </div>
   </div>
   <!-- Secondary navbar: not visible on all pages -->
   <div class="fullscreen-x secondary" ng-if="locationAt('/myOrders') || locationAt('/workstream') || locationAt('/resetPassword')">

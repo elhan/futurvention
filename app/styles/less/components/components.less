@@ -111,6 +111,10 @@
   @media screen and (max-width: 1024px) {
     width: 100%;
   }
+  &.wide {
+    width: 100%;
+    max-width: 1140px;
+  }
 }
 
 .navbar-wrapper {
@@ -195,7 +199,7 @@
   li:first-child, li:last-child {
     a {
       .text-h2;
-      color: @grey;
+      color: @grey80;
       border: 0;
       span {
         padding-bottom: 5px;
@@ -397,6 +401,7 @@
 
 .label {
   .border-radius-standard;
+  padding: 3px 3px 3px 2px;
 }
 
 .label-import-link {
@@ -417,6 +422,18 @@
 
 .has-error .control-label {
   color: @redError;
+}
+
+.label-danger {
+  background-color: @redError;
+}
+
+.label-success {
+  background-color: @greenLight;
+}
+
+.label-warning {
+  background-color: @gold;
 }
 
 // Dropdowns
@@ -668,7 +685,7 @@
 
   .panel {
     .border-radius-standard;
-    padding: 15px 18px 25px;
+    padding: 25px 28px 30px;
     border: 1px solid @lightGrey;
     margin-left: -6px;
     margin-bottom: 10px;
@@ -718,15 +735,19 @@
   }
 
   textarea::-webkit-input-placeholder {
+    font-size: 13px;
     .text-silver;
   }
   textarea:-moz-placeholder {
+    font-size: 13px;
     .text-silver;
   }
   textarea::-moz-placeholder {
+    font-size: 13px;
     .text-silver;
   }
   textarea:-ms-input-placeholder {
+    font-size: 13px;
     .text-silver;
   }
 
@@ -737,7 +758,8 @@
 
   .message-title {
     .text-m;
-    margin: 3px 0 16px;
+    .space-bottom-2x;
+    font-family: OpenSansBold;
   }
 
   .highlighted {
@@ -746,12 +768,11 @@
   }
 
   .rating-box {
-    .bg-greyMed;
     .space-top;
     .container-x;
     .flex-items-start;
-    .space-bottom-05;
     .border-radius-standard;
+    background-color: @grey95;
     padding: 20px;
   }
 
@@ -797,6 +818,23 @@
 
   .divider {
     margin: 15px 0;
+  }
+
+  button {
+    &.action {
+      .btn-flat;
+      font-size: 12px;
+      font-family: OpenSansRegular;
+      color: @blueDefault;
+      background: transparent;
+      padding: 0;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 
   .arrow-right {
