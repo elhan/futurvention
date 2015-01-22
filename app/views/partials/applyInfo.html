@@ -11,6 +11,7 @@
       <div class="label-l label-picture">Add your photo</div>
       <div class="flex-2">
         <div class="modal-lg profile-picture-m default wrapper-round clickable flex-content-centered" ng-click="showImageCropModal()">
+          <!-- No avatar available -->
           <div class="flex-content-centered" ng-if="!avatar">
             <svg class="icon icon-lightGrey icon-camera" ng-if="$parent.avatarLoading === false">
               <use xlink:href="#camera"></use>
@@ -19,8 +20,10 @@
               <div class="loader"></div>
             </div>
           </div>
-          <div ng-if="avatar" fv-bg-image="{{avatar}}" class="image-profile">
-            <div class="flex-content-centered">
+          <!--Avatar available -->
+          <div ng-if="avatar" class="wrapper-avatar">
+            <img class="img-responsive" ng-src="{{avatar}}">
+            <div class="overlay">
               <svg class="icon icon-light icon-camera">
                 <use xlink:href="#camera"></use>
               </svg>

@@ -18,7 +18,7 @@
           <div class="panel-title">
             <a bs-collapse-toggle ng-click=" panel.state === 'done' && $index !== panels.activePanel && setPanelState(panel, 'default')">
               <span class="text-blue" ng-show="$index !== panels.activePanel">+</span>
-              <span class="text-blue" ng-show="$index === panels.activePanel">-</span>
+              <span class="text-blue icon-collapse" ng-show="$index === panels.activePanel">-</span>
               {{ panel.title }}
             </a>
           </div>
@@ -274,8 +274,8 @@
                   <input type="checkbox">
                   <div class="text-i space-left">{{ choice.name }}</div>
                 </div>
-                <div class="container-x">
-                  <button ng-if="option.choices.length > 5" class="btn btn-default"
+                <div class="container-x dropdown-choices">
+                  <button ng-if="option.choices.length > 5" class="btn btn-default text-p"
                           data-multiple="1"
                           ng-model="selectedChoices"
                           ng-options="choice.name as choice.name for choice in option.choices"
@@ -421,7 +421,7 @@
       <div ng-if="panels.activePanel === $index && !($index === 1 && activeWorkSamples === 'imported')" class="wrapper-btn-done flex-content-end">
         <button class="button btn btn-blue" ng-click="closePanel(panel)">
           <span ng-if="panels.activePanel === 0">I got it</span>
-          <span ng-if="panels.activePanel > 0" ng-disabled="uploadInProgress">Done</span>
+          <span ng-if="panels.activePanel > 0" ng-disabled="uploadInProgress">Save</span>
         </button>
       </div>
       <div ng-if="$index === 1 && activeWorkSamples === 'imported'" class="wrapper-btn-done flex-content-end">

@@ -1016,15 +1016,16 @@
   .clickable;
   flex: 1;
   color: white;
-  padding-left: 15px;
-  padding-right: 15px;
   margin-bottom: 20px;
   margin-left: 15px;
   border-radius: 4px;
   padding: 0;
-  max-width: 232px;
+  max-width: 223px;
   width: 100%;
-  min-height: 223px;
+  min-height: 239px;
+  &:hover {
+    background: @blueDefault;
+  }
 }
 
 .wrapper-showcase-action {
@@ -1078,6 +1079,33 @@
   .icon-camera {
     width: calc(100% / 3);
     height: calc(100% / 3);
+  }
+}
+
+.wrapper-avatar {
+  .round;
+  width: 110px;
+  height: 110px;
+  position: absolute;
+  margin-left: -55px;
+
+  &:hover {
+    .overlay {
+      visibility: visible;
+    }
+  }
+
+  img {
+    .round;
+  }
+
+  .overlay {
+    .flex-content-centered;
+    margin-top: -110px;
+    position: absolute;
+    height: 110px;
+    width: 110px;
+    visibility: hidden;
   }
 }
 

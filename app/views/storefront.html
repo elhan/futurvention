@@ -4,18 +4,21 @@
     <fv-timeline-h active-step="activeStep" current-user="currentUser"></fv-timeline-h>
     <!-- Profile picture -->
     <div class="wrapper-pic">
-      <div class="wrapper-pic-inner" ng-class="{'clickable': isCurrentUser}" ng-click="showImageCropModal()">
-        <div class="image-profile profile-picture-m" fv-bg-image={{avatar}}>
-          <div ng-if="isCurrentUser" class="flex-content-centered">
-            <svg class="icon icon-lightGrey icon-camera">
-              <use xlink:href="#camera"></use>
-            </svg>
+      <!-- Modal shown only if user === currentUser -->
+      <div class="wrapper-pic-inner" ng-click="showImageCropModal()">
+        <div ng-if="avatar"
+             class="image-profile profile-picture-m flex-content-centered flex-items-centered"
+             ng-class="{'clickable': isCurrentUser}"
+             fv-bg-image={{avatar}}>
+          <div class="wrapper-camera">
+            <img class="img-responsive" src="images/svg/camera-white.svg">
           </div>
         </div>
-        <div class="flex-content-centered nopic" ng-if="!profile.image && isCurrentUser">
-          <svg class="icon icon-lightGrey icon-camera">
-            <use xlink:href="#camera"></use>
-          </svg>
+        <div class="flex-content-centered nopic" ng-if="!avatar && isCurrentUser">
+          <img class="img-responsive" src="images/svg/camera-lightGrey.svg">
+        </div>
+        <div class="flex-content-centered nopic" ng-if="!avatar && !isCurrentUser">
+          <img class="img-responsive" src="images/svg/avatar_placeholder.svg.svg">
         </div>
       </div>
       <!-- Profile details -->
@@ -38,20 +41,22 @@
       <!-- Anchor navigation tabs -->
       <div class="fv-tabs" fv-tabs>
         <div class="placeholder"></div>
-        <div class="fv-tab active" fv-pane>SERVICES</div>
-        <a class="fv-tab" href="#portfolio-header" offset="80" du-smooth-scroll fv-pane>PORTFOLIO</a>
-        <a class="fv-tab" href="#reviews-header" offset="80" du-smooth-scroll fv-pane>REVIEWS</a>
-        <a class="fv-tab" href="#bio-header" offset="80" du-smooth-scroll fv-pane>ABOUT ME</a>
+        <div class="fv-tab active">SERVICES</div>
+        <a class="fv-tab" href="#portfolio-header">PORTFOLIO</a>
+        <a class="fv-tab" href="#reviews-header">REVIEWS</a>
+        <a class="fv-tab" href="#bio-header">ABOUT ME</a>
         <div class="wrapper-link text-t">
+<!--
           <a ng-href="http://{{ profile.personalUrl }}" target="_blank">
             <svg class="icon icon-blue text-p">
               <use xlink:href="#url"></use>
             </svg>
             <span>{{ profile.personalUrl }}</span>
           </a>
+-->
           <!-- Share btn -->
           <div class="wrapper-share-btn" ng-if="isCurrentUser">
-            <button class="button btn btn-blue" ng-click="shareProfile()">Share my profile</button>
+            <button class="button btn btn-blue" ng-click="editProfile()">Edit profile</button>
           </div>
           <!-- Contact btn -->
           <div class="wrapper-contact-btn" ng-if="!isCurrentUser">
@@ -62,15 +67,21 @@
     </div>
     <!-- Offered Services Section -->
     <div ng-if="offers.length > 0">
-      <div class="container-x flex-items-end">
-        <div id="portfolio-header" class="text-h3 flex-content-centered flex-1">Services Offered</div>
-        <div class="text-blue text-p clickable" ng-if="isCurrentUser" ng-click="editProfileSection('service_selection')">
-          <svg class="icon icon-dark text-i icon-blue">
-            <use xlink:href="#edit"></use>
-          </svg>
-          Edit
-        </div>
+      <!-- User === currentUser -->
+      <div class="container-x flex-content-spread flex-items-end" ng-if="isCurrentUser">
+        <!-- Placeholder -->
+        <div class="title-placeholder"></div>
+        <span class="anchor">Services Offered</span>
+        <a class="wrapper-edit" ng-click="editProfileSection('service_selection')">
+          <img src="images/svg/edit-blue.svg">
+          <span>Edit</span>
+        </a>
       </div>
+      <!-- User !== currentUser -->
+      <div class="container-x flex-content-centered" ng-if="!isCurrentUser">
+        <span class="anchor">Services Offered</span>
+      </div>
+      <!-- Thumnail grid: offered services -->
       <div class="thumbnail-grid flex-wrap">
         <div ng-repeat="offer in offers" class="col-sm-6 col-md-3 wrapper-thumb">
           <div class="thumbnail">
@@ -79,7 +90,7 @@
               <img ng-if="offer.Service.ThumbnailFile.Url" ng-src="{{offer.Service.ThumbnailFile.Url}}" class="img-responsive">
             </div>
             <a class="thumb-overlay" ng-href="#/offers/{{offer.ID}}">
-              <span class="text-white text-h3">View in detail</span>
+              <span class="text-white text-h3">View details</span>
             </a>
 <!--
             <div class="thumb-overlay" ng-if="isCurrentUser">
@@ -117,11 +128,11 @@
         <div class="col-md-2 divider"></div>
       </div>
       <div class="container-x">
-        <div id="portfolio-header" class="text-h3 flex-content-centered flex-1">Portfolio</div>
+        <a id="portfolio-header" name="portfolio-header" class="anchor">Portfolio</a>
       </div>
-      <div class="portfolio-items flex-wrap">
+      <div class="portfolio-items flex-wrap flex-content-spread">
         <div class="showcase" ng-repeat="item in showcaseItems" ng-click="showPortfolioViewerModal($index)">
-          <div class="showcase-item thumbnail" fv-bg-image={{item.link}} fv-data={{item.link}} ng-class="{'bg-img-small-centered': !item.hasOwnThumbnail}"></div>
+          <img ng-src="{{item.link}}" class="img-responsive" ng-class="{'file-placeholder': !item.hasOwnThumbnail}">
           <div class="text-i caption">{{ item.name }}</div>
         </div>
       </div>
@@ -133,14 +144,14 @@
         <div class="text-p text-grey">page to do so.</div>
       </div>
     </div>
-    <!-- Reviews -->
+    <!-- Reviews Section -->
     <div ng-if="reviews.length > 0">
       <!-- Divider -->
       <div class="container-x flex-content-centered">
         <div class="col-md-2 divider"></div>
       </div>
       <div class="container-x">
-        <div id="reviews-header" class="text-h3 flex-content-centered flex-1">Reviews</div>
+        <a id="reviews-header" id="reviews-header" class="anchor">Reviews</a>
       </div>
       <div class="review" ng-repeat="review in reviews" ng-class="{'last': $index === reviews.length - 1}">
         <div class="content container-x">
@@ -179,19 +190,21 @@
       <div class="container-x flex-content-centered">
         <div class="col-md-2 divider"></div>
       </div>
-      <div class="container-x flex-content-centered">
-        <div class="container-x flex-items-end">
-          <div id="bio-header" class="text-h3" ng-if="isCurrentUser">About me</div>
-          <div id="bio-header" class="text-h3" ng-if="!isCurrentUser">
-            <span class="space-after">About</span>
-            <span>{{ user.FirstName }}</span>
-          </div>
-          <div class="text-blue text-p clickable" ng-click="editProfileSection('info')" ng-if="isCurrentUser">
-            <svg class="icon icon-light">
-              <use xlink:href="#edit"></use>
-            </svg>
-            Edit
-          </div>
+      <!-- User === currentUser -->
+      <div class="container-x flex-content-spread flex-items-end" ng-if="isCurrentUser">
+        <!-- Placeholder -->
+        <div class="title-placeholder"></div>
+        <a id="about-header" name="about-header" class="anchor">About me</a>
+        <a class="wrapper-edit" ng-click="editProfileSection('info')">
+          <img src="images/svg/edit-blue.svg">
+          <span>Edit</span>
+        </a>
+      </div>
+      <!-- User !== currentUser -->
+      <div class="container-x flex-content-centered flex-items-end" ng-if="!isCurrentUser">
+        <div class="text-h3">
+          <a id="about-header" name="about-header" class="anchor">About</a>
+          <span>{{ user.FirstName }}</span>
         </div>
       </div>
       <div class="bio">{{ profile.Description.Literals[0].Text }}</div>

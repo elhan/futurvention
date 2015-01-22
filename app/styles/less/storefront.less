@@ -58,8 +58,26 @@
   }
 
   .image-profile {
+    .flex-content-centered;
     width: 110px;
     height: 110px;
+
+    &.clickable {
+      &:hover {
+        .wrapper-camera {
+          visibility: visible;
+        }
+      }
+    }
+
+    .wrapper-camera {
+      .flex-content-centered;
+      .round;
+      background: rgba(0, 0, 0, .3);
+      visibility: hidden;
+      width: 46px;
+      padding: 10px;
+    }
   }
 
   .wrapper-details {
@@ -89,15 +107,32 @@
   .wrapper-share-btn, .wrapper-contact-btn {
     position: absolute;
     top: 270px;
-    margin-left: -170px;
+    margin-left: -158px;
     .btn {
       font-size: 12px;
       padding: 13px 33.5px;
+      width: 158px;
     }
   }
 
   .wrapper-contact-btn {
     margin-left: -117px;
+  }
+
+  .wrapper-edit {
+    .container-x;
+    .flex-items-centered;
+    .clickable;
+    span {
+      .text-blue;
+      .text-p;
+      line-height: 14px;
+    }
+    img {
+      margin-right: 5px;
+      width: 12px;
+      height: 12px;
+    }
   }
 
   .portfolio-items {
@@ -129,14 +164,9 @@
   .bio {
     .text-p;
     text-align: justify;
-    padding-top: 20px;
+    padding-top: 25px;
     max-width: 800px;
     margin: 0 auto;
-  }
-
-  #bio-header {
-    margin-right: 20px;
-    line-height: 20px;
   }
 
   .portfolio-footer {
@@ -144,6 +174,39 @@
     .flex-content-centered;
     margin-bottom: 22px;
     margin-top: 15px;
+  }
+
+  .title-placeholder {
+    width: 42px;
+  }
+
+  .showcase {
+    width: 180px;
+    height: 180px;
+    img {
+      width: 180px;
+      height: 135px;
+      &.file-placeholder {
+        width: calc(100%/3);
+        margin: auto;
+      }
+    }
+  }
+
+  .anchor {
+    .text-h2;
+    .flex-content-centered;
+    .flex-1;
+    font-family: OpenSansRegular;
+    font-size: calc(22 / 48em);
+    color: @greyDarker;
+    &:hover {
+      color: @greyDarker;
+    }
+  }
+
+  .thumbnail-grid {
+    margin-top: 25px;
   }
 }
 

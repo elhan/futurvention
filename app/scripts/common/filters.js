@@ -162,22 +162,22 @@
 
             switch (thumbnailType) {
             case 'Excel':
-                thumbnailLink = '/images/file-excel.png';
+                thumbnailLink = '/images/svg/file-excel.svg';
                 break;
             case 'Word':
-                thumbnailLink = '/images/file-doc.png';
+                thumbnailLink = '/images/svg/file-doc.svg';
                 break;
             case 'Txt':
-                thumbnailLink = '/images/file-rtf.png';
+                thumbnailLink = '/images/svg/file-rtf.svg';
                 break;
             case 'PDF':
-                thumbnailLink = '/images/file-pdf.png';
+                thumbnailLink = '/images/svg/file-pdf.svg';
                 break;
             case 'PowerPoint':
-                thumbnailLink = '/images/file-ppt.png';
+                thumbnailLink = '/images/svg/file-ppt.svg';
                 break;
             default:
-                thumbnailLink = '/images/file-default.png';
+                thumbnailLink = '/images/svg/file-default.svg';
                 break;
             }
 
