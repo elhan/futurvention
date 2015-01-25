@@ -73,6 +73,9 @@
             templateUrl: 'views/payments.html',
             controller: 'MyPaymentsController'
         })
+        .when('/payments/withdraw', {
+            templateUrl: 'views/withdraw.html'
+        })
         .when('/:moniker', {
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',
