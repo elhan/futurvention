@@ -69,6 +69,10 @@
         .when('/myOrders', {
             templateUrl: 'views/myOrders.html'
         })
+        .when('/payments', {
+            templateUrl: 'views/payments.html',
+            controller: 'MyPaymentsController'
+        })
         .when('/:moniker', {
             templateUrl: 'views/storefront.html',
             controller: 'StorefrontCtrl',

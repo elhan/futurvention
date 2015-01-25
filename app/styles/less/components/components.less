@@ -442,7 +442,6 @@
 // copy bootstrap .dropdown-menu > li > a
 .dropdown-menu > li > a {
   display: block;
-  padding: 3px 20px;
   clear: both;
   font-weight: normal;
   line-height: 1.42857143;
@@ -498,6 +497,9 @@
       padding-top: 7px;
       padding-bottom: 7px;
     }
+  }
+  li:last-child {
+    border: 0;
   }
 }
 
@@ -595,6 +597,44 @@
   background-color: rgba(245, 245, 245, 1); // default panel-heading color
   margin: 10px;
   padding: 0 10px;
+}
+
+.payments-panel {
+  .container-y;
+  .flex-items-centered;
+  .flex-content-spread;
+  .text-lightGrey;
+  font-family: OpenSansRegular;
+  font-weight: 700;
+  flex: 1;
+  max-width: 310px;
+  height: 210px;
+  border: 1px solid @lightGrey;
+  padding: 26px 19px 19px;
+
+  .button-row {
+    .container-x;
+    .fullscreen-x;
+    .flex-content-spread;
+    .btn {
+      .flex-content-centered;
+      .flex-1;
+    }
+    .placeholder {
+      width: 15px;
+    }
+  }
+
+  &.active {
+    color: @greyDarker;
+    border: 1px solid @blueDefault;
+    .btn {
+      color: @blueDefault;
+      &:hover {
+        color: white;
+      }
+    }
+  }
 }
 
 // Reviews

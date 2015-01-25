@@ -1,0 +1,108 @@
+<div class="payments">
+  <!-- Page content -->
+  <div class="container-page">
+    <div class="container-y container-page-inner">
+      <!-- Page title -->
+      <div class="main-title">Payments</div>
+      <div class="container-x flex-content-spread">
+        <!-- Panel: Wallet (set class 'active' if this panel is active. Active by default)-->
+        <div class="payments-panel wrapper-panels" ng-class="{'active': activePanel === 0}">
+          <div class="container-y flex-items-centered">
+            <div class="text-m padding">My Digiserved Wallet</div>
+            <div class="container-y flex-items-centered space-top">
+              <div class="text-h1 no-margin">$320</div>
+              <div class="text-i">
+                <span>$280</span>
+                <span>available</span>
+              </div>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-s btn-white" ng-click="activePanel=0">View</button>
+            <div class="placeholder"></div>
+            <a href="#/withdraw" class="btn btn-s btn-white">Withdraw</a>
+          </div>
+        </div>
+        <!-- Panel: Buyer Orders -->
+        <div class="payments-panel wrapper-panels" ng-class="{'active': activePanel === 1}">
+          <div class="container-y flex-items-centered">
+            <div class="text-m">Open Buyer Orders</div>
+            <div class="container-y flex-items-centered space-top">
+              <div class="text-h1 no-margin">$230</div>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-s btn-white" ng-click="activePanel=1">View</button>
+          </div>
+        </div>
+        <!-- Panel: Seller Orders -->
+        <div class="payments-panel wrapper-panels" ng-class="{'active': activePanel === 2}">
+          <div class="container-y flex-items-centered">
+            <div class="text-m">Open Seller Orders</div>
+            <div class="container-y flex-items-centered space-top">
+              <div class="text-h1 no-margin">$40</div>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-s btn-white" ng-click="activePanel=2">View</button>
+          </div>
+        </div>
+      </div>
+      <!-- Transactions dropdown: if active panel === Wallet -->
+      <div class="container-x flex-content-spread" ng-if="activePanel === 0">
+        <div class="container-x">
+          <div class="content-title space-right container-y flex-content-centered label-dropdown-group">
+            <span>SHOW</span>
+          </div>
+          <div class="dropdown space-right-2x space-left-05">
+            <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="true">
+              All<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu text-i" role="menu">
+              <li><a tabindex="-1" href="#"><span>All</span><span class="transaction-count">10</span></a></li>
+              <li><a tabindex="-1" href="#"><span>Purchases</span><span class="transaction-count">20</span></a></li>
+              <li><a tabindex="-1" href="#"><span>Withdrawals</span><span class="transaction-count">5</span></a></li>
+              <li><a tabindex="-1" href="#"><span>Earnings</span><span class="transaction-count">15</span></a></li>
+              <li><a tabindex="-1" href="#"><span>Refunds</span><span class="transaction-count">30</span></a></li>
+            </ul>
+          </div>
+          <div class="text-t space-right container-y flex-content-centered label-dropdown-group">
+            <span>TRANSACTIONS</span>
+          </div>
+        </div>
+        <div class="flex-1"></div>
+      </div>
+      <!-- Transactions dropdown: if active panel !== Wallet -->
+      <div class="content-title" ng-if="activePanel > 0">
+        <span>ORDERS</span>
+      </div>
+      <!-- Transactions table: if active panel === Wallet -->
+      <div ng-include="'views/partials/transactionsTable.html'" ng-if="activePanel === 0"></div>
+      <!-- Transactions table: if active panel !== Wallet -->
+      <div ng-include="'views/partials/myOrdersTable.html'" ng-if="activePanel > 0"></div>
+      <!-- Pagination: if active panel === Wallet -->
+      <div class="container-x fullscreen-x flex-content-centered" ng-if="activePanel === 0">
+        <nav>
+          <ul class="pagination">
+            <li>
+              <a aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li><a href=""><span>1</span></a></li>
+            <li><a href=""><span>2</span></a></li>
+            <li><a href=""><span>3</span></a></li>
+            <li><a href=""><span>4</span></a></li>
+            <li class="active"><a href=""><span>5</span></a></li>
+            <li>
+              <a aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <div ng-include="'views/partials/footer.html'"></div>
+</div>
