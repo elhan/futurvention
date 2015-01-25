@@ -39,15 +39,30 @@
 }
 
 .timeline-label-container {
+  .text-t;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  a:nth-child(1) {
+    margin-left: 2px;
+  }
+  a:nth-child(2) {
+    margin-right: -5px;
+  }
+  a:nth-child(3) {
+    margin-right: 14px;
+  }
+  a:nth-child(4) {
+    margin-right: 15px;
+  }
 }
 
 .timeline-label {
   display: flex;
   justify-content: center;
   &.active {
-    .text-black;
+    span {
+      .text-black;
+    }
   }
 }

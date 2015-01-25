@@ -1,34 +1,42 @@
 <div class="timeline-container">
   <!--  The actual timeline and nodes-->
   <div class="timeline-horizontal">
-    <span class="circle-timeline clickable" ng-class="{'active': activeStep === 'import'}" ng-click="navigateTo(0)"></span>
+    <a class="circle-timeline clickable" ng-class="{'active': activeStep === 'import'}" ng-click="navigateTo(0)"></a>
     <div class="divider-h">
       <div class="line"></div>
     </div>
-    <span class="circle-timeline clickable" ng-class="{'active': activeStep === 'info'}" ng-click="navigateTo(1)"></span>
+    <a class="circle-timeline clickable" ng-class="{'active': activeStep === 'info'}" ng-click="navigateTo(1)"></a>
     <div class="divider-h">
       <div class="line"></div>
     </div>
-    <span class="circle-timeline"
+    <a class="circle-timeline"
           ng-class="{'active': activeStep === 'service_selection' || activeStep === 'offer_config', 'clickable': currentUser && currentUser.Profile && currentUser.Profile.Moniker}"
-          ng-click="navigateTo(2)"></span>
+          ng-click="navigateTo(2)"></a>
     <div class="divider-h">
       <div class="line"></div>
     </div>
-    <span ng-if="currentUser.Profile && currentUser.Profile.Moniker" class="circle-timeline clickable" ng-class="{'active': activeStep === 'storefront'}" ng-click="navigateTo(3)"></span>
-    <span ng-if="!currentUser.Profile || !currentUser.Profile.Moniker" class="circle-timeline" ng-class="{'active': activeStep === 'storefront'}"></span>
+    <a ng-if="currentUser.Profile && currentUser.Profile.Moniker" class="circle-timeline clickable" ng-class="{'active': activeStep === 'storefront'}" ng-click="navigateTo(3)"></a>
+    <a ng-if="!currentUser.Profile || !currentUser.Profile.Moniker" class="circle-timeline" ng-class="{'active': activeStep === 'storefront'}"></a>
   </div>
   <!--  Node labels-->
   <div class="timeline-label-container">
-    <span class="timeline-label text-t clickable" ng-class="{'active': activeStep === 'import'}" ng-click="navigateTo(0)">Import Profiles</span>
-    <span class="timeline-label text-t clickable" ng-class="{'active': activeStep === 'info'}" ng-click="navigateTo(1)">Complete Profile</span>
-    <span class="timeline-label text-t"
-          ng-class="{'active': activeStep === 'service_selection' || activeStep === 'offer_config', 'clickable': currentUser && currentUser.Profile && currentUser.Profile.Moniker}"
-          ng-click="navigateTo(2)">
-      Open Storefront
-    </span>
-    <a ng-if="currentUser.Profile && currentUser.Profile.Moniker" ng-href="#{{currentUser.Profile && currentUser.Profile.Moniker}}" target="">
-      <span class="timeline-label text-t text-lightGrey clickable" ng-class="{'active': activeStep === 'storefront'}">Completed</span>
+    <a class="timeline-label clickable" ng-class="{'active': activeStep === 'import'}" ng-click="navigateTo(0)">
+      <span class="text-lightGrey">Import Profiles</span>
+    </a>
+    <a class="timeline-label clickable" ng-class="{'active': activeStep === 'info'}" ng-click="navigateTo(1)">
+      <span class="text-lightGrey">Complete Profile</span>
+    </a>
+    <a ng-click="navigateTo(2)"
+       class="timeline-label"
+       ng-class="{'active': activeStep === 'service_selection' || activeStep === 'offer_config', 'clickable': currentUser && currentUser.Profile && currentUser.Profile.Moniker}">
+      <span class="text-lightGrey">Open Storefront</span>
+    </a>
+    <a ng-if="currentUser.Profile && currentUser.Profile.Moniker"
+       class="timeline-label clickable"
+       ng-class="{'active': activeStep === 'storefront'}"
+       ng-href="#{{currentUser.Profile && currentUser.Profile.Moniker}}"
+       target="">
+      <span class="text-lightGrey">Completed</span>
     </a>
     <span ng-if="!currentUser.Profile || !currentUser.Profile.Moniker" class="timeline-label text-t text-lightGrey" ng-class="{'active': activeStep === 'storefront'}">Completed</span>
   </div>

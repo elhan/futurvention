@@ -1,6 +1,6 @@
 <div class="container-y apply-content" ng-controller="ApplyImportCtrl">
   <div class="fv-page-header">Import your profile info, portfolio, and reviews from other sites</div>
-  <div class="text-centered text-h3 text-silver">
+  <div class="text-centered text-h3 text-silver text-light">
     Compile profile information from multiple sites and showcase your expertise with pushbutton ease
   </div>
   <div class="content-center flex-content-centered">
@@ -15,7 +15,7 @@
         </div>
         <div class="icon-plus">+</div>
       </div>
-      <div class="label-import-link text-lightGrey">{{importer.Provider}}</div>
+      <div class="label-import-link text-lightGrey">{{importer.Provider | capitalize}}</div>
     </div>
   </div>
   <div ng-show="selectedImporters.length > 0" >
@@ -60,7 +60,7 @@
             <div class="container-x flex-content-centered">
               <div class="flex-1"></div>
               <div class="wrapper-continue-1">
-                <button type="submit" class="btn btn-continue"
+                <button type="submit" class="btn btn-big btn-continue no-padding"
                         ng-disabled="providersForm.$invalid"
                         ng-click="import()">
                   <span ng-show="ignoreInputs() === false">Import</span>
@@ -68,6 +68,9 @@
                 </button>
               </div>
               <div class="flex-1"></div>
+            </div>
+            <div class="text-grey text-i text-centered space-top-2x" ng-show="ignoreInputs() === false">
+              By clicking import I represent that I am the owner of the third-party profiles entered and I give DigiServed my consent to collect on my behalf my profile, portfolio and reviews information.
             </div>
           </div>
         </form>
@@ -77,7 +80,8 @@
   <!--Apply page footer - skip-->
   <div ng-show="selectedImporters.length === 0" class="apply-footer space-top-2x">
     <button class="btn btn-link link-apply-skip text-p" ng-click="goToStep(1)">
-      <span>Nothing to import? Skip>></span>
+      <span>Nothing to import? Skip</span>
+      <span aria-hidden="true">&raquo;</span>
     </button>
   </div>
 </div>
