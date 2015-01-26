@@ -6,7 +6,7 @@
       <div class="main-title">Payments</div>
       <div class="container-x flex-content-spread">
         <!-- Panel: Wallet (set class 'active' if this panel is active. Active by default)-->
-        <div class="payments-panel wrapper-panels" ng-class="{'active': activePanel === 0}">
+        <div class="payments-panel wrapper-panels clickable" ng-click="activePanel=0" ng-class="{'active': activePanel === 0}">
           <div class="container-y flex-items-centered">
             <div class="text-m padding">My Digiserved Wallet</div>
             <div class="container-y flex-items-centered space-top">
@@ -24,7 +24,7 @@
           </div>
         </div>
         <!-- Panel: Buyer Orders -->
-        <div class="payments-panel wrapper-panels" ng-class="{'active': activePanel === 1}">
+        <div class="payments-panel wrapper-panels clickable" ng-click="activePanel=1" ng-class="{'active': activePanel === 1}">
           <div class="container-y flex-items-centered">
             <div class="text-m">Open Buyer Orders</div>
             <div class="container-y flex-items-centered space-top">
@@ -36,7 +36,7 @@
           </div>
         </div>
         <!-- Panel: Seller Orders -->
-        <div class="payments-panel wrapper-panels" ng-class="{'active': activePanel === 2}">
+        <div class="payments-panel wrapper-panels clickable" ng-click="activePanel=2" ng-class="{'active': activePanel === 2}">
           <div class="container-y flex-items-centered">
             <div class="text-m">Open Seller Orders</div>
             <div class="container-y flex-items-centered space-top">
