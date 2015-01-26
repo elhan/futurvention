@@ -1,5 +1,5 @@
 <div class="container-y">
-<div class="register box col-md-6 col-md-offset-3">
+<div class="register">
   <div class="header-wrap">
     <div class="text-h1">APPLY TO JOIN OUR EXCLUSIVE COMMUNITY</div>
     <div class="text-h1">OF HIGH-END FREELANCERS</div>
@@ -24,7 +24,7 @@
       <label class="label-title text-grey text-p text-normal">Sign up with an email account</label>
       <!-- email input -->
       <div class="form-group" ng-class="{'has-error': registrationForm.inputEmail.$error.email || registrationForm.inputEmail.$error.emailPattern && registrationForm.inputEmail.$viewValue.length > 0}">
-        <input type="email" name="inputEmail" class="form-control" ng-model="newUser.email"
+        <input type="email" name="inputEmail" class="form-control input-l" ng-model="newUser.email"
                ui-validate="{emailPattern: 'isEmail($value)'}"
                ng-change="clearAuthError()"
                placeholder="Email"
@@ -36,7 +36,7 @@
       </div>
       <!-- password input -->
       <div class="form-group" ng-class="{'has-error': !registrationForm.inputPassword.$valid && registrationForm.inputPassword.$viewValue.length > 0}">
-        <input type="password" name="inputPassword" class="form-control"
+        <input type="password" name="inputPassword" class="form-control input-l"
                ng-model="newUser.password"
                ng-minlength="6"
                ui-validate="{digits: 'hasDigits($value)', lowercase: 'hasLowercase($value)', uppercase: 'hasUppercase($value)', alphanumeric: 'hasNonAlphanumeric($value)'}"
@@ -60,11 +60,11 @@
       </div>
       <!-- first name input-->
       <div class="form-group">
-        <input type="text" name="inputFirstName" class="form-control" ng-model="newUser.firstName" placeholder="First name" ng-required="true">
+        <input type="text" name="inputFirstName" class="form-control input-l" ng-model="newUser.firstName" placeholder="First name" ng-required="true">
       </div>
       <!-- last name input -->
       <div class="form-group">
-        <input type="text" name="inputLastName" class="form-control" ng-model="newUser.lastName" placeholder="Last name" ng-required="true">
+        <input type="text" name="inputLastName" class="form-control input-l" ng-model="newUser.lastName" placeholder="Last name" ng-required="true">
       </div>
       <div class="flex">
         <button type="submit" class="btn btn-blue btn-normal flex-1 flex-content-centered" ng-disabled="registrationForm.$invalid || authEror || registrationInProgress">
