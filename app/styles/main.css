@@ -114,7 +114,7 @@
 @media screen and (max-width: 1600px) {
   .fv-page-header {
     font-size: calc(0.5em);
-    line-height: calc(1.08333333em);
+    line-height: calc(1.08333333);
   }
 }
 .transparent {
@@ -164,51 +164,51 @@ html {
 }
 .text-h2 {
   font-size: calc(0.5em);
-  line-height: calc(1.08333333em);
+  line-height: calc(1.08333333);
 }
 .text-h3 {
   font-size: calc(0.375em);
-  line-height: calc(1.44444444em);
+  line-height: calc(1.44444444);
   font-family: OpenSansRegular;
 }
 .text-m {
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
 }
 .text-m-os {
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
   font-family: OpenSansRegular;
 }
 .text-p {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
 }
 .text-p-bold {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansBold;
 }
 .text-t {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
 }
 .text-t-bold {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   font-family: OpenSansBold;
 }
 .text-i {
   font-size: calc(0.25em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
 }
 .text-min {
   font-size: calc(0.20833333em);
-  line-height: calc(1.23076923em);
+  line-height: calc(1.23076923);
   font-family: OpenSansRegular;
 }
 .text-black {
@@ -522,7 +522,7 @@ html {
 }
 .navbar-main .secondary .navbar-link {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   color: black;
   margin-right: 40px;
@@ -695,7 +695,7 @@ html {
 .pagination li:first-child a,
 .pagination li:last-child a {
   font-size: calc(0.5em);
-  line-height: calc(1.08333333em);
+  line-height: calc(1.08333333);
   color: #cccccc;
   border: 0;
 }
@@ -905,7 +905,7 @@ html {
 .label-import-link {
   text-align: center;
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
   font-family: OpenSansRegular;
   padding: 12px 0;
 }
@@ -914,7 +914,7 @@ html {
 }
 .label-s {
   font-size: calc(0.25em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   margin: 5px 0 -6px;
   display: flex;
@@ -950,7 +950,7 @@ html {
 }
 .dropdown-menu {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   max-height: 200px;
   overflow-x: hidden;
@@ -1003,7 +1003,7 @@ html {
 .table-l thead tr {
   background-color: #f2f2f2;
   font-size: calc(0.25em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   font-family: OpenSansLight;
 }
@@ -1048,7 +1048,7 @@ html {
 }
 .panel-heading .icon-check {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   font-family: FontAwesome;
 }
@@ -1134,7 +1134,7 @@ html {
 }
 .review .review-text {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   padding: 5px 55px 20px 0;
 }
@@ -1142,7 +1142,7 @@ html {
   justify-content: center;
   align-items: center;
   font-size: calc(0.5em);
-  line-height: calc(1.08333333em);
+  line-height: calc(1.08333333);
   color: #d5d5d5;
   border: 1px solid #d5d5d5;
   -webkit-box-shadow: 0 0 2px #d5d5d5;
@@ -1185,7 +1185,7 @@ html {
 .fv-tab {
   color: #808080;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   display: flex;
   justify-content: center;
@@ -1269,12 +1269,12 @@ html {
 }
 .workflow-message input[type=submit] {
   font-size: calc(0.25em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
 }
 .workflow-message .message-title {
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
   margin-bottom: 20px !important;
   font-family: OpenSansBold;
 }
@@ -1293,7 +1293,7 @@ html {
 }
 .workflow-message .subtitle {
   font-size: calc(0.20833333em);
-  line-height: calc(1.23076923em);
+  line-height: calc(1.23076923);
   font-family: OpenSansRegular;
   color: #808080;
   margin-top: 2px;
@@ -1398,7 +1398,7 @@ html {
   display: flex;
   flex: 1;
   font-size: calc(0.5em);
-  line-height: calc(1.08333333em);
+  line-height: calc(1.08333333);
   justify-content: center;
   align-items: center;
   height: 100%;
@@ -1628,7 +1628,7 @@ a:hover {
 .nav-link {
   color: white !important;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
 }
 .nav-link:hover {
@@ -1643,7 +1643,7 @@ a:hover {
 .btn-header-dropdown {
   color: white !important;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   background: transparent;
 }
@@ -1654,7 +1654,7 @@ a:hover {
   height: 55px;
   border-radius: 4px;
   padding: 10px 30px;
-  font-size: calc(0.3125em);
+  font-size: calc(0.3125);
   font-family: GothamMedium;
 }
 .btn-normal {
@@ -1802,14 +1802,14 @@ a:hover {
   height: 55px;
   border-radius: 4px;
   padding: 10px 30px;
-  font-size: calc(0.3125em);
+  font-size: calc(0.3125);
   font-family: GothamMedium;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
 }
 .btn-continue:hover {
   color: white !important;
@@ -1996,7 +1996,7 @@ a:hover {
 .fv-modal-header .header-message {
   text-align: center;
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
   font-family: OpenSansRegular;
   color: #808080;
   margin-top: 10px;
@@ -2047,7 +2047,7 @@ a:hover {
 }
 .modal-loader button {
   font-size: calc(0.375em);
-  line-height: calc(1.44444444em);
+  line-height: calc(1.44444444);
   font-family: OpenSansRegular;
   margin-top: 20px !important;
   background-color: white;
@@ -2100,7 +2100,7 @@ a:hover {
 }
 .alert-content {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   display: flex;
   padding: 10px;
@@ -2221,7 +2221,7 @@ a:hover {
 }
 input.input-l {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   color: #424242;
   border-color: #d5d5d5;
@@ -2230,7 +2230,7 @@ input.input-l {
 input.input-s {
   height: 38px;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   color: #424242;
 }
@@ -2271,7 +2271,7 @@ input[placeholder].input-l {
 }
 input[placeholder].input-s {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
 }
 textarea {
@@ -2280,7 +2280,7 @@ textarea {
   padding: 6px 12px;
   border-style: solid;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   color: #424242;
 }
@@ -2294,7 +2294,7 @@ textarea:focus {
 }
 .navbar-search .form-control {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   height: 30px;
   border: 0;
@@ -2381,7 +2381,7 @@ textarea:focus {
 }
 .timeline-label-container {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   display: flex;
   flex-direction: row;
@@ -2473,7 +2473,7 @@ textarea:focus {
 }
 .portfolio-viewer .wrapper-item-name {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   display: flex;
   justify-content: center;
@@ -2498,7 +2498,7 @@ textarea:focus {
 }
 .portfolio-viewer .btn-viewer-nav {
   font-size: calc(0.375em);
-  line-height: calc(1.44444444em);
+  line-height: calc(1.44444444);
   font-family: OpenSansRegular;
   padding: 0px;
   border-radius: 50%;
@@ -3153,7 +3153,7 @@ display: none;
 .apply .spinner-icon {
   color: #424242;
   font-size: calc(0.375em);
-  line-height: calc(1.44444444em);
+  line-height: calc(1.44444444);
   font-family: OpenSansRegular;
   margin-left: 15px;
 }
@@ -3182,7 +3182,7 @@ display: none;
 .apply .label-l {
   flex: 1;
   font-size: calc(0.375em);
-  line-height: calc(1.44444444em);
+  line-height: calc(1.44444444);
   font-family: OpenSansRegular;
   display: flex;
   justify-content: flex-end;
@@ -3200,7 +3200,7 @@ display: none;
 }
 .apply .label-r {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   display: flex;
   justify-content: flex-start;
@@ -3233,6 +3233,11 @@ display: none;
   margin-right: 21px;
   margin-left: 6px;
   height: 48px;
+}
+.apply .location-wrapper .dropdown-toggle .caret {
+  position: absolute;
+  right: 15px;
+  top: 17px;
 }
 .apply .progress-bar {
   width: calc(66.66666667%);
@@ -3330,7 +3335,7 @@ display: none;
 }
 .apply .apply-service-config .label-import-link {
   font-size: calc(0.375em);
-  line-height: calc(1.44444444em);
+  line-height: calc(1.44444444);
   font-family: OpenSansRegular;
   display: flex;
   justify-content: center;
@@ -3344,7 +3349,7 @@ display: none;
 }
 .apply .separator-text {
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
   font-family: OpenSansLight;
   display: flex;
   justify-content: center;
@@ -3354,7 +3359,7 @@ display: none;
 }
 .apply .separator-text-l {
   font-size: calc(0.33333333em);
-  line-height: calc(1.375em);
+  line-height: calc(1.375);
   font-family: OpenSansLight;
   display: flex;
   justify-content: center;
@@ -3390,7 +3395,7 @@ display: none;
 }
 .apply .choice-name {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansBold;
   display: flex;
   flex: 1;
@@ -3517,7 +3522,7 @@ display: none;
 .storefront .wrapper-edit span {
   color: #2f40d1;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   line-height: 14px;
 }
@@ -3550,7 +3555,7 @@ display: none;
 }
 .storefront .bio {
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   text-align: justify;
   padding-top: 25px;
@@ -3582,7 +3587,7 @@ display: none;
 }
 .storefront .anchor {
   font-size: calc(0.5em);
-  line-height: calc(1.08333333em);
+  line-height: calc(1.08333333);
   justify-content: center;
   align-items: center;
   display: flex;
@@ -3649,7 +3654,7 @@ display: none;
   background-color: #2f40d1;
   color: white !important;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansRegular;
   width: 30px;
   height: 30px;
@@ -3723,7 +3728,7 @@ display: none;
 }
 .workstream .main-title {
   font-size: calc(0.5em);
-  line-height: calc(1.08333333em);
+  line-height: calc(1.08333333);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3754,7 +3759,7 @@ display: none;
 }
 .my-orders .main-title {
   font-size: calc(0.5em);
-  line-height: calc(1.08333333em);
+  line-height: calc(1.08333333);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -3762,7 +3767,7 @@ display: none;
 }
 .my-orders .dropdown .btn-default {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   flex-direction: row;
   align-items: center;
@@ -3778,6 +3783,33 @@ display: none;
 }
 .my-orders .table-l tbody tr td:last-child a:hover {
   text-decoration: underline;
+}
+.my-orders .wf-label {
+  display: inline;
+  border-radius: 4px;
+  padding: 3px 3px 3px 2px;
+  font-size: 75%;
+  font-weight: bold;
+  color: white;
+  border-radius: .25em;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+.my-orders .wf-label-new,
+.my-orders .wf-label-delivered,
+.my-orders .wf-label-completed {
+  background-color: #00bb67;
+}
+.my-orders .wf-label-in-discussion {
+  background-color: #777;
+}
+.my-orders .wf-label-delayed,
+.my-orders .wf-label-cancelled {
+  background-color: #fa556e;
+}
+.my-orders .wf-label-in-progress {
+  background-color: #efab39;
 }
 .payments .container-page {
   /* navbar space */
@@ -3795,7 +3827,7 @@ display: none;
 }
 .payments .dropdown .dropdown-toggle {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   flex-direction: row;
   align-items: center;
@@ -3839,7 +3871,7 @@ display: none;
 }
 .payments .content-title {
   font-size: calc(0.27083333em);
-  line-height: calc(1.38461538em);
+  line-height: calc(1.38461538);
   font-family: OpenSansRegular;
   font-family: OpenSansBold;
   line-height: 32px;
@@ -3863,7 +3895,7 @@ display: none;
   display: flex;
   flex: 1;
   font-size: calc(0.29166667em);
-  line-height: calc(1.42857143em);
+  line-height: calc(1.42857143);
   font-family: OpenSansBold;
   max-width: 175px;
 }

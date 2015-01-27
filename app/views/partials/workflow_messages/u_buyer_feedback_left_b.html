@@ -9,38 +9,23 @@
     <!-- Message panel -->
     <div class="flex-1 panel container-y">
       <!-- Message title -->
-      <div class="message-title">Accept order delivery</div>
+      <div class="message-title">
+        <span>Feedback to</span>
+        <span>{Seller}</span>
+      </div>
       <!-- Message body -->
       <div class="text-i space-bottom-2x">
-        <span>By approving </span>
-        <!-- Bind: sender moniker, name -->
-        <a href="/user/moniker">[Sender]</a>
-        <span>'s delivery note, you confirm the work has been successfully delivered and that your advance payment of </span>
-        <!-- Bind: price -->
-        <span>$30 </span>
-        <span>will be released to </span>
-        <!-- Bind: recipient moniker, name -->
-        <a href="/user/moniker">[Sender]</a>
+        <span>Thank you for taking the time to leave feedback for</span>
+        <span>{Seller}</span>
       </div>
-      <!-- Rate seller call to action -->
-      <div class="space-bottom">
-        <div class="text-p text-bold">Please rate your experience</div>
-        <div class="text-i space-bottom">
-          <span>
-            We are trying to make Digiserved a high-quality community for only the best Sellers. To achieve this, we rely on your honest feedback.
-            So we would really appreciate it if you could take a few seconds to rate your overall experience with
-          </span>
-          <!-- Bind: recipient moniker, name -->
-          <a href="/user/moniker"> [Sender]</a>
-        </div>
-      </div>
+
       <!-- Private feedback -->
       <div class="text-p text-bold">Private Feedback</div>
       <div class="subtitle space-bottom">
-        (this feedback will be used only by the Digiserved team and never shared with the Seller or anyone else)
+        (this feedback will be used only by the Digiserved team and won't be shared publicly with the seller)
       </div>
       <div class="text-i">
-        How likely are you to buy again or recommend this service/seller to a friend or colleague?
+        How likely are you to buy again or recommend this service or seller to a friend or coworker?
       </div>
       <div class="rating-box">
         <div class="text-i container-y flex-1">
@@ -98,10 +83,10 @@
       <div class="space-top-2x space-bottom-2x">
         <div class="text-p text-bold">Public feedback</div>
         <div class="subtitle">
-          <span>(will be shared on</span>
+          <span>(This will be shared on</span>
           <!-- Bind: seller name -->
-          <span> [Seller]</span>
-          <span>'s profile. Seller on their end cannot leave public feedback for you.)</span>
+          <span>{Seller}</span>
+          <span>'s profile. {Seller} on their end cannot leave public feedback for you.)</span>
         </div>
       </div>
       <!-- Public feedback ratings -->
@@ -165,15 +150,10 @@
         </div>
       </div>
       <!-- Comments form -->
-      <div class="flex-1 text-p-bold">Your comments</div>
-      <form class="space-top">
-        <textarea rows="5" placeholder="Help the community by sharing your experience"></textarea>
-        <!-- Action buttons -->
-        <div class="container-x flex-content-end">
-          <button class="btn btn-link space-right-x text-i">Close</button>
-          <input class="btn btn-blue btn-m text-i space-left-05" type="submit" value="Accept">
-        </div>
-      </form>
+      <div class="flex-1 text-p-bold">Comments</div>
+      <div class="highlighted bg-grey95 space-top-05 text-i italic">
+        "Thank you very much for your order once again. Please find your logo with the agreed deliverables attached. It was a pleasure working with you and I am looking forward to working again with you in the future"
+      </div>
     </div>
   </div>
   <div class="container-x flex-content-end">

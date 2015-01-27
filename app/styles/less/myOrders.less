@@ -42,4 +42,34 @@
     }
   }
 
+
+  .wf-label {
+    display: inline;
+    border-radius: 4px;
+    padding: 3px 3px 3px 2px;
+    font-size: 75%;
+    font-weight: bold;
+    color: white;
+    border-radius: .25em;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+  }
+
+  .wf-label-new, .wf-label-delivered, .wf-label-completed {
+    .label-success;
+  }
+
+  .wf-label-in-discussion {
+    background-color: #777;
+  }
+
+  .wf-label-delayed, .wf-label-cancelled {
+    .label-danger;
+  }
+
+  .wf-label-in-progress {
+    .label-warning;
+  }
+
 }
