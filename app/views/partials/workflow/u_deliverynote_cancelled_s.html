@@ -9,26 +9,25 @@
     <!-- Message panel -->
     <div class="flex-1 panel container-y">
       <!-- Message title -->
-      <div class="message-title">Requirements Received - Order Started</div>
+      <div class="message-title">Delivery Approval Request Cancelled</div>
       <!-- Message body -->
       <div class="text-i space-bottom">
-        <span>You received the required information from</span>
+        <span>You cancelled the Delivery Approval Request sent to</span>
         <span>{Buyer}</span>
-        <span>to get started on the order. Please get in touch with your buyer if you need more information. During the course of the project we encourage you to stay in touch with</span>
-        <span>{Buyer}</span>
-        <span>and provide timely updates on progress. Good communication is key to a successful project!</span>
-      </div>
-      <div class="space-top space-bottom text-p-bold">
-        <span>Your deadline for this order is</span>
+        <span>on</span>
         <span>{Mon, 07 Nov 2014}</span>
+        <span>You can submit a new Delivery Approval Request at any time.</span>
       </div>
-      <div class="text-i space-bottom">Deadlines are strictly enforced. If you miss your deadline your buyer may cancel the order and also provide a poor review.</div>
-      <div class="space-bottom text-p-bold space-top-05">Order requirements</div>
-      <div class="highlighted bg-grey95 space-top-05 text-i italic">
-        "Hi George. Our company is a marketplace for digital services and we are looking to get some sexy names that convey the meaning of amazon for services"
+      <div class="text-p-bold space-top space-bottom">Reason for Cancellation</div>
+      <div class="highlighted bg-grey95 space-top-05 space-bottom-2x text-i italic">
+        "I realized that there were some pending iterations/ fixes to make. So i am cancelling this and i will resubmit it tomorrow"
+      </div>
+      <div class="text-p-bold space-top space-bottom">Delivery Approval Request</div>
+      <div class="highlighted bg-grey95 space-top-05 space-bottom-2x text-i italic">
+        "Thank you very much for your order once again. Please find your logo with the agreed deliverables attached. It was a pleasure working with you and I am looking forward to working again with you in the future"
       </div>
       <!-- Attachments -->
-      <div class="attachments space-top-2x container-y text-i">
+      <div class="attachments container-y text-i">
         <!-- Repeat 0-5 times -->
         <!-- attachment: doc file -->
         <div class="container-x flex-content-spread flex-items-centered">
@@ -45,11 +44,9 @@
               <span>150</span>
               <span>KB</span>
             </div>
-            <div class="wrapper-remove-icon dark space-left-2x space-right-4x">
-              <svg class="icon icon-light">
-                <use xlink:href="#close"></use>
-              </svg>
-            </div>
+            <a class="space-left space-right-4x" href="" target="_blank">
+              <img class="img-responsive img-download" src="images/svg/download.svg">
+            </a>
           </div>
         </div>
         <div class="divider"></div>
@@ -68,11 +65,9 @@
               <span>150</span>
               <span>KB</span>
             </div>
-            <div class="wrapper-remove-icon dark space-left-2x space-right-4x">
-              <svg class="icon icon-light">
-                <use xlink:href="#close"></use>
-              </svg>
-            </div>
+            <a class="space-left space-right-4x" href="" target="_blank">
+              <img class="img-responsive img-download" src="images/svg/download.svg">
+            </a>
           </div>
         </div>
         <div class="divider"></div>
@@ -91,15 +86,17 @@
               <span>150</span>
               <span>KB</span>
             </div>
-            <div class="wrapper-remove-icon dark space-left-2x space-right-4x">
-              <svg class="icon icon-light">
-                <use xlink:href="#close"></use>
-              </svg>
-            </div>
+            <a class="space-left space-right-4x" href="" target="_blank">
+              <img class="img-responsive img-download" src="images/svg/download.svg">
+            </a>
           </div>
         </div>
         <!-- Conditional class: last. Add on the last visible divider -->
         <div class="divider last"></div>
+      </div>
+      <!-- Actions -->
+      <div class="container-x flex-content-end">
+        <button class="btn btn-blue btn-m text-i space-left">Request Delivery Approval</button>
       </div>
     </div>
   </div>
