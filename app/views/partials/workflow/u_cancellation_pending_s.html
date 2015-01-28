@@ -15,16 +15,14 @@
         <span>{Buyer}</span>
         <span>has requested to cancel this order and get a refund for the following reason:</span>
       </div>
-      <div class="highlighted bg-grey95 space-bottom-2x text-i italic">
-        Seller is not responsive and project deadline has passed
-      </div>
+      <div class="highlighted bg-grey95 space-bottom-2x text-i italic">{refund request reason}</div>
       <div class="text-i space-bottom">
         <span>You can either accept the cancellation, in which case the advance payment of</span>
-        <span>{$30}</span>
+        <span>{order_amount}</span>
         <span>will be refunded to</span>
         <span>{Buyer}</span>
         <span>, or you can</span>
-        <a href="">open a dispute</a>
+        <a href="#action_dispute">open a dispute</a>
         <span>. Should you choose to open a dispute, a Customer Service Representative will get in touch with you and</span>
         <span>{Buyer}</span>
         <span>to resolve the dispute for a fair outcome.</span>

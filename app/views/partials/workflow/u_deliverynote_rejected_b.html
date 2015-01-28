@@ -15,19 +15,15 @@
         <span>You rejected the Delivery Approval Request sent by</span>
         <span>{Seller}</span>
         <span>on</span>
-        <span>{Mon, 07 Nov, 2014}</span>
+        <span>{delivery_approval_request_date}</span>
         <span>. Please get in touch with</span>
         <span>{Seller}</span>
         <span>to explain why the work was not acceptable and for more instructions or information on your specific needs.</span>
       </div>
       <div class="text-p-bold space-top space-bottom">Reason for rejection</div>
-      <div class="highlighted bg-grey95 space-top-05 space-bottom-2x text-i italic">
-        "I don't like the logo. I need some extra revisions"
-      </div>
+      <div class="highlighted bg-grey95 space-top-05 space-bottom-2x text-i italic">{delivery_rejection_reason}</div>
       <div class="text-p-bold space-top space-bottom">Delivery Approval Request</div>
-      <div class="highlighted bg-grey95 space-top-05 text-i italic">
-        "Thank you very much for your order once again. Pls find your logo with the agreed deliverables attached. It was a pleasure working with you and I am looking forward to working again with you in the future"
-      </div>
+      <div class="highlighted bg-grey95 space-top-05 text-i italic">{delivery_approval_request_msg}</div>
       <!-- Attachments -->
       <div class="attachments space-top-2x container-y text-i">
         <!-- Repeat 0-5 times -->

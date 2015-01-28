@@ -13,7 +13,7 @@
       <!-- Message body -->
       <div class="text-i space-bottom">
         <span>Good job, you've finished the work! Your advance payment of </span>
-        <span>{$30}</span>
+        <span>{order_amount}</span>
         <span>currently held in escrow will be released to you when</span>
         <span>{Buyer}</span>
         <span>accepts the work and approves the request. We recommend getting in touch with</span>
@@ -21,14 +21,12 @@
         <span>if you don't hear back in two to three days.</span>
         <div class="space-top">
           <span>You can</span>
-          <a href="">[cancel]</a>
+          <a href="#action_cancel_delivery_approval_request">cancel</a>
           <span>and send a new Delivery Approval Request at any time before the project deadline.</span>
         </div>
       </div>
       <div class="text-p-bold space-top space-bottom">Delivery Approval Request</div>
-      <div class="highlighted bg-grey95 space-top-05 text-i italic">
-        "Thank you very much for your order once again. Please find your logo with the agreed deliverables attached. It was a pleasure working with you and I am looking forward to working again with you in the future"
-      </div>
+      <div class="highlighted bg-grey95 space-top-05 text-i italic">{delivery_approval_request_msg}</div>
       <!-- Attachments -->
       <div class="attachments space-top-2x container-y text-i">
         <!-- Repeat 0-5 times -->

@@ -14,52 +14,56 @@
       <div class="text-i">
         <span>{Seller}</span>
         <span>has delivered your order on
-        <span>{Mon, 07 Nov 2014}</span>
+        <span>{delivery_approval_request_date}</span>
         <span>
           , but you haven't reviewed the deliverables yet. Please take the time to review the work. If everything looks good, all you have to do is accept the work and we'll release the funds. If you're not happy with the quality of work, or if it's incomplete, you can reject the request. You will need to clearly state a reason for rejection.
         </span>
         <!-- Notice -->
         <div class="space-top-2x warning-note highlighted">
           <span class="text-bold">Important:</span>
-          <span>If you are unable to accept or reject the Delivery Approval Request within the next 3 days, the delivery will be automatically approved on</span>
-          <span>{Mon, 17 Nov 2015}</span>
+          <span>If you are unable to accept or reject the Delivery Approval Request, the delivery will be automatically approved on</span>
+          <span>{delivery_approval_action_deadline}</span>
           <span>and the funds will be released to</span>
           <span>{Seller}</span>
         </div>
       </div>
       <div class="text-p-bold space-bottom">Expected Deliverables</div>
       <!-- Order requirements -->
-      <ul class="text-t italic list-unstyled space-top-05 space-bottom-05">
-        <!-- Repeat: requirement in requirements -->
-        <li class="order-requirement">
-          <img class="icon text-p" src="images/svg/tick.svg">
-          <span>Your pre-existing high-resolution logo file in one of the following vector formats: .AI, .EPS, .PSD</span>
-        </li>
-        <li class="order-requirement">
-          <img class="icon text-p" src="images/svg/tick.svg">
-          <span>Website URL</span>
-        </li>
-        <li class="order-requirement">
-          <img class="icon text-p" src="images/svg/tick.svg">
-          <span>Examples of logo animations that you like, or any aesthetic style that you have in mind</span>
-        </li>
-        <li class="order-requirement">
-          <img class="icon text-p" src="images/svg/tick.svg">
-          <span>Any pre-existing guidelines for colour schemes in relation to your branding</span>
-        </li>
-        <li class="order-requirement">
-          <img class="icon text-p" src="images/svg/tick.svg">
-          <span>Brief description of your customers/target audience and any additional specific information regarding their buying habits</span>
-        </li>
-        <li class="order-requirement">
-          <img class="icon text-p" src="images/svg/tick.svg">
-          <span>Any ethical considerations that need to be raised</span>
-        </li>
-        <li class="order-requirement">
-          <img class="icon text-p" src="images/svg/tick.svg">
-          <span>Any aspects or elements you would like to include or avoid</span>
-        </li>
-      </ul>
+        <div class="text-t italic space-top-05 space-bottom-05">
+          {service_deliverables}
+<!--
+        <ul class="list-unstyled">
+          <li class="order-requirement">
+            <img class="icon text-p" src="images/svg/tick.svg">
+            <span>Your pre-existing high-resolution logo file in one of the following vector formats: .AI, .EPS, .PSD</span>
+          </li>
+          <li class="order-requirement">
+            <img class="icon text-p" src="images/svg/tick.svg">
+            <span>Website URL</span>
+          </li>
+          <li class="order-requirement">
+            <img class="icon text-p" src="images/svg/tick.svg">
+            <span>Examples of logo animations that you like, or any aesthetic style that you have in mind</span>
+          </li>
+          <li class="order-requirement">
+            <img class="icon text-p" src="images/svg/tick.svg">
+            <span>Any pre-existing guidelines for colour schemes in relation to your branding</span>
+          </li>
+          <li class="order-requirement">
+            <img class="icon text-p" src="images/svg/tick.svg">
+            <span>Brief description of your customers/target audience and any additional specific information regarding their buying habits</span>
+          </li>
+          <li class="order-requirement">
+            <img class="icon text-p" src="images/svg/tick.svg">
+            <span>Any ethical considerations that need to be raised</span>
+          </li>
+          <li class="order-requirement">
+            <img class="icon text-p" src="images/svg/tick.svg">
+            <span>Any aspects or elements you would like to include or avoid</span>
+          </li>
+        </ul>
+-->
+        </div>
       <div class="text-p-bold space-top">Work Delivered</div>
       <div class="highlighted bg-grey95 space-top-05 text-i italic">
         "Thank you very much for your order once again. Please find your logo with the agreed deliverables attached. It was a pleasure working with you and I am looking forward to working again with you in the future"

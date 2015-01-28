@@ -15,21 +15,17 @@
         <span>Looks like</span>
         <span>{Buyer}</span>
         <span>rejected the Delivery Approval Request you sent on</span>
-        <span> {Mon, 07 Nov, 2014}</span>
+        <span> {delivery_approval_request_date}</span>
         <span>. Please get in touch with</span>
         <span>{Buyer}</span>
         <span>as soon as possible to resolve the issue. You should closely work with them to deliver the work successfully. If you believe your work was up to mark, you can</span>
-        <a href="">open a dispute.</a>
+        <a href="#action_dispute">open a dispute.</a>
         <span>Please note opening a dispute should be a last resort measure, as it may affect your rankings and ratings.</span>
       </div>
       <div class="text-p-bold space-top space-bottom">Rejection reason</div>
-      <div class="highlighted bg-grey95 space-top-05 space-bottom-2x text-i italic">
-        "I don't like the logo. I need some extra revisions"
-      </div>
+      <div class="highlighted bg-grey95 space-top-05 space-bottom-2x text-i italic">{delivery_rejection_reason}</div>
       <div class="text-p-bold space-top space-bottom">Delivery Approval Request</div>
-      <div class="highlighted bg-grey95 space-top-05 text-i italic">
-        "Thank you very much for your order once again. Pls find your logo with the agreed deliverables attached. It was a pleasure working with you and I am looking forward to working again with you in the future"
-      </div>
+      <div class="highlighted bg-grey95 space-top-05 text-i italic">{delivery_approval_request_msg}</div>
       <!-- Attachments -->
       <div class="attachments space-top-2x container-y text-i">
         <!-- Repeat 0-5 times -->
