@@ -18,7 +18,6 @@
         var modalEmbedUrl, modalCameraTag, modalShowcaseViewer, modalPageLoading;
 
         $scope.deadlines = ['1 day', '2 days', '3 days', '4 days', '5 days', '6 days', '7 days', '8 days', '9 days', '10 days'];
-        $scope.extraDeadlines = ['1 extra day', '2 extra days', '3 extra days', '4 extra days', '5 extra days', '6 extra days', '7 extra days', '8 extra days', '9 extra days', '10 extra days'];
 
         $scope.urlsToEmbed = [{ url: '' }];
 

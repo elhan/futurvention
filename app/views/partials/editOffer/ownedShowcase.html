@@ -1,0 +1,39 @@
+<div class="showcase">
+  <div class="showcase-item thumbnail no-margin" ng-class="{'progress': item.state === 'loading', 'bg-img-small-centered': !item.hasOwnThumbnail}"
+       ng-click="displayInDetail(item.ID)"
+       fv-bg-image={{item.link}}
+       fv-data={{item.link}}
+       fv-draggable="item.state !== 'loading'"
+       fv-drop-class="drag-over"
+       fv-on-drop="rearangeShowcaseItems"
+       fv-droppable>
+    <!-- Remove button -->
+    <div class="container-x flex-content-end" ng-show="item.state !== 'loading'">
+      <div class="wrapper-showcase-action" ng-click="removeShowcase(item); $event.stopPropagation();">
+        <svg class="icon icon-light">
+          <use xlink:href="#close"></use>
+        </svg>
+      </div>
+    </div>
+    <!-- Spinner -->
+    <div class="showcase-overlay preview" ng-show="item.state === 'loading'">
+      <div class="loader"></div>
+    </div>
+    <!-- Video thumbnail play icon-->
+    <div class="container-y flex-content-centered fullscreen"
+         ng-if="item.hasOwnThumbnail && item.hasOwnProperty('file') && item.file.hasOwnProperty('FileTypeID') && item.file.FileTypeID === 5">
+      <div class="icon-play-wrapper">
+        <svg class="icon icon-light">
+          <use xlink:href="#play"></use>
+        </svg>
+      </div>
+    </div>
+  </div>
+  <!-- Caption -->
+  <div class="caption editable container-x flex-items-start flex-content-centered">
+    <svg class="icon icon-dark text-i">
+      <use xlink:href="#edit"></use>
+    </svg>
+    <textarea fv-caption rows="2" cols="25" class="text-i textarea-caption input-borderless" ng-model="item.name" ng-blur="updateShowcaseTitle(item)"></textarea>
+  </div>
+</div>

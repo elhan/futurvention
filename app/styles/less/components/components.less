@@ -16,14 +16,32 @@
 
   .dropdown-toggle {
     .text-white;
+	background: transparent;
+	border:transparent;
     font-family: OpenSansRegular;
     font-size: 13px;
+  }
+
+  .dropdown-menu {
+	  min-width: 0;
+	  padding: 5px 0;
+	  li {
+		  border: 0;
+		  a {
+			  padding: 3px 20px;
+		  }
+	  }
+	  .divider {
+		  margin: 9px 0 5px;
+	  }
   }
 
   .wrapper-avatar {
     .space-right;
     .container-y;
     .flex-content-centered;
+	width: 30px;
+	height: 30px;
     img {
       .round;
       width: 30px;
@@ -842,6 +860,7 @@
     .container-x;
     .flex-content-spread;
     .flex-items-centered;
+	.space-right;
     .icon {
       margin-right: 8px;
       &.icon-red-error {
@@ -1154,5 +1173,11 @@ a {
   &:hover {
     text-decoration: none;
     color: @blueDefault;
+	&.text-grey-dark {
+		color: @greyDark;
+	}
+  }
+  &.text-grey-dark {
+	color: @greyDark;
   }
 }

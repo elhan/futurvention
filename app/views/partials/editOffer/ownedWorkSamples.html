@@ -1,0 +1,40 @@
+<div class="container-x">
+  <div class="text-p space-after">{{ service.showcasePrompt }}</div>
+  <div class="text-p">(allowed file types: {{ service.allowedShowcaseFileTypes | displayMediaTypes}} )</div>
+</div>
+<div class="wrapper-icons">
+  <div class="container-x">
+    <!-- Switch View to Imported Work Samples-->
+    <div class="container-y flex-1 clickable" ng-if="importersAvailable" ng-click="toggleActiveWorkSamples()">
+      <div class="import-link bg-grey-dark text-white">
+        <svg class="icon icon-light nostroke icon-import">
+          <use xlink:href="#import"></use>
+        </svg>
+      </div>
+      <div class="label-import-link">Select from imported</div>
+    </div>
+    <!-- File Upload Button -->
+    <div class="container-y flex-1 clickable" ng-file-select="onFileSelect($files)" data-multiple="true">
+      <div class="import-link bg-grey-dark text-white">
+        <svg class="icon icon-light">
+          <use xlink:href="#upload"></use>
+        </svg>
+      </div>
+      <div class="label-import-link">Upload</div>
+    </div>
+    <!-- Embed Url Modal Button -->
+    <div class="container-y flex-1 clickable" ng-click="showEmbedUrlModal()">
+      <div class="import-link bg-grey-dark text-white embed">@</div>
+      <div class="label-import-link">Embed Url</div>
+    </div>
+  </div>
+</div>
+<div class="space-x text-p" ng-show="showcaseItems.length > 0">
+  Click to select samples you want to showcase for this service. You may add a title to each sample (recommended). Remember to reorder them as only the first three will be displayed as cover images in search results.
+</div>
+<!-- Showcases -->
+<div class="flex-wrap">
+  <div ng-repeat="item in showcaseItems">
+    <div ng-include="'views/partials/editOffer/ownedShowcase.html'"></div>
+  </div>
+</div>

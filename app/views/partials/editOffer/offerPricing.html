@@ -1,0 +1,124 @@
+<!-- Price Discriminators > 1 -->
+<div ng-repeat="option in priceDiscriminators">
+  <!-- Choices > 1 -->
+  <div ng-if="option.choices.length > 1" class="container-x">
+    <div class="text-p-bold space-right">Set your price and deadline for the following service configurations</div>
+    <div class="optional-header-part text-i text-grey">(leave blank if you don't want to offer a particular one)</div>
+  </div>
+  <!-- Choices === 1 -->
+  <div ng-if="option.choices.length === 1" class="text-p-bold">Set your price and deadline for this service</div>
+  <div class="wrapper-disc">
+    <form name="PriceDiscriminatorForm" role="form">
+      <!-- Choices > 1 -->
+      <div ng-if="option.choices.length > 1" class="container-y">
+        <div ng-repeat="choice in option.choices">
+          <div ng-form class="form-group" name="innerForm">
+            <!-- input row -->
+            <div class="container-x">
+              <div class="container-x wrapper-half">
+                <div class="choice-name">{{ choice.name }}</div>
+                <div class="flex-2">
+                  <div class="separator-text">$</div>
+                  <div class="wrapper-price">
+                    <input type="number" fv-dynamic-name=$index class="form-control input-s input-price"
+                           min="0"
+                           ng-model="choice.price"
+                           placeholder="0"
+                           ng-blur="saveOfferedChoice(choice)"
+                           ng-required="true"
+                           fv-positive-num-validation>
+                  </div>
+                  <div class="separator-text text-grey">in</div>
+                  <div class="wrapper-days">
+                    <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
+                            ng-model="choice.days"
+                            data-html="1"
+                            ng-options="deadline for deadline in deadlines"
+                            placeholder="{{choice.days}} days"
+                            ng-change="saveOfferedChoice(choice)"
+                            bs-select>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-shrink-10"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Choices === 1 -->
+      <div ng-if="option.choices.length === 1" class="container-x">
+        <div class="container-x wrapper-half">
+          <div class="flex-1">
+            <div class="flex-content-centered separator-text-l">$</div>
+            <input type="number" name="inputPrice" class="form-control input-s input-price center-self"
+                   ng-model="option.choices[0].price"
+                   placeholder="0"
+                   min="0"
+                   ng-blur="saveOfferedChoice(option.choices[0])"
+                   ng-required="true"
+                   fv-positive-num-validation>
+            <!-- Price discriminators are always days discriminators too -->
+            <div class="separator-text text-grey">to be delivered in</div>
+            <div class="wrapper-days">
+              <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
+                      ng-model="option.choices[0].days"
+                      data-html="1"
+                      ng-options="deadline for deadline in deadlines"
+                      placeholder="{{option.choices[0].days}} days"
+                      ng-change="saveOfferedChoice(option.choices[0])"
+                      bs-select>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="flex-shrink-10"></div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Price Addons -->
+<div ng-if="addons.length > 0">
+  <div class="container-x flex-wrap">
+    <div class="text-p-bold space-right">Set a premium price and extended deadline for the following add-ons</div>
+    <div class="optional-header-part text-i text-grey">(leave blank if you don't want to offer an add-on.)</div>
+  </div>
+  <div class="wrapper-disc">
+    <form name="OfferAddonsForm" role="form">
+      <div class="container-y">
+        <div ng-repeat="option in addons">
+          <div ng-form class="form-group" name="innerForm">
+            <div class="container-x">
+              <div class="container-x wrapper-half">
+                <div class="choice-name space-right">{{ option.sellerTitle }}</div>
+                <div class="flex-2">
+                  <div class="container-x flex-items-centered text-grey text-p space-right space-left">+ $</div>
+                  <div class="wrapper-price">
+                    <!-- Addons always have just one choice -->
+                    <input type="number" fv-dynamic-name=$index class="form-control input-s input-price"
+                           ng-model="option.choices[0].price"
+                           placeholder="0"
+                           ng-required="true"
+                           min="0"
+                           ng-blur="saveOfferedChoice(option.choices[0])"
+                           fv-positive-num-validation>
+                  </div>
+                  <div class="container-x wrapper-days" ng-if="!option.overridesDays">
+                    <div class="separator-text text-grey">in +</div>
+                    <button type="button" class="btn btn-default text-p-bold btn-small select-deadline"
+                            ng-model="option.choices[0].days" data-html="1" ng-options="deadline for deadline in deadlines"
+                            placeholder="{{option.choices[0].days}} days"
+                            ng-change="saveOfferedChoice(option.choices[0])"
+                            bs-select>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-shrink-10"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

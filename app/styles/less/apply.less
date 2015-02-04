@@ -89,7 +89,7 @@
     &.label-bio {
       align-items: flex-start;
       margin-right: 0px;
-      padding-top: 5px;
+      padding-top: 3px;
     }
   }
 
@@ -104,8 +104,8 @@
     margin-left: 15px;
   }
 
-  .label-location {
-    padding-bottom: 10px;
+  .label-l {
+    max-height: 38px;
   }
 
   .input-info-url {
@@ -217,7 +217,7 @@
     }
   }
 
-  // Page 3 - Service Configuration
+  // Page 4 - Edit Offer
   // ------------------------------
 
   .apply-service-config {
@@ -264,13 +264,8 @@
     }
   }
 
-  .optional-header-part {
-    margin-left: 10px;
-  }
-
   .separator-text {
-    .text-m;
-    .text-light;
+    .text-p;
     .flex-content-centered;
     flex-shrink: 0;
     margin: 0 15px;
@@ -278,11 +273,13 @@
 
   .separator-text-l {
     .separator-text;
+    .text-p;
     margin: 0px 15px 0px 0px;
   }
 
   .select-deadline {
-    min-width: 78px;
+    text-align: left;
+    min-width: 130px;
   }
 
   .wrapper-disc {
@@ -291,6 +288,13 @@
 
   .wrapper-price {
     min-width: 50px;
+  }
+
+  .wrapper-days {
+    .center-self;
+    .dropdown-menu {
+      width: 130px !important;
+    }
   }
 
   .input-price {
@@ -315,6 +319,7 @@
   .choice-name {
     .text-p-bold;
     .flex-1;
+    .space-right;
     align-items: center;
   }
 

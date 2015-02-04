@@ -144,33 +144,46 @@
   button {
     margin: 2px;
     span {
-      margin-left: 8px;
+      margin-left: 10px;
     }
   }
-  div {
+  >div {
     margin: 10px 0;
   }
 }
 
 .btn-fb {
   width: 230px;
-  padding: 10px 15px 10px 10px;
+  padding: 10px 15px 12px;
   background-color: @blueFb;
   border: 1px solid @blueFb;
   &:hover {
     background-color: @blueFbHover;
     border: 1px solid @blueFbHover;
   }
+  .icon {
+	  margin-right: 2px;
+  }
+  span:last-child {
+	  padding-top: 3px;
+  }
 }
 
 .btn-li {
   width: 230px;
-  padding: 10px 15px;
+  padding: 10px 15px 12px;
   background-color: @blueLi;
   border: 1px solid @blueLi;
   &:hover {
     background-color: @blueLiHover;
     border: 1px solid @blueLiHover;
+  }
+  .icon {
+	  margin-bottom: 3px;
+	  margin-right: 8px;
+  }
+  span:last-child {
+	  padding-top: 3px;
   }
 }
 

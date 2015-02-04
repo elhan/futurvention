@@ -17,15 +17,11 @@
           </div>
           <div class="thumb-overlay">
             <div class="thumb-overlay-inner" ng-click="editOffer(offer.Service.ID)">
-              <svg class="icon icon-light">
-                <use xlink:href="#edit"></use>
-              </svg>
+              <img class="icon icon-light" src="images/svg/edit-white.svg">
             </div>
             <div class="divider-thumb-overlay"></div>
             <div class="thumb-overlay-inner" ng-click="removeOffer(offer)">
-              <svg class="icon icon-light">
-                <use xlink:href="#close"></use>
-              </svg>
+              <img class="icon icon-light" src="images/svg/close-white.svg">
             </div>
           </div>
           <div class="caption">
@@ -43,20 +39,18 @@
     <span class="text-h3">Service Catalogue</span>
     <div class="search-box">
       <div class="inner-addon left-addon">
-        <svg class="icon">
-          <use xlink:href="#search-dark"></use>
-        </svg>
+        <img class="icon" src="images/svg/search-dark.svg">
         <input type="text" class="form-control" ng-model="selectedService" ng-options="service.shortTitle for service in allServices" placeholder="Service name" bs-typeahead />
       </div>
     </div>
   </div>
   <!-- Service categories -->
   <div class="container-x">
-    <div class="text-t">
-      <div ng-model="categories.activeCategoryIndex" bs-tabs>
-        <div ng-repeat="category in categories" title="{{ category.categoryName }}" bs-pane></div>
-      </div>
-    </div>
+    <ul class="nav nav-tabs text-t">
+      <!-- 'active' class must be toggled manually -->
+      <li role="presentation" class="active"><a>All</a></li>
+      <li role="presentation" ng-repeat="category in categories"><a>{{ category.categoryName }}</a></li>
+    </ul>
   </div>
   <!-- Thumbnail Grid: Services By Category -->
   <div class="thumbnail-grid flex-wrap">
@@ -75,9 +69,9 @@
   </div>
   <!-- Show more button -->
   <div class="wrapper-showmore" ng-show="services.length < allServices.length">
-    <button class="btn btn-link text-p" ng-click="showMore()">
+    <a class="btn btn-link text-p" ng-click="showMore()">
       <span>Show more services</span>
       <span aria-hidden="true">&raquo;</span>
-    </button>
+    </a>
   </div>
 </div>

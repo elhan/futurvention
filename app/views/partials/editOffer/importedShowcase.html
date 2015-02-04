@@ -1,0 +1,28 @@
+<div class="showcase">
+  <div class="showcase-item thumbnail"
+       ng-click="togglePortfolioSelection(item)"
+       fv-bg-image={{item|importedLink:item}}
+       fv-data={{item|importedLink:item}}
+       ng-class="{'bg-img-small-centered': !item.hasOwnThumbnail}"
+       >
+    <!-- Overlay: selected -->
+    <div class="showcase-overlay selected" ng-show="selectedPortfolios.indexOf(item) > -1">
+      <svg class="icon icon-light">
+        <use xlink:href="#tick"></use>
+      </svg>
+    </div>
+    <!-- Overlay: selected disabled -->
+    <div class="showcase-overlay selected disabled" ng-show="getImportedItemAddedStatus(item)">
+      <svg class="icon icon-light">
+        <use xlink:href="#tick"></use>
+      </svg>
+    </div>
+    <!-- Overlay: selected disabled -->
+    <div class="showcase-overlay disabled" ng-show="getImportedItemUnavailableStatus(item)">
+      Unavailable for this service
+    </div>
+    <!-- Overlay: drag-over -->
+    <div class="showcase-overlay"></div>
+  </div>
+  <div class="caption text-i">{{item.Title}}</div>
+</div>

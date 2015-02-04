@@ -1,0 +1,65 @@
+<p class="container-x text-p">
+  <span>Introduce yourself to potential Buyers</span>
+  <span class="optional-header-part text-grey" ng-if="service.interview.isMandatory">(strongly reccomended)</span>
+</p>
+<!-- !textonly -->
+<div ng-show="!panels[2].textonly">
+  <div class="wrapper-icons" ng-if="!service.interview.videoUrl">
+    <div class="container-y flex-content-centered" ng-click="showCameraTagModal()">
+      <div class="import-link bg-grey-dark text-white clickable">
+        <span class="glyphicon glyphicon-facetime-video"></span>
+      </div>
+      <div class="label-import-link">Upload or record a video from your webcam or phone</div>
+    </div>
+  </div>
+  <!-- interview video -->
+  <!--                <video id='interviewPlayer' data-uuid={{service.interview.videoUuid}} data-options='{"aspectratio": "4:3"}'></video>-->
+  <div class="container-y flex-content-centered flex-1" ng-if="service.interview.videoUrl">
+    <div class="space-top-2x">
+      <video ng-src="{{service.interview.videoUrl | trusted}}" controls></video>
+    </div>
+    <div class="container-x flex-items-centered flex-wrap space-top space-bottom-2x">
+      <span class="space-after text-p">Your video is ready and will be shown on your profile. If you are not happy with the result you can</span>
+      <span class="btn no-padding btn-link text-p space-after" ng-click="showCameraTagModal()">
+        re-record
+      </span>
+      <span class="text-p">it.</span>
+    </div>
+  </div>
+  <div ng-hide="service.interview.videoUrl">
+    <div class="text-p">A picture is 1000 words and a video is 1000 pictures. In a minute, video tells Buyers why they should buy from you.</div>
+    <p class="text-p">In your recording, try to give short sharp answers within 1 minute to the following (You will be able to view the video at the end of the recoring if you want):</p>
+  </div>
+</div>
+<!-- Service interview -->
+<p class="text-p italic" ng-if="service.interview && !service.interview.videoUrl" ng-bind-html="service.interview.sellerLabel"></p>
+<textarea ng-if="panels[2].textonly" placeholder="Type your answers here" ng-model="service.interview.answer"></textarea>
+<!-- Switch textonly state -->
+<button class="btn no-padding btn-link text-p" ng-click="toggleTextOnly()">
+  <span ng-show="!panels[2].textonly">Switch to text instead</span>
+  <div ng-show="panels[2].textonly">
+    <span class="glyphicon glyphicon-facetime-video text-blue"></span>
+    <span >Record a video and increase your chances to be approved</span>
+  </div>
+</button>
+<!-- Service options: !PriceDiscriminator -->
+<div ng-repeat="option in service.options | filter: { isPriceDiscriminator: false }" class="space-top-bottom-2x">
+  <p class="text-p-bold">{{ option.sellerTitle }}</p>
+  <div class="container-x" ng-if="option.choices.length < 5" ng-repeat="choice in option.choices">
+    <input type="checkbox">
+    <div class="text-i space-left">{{ choice.name }}</div>
+  </div>
+  <div class="container-x dropdown-choices">
+    <button ng-if="option.choices.length > 5" class="btn btn-default text-p"
+            data-multiple="1"
+            ng-model="selectedChoices"
+            ng-options="choice.name as choice.name for choice in option.choices"
+            bs-select>
+    </button>
+  </div>
+</div>
+<!-- Service fields -->
+<div ng-if="service.fields.length > 0">
+  <p class="text-p-bold">{{ field.sellerLabel }}</p>
+  <textarea placeholder="Type your answers here" ng-model="service.fields[0].answer"></textarea>
+</div>

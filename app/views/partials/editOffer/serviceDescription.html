@@ -1,0 +1,16 @@
+<div ng-if="service.description">
+  <div class="text-p-bold">Overview of the service</div>
+  <div class="text-p" ng-bind-html="service.description"></div>
+</div>
+<div ng-if="service.deliverables">
+  <div class="text-p-bold">What you are expected to deliver</div>
+  <div class="text-p" ng-bind-html="service.deliverables"></div>
+</div>
+<div ng-if="service.provision">
+  <div class="text-p-bold">What the buyer will provide before you start working</div>
+  <div class="text-p" ng-bind-html="service.provision"></div>
+</div>
+<div ng-if="service.excluded">
+  <div class="text-p-bold">Services that are not part of the offer</div>
+  <div class="text-p" ng-bind-html="service.excluded"></div>
+</div>

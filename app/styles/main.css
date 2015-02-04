@@ -93,6 +93,9 @@
 .border-lightGrey {
   border-color: #d5d5d5;
 }
+.borderless {
+  border: 0 !important;
+}
 .no-padding {
   padding: 0 !important;
 }
@@ -109,7 +112,7 @@
   text-align: center;
   max-width: 989px;
   margin: 0 auto;
-  font-size: calc(0.58333333em);
+  font-size: calc(0.58333333);
 }
 @media screen and (max-width: 1600px) {
   .fv-page-header {
@@ -372,6 +375,10 @@ html {
 .flex-shrink-10 {
   flex-shrink: 10;
 }
+.center-self {
+  display: flex;
+  align-self: center;
+}
 .container-x {
   display: flex;
   flex-direction: row;
@@ -419,7 +426,7 @@ html {
   display: inline-block;
 }
 .wrapper-half {
-  width: 50%;
+  width: 56%;
 }
 .wrapper-row {
   display: flex;
@@ -497,8 +504,23 @@ html {
 }
 .navbar-main .dropdown-toggle {
   color: white !important;
+  background: transparent;
+  border: transparent;
   font-family: OpenSansRegular;
   font-size: 13px;
+}
+.navbar-main .dropdown-menu {
+  min-width: 0;
+  padding: 5px 0;
+}
+.navbar-main .dropdown-menu li {
+  border: 0;
+}
+.navbar-main .dropdown-menu li a {
+  padding: 3px 20px;
+}
+.navbar-main .dropdown-menu .divider {
+  margin: 9px 0 5px;
 }
 .navbar-main .wrapper-avatar {
   margin-right: 10px !important;
@@ -506,6 +528,8 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 30px;
+  height: 30px;
 }
 .navbar-main .wrapper-avatar img {
   border-radius: 50%;
@@ -1316,6 +1340,7 @@ html {
   justify-content: space-between;
   display: flex;
   align-items: center;
+  margin-right: 10px !important;
 }
 .detail-box .state-label .icon {
   margin-right: 8px;
@@ -1597,6 +1622,12 @@ a:hover {
   text-decoration: none;
   color: #2f40d1;
 }
+a:hover.text-grey-dark {
+  color: #424242;
+}
+a.text-grey-dark {
+  color: #424242;
+}
 .btn:focus {
   outline: none !important;
 }
@@ -1718,14 +1749,14 @@ a:hover {
   margin: 2px;
 }
 .social-btn-wrap button span {
-  margin-left: 8px;
+  margin-left: 10px;
 }
-.social-btn-wrap div {
+.social-btn-wrap > div {
   margin: 10px 0;
 }
 .btn-fb {
   width: 230px;
-  padding: 10px 15px 10px 10px;
+  padding: 10px 15px 12px;
   background-color: #3c4eaa;
   border: 1px solid #3c4eaa;
 }
@@ -1733,15 +1764,28 @@ a:hover {
   background-color: #2e409a;
   border: 1px solid #2e409a;
 }
+.btn-fb .icon {
+  margin-right: 2px;
+}
+.btn-fb span:last-child {
+  padding-top: 3px;
+}
 .btn-li {
   width: 230px;
-  padding: 10px 15px;
+  padding: 10px 15px 12px;
   background-color: #2289c4;
   border: 1px solid #2289c4;
 }
 .btn-li:hover {
   background-color: #187ab1;
   border: 1px solid #187ab1;
+}
+.btn-li .icon {
+  margin-bottom: 3px;
+  margin-right: 8px;
+}
+.btn-li span:last-child {
+  padding-top: 3px;
 }
 .btn-apply {
   color: white !important;
@@ -1962,12 +2006,18 @@ a:hover {
 .modal-image-crop .footer .btn-blue {
   margin-right: 15px;
 }
+.modal-image-crop .fileinput-button span {
+  display: block;
+}
 .wrapper-modal-inner {
   position: absolute;
   width: 80%;
   height: 80%;
   left: 10%;
   top: 10%;
+}
+.wrapper-modal-inner .container {
+  max-height: 100%;
 }
 .fv-modal .close {
   font-family: OpenSansLight;
@@ -2068,6 +2118,16 @@ a:hover {
 .modal-backdrop.am-fade.light {
   background-color: white;
   opacity: .9;
+}
+#deleteOfferModal .modal-content {
+  padding: 30px 30px 55px;
+}
+#deleteOfferModal .content {
+  padding: 0 65px;
+  margin-bottom: 30px;
+}
+#deleteOfferModal .btn {
+  width: 150px;
 }
 .alert {
   display: flex !important;
@@ -3193,7 +3253,7 @@ display: none;
 .apply .label-l.label-bio {
   align-items: flex-start;
   margin-right: 0px;
-  padding-top: 5px;
+  padding-top: 3px;
 }
 .apply .label-picture {
   margin-left: -10px;
@@ -3207,8 +3267,8 @@ display: none;
   align-items: center;
   margin-left: 15px;
 }
-.apply .label-location {
-  padding-bottom: 10px;
+.apply .label-l {
+  max-height: 38px;
 }
 .apply .input-info-url {
   flex-shrink: 10;
@@ -3344,13 +3404,10 @@ display: none;
 .apply .apply-service-config .icon-collapse {
   margin: 0 2px;
 }
-.apply .optional-header-part {
-  margin-left: 10px;
-}
 .apply .separator-text {
-  font-size: calc(0.33333333em);
-  line-height: calc(1.375);
-  font-family: OpenSansLight;
+  font-size: calc(0.29166667em);
+  line-height: calc(1.42857143);
+  font-family: OpenSansRegular;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -3358,24 +3415,32 @@ display: none;
   margin: 0 15px;
 }
 .apply .separator-text-l {
-  font-size: calc(0.33333333em);
-  line-height: calc(1.375);
-  font-family: OpenSansLight;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
   margin: 0 15px;
+  font-size: calc(0.29166667em);
+  line-height: calc(1.42857143);
+  font-family: OpenSansRegular;
   margin: 0px 15px 0px 0px;
 }
 .apply .select-deadline {
-  min-width: 78px;
+  text-align: left;
+  min-width: 130px;
 }
 .apply .wrapper-disc {
   padding: 30px 0;
 }
 .apply .wrapper-price {
   min-width: 50px;
+}
+.apply .wrapper-days {
+  display: flex;
+  align-self: center;
+}
+.apply .wrapper-days .dropdown-menu {
+  width: 130px !important;
 }
 .apply .input-price {
   width: 78px;
@@ -3399,6 +3464,7 @@ display: none;
   font-family: OpenSansBold;
   display: flex;
   flex: 1;
+  margin-right: 10px !important;
   align-items: center;
 }
 .apply .progress-row {
@@ -3721,6 +3787,12 @@ display: none;
   width: 100%;
   max-width: 1140px;
 }
+.workstream ul {
+  padding-left: 16px;
+}
+.workstream ul.list-unstyled {
+  padding-left: 0;
+}
 .workstream .avatar {
   border-radius: 50%;
   height: 42px;
@@ -3748,6 +3820,10 @@ display: none;
   margin-left: 10px !important;
   margin-right: 10px !important;
   width: 30px;
+  height: 30px;
+}
+.workstream .wrapper-file-img img {
+  height: 30px;
 }
 .workstream .img-download {
   width: 20px;
@@ -3801,7 +3877,7 @@ display: none;
 .my-orders .wf-label-completed {
   background-color: #00bb67;
 }
-.my-orders .wf-label-in-discussion {
+.my-orders .wf-label-indiscussion {
   background-color: #777;
 }
 .my-orders .wf-label-delayed,
@@ -3907,6 +3983,10 @@ display: none;
   margin-left: 10px !important;
   margin-right: 10px !important;
   width: 30px;
+  height: 30px;
+}
+.withdraw #withdrawForm .wrapper-file-img img {
+  height: 30px;
 }
 .withdraw #withdrawForm .divider {
   margin: 10px 0;
